@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d769073e1204cd48a898ceadc223e09, type: 3}
   m_Name: Engineer
   m_EditorClassIdentifier: 
+  fullTime: 1
+  huntable: 0
   professionName: Engineer
   salary: 80000
+  jobCost: 120000
   personalExpenses: 55000
   autoLoan: 30000
-  studentLoan: 100000
   costPerChild: 15000
   startingCash: 10000
   startingAge: 24

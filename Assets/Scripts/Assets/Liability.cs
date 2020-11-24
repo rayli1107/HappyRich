@@ -43,4 +43,12 @@ namespace Assets
         }
     }
 
+    public class PersonalLoan : AbstractLiability
+    {
+        public PersonalLoan(int amount) :
+            base("Personal Loan", amount, InterestRateManager.Instance.personalLoanRate)
+        {
+        }
+    }
+
 }

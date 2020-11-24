@@ -31,15 +31,7 @@
     public class Car : AbstractAsset
     {
         public Car(int value) :
-            base("Auto Loan", value, new AutoLoan(value), 0)
-        {
-        }
-    }
-
-    public class Education : AbstractAsset
-    {
-        public Education(int value) :
-            base("Student Loan", 0, new StudentLoan(value), 0)
+            base("Car", value, new AutoLoan(value), 0)
         {
         }
     }

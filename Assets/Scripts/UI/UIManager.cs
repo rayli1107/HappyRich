@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -9,36 +9,38 @@ namespace UI
     {
 #pragma warning disable 0649
         [SerializeField]
-        private TextMeshProUGUI _textAge;
+        private GameObject _prefabMessageBoxPanel;
         [SerializeField]
-        private TextMeshProUGUI _textHappiness;
+        private GameObject _prefabTopLevelUIPanel;
         [SerializeField]
-        private TextMeshProUGUI _textFI;
+        private GameObject _prefabPlayerStatusMenuPanel;
         [SerializeField]
-        private TextMeshProUGUI _textCash;
-        [SerializeField]
-        private TextMeshProUGUI _textCashflow;
-        [SerializeField]
-        private TextMeshProUGUI _textNetworth;
+        private GameObject _prefabScrollableTextPanel;
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
+        public bool ready { get; private set; }
 
-        private List<ModalObject> modalObjects;
+        private List<Panels.ModalObject> modalObjects;
         private EventSystem _eventSystem;
+        private Panels.PlayerSnapshotPanel _playerSnapshotPanel;
 
         private void Awake()
         {
+            ready = false;
             Instance = this;
             _eventSystem = EventSystem.current;
         }
 
         void Start()
         {
-            modalObjects = new List<ModalObject>();
+            modalObjects = new List<Panels.ModalObject>();
+            Instantiate(_prefabTopLevelUIPanel, transform);
+            _playerSnapshotPanel = GetComponentInChildren<Panels.PlayerSnapshotPanel>(true);
+            ready = true;
         }
 
-        public void RegisterModalItem(ModalObject modalObject)
+        public void RegisterModalItem(Panels.ModalObject modalObject)
         {
             if (modalObjects.Count > 0)
             {
@@ -47,7 +49,7 @@ namespace UI
             modalObjects.Add(modalObject);
         }
 
-        public void UnregisterModalItem(ModalObject modalObject)
+        public void UnregisterModalItem(Panels.ModalObject modalObject)
         {
             modalObjects.Remove(modalObject);
             if (modalObjects.Count > 0)
@@ -66,7 +68,7 @@ namespace UI
 
             if (Input.GetMouseButtonDown(0) && modalObjects.Count > 0)
             {
-                ModalObject modalObject = modalObjects[modalObjects.Count - 1];
+                Panels.ModalObject modalObject = modalObjects[modalObjects.Count - 1];
                 if (!DetectHit(Input.mousePosition, modalObject.gameObject))
                 {
                     modalObject.OnClickOutsideBoundary();
@@ -93,39 +95,52 @@ namespace UI
 
         public void UpdatePlayerInfo(Player player)
         {
-            PlayerSnapshot snapshot = new PlayerSnapshot(player);
+            _playerSnapshotPanel.UpdatePlayerInfo(player);
+        }
 
-            if (_textAge)
-            {
-                _textAge.text = string.Format("Age: {0}", snapshot.age);
-            }
+        private void ShowMessageBox(
+            GameObject childPanel,
+            Panels.IMessageBoxHandler handler,
+            UI.Panels.ButtonChoiceType buttonChoice)
+        {
+            GameObject msgBoxObj = Instantiate(_prefabMessageBoxPanel, transform);
+            childPanel.transform.SetParent(msgBoxObj.transform);
+            childPanel.transform.localScale = Vector3.one;
+            RectTransform childRect = childPanel.GetComponent<RectTransform>();
+            childRect.anchorMin = childRect.anchorMax = childRect.pivot = new Vector2(0, 1);
+            childRect.anchoredPosition = new Vector2(0, 0);
+            childPanel.SetActive(true);
 
-            if (_textHappiness)
-            {
-                _textHappiness.text = string.Format("Happy {0}", snapshot.happiness);
-            }
+            Panels.MessageBox msgBox = msgBoxObj.GetComponent<Panels.MessageBox>();
+            msgBox.childRect = childPanel.GetComponent<RectTransform>();
+            msgBox.buttonChoice = buttonChoice;
+            msgBox.messageBoxHandler = handler;
+            msgBoxObj.GetComponent<Image>().color = Color.blue;
+            msgBoxObj.SetActive(true);
+        }
 
-            if (_textFI)
-            {
-                int fi = (100 * snapshot.passiveIncome) / snapshot.expenses;
-                _textFI.text = string.Format("FI: {0}%", fi);
-            }
+        public void ShowPlayerStatusMenuPanel()
+        {
+            GameObject gameObj = Instantiate(_prefabPlayerStatusMenuPanel);
+            Panels.PlayerStatusMenuPanel panel = gameObj.GetComponent<Panels.PlayerStatusMenuPanel>();
+            panel.player = GameManager.Instance.player;
+            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.OK_CANCEL);
+        }
 
-            if (_textCash)
-            {
-                _textCash.text = string.Format("Cash:\n{0}", snapshot.cash);
-            }
+        public void ShowAssetLiabilityStatusPanel()
+        {
+            GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
+            Panels.AssetLiabilityListPanel panel = gameObj.AddComponent<Panels.AssetLiabilityListPanel>();
+            panel.player = GameManager.Instance.player;
+            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.NONE);
+        }
 
-            if (_textCashflow)
-            {
-                int cashflow = snapshot.activeIncome + snapshot.passiveIncome - snapshot.expenses;
-                _textCashflow.text = string.Format("Cashflow:\n{0}", cashflow);
-            }
-
-            if (_textNetworth)
-            {
-                _textNetworth.text = string.Format("Net Worth:\n{0}", snapshot.netWorth);
-            }
+        public void ShowIncomeExpenseStatusPanel()
+        {
+            GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
+            Panels.IncomeExpenseListPanel panel = gameObj.AddComponent<Panels.IncomeExpenseListPanel>();
+            panel.player = GameManager.Instance.player;
+            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.NONE);
         }
     }
 }

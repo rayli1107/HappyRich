@@ -30,9 +30,9 @@ public class PlayerSnapshot
         netWorth = player.cash;
 
         activeIncome = 0;
-        foreach (Income job in player.jobs)
+        foreach (ScriptableObjects.Profession job in player.jobs)
         {
-            activeIncome += job.income;
+            activeIncome += job.salary;
         }
 
         passiveIncome = 0;
@@ -57,13 +57,33 @@ public class PlayerSnapshot
                 netWorth -= asset.liability.amount;
             }
         }
+
+        foreach (Assets.AbstractLiability liability in player.liabilities)
+        {
+            netWorth -= liability.amount;
+            expenses += liability.getExpense();
+        }
     }
 }
 
 public class Player
 {
-    public List<Income> jobs { get; private set; }
+    public List<ScriptableObjects.Profession> jobs { get; private set; }
     public List<Assets.AbstractAsset> assets { get; private set; }
+    public List<Assets.AbstractLiability> liabilities { get
+        {
+            List<Assets.AbstractLiability> ret = new List<Assets.AbstractLiability>();
+            if (studentLoan != null && studentLoan.amount > 0)
+            {
+                ret.Add(studentLoan);
+            }
+            if (personalLoan != null && personalLoan.amount > 0)
+            {
+                ret.Add(personalLoan);
+            }
+            return ret;
+        }
+    }
     public int personalExpenses { get; private set; }
     public int costPerChild { get; private set; }
     public int numChild { get; private set; }
@@ -73,10 +93,13 @@ public class Player
 
     private int _defaultHappiness;
 
+    public Assets.StudentLoan studentLoan { get; private set; }
+    public Assets.PersonalLoan personalLoan { get; private set; }
+
     public Player(ScriptableObjects.Profession profession, int defaultHappiness)
     {
-        jobs = new List<Income>();
-        jobs.Add(new Income(profession.name, profession.salary));
+        jobs = new List<ScriptableObjects.Profession>();
+        jobs.Add(profession);
 
         assets = new List<Assets.AbstractAsset>();
         if (profession.autoLoan > 0)
@@ -84,9 +107,9 @@ public class Player
             assets.Add(new Assets.Car(profession.autoLoan));
         }
 
-        if (profession.studentLoan > 0)
+        if (profession.jobCost > 0)
         {
-            assets.Add(new Assets.Education(profession.studentLoan));
+            studentLoan = new Assets.StudentLoan(profession.jobCost);
         }
 
         personalExpenses = profession.personalExpenses;
@@ -110,11 +133,11 @@ public class Player
         }
         return happiness;
     }
-
+/*
     public int getCashflow()
     {
         int cashflow = 0;
-        foreach (Income job in jobs)
+        foreach (ScriptableObjects.Profession job in jobs)
         {
             cashflow += job.income;
         }
@@ -126,7 +149,7 @@ public class Player
         }
         return cashflow;
     }
-
+    */
     /*
     public List<Income> getIncomeList()
     {

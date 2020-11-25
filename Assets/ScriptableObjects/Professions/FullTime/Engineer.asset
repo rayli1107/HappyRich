@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Engineer
   m_EditorClassIdentifier: 
   fullTime: 1
-  huntable: 0
+  searchable: 0
   professionName: Engineer
   salary: 80000
   jobCost: 120000
-  personalExpenses: 55000
+  personalExpenses: 50000
   autoLoan: 30000
   costPerChild: 15000
   startingCash: 10000

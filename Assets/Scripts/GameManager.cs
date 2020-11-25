@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Transaction;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public ScriptableObjects.Profession startingProfession;
     public int defaultHappiness = 50;
 
     public static GameManager Instance { get; private set; }
@@ -19,7 +18,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = new Player(startingProfession, defaultHappiness);
+        player = new Player(
+            JobManager.Instance.FindInitialProfession(),
+            defaultHappiness);
         StartCoroutine(WaitAndUpdateUI());
     }
 
@@ -36,5 +37,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void TryDebit(Player player, int amount, ITransactionHandler handler)
+    {
+        player.AddCash(-1 * amount);
+        handler.OnTransactionSuccess();
     }
 }

@@ -21,6 +21,8 @@ namespace UI.Panels
 
 #pragma warning disable 0649
         [SerializeField]
+        private int padding = 20;
+        [SerializeField]
         private RectTransform _panelButtons;
         [SerializeField]
         private RectTransform _buttonOk;
@@ -54,14 +56,12 @@ namespace UI.Panels
                     break;
             }
 
-            RectTransform rect = GetComponent<RectTransform>();
-            rect.sizeDelta = childRect.sizeDelta;
+            float width = childRect.sizeDelta.x + 2 * padding;
+            float height = childRect.sizeDelta.y + 2 * padding;
 
             if (buttons.Count > 0)
             {
-                rect.sizeDelta = new Vector2(
-                    childRect.sizeDelta.x,
-                    childRect.sizeDelta.y + _panelButtons.sizeDelta.y);
+                height += _panelButtons.sizeDelta.y;
                 _panelButtons.gameObject.SetActive(true);
 
                 float deltaX = 1.0f / buttons.Count;
@@ -73,24 +73,36 @@ namespace UI.Panels
                     rectButton.anchorMax = new Vector2((i + 1) * deltaX, 1);
                 }
             }
+
+            RectTransform rect = GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(width, height);
+            childRect.anchorMin = childRect.anchorMax = childRect.pivot = new Vector2(0, 1);
+            childRect.anchoredPosition = new Vector2(padding, -1 * padding);
+
         }
 
         public void OnButtonOk()
         {
             if (messageBoxHandler != null)
             {
-                messageBoxHandler.OnButtonClick(ButtonType.OK);
+                messageBoxHandler.OnButtonClick(this, ButtonType.OK);
             }
-            Destroy(gameObject);
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         public void OnButtonCancel()
         {
             if (messageBoxHandler != null)
             {
-                messageBoxHandler.OnButtonClick(ButtonType.CANCEL);
+                messageBoxHandler.OnButtonClick(this, ButtonType.CANCEL);
             }
-            Destroy(gameObject);
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         public override void OnClickOutsideBoundary()
@@ -99,9 +111,12 @@ namespace UI.Panels
             {
                 if (messageBoxHandler != null)
                 {
-                    messageBoxHandler.OnButtonClick(ButtonType.OUTSIDE_BOUNDARY);
+                    messageBoxHandler.OnButtonClick(this, ButtonType.OUTSIDE_BOUNDARY);
                 }
-                Destroy(gameObject);
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

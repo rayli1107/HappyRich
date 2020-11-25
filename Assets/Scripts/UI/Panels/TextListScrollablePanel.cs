@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Panels
 {
-    public class TextListScrollablePanel : MonoBehaviour, IMessageBoxHandler
+    public class TextListScrollablePanel : MonoBehaviour
     {
         public Player player;
         private float _textSize;
@@ -26,10 +26,6 @@ namespace UI.Panels
             textComponent.text = text;
             textComponent.fontSize = _textSize;
             textComponent.color = Color.black;
-        }
-
-        public void OnButtonClick(ButtonType button)
-        {
         }
     }
 }

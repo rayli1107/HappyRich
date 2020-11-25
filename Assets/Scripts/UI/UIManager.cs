@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UI.Panels;
+using TMPro;
 
 namespace UI
 {
@@ -11,64 +13,69 @@ namespace UI
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
         [SerializeField]
-        private GameObject _prefabTopLevelUIPanel;
-        [SerializeField]
         private GameObject _prefabPlayerStatusMenuPanel;
         [SerializeField]
+        private GameObject _prefabActionMenuPanel;
+        [SerializeField]
         private GameObject _prefabScrollableTextPanel;
+        [SerializeField]
+        private GameObject _prefabSimpleTextPanel;
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
         public bool ready { get; private set; }
 
-        private List<Panels.ModalObject> modalObjects;
+        private List<ModalObject> _modalObjects;
         private EventSystem _eventSystem;
-        private Panels.PlayerSnapshotPanel _playerSnapshotPanel;
+        private PlayerSnapshotPanel _playerSnapshotPanel;
 
         private void Awake()
         {
             ready = false;
             Instance = this;
             _eventSystem = EventSystem.current;
+            _modalObjects = new List<ModalObject>();
+            foreach (ModalObject panel in GetComponentsInChildren<ModalObject>(true))
+            {
+                panel.gameObject.SetActive(true);
+            }
         }
 
         void Start()
         {
-            modalObjects = new List<Panels.ModalObject>();
-            Instantiate(_prefabTopLevelUIPanel, transform);
-            _playerSnapshotPanel = GetComponentInChildren<Panels.PlayerSnapshotPanel>(true);
+            _playerSnapshotPanel = GetComponentInChildren<PlayerSnapshotPanel>(true);
             ready = true;
         }
 
-        public void RegisterModalItem(Panels.ModalObject modalObject)
+        public void RegisterModalItem(ModalObject modalObject)
         {
-            if (modalObjects.Count > 0)
+            if (_modalObjects.Count > 0)
             {
-                modalObjects[modalObjects.Count - 1].EnableInput(false);
+                _modalObjects[_modalObjects.Count - 1].EnableInput(false);
             }
-            modalObjects.Add(modalObject);
+            _modalObjects.Add(modalObject);
         }
 
-        public void UnregisterModalItem(Panels.ModalObject modalObject)
+        public void UnregisterModalItem(ModalObject modalObject)
         {
-            modalObjects.Remove(modalObject);
-            if (modalObjects.Count > 0)
+            _modalObjects.Remove(modalObject);
+            if (_modalObjects.Count > 0)
             {
-                modalObjects[modalObjects.Count - 1].EnableInput(true);
+                _modalObjects[_modalObjects.Count - 1].EnableInput(true);
             }
         }
 
         void Update()
         {
-            int count = modalObjects.Count;
+            int count = _modalObjects.Count;
             if (count > 0)
             {
-                modalObjects[count - 1].ActivePanelUpdate();
+                _modalObjects[count - 1].ActivePanelUpdate();
             }
 
-            if (Input.GetMouseButtonDown(0) && modalObjects.Count > 0)
+            if (Input.GetMouseButtonDown(0) && _modalObjects.Count > 0)
             {
-                Panels.ModalObject modalObject = modalObjects[modalObjects.Count - 1];
+                ModalObject modalObject = _modalObjects[_modalObjects.Count - 1];
                 if (!DetectHit(Input.mousePosition, modalObject.gameObject))
                 {
                     modalObject.OnClickOutsideBoundary();
@@ -98,49 +105,76 @@ namespace UI
             _playerSnapshotPanel.UpdatePlayerInfo(player);
         }
 
-        private void ShowMessageBox(
+        public MessageBox ShowMessageBox(
             GameObject childPanel,
-            Panels.IMessageBoxHandler handler,
-            UI.Panels.ButtonChoiceType buttonChoice)
+            IMessageBoxHandler handler,
+            ButtonChoiceType buttonChoice)
         {
             GameObject msgBoxObj = Instantiate(_prefabMessageBoxPanel, transform);
             childPanel.transform.SetParent(msgBoxObj.transform);
             childPanel.transform.localScale = Vector3.one;
-            RectTransform childRect = childPanel.GetComponent<RectTransform>();
-            childRect.anchorMin = childRect.anchorMax = childRect.pivot = new Vector2(0, 1);
-            childRect.anchoredPosition = new Vector2(0, 0);
             childPanel.SetActive(true);
 
-            Panels.MessageBox msgBox = msgBoxObj.GetComponent<Panels.MessageBox>();
+            MessageBox msgBox = msgBoxObj.GetComponent<MessageBox>();
             msgBox.childRect = childPanel.GetComponent<RectTransform>();
             msgBox.buttonChoice = buttonChoice;
             msgBox.messageBoxHandler = handler;
             msgBoxObj.GetComponent<Image>().color = Color.blue;
             msgBoxObj.SetActive(true);
+            return msgBox;
+        }
+
+        public MessageBox ShowSimpleMessageBox(
+            string message,
+            int size,
+            ButtonChoiceType buttonChoice,
+            IMessageBoxHandler handler)
+        {
+            GameObject gameObj = Instantiate(_prefabSimpleTextPanel);
+            TextMeshProUGUI text = gameObj.GetComponent<TextMeshProUGUI>();
+            text.text = message;
+            text.fontSize = size;
+            return ShowMessageBox(gameObj, handler, buttonChoice);
         }
 
         public void ShowPlayerStatusMenuPanel()
         {
             GameObject gameObj = Instantiate(_prefabPlayerStatusMenuPanel);
-            Panels.PlayerStatusMenuPanel panel = gameObj.GetComponent<Panels.PlayerStatusMenuPanel>();
+            PlayerStatusMenuPanel panel = gameObj.GetComponent<PlayerStatusMenuPanel>();
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.OK_CANCEL);
+            ShowMessageBox(gameObj, null, ButtonChoiceType.BACK_ONLY);
+        }
+
+        public void ShowActionMenuPanel()
+        {
+            GameObject gameObj = Instantiate(_prefabActionMenuPanel);
+            ActionMenuPanel panel = gameObj.GetComponent<ActionMenuPanel>();
+            panel.player = GameManager.Instance.player;
+            ShowMessageBox(gameObj, null, ButtonChoiceType.BACK_ONLY);
         }
 
         public void ShowAssetLiabilityStatusPanel()
         {
             GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
-            Panels.AssetLiabilityListPanel panel = gameObj.AddComponent<Panels.AssetLiabilityListPanel>();
+            AssetLiabilityListPanel panel = gameObj.AddComponent<AssetLiabilityListPanel>();
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.NONE);
+            ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
         }
 
         public void ShowIncomeExpenseStatusPanel()
         {
             GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
-            Panels.IncomeExpenseListPanel panel = gameObj.AddComponent<Panels.IncomeExpenseListPanel>();
+            IncomeExpenseListPanel panel = gameObj.AddComponent<IncomeExpenseListPanel>();
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, panel, Panels.ButtonChoiceType.NONE);
+            ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+        }
+
+        public void DestroyAllModal()
+        {
+            while (_modalObjects.Count > 1)
+            {
+                _modalObjects[_modalObjects.Count - 1].OnClickOutsideBoundary();
+            }
         }
     }
 }

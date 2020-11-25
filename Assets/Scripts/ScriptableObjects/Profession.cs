@@ -6,7 +6,7 @@ namespace ScriptableObjects
     public class Profession : ScriptableObject
     {
         public bool fullTime;
-        public bool huntable;
+        public bool searchable;
         public string professionName;
         public int salary;
         public int jobCost;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ScriptableObjects;
+using System.Collections.Generic;
 
 public class Income
 {
@@ -30,7 +31,7 @@ public class PlayerSnapshot
         netWorth = player.cash;
 
         activeIncome = 0;
-        foreach (ScriptableObjects.Profession job in player.jobs)
+        foreach (Profession job in player.jobs)
         {
             activeIncome += job.salary;
         }
@@ -68,7 +69,7 @@ public class PlayerSnapshot
 
 public class Player
 {
-    public List<ScriptableObjects.Profession> jobs { get; private set; }
+    public List<Profession> jobs { get; private set; }
     public List<Assets.AbstractAsset> assets { get; private set; }
     public List<Assets.AbstractLiability> liabilities { get
         {
@@ -96,9 +97,9 @@ public class Player
     public Assets.StudentLoan studentLoan { get; private set; }
     public Assets.PersonalLoan personalLoan { get; private set; }
 
-    public Player(ScriptableObjects.Profession profession, int defaultHappiness)
+    public Player(Profession profession, int defaultHappiness)
     {
-        jobs = new List<ScriptableObjects.Profession>();
+        jobs = new List<Profession>();
         jobs.Add(profession);
 
         assets = new List<Assets.AbstractAsset>();
@@ -124,6 +125,16 @@ public class Player
         playerStates.Add(new PlayerState.TwoJobState());
     }
 
+    public void AddJob(Profession job)
+    {
+        jobs.Add(job);
+    }
+
+    public void AddCash(int amount)
+    {
+        cash += amount;
+    }
+
     public int getHappiness()
     {
         int happiness = _defaultHappiness;
@@ -133,48 +144,4 @@ public class Player
         }
         return happiness;
     }
-/*
-    public int getCashflow()
-    {
-        int cashflow = 0;
-        foreach (ScriptableObjects.Profession job in jobs)
-        {
-            cashflow += job.income;
-        }
-        cashflow -= personalExpenses;
-        cashflow -= numChild * costPerChild;
-        foreach (Assets.AbstractAsset asset in assets)
-        {
-            cashflow += asset.getIncome();
-        }
-        return cashflow;
-    }
-    */
-    /*
-    public List<Income> getIncomeList()
-    {
-        List<Income> result = new List<Income>();
-        foreach (Income job in _jobs)
-        {
-            result.Add(job);
-        }
-        if (_personalExpenses > 0)
-        {
-            result.Add(new Income("Personal Expenses", -1 * _personalExpenses));
-        }
-        if (_numChild > 0)
-        {
-            result.Add(new Income("Children", -1 * _numChild * _costPerChild));
-        }
-        foreach (Assets.AbstractAsset asset in _assets)
-        {
-            int income = asset.getIncome();
-            if (income != 0)
-            {
-                result.Add(new Income(asset.name, income));
-            }
-        }
-        return result;
-    }
-    */
 }

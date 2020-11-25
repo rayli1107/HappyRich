@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Game Developer
   m_EditorClassIdentifier: 
   fullTime: 0
-  huntable: 1
+  searchable: 1
   professionName: Game Developer
   salary: 25000
   jobCost: 20000

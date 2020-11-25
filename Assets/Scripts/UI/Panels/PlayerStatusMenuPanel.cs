@@ -2,12 +2,8 @@
 
 namespace UI.Panels
 {
-    public class PlayerStatusMenuPanel : MonoBehaviour, IMessageBoxHandler
+    public class PlayerStatusMenuPanel : MonoBehaviour
     {
         public Player player;
-
-        public void OnButtonClick(ButtonType button)
-        {
-        }
     }
 }

@@ -154,7 +154,7 @@ MonoBehaviour:
   studentLoanRate: 3
   autoLoanRate: 3
   realEstateLoanRate: 4
-  personalLoanRate: 10
+  personalLoanRate: 15
 --- !u!114 &204261752
 MonoBehaviour:
   m_ObjectHideFlags: 0

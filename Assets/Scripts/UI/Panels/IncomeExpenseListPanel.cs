@@ -9,6 +9,7 @@ namespace UI.Panels
         {
             base.OnEnable();
 
+            Localization local = GameManager.Instance.Localization;
             List<string> activeIncomeList = new List<string>();
             List<string> passiveIncomeList = new List<string>();
             List<string> expenseList = new List<string>();
@@ -20,17 +21,17 @@ namespace UI.Panels
             {
                 activeIncome += income.salary;
                 activeIncomeList.Add(
-                    string.Format("  {0}: {1}", income.name, income.salary));
+                    string.Format("  {0}: {1}", income.name, local.GetCurrency(income.salary)));
             }
 
             expenses += player.personalExpenses;
             expenseList.Add(
-                string.Format("  Personal Expenses: {0}", player.personalExpenses));
+                string.Format("  Personal Expenses: {0}", local.GetCurrency(player.personalExpenses)));
             if (player.numChild > 0)
             {
                 int childCost = player.numChild * player.costPerChild;
                 expenses += childCost;
-                expenseList.Add(string.Format("  Children: {0}", childCost));
+                expenseList.Add(string.Format("  Children: {0}", local.GetCurrency(childCost)));
             }
 
             foreach (Assets.AbstractAsset asset in player.assets)
@@ -40,13 +41,13 @@ namespace UI.Panels
                 {
                     passiveIncome += income;
                     passiveIncomeList.Add(
-                        string.Format("  {0}: {1}", asset.name, income));
+                        string.Format("  {0}: {1}", asset.name, local.GetCurrency(income)));
                 }
                 else if (income < 0)
                 {
                     expenses -= income;
                     expenseList.Add(
-                        string.Format("  {0}: {1}", asset.name, -1 * income));
+                        string.Format("  {0}: {1}", asset.name, local.GetCurrency(-1 * income)));
                 }
             }
 
@@ -57,26 +58,26 @@ namespace UI.Panels
                 {
                     expenses += expense;
                     expenseList.Add(
-                        string.Format("  {0}: {1}", liability.name, expense));
+                        string.Format("  {0}: {1}", liability.name, local.GetCurrency(expense)));
                 }
             }
 
             int cashflow = activeIncome + passiveIncome - expenses;
-            AddText(string.Format("Total Cashflow: {0}", cashflow));
+            AddText(string.Format("Total Cashflow: {0}", local.GetCurrency(cashflow)));
 
-            AddText(string.Format("Active Income: {0}", activeIncome));
+            AddText(string.Format("Active Income: {0}", local.GetCurrency(activeIncome)));
             foreach (string s in activeIncomeList)
             {
                 AddText(s);
             }
 
-            AddText(string.Format("Passive Income: {0}", passiveIncome));
+            AddText(string.Format("Passive Income: {0}", local.GetCurrency(passiveIncome)));
             foreach (string s in passiveIncomeList)
             {
                 AddText(s);
             }
 
-            AddText(string.Format("Expenses: {0}", expenses));
+            AddText(string.Format("Expenses: {0}", local.GetCurrency(expenses)));
             foreach (string s in expenseList)
             {
                 AddText(s);

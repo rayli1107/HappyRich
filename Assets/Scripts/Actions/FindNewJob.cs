@@ -48,6 +48,8 @@ namespace Actions
                 return;
             }
 
+            Localization local = GameManager.Instance.Localization;
+
             bool hasFullTime = false;
             foreach (Profession job in _player.jobs)
             {
@@ -60,8 +62,10 @@ namespace Actions
 
             List<string> message = new List<string>();
             message.Add(_job.professionName);
-            message.Add(string.Format("Training Cost: {0}", _job.jobCost));
-            message.Add(string.Format("Salary: {0}", _job.salary));
+            message.Add(string.Format(
+                "Training Cost: {0}", local.GetCurrency(_job.jobCost)));
+            message.Add(string.Format(
+                "Salary: {0}", local.GetCurrency(_job.salary)));
             message.Add(string.Format("Apply?"));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 string.Join("\n", message), 48, ButtonChoiceType.OK_CANCEL, this);

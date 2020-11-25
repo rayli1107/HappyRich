@@ -21,9 +21,14 @@ namespace Assets
             return amount * interestRate / 100;
         }
 
-        public virtual void payoff(int amount)
+        public virtual void PayOff(int amount)
         {
             this.amount = Mathf.Max(this.amount - amount, 0);
+        }
+
+        public void Add(int amount)
+        {
+            this.amount += amount;
         }
     }
 

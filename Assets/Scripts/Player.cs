@@ -125,6 +125,17 @@ public class Player
         playerStates.Add(new PlayerState.TwoJobState());
     }
 
+    public void AddPersonalLoan(int amount)
+    {
+        if (personalLoan == null)
+        {
+            personalLoan = new Assets.PersonalLoan(amount);
+        }
+        else
+        {
+            personalLoan.Add(amount);
+        }
+    }
     public void AddJob(Profession job)
     {
         jobs.Add(job);

@@ -25,15 +25,17 @@ namespace UI.Panels
                 netWorth -= liability.amount;
             }
 
-            AddText(string.Format("Total Net Worth: {0}", netWorth));
-            AddText(string.Format("Cash: {0}", player.cash));
+            Localization local = GameManager.Instance.Localization;
+            AddText(string.Format("Total Net Worth: {0}", local.GetCurrency(netWorth)));
+            AddText(string.Format("Cash: {0}", local.GetCurrency(player.cash)));
 
             if (player.assets.Count > 0)
             {
                 AddText(string.Format("Assets:"));
                 foreach (Assets.AbstractAsset asset in player.assets)
                 {
-                    AddText(string.Format("  {0}: {1}", asset.name, asset.value));
+                    AddText(string.Format(
+                        "  {0}: {1}", asset.name, local.GetCurrency(asset.value)));
                 }
             }
 
@@ -42,7 +44,8 @@ namespace UI.Panels
                 AddText(string.Format("Liabilities:"));
                 foreach (Assets.AbstractLiability liability in liabilities)
                 {
-                    AddText(string.Format("  {0}: {1}", liability.name, liability.amount));
+                    AddText(string.Format(
+                        "  {0}: {1}", liability.name, local.GetCurrency(liability.amount)));
                 }
             }
         }

@@ -65,11 +65,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\InterestRateManager.cs" />
     <Compile Include="Assets\Scripts\JobManager.cs" />
+    <Compile Include="Assets\Scripts\Localization.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />

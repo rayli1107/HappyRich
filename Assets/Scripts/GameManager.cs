@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public int defaultHappiness = 50;
 
     public static GameManager Instance { get; private set; }
+    public Localization Localization { get; private set; }
     public Player player { get; private set; }
 
     private void Awake()
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Localization = new Localization();
         player = new Player(
             JobManager.Instance.FindInitialProfession(),
             defaultHappiness);
@@ -41,7 +43,14 @@ public class GameManager : MonoBehaviour
 
     public void TryDebit(Player player, int amount, ITransactionHandler handler)
     {
-        player.AddCash(-1 * amount);
-        handler.OnTransactionSuccess();
+        if (player.cash >= amount)
+        {
+            player.AddCash(-1 * amount);
+            handler.OnTransactionSuccess();
+        }
+        else
+        {
+            new Actions.TakePersonalLoan(player, amount, handler).Start();
+        }
     }
 }

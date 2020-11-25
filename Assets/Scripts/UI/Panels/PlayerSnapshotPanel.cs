@@ -27,6 +27,7 @@ namespace UI.Panels
 
         public void UpdatePlayerInfo(Player player)
         {
+            Localization local = GameManager.Instance.Localization;
             PlayerSnapshot snapshot = new PlayerSnapshot(player);
 
             if (_textAge)
@@ -47,18 +48,21 @@ namespace UI.Panels
 
             if (_textCash)
             {
-                _textCash.text = string.Format("Cash:\n{0}", snapshot.cash);
+                _textCash.text = string.Format(
+                    "Cash:\n{0}", local.GetCurrency(snapshot.cash));
             }
 
             if (_textCashflow)
             {
                 int cashflow = snapshot.activeIncome + snapshot.passiveIncome - snapshot.expenses;
-                _textCashflow.text = string.Format("Cashflow:\n{0}", cashflow);
+                _textCashflow.text = string.Format(
+                    "Cashflow:\n{0}", local.GetCurrency(cashflow));
             }
 
             if (_textNetworth)
             {
-                _textNetworth.text = string.Format("Net Worth:\n{0}", snapshot.netWorth);
+                _textNetworth.text = string.Format(
+                    "Net Worth:\n{0}", local.GetCurrency(snapshot.netWorth));
             }
         }
     }

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Localization Localization { get; private set; }
     public Player player { get; private set; }
 
+    public StateMachine.StateMachine StateMachine { get; private set; }
+
     private void Awake()
     {
         Instance = this;
@@ -20,25 +22,21 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Localization = new Localization();
+        StateMachine = new StateMachine.StateMachine();
+        StateMachine.Start();
+    }
+
+    public void CreatePlayer()
+    {
         player = new Player(
             JobManager.Instance.FindInitialProfession(),
             defaultHappiness);
-        StartCoroutine(WaitAndUpdateUI());
-    }
-
-    private IEnumerator WaitAndUpdateUI()
-    {
-        while (!UI.UIManager.Instance.ready)
-        {
-            yield return null;
-        }
-        UI.UIManager.Instance.UpdatePlayerInfo(player);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        StateMachine.Update();
     }
 
     public void TryDebit(Player player, int amount, ITransactionHandler handler)

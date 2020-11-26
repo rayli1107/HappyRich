@@ -76,6 +76,16 @@
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Profession.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\GameInitState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\GameOverState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\IState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\MarketEventState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\PersonalEventState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\PlayerActionState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\PlayerInitState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\PlayerPostActionState.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\StateMachine.cs" />
+    <Compile Include="Assets\Scripts\StateMachine\VictoryState.cs" />
     <Compile Include="Assets\Scripts\Transaction\ITransactionHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\ActionMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\JobSearchPanel.cs" />

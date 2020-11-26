@@ -23,6 +23,8 @@ public class PlayerSnapshot
     public int happiness {get; private set; }
     public int netWorth { get; private set; }
 
+    public int cashflow { get { return activeIncome + passiveIncome - expenses; } }
+
     public PlayerSnapshot(Player player)
     {
         age = player.age;
@@ -136,6 +138,12 @@ public class Player
             personalLoan.Add(amount);
         }
     }
+    public void DistributeCashflow()
+    {
+        PlayerSnapshot snapshot = new PlayerSnapshot(this);
+        AddCash(snapshot.cashflow);
+    }
+
     public void AddJob(Profession job)
     {
         jobs.Add(job);

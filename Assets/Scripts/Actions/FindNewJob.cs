@@ -27,6 +27,7 @@ namespace Actions
             else
             {
                 Object.Destroy(msgBox.gameObject);
+                GameManager.Instance.StateMachine.OnPlayerActionDone();
             }
         }
 
@@ -39,6 +40,7 @@ namespace Actions
             Object.Destroy(_msgBox.gameObject);
             _player.AddJob(_job);
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            GameManager.Instance.StateMachine.OnPlayerActionDone();
         }
 
         public void Start()

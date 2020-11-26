@@ -11,6 +11,8 @@ namespace UI
     {
 #pragma warning disable 0649
         [SerializeField]
+        private GameObject _actionButton;
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
         [SerializeField]
         private GameObject _prefabPlayerStatusMenuPanel;
@@ -100,6 +102,11 @@ namespace UI
             return false;
         }
 
+        public void EnableActionButton(bool enable)
+        {
+            _actionButton.SetActive(enable);
+        }
+
         public void UpdatePlayerInfo(Player player)
         {
             _playerSnapshotPanel.UpdatePlayerInfo(player);
@@ -175,6 +182,11 @@ namespace UI
             {
                 _modalObjects[_modalObjects.Count - 1].OnClickOutsideBoundary();
             }
+        }
+
+        public void OnEndTurnButton()
+        {
+            GameManager.Instance.StateMachine.OnPlayerTurnDone();
         }
     }
 }

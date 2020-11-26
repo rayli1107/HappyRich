@@ -54,9 +54,8 @@ namespace UI.Panels
 
             if (_textCashflow)
             {
-                int cashflow = snapshot.activeIncome + snapshot.passiveIncome - snapshot.expenses;
                 _textCashflow.text = string.Format(
-                    "Cashflow:\n{0}", local.GetCurrency(cashflow));
+                    "Cashflow:\n{0}", local.GetCurrency(snapshot.cashflow));
             }
 
             if (_textNetworth)

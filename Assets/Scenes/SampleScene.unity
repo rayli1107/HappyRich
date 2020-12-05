@@ -545,6 +545,8 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleTextPanel: {fileID: 7061017048023922611, guid: d6aa43a3069159948be94f7eb3338ee8,
     type: 3}
+  _prefabJobListPanel: {fileID: 2875977875128652921, guid: cf8faa891a2e52942bd8551c48e0a749,
+    type: 3}
 --- !u!114 &1690758058
 MonoBehaviour:
   m_ObjectHideFlags: 0

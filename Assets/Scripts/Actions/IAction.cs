@@ -4,4 +4,9 @@
     {
         void Start();
     }
+
+    public interface IActionCallback
+    {
+        void OnActionCallback(bool success);
+    }
 }

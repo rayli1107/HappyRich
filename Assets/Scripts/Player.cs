@@ -72,6 +72,8 @@ public class PlayerSnapshot
 public class Player
 {
     public List<Profession> jobs { get; private set; }
+    public List<Profession> oldJobs { get; private set; }
+
     public List<Assets.AbstractAsset> assets { get; private set; }
     public List<Assets.AbstractLiability> liabilities { get
         {
@@ -101,6 +103,7 @@ public class Player
 
     public Player(Profession profession, int defaultHappiness)
     {
+        oldJobs = new List<Profession>();
         jobs = new List<Profession>();
         jobs.Add(profession);
 
@@ -162,5 +165,13 @@ public class Player
             happiness += state.getHappiness(this);
         }
         return happiness;
+    }
+
+    public void LoseJob(Profession job)
+    {
+        if (jobs.Remove(job) && !oldJobs.Contains(job))
+        {
+            oldJobs.Add(job);
+        }
     }
 }

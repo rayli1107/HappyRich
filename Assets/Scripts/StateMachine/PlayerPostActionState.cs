@@ -11,10 +11,12 @@
 
         public void EnterState()
         {
+            UI.UIManager.Instance.EnableActionButton(false);
         }
 
         public void ExitState()
         {
+            UI.UIManager.Instance.EnableActionButton(true);
         }
 
         public void Update()

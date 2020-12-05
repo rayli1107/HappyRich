@@ -63,11 +63,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Actions\AbstractAction.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
     <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
+    <Compile Include="Assets\Scripts\Events\IEvent.cs" />
+    <Compile Include="Assets\Scripts\Events\Market\MarketEvent.cs" />
+    <Compile Include="Assets\Scripts\Events\Personal\JobLossEvent.cs" />
+    <Compile Include="Assets\Scripts\Events\Personal\PersonalEvent.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\InterestRateManager.cs" />
     <Compile Include="Assets\Scripts\JobManager.cs" />
@@ -92,6 +98,8 @@
     <Compile Include="Assets\Scripts\UI\Panels\AssetLiabilityListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\IMessageBox.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\IncomeExpenseListPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\JobListPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\JobPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\MessageBox.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\ModalObject.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerSnapshotPanel.cs" />

@@ -78,7 +78,6 @@ namespace UI.Panels
             rect.sizeDelta = new Vector2(width, height);
             childRect.anchorMin = childRect.anchorMax = childRect.pivot = new Vector2(0, 1);
             childRect.anchoredPosition = new Vector2(padding, -1 * padding);
-
         }
 
         public void OnButtonOk()

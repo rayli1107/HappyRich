@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Actions
 {
-    public class FindNewJob : IAction, ITransactionHandler, IMessageBoxHandler
+    public class FindNewJob : AbstractAction, ITransactionHandler, IMessageBoxHandler
     {
         private Player _player;
         private MessageBox _msgBox;
         private Profession _job;
 
-        public FindNewJob(Player player)
+        public FindNewJob(Player player) : base(null)
         {
             _player = player;
         }
@@ -33,6 +33,7 @@ namespace Actions
 
         public void OnTransactionFailure()
         {
+            RunCallback(false);
         }
 
         public void OnTransactionSuccess()
@@ -41,9 +42,10 @@ namespace Actions
             _player.AddJob(_job);
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
             GameManager.Instance.StateMachine.OnPlayerActionDone();
+            RunCallback(true);
         }
 
-        public void Start()
+        public override void Start()
         {
             if (_player.jobs.Count > 1)
             {
@@ -60,7 +62,8 @@ namespace Actions
                     hasFullTime = true;
                 }
             }
-            _job = JobManager.Instance.FindJob(hasFullTime);
+            _job = JobManager.Instance.FindJob(
+                GameManager.Instance.Random, hasFullTime);
 
             List<string> message = new List<string>();
             message.Add(_job.professionName);
@@ -70,7 +73,7 @@ namespace Actions
                 "Salary: {0}", local.GetCurrency(_job.salary)));
             message.Add(string.Format("Apply?"));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", message), 48, ButtonChoiceType.OK_CANCEL, this);
+                string.Join("\n", message), 36, ButtonChoiceType.OK_CANCEL, this);
         }
     }
 }

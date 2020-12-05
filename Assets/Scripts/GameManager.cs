@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public Player player { get; private set; }
 
     public StateMachine.StateMachine StateMachine { get; private set; }
+    public System.Random Random { get; private set; }
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Random = new System.Random(System.Guid.NewGuid().GetHashCode());
         Localization = new Localization();
         StateMachine = new StateMachine.StateMachine();
         StateMachine.Start();
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
     public void CreatePlayer()
     {
         player = new Player(
-            JobManager.Instance.FindInitialProfession(),
+            JobManager.Instance.FindInitialProfession(Random),
             defaultHappiness);
     }
 

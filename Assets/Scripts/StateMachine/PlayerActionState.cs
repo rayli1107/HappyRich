@@ -25,12 +25,10 @@ namespace StateMachine
                 player.DistributeCashflow();
             }
             UI.UIManager.Instance.UpdatePlayerInfo(player);
-            UI.UIManager.Instance.EnableActionButton(true);
         }
 
         public void ExitState()
         {
-            UI.UIManager.Instance.EnableActionButton(false);
         }
 
         public void Update()

@@ -22,6 +22,8 @@ namespace UI
         private GameObject _prefabScrollableTextPanel;
         [SerializeField]
         private GameObject _prefabSimpleTextPanel;
+        [SerializeField]
+        private GameObject _prefabJobListPanel;
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
@@ -174,6 +176,22 @@ namespace UI
             IncomeExpenseListPanel panel = gameObj.AddComponent<IncomeExpenseListPanel>();
             panel.player = GameManager.Instance.player;
             ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+        }
+
+        public void ShowJobListPanel()
+        {
+            Player player = GameManager.Instance.player;
+            if (player.jobs.Count > 0)
+            {
+                GameObject gameObj = Instantiate(_prefabJobListPanel);
+                gameObj.GetComponent<JobListPanel>().player = player;
+                ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+            }
+            else
+            {
+                ShowSimpleMessageBox(
+                    "You are currently unemployed.", 36, ButtonChoiceType.OK_ONLY, null);
+            }
         }
 
         public void DestroyAllModal()

@@ -12,20 +12,18 @@ public class JobManager : MonoBehaviour
 #pragma warning restore 0649
 
     public static JobManager Instance { get; private set; }
-    private System.Random _random;
 
     private void Awake()
     {
         Instance = this;
-        _random = new System.Random(System.Guid.NewGuid().GetHashCode());
     }
 
-    public Profession FindInitialProfession()
+    public Profession FindInitialProfession(System.Random random)
     {
-        return _professions[_random.Next(_professions.Length)];
+        return _professions[random.Next(_professions.Length)];
     }
 
-    public Profession FindJob(bool hasFullTime)
+    public Profession FindJob(System.Random random, bool hasFullTime)
     {
         List<Profession> jobs = new List<Profession>(_partTimeJobs);
         if (!hasFullTime)
@@ -38,6 +36,6 @@ public class JobManager : MonoBehaviour
                 }
             }
         }
-        return jobs[_random.Next(jobs.Count)];
+        return jobs[random.Next(jobs.Count)];
     }
 }

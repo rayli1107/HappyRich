@@ -3,7 +3,7 @@
     public class AbstractAsset
     {
         public string name { get; private set; }
-        public int value { get; private set; }
+        public int value { get; protected set; }
         public AbstractLiability liability { get; private set; }
 
         private int _passiveIncome;
@@ -17,7 +17,7 @@
             _passiveIncome = passiveIncome;
         }
 
-        public int getIncome()
+        public virtual int getIncome()
         {
             int income = _passiveIncome;
             if (liability != null)

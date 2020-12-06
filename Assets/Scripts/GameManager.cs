@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public StateMachine.StateMachine StateMachine { get; private set; }
     public System.Random Random { get; private set; }
 
+    public StockManager StockManager { get; private set; }
+
     private void Awake()
     {
         Instance = this;
@@ -23,6 +25,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Random = new System.Random(System.Guid.NewGuid().GetHashCode());
+
+        StockManager = GetComponent<StockManager>();
+        StockManager.Initialize(Random);
+
         Localization = new Localization();
         StateMachine = new StateMachine.StateMachine();
         StateMachine.Start();

@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 204261752}
   - component: {fileID: 204261751}
   - component: {fileID: 204261754}
+  - component: {fileID: 204261755}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -151,10 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8271894cd2ef0444aac7edfe3bc75a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  studentLoanRate: 3
-  autoLoanRate: 3
-  realEstateLoanRate: 4
-  personalLoanRate: 15
+  _studentLoanRate: 3
+  _autoLoanRate: 3
+  _realEstateLoanRate: 4
+  _personalLoanRate: 15
 --- !u!114 &204261752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +199,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c94c11276e8ff3408697d911312f561, type: 2}
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
+--- !u!114 &204261755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204261750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c188891f23909a641abfdfc1e93dc8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialPriceMin: 20
+  _initialPriceMax: 100
+  _numGrowthStock: 5
+  _growthStockRangeMin: 0.9
+  _growthStockRangeMax: 1.2
 --- !u!1 &494767972
 GameObject:
   m_ObjectHideFlags: 0

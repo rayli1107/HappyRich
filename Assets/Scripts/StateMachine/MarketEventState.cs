@@ -11,6 +11,8 @@
 
         public void EnterState()
         {
+            GameManager.Instance.StockManager.OnTurnStart(
+                GameManager.Instance.Random);
             new Events.Market.MarketEvent(this).Run();
         }
 
@@ -21,6 +23,7 @@
         public void Update()
         {
         }
+
         public void OnEventDone()
         {
             _stateMachine.ChangeState(_stateMachine.PlayerActionState);

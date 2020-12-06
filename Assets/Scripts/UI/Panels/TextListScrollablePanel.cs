@@ -18,14 +18,25 @@ namespace UI.Panels
             _textSize = _gridLayoutGroup.cellSize.y - 4;
         }
 
-        protected void AddText(string text)
+        protected void AddObject(GameObject gameObject)
+        {
+            gameObject.transform.SetParent(_gridLayoutGroup.transform);
+        }
+
+        protected void AddText(string s)
+        {
+            AddText(s, Color.black);
+        }
+
+        protected void AddText(string text, Color color)
         {
             GameObject textObj = new GameObject("Text");
-            textObj.transform.SetParent(_gridLayoutGroup.transform);
+            AddObject(textObj);
+
             TextMeshProUGUI textComponent = textObj.AddComponent<TextMeshProUGUI>();
             textComponent.text = text;
             textComponent.fontSize = _textSize;
-            textComponent.color = Color.black;
+            textComponent.color = color;
         }
     }
 }

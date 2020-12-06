@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using Assets;
+using System.Collections.Generic;
+
 
 namespace UI.Panels
 {
@@ -34,7 +35,7 @@ namespace UI.Panels
                 expenseList.Add(string.Format("  Children: {0}", local.GetCurrency(childCost)));
             }
 
-            foreach (Assets.AbstractAsset asset in player.assets)
+            foreach (AbstractAsset asset in player.assets)
             {
                 int income = asset.getIncome();
                 if (income > 0)
@@ -51,7 +52,7 @@ namespace UI.Panels
                 }
             }
 
-            foreach (Assets.AbstractLiability liability in player.liabilities)
+            foreach (AbstractLiability liability in player.liabilities)
             {
                 int expense = liability.getExpense();
                 if (expense > 0)

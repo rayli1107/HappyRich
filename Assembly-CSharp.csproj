@@ -98,6 +98,8 @@
     <Compile Include="Assets\Scripts\UI\Panels\ActionMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\JobSearchPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\AssetLiabilityListPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\StockMarketPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\StockPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\IMessageBox.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\IncomeExpenseListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\JobListPanel.cs" />

@@ -21,7 +21,7 @@ public class StockManager : MonoBehaviour
     public static StockManager Instance;
 
     private Dictionary<string, AbstractStock> _stocks;
-    private List<GrowthStock> _growthStocks;
+    public List<AbstractStock> growthStocks { get; private set; }
 
     private void Awake()
     {
@@ -50,13 +50,13 @@ public class StockManager : MonoBehaviour
     public void Initialize(System.Random random)
     {
         _stocks = new Dictionary<string, AbstractStock>();
-        _growthStocks = new List<GrowthStock>();
+        growthStocks = new List<AbstractStock>();
 
         for (int i = 0; i < _numGrowthStock; ++i) {
             string name = generateStockName(random);
             int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
             GrowthStock stock = new GrowthStock(name, value);
-            _growthStocks.Add(stock);
+            growthStocks.Add(stock);
             _stocks.Add(name, stock);
         }
     }

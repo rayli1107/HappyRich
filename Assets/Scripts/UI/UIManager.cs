@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UI.Panels;
+using UI.Panels.Assets;
 using TMPro;
 
 namespace UI
@@ -24,6 +25,8 @@ namespace UI
         private GameObject _prefabSimpleTextPanel;
         [SerializeField]
         private GameObject _prefabJobListPanel;
+        [SerializeField]
+        private GameObject _prefabStockMarketPanel;
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
@@ -176,6 +179,14 @@ namespace UI
             IncomeExpenseListPanel panel = gameObj.AddComponent<IncomeExpenseListPanel>();
             panel.player = GameManager.Instance.player;
             ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+        }
+
+        public void ShowStockMarketPanel()
+        {
+            GameObject gameObject = Instantiate(_prefabStockMarketPanel);
+            StockMarketPanel panel = gameObject.GetComponent<StockMarketPanel>();
+            panel.player = GameManager.Instance.player;
+            ShowMessageBox(gameObject, null, ButtonChoiceType.OK_ONLY);
         }
 
         public void ShowJobListPanel()

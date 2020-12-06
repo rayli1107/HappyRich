@@ -15,4 +15,13 @@ public class Localization
         }
         return amount.ToString("C0");
     }
+
+    public string GetPercent(float pct)
+    {
+        if (pct >= 0)
+        {
+            return "+" + pct.ToString("#0%");
+        }
+        return pct.ToString("#0%");
+    }
 }

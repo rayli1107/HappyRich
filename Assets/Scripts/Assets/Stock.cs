@@ -5,7 +5,14 @@ namespace Assets
 {
     public class AbstractStock : AbstractAsset
     {
-        protected float _prevValue;
+        private float _prevValue;
+        public float change
+        {
+            get
+            {
+                return (value - _prevValue) / _prevValue;
+            }
+        }
 
         public AbstractStock(string name, int price) : base(name, price, null, 0)
         {
@@ -14,7 +21,7 @@ namespace Assets
 
         public virtual void OnTurnStart(Random random)
         {
-
+            _prevValue = value;
         }
 
         public virtual string GetDescription()
@@ -40,7 +47,7 @@ namespace Assets
 
         public override void OnTurnStart(Random random)
         {
-            _prevValue = value;
+            base.OnTurnStart(random);
             value = Convert.ToInt32(
                 value * StockManager.Instance.getGrowthStockGrowth(random));
             value = Math.Max(value, 1);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI.Panels
@@ -10,9 +11,9 @@ namespace UI.Panels
             base.OnEnable();
 
             int netWorth = player.cash;
-            List<Assets.AbstractLiability> liabilities = new List<Assets.AbstractLiability>();
+            List<AbstractLiability> liabilities = new List<AbstractLiability>();
             liabilities.AddRange(player.liabilities);
-            foreach (Assets.AbstractAsset asset in player.assets)
+            foreach (AbstractAsset asset in player.assets)
             {
                 netWorth += asset.value;
                 if (asset.liability != null && asset.liability.amount > 0)
@@ -20,7 +21,7 @@ namespace UI.Panels
                     liabilities.Add(asset.liability);
                 }
             }
-            foreach (Assets.AbstractLiability liability in liabilities)
+            foreach (AbstractLiability liability in liabilities)
             {
                 netWorth -= liability.amount;
             }
@@ -32,7 +33,7 @@ namespace UI.Panels
             if (player.assets.Count > 0)
             {
                 AddText(string.Format("Assets:"));
-                foreach (Assets.AbstractAsset asset in player.assets)
+                foreach (AbstractAsset asset in player.assets)
                 {
                     AddText(string.Format(
                         "  {0}: {1}", asset.name, local.GetCurrency(asset.value)));
@@ -42,7 +43,7 @@ namespace UI.Panels
             if (liabilities.Count > 0)
             {
                 AddText(string.Format("Liabilities:"));
-                foreach (Assets.AbstractLiability liability in liabilities)
+                foreach (AbstractLiability liability in liabilities)
                 {
                     AddText(string.Format(
                         "  {0}: {1}", liability.name, local.GetCurrency(liability.amount)));

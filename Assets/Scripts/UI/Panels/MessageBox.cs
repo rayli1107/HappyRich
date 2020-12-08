@@ -80,6 +80,12 @@ namespace UI.Panels
             childRect.anchoredPosition = new Vector2(padding, -1 * padding);
         }
 
+        public void Destroy()
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+
         public void OnButtonOk()
         {
             if (messageBoxHandler != null)
@@ -88,7 +94,7 @@ namespace UI.Panels
             }
             else
             {
-                Destroy(gameObject);
+                Destroy();
             }
         }
 
@@ -100,7 +106,7 @@ namespace UI.Panels
             }
             else
             {
-                Destroy(gameObject);
+                Destroy();
             }
         }
 
@@ -114,7 +120,7 @@ namespace UI.Panels
                 }
                 else
                 {
-                    Destroy(gameObject);
+                    Destroy();
                 }
             }
         }

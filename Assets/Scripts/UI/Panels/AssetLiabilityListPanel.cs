@@ -12,10 +12,10 @@ namespace UI.Panels
 
             int netWorth = player.cash;
             List<AbstractLiability> liabilities = new List<AbstractLiability>();
-            liabilities.AddRange(player.liabilities);
-            foreach (AbstractAsset asset in player.assets)
+            liabilities.AddRange(player.portfolio.liabilities);
+            foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                netWorth += asset.value;
+                netWorth += asset.getValue();
                 if (asset.liability != null && asset.liability.amount > 0)
                 {
                     liabilities.Add(asset.liability);
@@ -30,13 +30,13 @@ namespace UI.Panels
             AddText(string.Format("Total Net Worth: {0}", local.GetCurrency(netWorth)));
             AddText(string.Format("Cash: {0}", local.GetCurrency(player.cash)));
 
-            if (player.assets.Count > 0)
+            if (player.portfolio.assets.Count > 0)
             {
                 AddText(string.Format("Assets:"));
-                foreach (AbstractAsset asset in player.assets)
+                foreach (AbstractAsset asset in player.portfolio.assets)
                 {
                     AddText(string.Format(
-                        "  {0}: {1}", asset.name, local.GetCurrency(asset.value)));
+                        "  {0}: {1}", asset.name, local.GetCurrency(asset.getValue())));
                 }
             }
 

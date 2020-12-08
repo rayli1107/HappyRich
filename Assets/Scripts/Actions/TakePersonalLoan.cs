@@ -26,15 +26,15 @@ namespace Actions
             if (button == ButtonType.OK)
             {
                 int loanAmount = _amount - _player.cash;
-                _player.AddCash(-1 * _player.cash);
-                _player.AddPersonalLoan(loanAmount);
+                _player.portfolio.AddCash(-1 * _player.cash);
+                _player.portfolio.AddPersonalLoan(loanAmount);
                 _transactionHandler.OnTransactionSuccess();
             }
             else
             {
                 _transactionHandler.OnTransactionFailure();
             }
-            Object.Destroy(msgBox.gameObject);
+            msgBox.Destroy();
         }
 
         public void Start()
@@ -48,7 +48,7 @@ namespace Actions
             message.Add(string.Format("You will need to pay an additional annual interest of {0}",
                 local.GetCurrency(interst)));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", message), 48, ButtonChoiceType.OK_CANCEL, this);
+                string.Join("\n", message), ButtonChoiceType.OK_CANCEL, this);
         }
     }
 }

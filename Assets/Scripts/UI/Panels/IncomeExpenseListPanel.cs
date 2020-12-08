@@ -35,7 +35,7 @@ namespace UI.Panels
                 expenseList.Add(string.Format("  Children: {0}", local.GetCurrency(childCost)));
             }
 
-            foreach (AbstractAsset asset in player.assets)
+            foreach (AbstractAsset asset in player.portfolio.assets)
             {
                 int income = asset.getIncome();
                 if (income > 0)
@@ -52,7 +52,7 @@ namespace UI.Panels
                 }
             }
 
-            foreach (AbstractLiability liability in player.liabilities)
+            foreach (AbstractLiability liability in player.portfolio.liabilities)
             {
                 int expense = liability.getExpense();
                 if (expense > 0)

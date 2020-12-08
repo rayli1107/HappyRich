@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Actions\AbstractAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\BuyStocksAction.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\JobPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\MessageBox.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\ModalObject.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\NumberInputPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerSnapshotPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerStatusMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\TextListScrollablePanel.cs" />

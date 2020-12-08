@@ -20,7 +20,7 @@ namespace Actions
             string message = string.Format(
                 "Quit your {0} job?", _job.professionName);
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                message, 36, ButtonChoiceType.OK_CANCEL, this);
+                message, ButtonChoiceType.OK_CANCEL, this);
         }
 
         public void OnButtonClick(MessageBox msgBox, ButtonType button)
@@ -35,7 +35,7 @@ namespace Actions
             {
                 RunCallback(false);
             }
-            Object.Destroy(msgBox.gameObject);
+            msgBox.Destroy();
         }
     }
 }

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         if (player.cash >= amount)
         {
-            player.AddCash(-1 * amount);
+            player.portfolio.AddCash(-1 * amount);
             handler.OnTransactionSuccess();
         }
         else

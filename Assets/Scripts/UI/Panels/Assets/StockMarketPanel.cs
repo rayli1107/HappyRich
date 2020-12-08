@@ -27,6 +27,7 @@ namespace UI.Panels.Assets
                     _prefabStockPanel, panelObject.transform);
                 childPanel.player = player;
                 childPanel.stock = stock;
+                childPanel.gameObject.SetActive(false);
                 childPanel.gameObject.SetActive(true);
             }
         }
@@ -37,7 +38,6 @@ namespace UI.Panels.Assets
             if (stockManager.growthStocks.Count > 0)
             {
                 SetupStockPanel(_growthStockPanel, stockManager.growthStocks);
-                SetupStockPanel(_yieldStockPanel, stockManager.growthStocks);
             }
         }
     }

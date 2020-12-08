@@ -42,7 +42,7 @@ public class PlayerSnapshot
         expenses = player.personalExpenses;
         expenses += player.numChild * player.costPerChild;
 
-        foreach (Assets.AbstractAsset asset in player.assets)
+        foreach (Assets.AbstractAsset asset in player.portfolio.assets)
         {
             int income = asset.getIncome();
             if (income > 0)
@@ -54,14 +54,14 @@ public class PlayerSnapshot
                 expenses -= income;
             }
 
-            netWorth += asset.value;
+            netWorth += asset.getValue();
             if (asset.liability != null)
             {
                 netWorth -= asset.liability.amount;
             }
         }
 
-        foreach (Assets.AbstractLiability liability in player.liabilities)
+        foreach (Assets.AbstractLiability liability in player.portfolio.liabilities)
         {
             netWorth -= liability.amount;
             expenses += liability.getExpense();
@@ -69,13 +69,34 @@ public class PlayerSnapshot
     }
 }
 
-public class Player
+public class Portfolio
 {
-    public List<Profession> jobs { get; private set; }
-    public List<Profession> oldJobs { get; private set; }
+    public Assets.StudentLoan studentLoan { get; private set; }
+    public Assets.PersonalLoan personalLoan { get; private set; }
+    public Assets.Car car { get; private set; }
+    public int cash { get; private set; }
+    public Dictionary<string, Assets.PurchasedStock> stocks { get; private set; }
 
-    public List<Assets.AbstractAsset> assets { get; private set; }
-    public List<Assets.AbstractLiability> liabilities { get
+    public List<Assets.AbstractAsset> assets
+    {
+        get
+        {
+            List<Assets.AbstractAsset> assets = new List<Assets.AbstractAsset>();
+            if (car != null)
+            {
+                assets.Add(car);
+            }
+            foreach (KeyValuePair<string, Assets.PurchasedStock> entry in stocks)
+            {
+                assets.Add(entry.Value);
+            }
+            return assets;
+        }
+    }
+
+    public List<Assets.AbstractLiability> liabilities
+    {
+        get
         {
             List<Assets.AbstractLiability> ret = new List<Assets.AbstractLiability>();
             if (studentLoan != null && studentLoan.amount > 0)
@@ -89,28 +110,13 @@ public class Player
             return ret;
         }
     }
-    public int personalExpenses { get; private set; }
-    public int costPerChild { get; private set; }
-    public int numChild { get; private set; }
-    public int age { get; private set; }
-    public int cash { get; private set; }
-    public List<PlayerState.PlayerStateInterface> playerStates { get; private set; }
 
-    private int _defaultHappiness;
 
-    public Assets.StudentLoan studentLoan { get; private set; }
-    public Assets.PersonalLoan personalLoan { get; private set; }
-
-    public Player(Profession profession, int defaultHappiness)
+    public Portfolio(Profession profession)
     {
-        oldJobs = new List<Profession>();
-        jobs = new List<Profession>();
-        jobs.Add(profession);
-
-        assets = new List<Assets.AbstractAsset>();
         if (profession.autoLoan > 0)
         {
-            assets.Add(new Assets.Car(profession.autoLoan));
+            car = new Assets.Car(profession.autoLoan);
         }
 
         if (profession.jobCost > 0)
@@ -118,16 +124,8 @@ public class Player
             studentLoan = new Assets.StudentLoan(profession.jobCost);
         }
 
-        personalExpenses = profession.personalExpenses;
-        costPerChild = profession.costPerChild;
-        numChild = 0;
-        age = profession.startingAge;
         cash = profession.startingCash;
-        _defaultHappiness = defaultHappiness;
-
-        playerStates = new List<PlayerState.PlayerStateInterface>();
-        playerStates.Add(new PlayerState.OneJobState());
-        playerStates.Add(new PlayerState.TwoJobState());
+        stocks = new Dictionary<string, Assets.PurchasedStock>();
     }
 
     public void AddPersonalLoan(int amount)
@@ -141,20 +139,70 @@ public class Player
             personalLoan.Add(amount);
         }
     }
+
+    public void AddCash(int amount)
+    {
+        cash += amount;
+    }
+
+    public void AddStock(Assets.AbstractStock stock, int number)
+    {
+        Assets.PurchasedStock purchasedStock = null;
+        if (stocks.TryGetValue(stock.name, out purchasedStock))
+        {
+            purchasedStock.AddCount(number);
+        } 
+        else
+        {
+            purchasedStock = new Assets.PurchasedStock(stock);
+            purchasedStock.AddCount(number);
+            stocks.Add(stock.name, purchasedStock);
+        }
+    }
+}
+
+public class Player
+{
+    public List<Profession> jobs { get; private set; }
+    public List<Profession> oldJobs { get; private set; }
+    public Portfolio portfolio { get; private set; }
+    public int cash => portfolio.cash;
+    public int personalExpenses { get; private set; }
+    public int costPerChild { get; private set; }
+    public int numChild { get; private set; }
+    public int age { get; private set; }
+    public List<PlayerState.PlayerStateInterface> playerStates { get; private set; }
+
+    private int _defaultHappiness;
+
+
+    public Player(Profession profession, int defaultHappiness)
+    {
+        oldJobs = new List<Profession>();
+        jobs = new List<Profession>();
+        jobs.Add(profession);
+        portfolio = new Portfolio(profession);
+
+        personalExpenses = profession.personalExpenses;
+        costPerChild = profession.costPerChild;
+        numChild = 0;
+        age = profession.startingAge;
+        _defaultHappiness = defaultHappiness;
+
+        playerStates = new List<PlayerState.PlayerStateInterface>();
+        playerStates.Add(new PlayerState.OneJobState());
+        playerStates.Add(new PlayerState.TwoJobState());
+    }
+
     public void DistributeCashflow()
     {
         PlayerSnapshot snapshot = new PlayerSnapshot(this);
-        AddCash(snapshot.cashflow);
+        portfolio.AddCash(snapshot.cashflow);
     }
 
     public void AddJob(Profession job)
     {
         jobs.Add(job);
-    }
-
-    public void AddCash(int amount)
-    {
-        cash += amount;
     }
 
     public int getHappiness()

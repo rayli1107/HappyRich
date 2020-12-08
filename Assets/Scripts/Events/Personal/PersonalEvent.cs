@@ -13,7 +13,8 @@ namespace Events.Personal
 
         public void Run()
         {
-            new JobLossEvent(_state).Run();
+            _state.OnEventDone();
+//            new JobLossEvent(_state).Run();
         }
     }
 }

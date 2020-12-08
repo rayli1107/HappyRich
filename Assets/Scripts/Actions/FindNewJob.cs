@@ -26,7 +26,7 @@ namespace Actions
             }
             else
             {
-                Object.Destroy(msgBox.gameObject);
+                msgBox.Destroy();
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
             }
         }
@@ -38,7 +38,7 @@ namespace Actions
 
         public void OnTransactionSuccess()
         {
-            Object.Destroy(_msgBox.gameObject);
+            _msgBox.Destroy();
             _player.AddJob(_job);
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
             GameManager.Instance.StateMachine.OnPlayerActionDone();
@@ -73,7 +73,7 @@ namespace Actions
                 "Salary: {0}", local.GetCurrency(_job.salary)));
             message.Add(string.Format("Apply?"));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", message), 36, ButtonChoiceType.OK_CANCEL, this);
+                string.Join("\n", message), ButtonChoiceType.OK_CANCEL, this);
         }
     }
 }

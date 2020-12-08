@@ -38,8 +38,7 @@ namespace UI.Panels
 
         public void Restart()
         {
-            MessageBox messageBox = GetComponentInParent<MessageBox>();
-            Destroy(messageBox.gameObject);
+            GetComponentInParent<MessageBox>().Destroy();
             UIManager.Instance.ShowJobListPanel();
         }
     }

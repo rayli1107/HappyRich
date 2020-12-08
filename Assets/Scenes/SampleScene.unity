@@ -851,6 +851,10 @@ MonoBehaviour:
     type: 3}
   _prefabStockMarketPanel: {fileID: 1856141655973065709, guid: 95dd5eb4c380dca4592c9b335b61e913,
     type: 3}
+  _prefabStockTradePanel: {fileID: 3934114308770730067, guid: ad7ea9124dae432418f18827e6bc0fa6,
+    type: 3}
+  _prefabNumberInputPanel: {fileID: 8442406110688286688, guid: 608d6ee000ca6a84eb6921d3ec34038f,
+    type: 3}
 --- !u!114 &1690758058
 MonoBehaviour:
   m_ObjectHideFlags: 0

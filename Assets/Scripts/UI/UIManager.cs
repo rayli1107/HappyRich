@@ -27,6 +27,11 @@ namespace UI
         private GameObject _prefabJobListPanel;
         [SerializeField]
         private GameObject _prefabStockMarketPanel;
+        [SerializeField]
+        private GameObject _prefabStockTradePanel;
+        [SerializeField]
+        private GameObject _prefabNumberInputPanel;
+
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
@@ -138,14 +143,12 @@ namespace UI
 
         public MessageBox ShowSimpleMessageBox(
             string message,
-            int size,
             ButtonChoiceType buttonChoice,
             IMessageBoxHandler handler)
         {
             GameObject gameObj = Instantiate(_prefabSimpleTextPanel);
             TextMeshProUGUI text = gameObj.GetComponent<TextMeshProUGUI>();
             text.text = message;
-            text.fontSize = size;
             return ShowMessageBox(gameObj, handler, buttonChoice);
         }
 
@@ -189,6 +192,25 @@ namespace UI
             ShowMessageBox(gameObject, null, ButtonChoiceType.OK_ONLY);
         }
 
+        public void ShowStockTradePanel(Assets.AbstractStock stock)
+        {
+            GameObject gameObject = Instantiate(_prefabStockTradePanel);
+            StockPanel panel = gameObject.GetComponent<StockPanel>();
+            panel.player = GameManager.Instance.player;
+            panel.stock = stock;
+            ShowMessageBox(gameObject, null, ButtonChoiceType.NONE);
+        }
+
+        public void ShowNumberInputPanel(string message, int max, INumberInputCallback callback)
+        {
+            GameObject gameObject = Instantiate(_prefabNumberInputPanel);
+            NumberInputPanel panel = gameObject.GetComponent<NumberInputPanel>();
+            panel.message = message;
+            panel.max = max;
+            panel.callback = callback;
+            ShowMessageBox(gameObject, panel, ButtonChoiceType.NONE);
+        }
+
         public void ShowJobListPanel()
         {
             Player player = GameManager.Instance.player;
@@ -201,7 +223,7 @@ namespace UI
             else
             {
                 ShowSimpleMessageBox(
-                    "You are currently unemployed.", 36, ButtonChoiceType.OK_ONLY, null);
+                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
             }
         }
 

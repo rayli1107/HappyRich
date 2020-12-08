@@ -46,12 +46,12 @@ namespace Events.Personal
             messages.Add("Personal Event:");
             messages.Add(string.Format("You lost your job as a {0}.", job.professionName));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages), 48, UI.Panels.ButtonChoiceType.NONE, this);
+                string.Join("\n", messages), UI.Panels.ButtonChoiceType.NONE, this);
         }
 
         public void OnButtonClick(MessageBox msgBox, ButtonType button)
         {
-            Object.Destroy(msgBox.gameObject);
+            msgBox.Destroy();
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
             _state.OnEventDone();
         }

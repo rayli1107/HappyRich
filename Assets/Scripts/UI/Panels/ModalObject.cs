@@ -27,20 +27,10 @@ namespace UI.Panels
             }
         }
 
-        public virtual void ActivePanelUpdate()
+        public void Destroy()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        public virtual void OnClickOutsideBoundary()
-        {
-
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

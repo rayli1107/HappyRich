@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UI.Panels;
 using UI.Panels.Assets;
 using TMPro;
+using Michsky.UI.ModernUIPack;
 
 namespace UI
 {
@@ -14,17 +15,18 @@ namespace UI
         [SerializeField]
         private GameObject _actionButton;
         [SerializeField]
-        private GameObject _prefabMessageBoxPanel;
+        private ModalWindowManager _prefabModalWindowManager;
         [SerializeField]
-        private GameObject _prefabPlayerStatusMenuPanel;
+        private PlayerStatusMenuPanel _prefabPlayerStatusManeuPanel;
+
+        [SerializeField]
+        private GameObject _prefabMessageBoxPanel;
         [SerializeField]
         private GameObject _prefabActionMenuPanel;
         [SerializeField]
         private GameObject _prefabScrollableTextPanel;
         [SerializeField]
         private GameObject _prefabSimpleTextPanel;
-        [SerializeField]
-        private GameObject _prefabJobListPanel;
         [SerializeField]
         private GameObject _prefabStockMarketPanel;
         [SerializeField]
@@ -79,20 +81,21 @@ namespace UI
 
         void Update()
         {
-            int count = _modalObjects.Count;
-            if (count > 0)
-            {
-                _modalObjects[count - 1].ActivePanelUpdate();
-            }
-
-            if (Input.GetMouseButtonDown(0) && _modalObjects.Count > 0)
-            {
-                ModalObject modalObject = _modalObjects[_modalObjects.Count - 1];
-                if (!DetectHit(Input.mousePosition, modalObject.gameObject))
-                {
-                    modalObject.OnClickOutsideBoundary();
-                }
-            }
+            /*
+                        int count = _modalObjects.Count;
+                        if (count > 0)
+                        {
+                            _modalObjects[count - 1].ActivePanelUpdate();
+                        }
+                        if (Input.GetMouseButtonDown(0) && _modalObjects.Count > 0)
+                        {
+                            ModalObject modalObject = _modalObjects[_modalObjects.Count - 1];
+                            if (!DetectHit(Input.mousePosition, modalObject.gameObject))
+                            {
+                                modalObject.OnClickOutsideBoundary();
+                            }
+                        }
+                        */
         }
 
         private bool DetectHit(Vector2 position, GameObject obj)
@@ -114,7 +117,7 @@ namespace UI
 
         public void EnableActionButton(bool enable)
         {
-            _actionButton.SetActive(enable);
+            _actionButton.GetComponent<Button>().interactable = enable;
         }
 
         public void UpdatePlayerInfo(Player player)
@@ -133,8 +136,8 @@ namespace UI
             childPanel.SetActive(true);
 
             MessageBox msgBox = msgBoxObj.GetComponent<MessageBox>();
-            msgBox.childRect = childPanel.GetComponent<RectTransform>();
-            msgBox.buttonChoice = buttonChoice;
+//            msgBox.childRect = childPanel.GetComponent<RectTransform>();
+//            msgBox.buttonChoice = buttonChoice;
             msgBox.messageBoxHandler = handler;
             msgBoxObj.GetComponent<Image>().color = Color.blue;
             msgBoxObj.SetActive(true);
@@ -154,11 +157,11 @@ namespace UI
 
         public void ShowPlayerStatusMenuPanel()
         {
-            GameObject gameObj = Instantiate(_prefabPlayerStatusMenuPanel);
-            PlayerStatusMenuPanel panel = gameObj.GetComponent<PlayerStatusMenuPanel>();
+            PlayerStatusMenuPanel panel = Instantiate(_prefabPlayerStatusManeuPanel, transform);
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, null, ButtonChoiceType.BACK_ONLY);
+            panel.gameObject.SetActive(true);
         }
+
 
         public void ShowActionMenuPanel()
         {
@@ -211,27 +214,11 @@ namespace UI
             ShowMessageBox(gameObject, panel, ButtonChoiceType.NONE);
         }
 
-        public void ShowJobListPanel()
-        {
-            Player player = GameManager.Instance.player;
-            if (player.jobs.Count > 0)
-            {
-                GameObject gameObj = Instantiate(_prefabJobListPanel);
-                gameObj.GetComponent<JobListPanel>().player = player;
-                ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
-            }
-            else
-            {
-                ShowSimpleMessageBox(
-                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
-            }
-        }
-
         public void DestroyAllModal()
         {
             while (_modalObjects.Count > 1)
             {
-                _modalObjects[_modalObjects.Count - 1].OnClickOutsideBoundary();
+                _modalObjects[_modalObjects.Count - 1].Destroy();
             }
         }
 

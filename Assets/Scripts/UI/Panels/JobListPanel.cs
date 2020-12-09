@@ -39,7 +39,7 @@ namespace UI.Panels
         public void Restart()
         {
             GetComponentInParent<MessageBox>().Destroy();
-            UIManager.Instance.ShowJobListPanel();
+//            UIManager.Instance.ShowJobListPanel();
         }
     }
 }

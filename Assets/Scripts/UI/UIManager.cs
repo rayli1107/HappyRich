@@ -18,6 +18,8 @@ namespace UI
         private ModalWindowManager _prefabModalWindowManager;
         [SerializeField]
         private PlayerStatusMenuPanel _prefabPlayerStatusManeuPanel;
+        [SerializeField]
+        private AssetLiabilityListPanel _prefabAssetLiabilityListPanel;
 
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
@@ -173,10 +175,9 @@ namespace UI
 
         public void ShowAssetLiabilityStatusPanel()
         {
-            GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
-            AssetLiabilityListPanel panel = gameObj.AddComponent<AssetLiabilityListPanel>();
+            AssetLiabilityListPanel panel = Instantiate(_prefabAssetLiabilityListPanel, transform);
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+            panel.RefreshContent();
         }
 
         public void ShowIncomeExpenseStatusPanel()

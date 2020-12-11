@@ -82,15 +82,25 @@ public class Portfolio
         get
         {
             List<Assets.AbstractAsset> assets = new List<Assets.AbstractAsset>();
-            if (car != null)
-            {
-                assets.Add(car);
-            }
+            assets.AddRange(otherAssets);
             foreach (KeyValuePair<string, Assets.PurchasedStock> entry in stocks)
             {
                 assets.Add(entry.Value);
             }
             return assets;
+        }
+    }
+
+    public List<Assets.AbstractAsset> otherAssets
+    {
+        get
+        {
+            List<Assets.AbstractAsset> otherAssets = new List<Assets.AbstractAsset>();
+            if (car != null)
+            {
+                otherAssets.Add(car);
+            }
+            return otherAssets;
         }
     }
 

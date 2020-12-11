@@ -184,6 +184,8 @@
     <Compile Include="Assets\Scripts\UI\Panels\PlayerSnapshotPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerStatusMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Templates\ExpandableContent.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Templates\ItemListPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Templates\ItemValuePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\TextListScrollablePanel.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />

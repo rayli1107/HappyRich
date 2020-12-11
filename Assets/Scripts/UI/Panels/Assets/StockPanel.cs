@@ -27,7 +27,6 @@ namespace UI.Panels.Assets
 
         public Player player;
         public AbstractStock stock;
-        public bool value = true;
 
         private void Refresh()
         {
@@ -41,6 +40,11 @@ namespace UI.Panels.Assets
             if (_textValue != null)
             {
                 _textValue.text = local.GetCurrency(stock.value);
+            }
+
+            if (_textTotalValue != null && player != null)
+            {
+
             }
 
             if (_textChange != null)
@@ -66,8 +70,7 @@ namespace UI.Panels.Assets
 
             if (_textTotalValue != null)
             {
-                _textTotalValue.text = string.Format(
-                    "Total Value: {0}", local.GetCurrency(value));
+                _textTotalValue.text = local.GetCurrency(value);
             }
 
             if (_buttonSell)

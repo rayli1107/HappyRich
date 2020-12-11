@@ -12,8 +12,6 @@ namespace UI.Panels.Templates
     {
 #pragma warning disable 0649
         [SerializeField]
-        private GameObject _panelButtons;
-        [SerializeField]
         private Button _buttonExpand;
         [SerializeField]
         private Button _buttonShrink;
@@ -22,15 +20,6 @@ namespace UI.Panels.Templates
         [SerializeField]
         private bool _startExpanded;
 #pragma warning restore 0649
-
-        private void AdjustButton()
-        {
-            LayoutElement layout = _panelButtons.GetComponent<LayoutElement>();
-            float buttonHeight = _panelButtons.transform.parent.GetComponent<RectTransform>().rect.height;
-            layout.minWidth = buttonHeight;
-            layout.preferredWidth = buttonHeight;
-
-        }
 
         private void OnEnable()
         {
@@ -44,11 +33,18 @@ namespace UI.Panels.Templates
             }
         }
 
+        private void RefreshParents()
+        {
+            ScrollRect scrollRect = GetComponentInParent<ScrollRect>();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+        }
+
         public void Expand()
         {
             _buttonExpand.gameObject.SetActive(false);
             _buttonShrink.gameObject.SetActive(true);
             _panelContent.SetActive(true);
+            RefreshParents();
         }
 
         public void Shrink()
@@ -56,6 +52,7 @@ namespace UI.Panels.Templates
             _buttonExpand.gameObject.SetActive(true);
             _buttonShrink.gameObject.SetActive(false);
             _panelContent.SetActive(false);
+            RefreshParents();
         }
 
     }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2790003171453975234}
   - component: {fileID: 1467294645462480124}
   - component: {fileID: 6095633897291053222}
+  - component: {fileID: 655407699141449620}
   m_Layer: 5
   m_Name: Expandable Content
   m_TagString: Untagged
@@ -85,11 +86,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed4ff848d3a7194da9e6bc3f965a15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _panelButtons: {fileID: 7667987770748006292}
   _buttonExpand: {fileID: 5306459967505439782}
   _buttonShrink: {fileID: 7724464064398610862}
   _panelContent: {fileID: 5546259677285203290}
   _startExpanded: 1
+--- !u!114 &655407699141449620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929065177743966773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &3035012496734113632
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8166500734424184719}
   - component: {fileID: 7821976566946243620}
-  - component: {fileID: 4983499931322450812}
+  - component: {fileID: 6866280486298921497}
   m_Layer: 5
   m_Name: Button Panel
   m_TagString: Untagged
@@ -578,7 +592,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7667987770748006292}
   m_CullTransparentMesh: 0
---- !u!114 &4983499931322450812
+--- !u!114 &6866280486298921497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -596,7 +610,7 @@ MonoBehaviour:
   m_PreferredWidth: 48
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
+  m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!1 &8640851257456345292
 GameObject:

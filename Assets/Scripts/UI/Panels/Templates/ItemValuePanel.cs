@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Templates
 {
@@ -11,12 +12,24 @@ namespace UI.Panels.Templates
         [SerializeField]
         private TextMeshProUGUI _value;
         [SerializeField]
+        private LayoutElement _tab;
+        [SerializeField]
         private Color _positiveColor = Color.green;
         [SerializeField]
         private Color _negativeColor = Color.red;
+        [SerializeField]
+        private float tabWidth = 40;
 #pragma warning restore 0649
 
         public bool colorFlip = false;
+        public int tabCount { get; private set; }
+
+        public void setTabCount(int i)
+        {
+            tabCount = i;
+            _tab.minWidth = tabWidth * i;
+            _tab.preferredWidth = tabWidth * i;
+        }
 
         public void setLabel(string s)
         {
@@ -34,6 +47,10 @@ namespace UI.Panels.Templates
                 positive = !positive;
             }
             _value.color = positive ? _positiveColor : _negativeColor;
+        }
+        private void OnEnable()
+        {
+            tabCount = 0;
         }
     }
 }

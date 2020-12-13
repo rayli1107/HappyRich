@@ -1,9 +1,9 @@
 ﻿using Assets;
+using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UI.Panels.Assets;
 using UI.Panels.Templates;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels
 {
@@ -15,11 +15,21 @@ namespace UI.Panels
         [SerializeField]
         private ItemValuePanel _panelAvailableCash;
         [SerializeField]
-        private ItemListPanel _panelStocks;
+        private ItemValuePanel _panelAssets;
         [SerializeField]
-        private ItemListPanel _panelOtherAssets;
-        [SerializeField]
-        private ItemListPanel _panelOtherLiabilities;
+        private ItemValuePanel _panelLiabilities;
+        /*
+         *[SerializeField]
+                private ItemListPanel _panelAssets;
+                [SerializeField]
+                private ItemListPanel _panelStocks;
+                [SerializeField]
+                private ItemListPanel _panelOtherAssets;
+                [SerializeField]
+                private ItemListPanel _panelLiabilities;
+                [SerializeField]
+                private ItemListPanel _panelOtherLiabilities;
+                */
 
         [SerializeField]
         private ItemValuePanel _prefabItemValuePanel;
@@ -29,6 +39,30 @@ namespace UI.Panels
 
         private void Awake()
         {
+        }
+
+        private IEnumerator DelayedRefresh()
+        {
+            GameObject content = GetComponentInChildren<ScrollRect>().content.gameObject;
+            yield return new WaitForSeconds(0.5f);
+            content.SetActive(true);
+        }
+
+        private int AddItemValueAsCurrency(
+            Transform parentTranform,
+            int index,
+            int tab,
+            string label,
+            int value,
+            bool flip)
+        {
+            ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
+            panel.colorFlip = flip;
+            panel.setLabel(label);
+            panel.setValueAsCurrency(value);
+            panel.setTabCount(tab);
+            panel.transform.SetSiblingIndex(index);
+            return index + 1;
         }
 
         public void RefreshContent()
@@ -46,61 +80,89 @@ namespace UI.Panels
             int totalStocks = 0;
             int totalOtherAssets = 0;
 
-            foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
-            {
-                PurchasedStock stock = entry.Value;
-                int value = stock.getValue();
-                totalStocks += value;
+            int currentIndex = _panelAssets.transform.GetSiblingIndex() + 1;
 
-                ItemValuePanel panel = Instantiate(
-                    _prefabItemValuePanel, _panelStocks.content.transform);
-                panel.setLabel(stock.stock.name);
-                panel.setValueAsCurrency(stock.getValue());
-            }
-            if (_panelStocks.content.transform.childCount == 0)
+            // Stocks
+            if (player.portfolio.stocks.Count > 0)
             {
-                _panelStocks.gameObject.SetActive(false);
-            }
-
-            foreach (AbstractAsset asset in player.portfolio.otherAssets)
-            {
-                int value = asset.getValue();
-                totalOtherAssets = value;
-                if (asset.liability != null && asset.liability.amount > 0)
+                foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
                 {
-                    liabilities.Add(asset.liability);
+                    totalStocks += entry.Value.getValue();
                 }
 
-                ItemValuePanel panel = Instantiate(
-                    _prefabItemValuePanel, _panelOtherAssets.content.transform);
-                panel.setLabel(asset.name);
-                panel.setValueAsCurrency(value);
-            }
-            if (_panelOtherAssets.content.transform.childCount == 0)
-            {
-                _panelOtherAssets.gameObject.SetActive(false);
+                currentIndex = AddItemValueAsCurrency(
+                    _panelAssets.transform.parent,
+                    currentIndex,
+                    _panelAssets.tabCount + 1,
+                    "Stocks",
+                    totalStocks,
+                    false);
+
+                foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
+                {
+                    PurchasedStock stock = entry.Value;
+                    currentIndex = AddItemValueAsCurrency(
+                        _panelAssets.transform.parent,
+                        currentIndex,
+                        _panelAssets.tabCount + 2,
+                        stock.stock.name,
+                        stock.getValue(),
+                        false);
+                }
             }
 
+            // Other Assets
+            if (player.portfolio.otherAssets.Count > 0)
+            {
+                foreach (AbstractAsset asset in player.portfolio.otherAssets)
+                {
+                    totalOtherAssets += asset.getValue();
+                    if (asset.liability != null && asset.liability.amount > 0)
+                    {
+                        liabilities.Add(asset.liability);
+                    }
+                }
+
+                currentIndex = AddItemValueAsCurrency(
+                    _panelAssets.transform.parent,
+                    currentIndex,
+                    _panelAssets.tabCount + 1,
+                    "Other Assets",
+                    totalOtherAssets,
+                    false);
+
+                foreach (AbstractAsset asset in player.portfolio.otherAssets)
+                {
+                    currentIndex = AddItemValueAsCurrency(
+                        _panelAssets.transform.parent,
+                        currentIndex,
+                        _panelAssets.tabCount + 2,
+                        asset.name,
+                        asset.getValue(),
+                        false);
+                }
+            }
+
+            // Other Liabilities
+            currentIndex = _panelLiabilities.transform.GetSiblingIndex() + 1;
             foreach (AbstractLiability liability in liabilities)
             {
                 totalLiabilities += liability.amount;
 
-                ItemValuePanel panel = Instantiate(
-                    _prefabItemValuePanel, _panelOtherLiabilities.content.transform);
-                panel.colorFlip = true;
-                panel.setLabel(liability.name);
-                panel.setValueAsCurrency(liability.amount);
-            }
-
-            if (_panelOtherLiabilities.content.transform.childCount == 0)
-            {
-                _panelOtherLiabilities.gameObject.SetActive(false);
+                currentIndex = AddItemValueAsCurrency(
+                    _panelLiabilities.transform.parent,
+                    currentIndex,
+                    _panelLiabilities.tabCount + 1,
+                    liability.name,
+                    liability.amount,
+                    true);
             }
 
             totalAssets = totalStocks + totalOtherAssets;
             int netWorth = player.cash + totalAssets - totalLiabilities;
 
-            Localization local = GameManager.Instance.Localization;
+            _panelAssets.setValueAsCurrency(totalAssets);
+            _panelLiabilities.setValueAsCurrency(totalLiabilities);
             _panelNetWorth.setValueAsCurrency(netWorth);
             _panelAvailableCash.setValueAsCurrency(player.cash);
         }

@@ -1,6 +1,7 @@
 ﻿using Assets;
 using Transaction;
 using UI.Panels;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Actions
@@ -71,7 +72,7 @@ namespace Actions
                 int cost = _numPrurchased * _stock.value;
                 GameManager.Instance.TryDebit(_player, cost, this);
             }
-            msgBox.Destroy();
+//            msgBox.Destroy();
         }
     }
 }

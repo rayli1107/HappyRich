@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Transaction;
 using UI.Panels;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Actions
@@ -34,7 +35,7 @@ namespace Actions
             {
                 _transactionHandler.OnTransactionFailure();
             }
-            msgBox.Destroy();
+//            msgBox.Destroy();
         }
 
         public void Start()

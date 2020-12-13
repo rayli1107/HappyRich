@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace UI.Panels.Templates
 {
     public enum ButtonChoiceType
     {
@@ -16,8 +17,17 @@ namespace UI.Panels
     public class MessageBox : ModalObject
     {
         public IMessageBoxHandler messageBoxHandler;
-//        public RectTransform childRect;
-//        public ButtonChoiceType buttonChoice = ButtonChoiceType.OK_ONLY;
+
+#pragma warning disable 0649
+        [SerializeField]
+        private GameObject _buttonOk;
+        [SerializeField]
+        private GameObject _buttonCancel;
+        [SerializeField]
+        private GameObject _buttonBack;
+#pragma warning restore 0649
+        //        public RectTransform childRect;
+        //        public ButtonChoiceType buttonChoice = ButtonChoiceType.OK_ONLY;
 
         /*
 #pragma warning disable 0649
@@ -94,10 +104,7 @@ namespace UI.Panels
             {
                 messageBoxHandler.OnButtonClick(this, ButtonType.OK);
             }
-            else
-            {
-                Destroy();
-            }
+            Destroy();
         }
 
         public void OnButtonCancel()
@@ -106,26 +113,46 @@ namespace UI.Panels
             {
                 messageBoxHandler.OnButtonClick(this, ButtonType.CANCEL);
             }
-            else
-            {
-                Destroy();
-            }
+            Destroy();
         }
-/*
-        public override void OnClickOutsideBoundary()
+        /*
+                public override void OnClickOutsideBoundary()
+                {
+                    if (_enableInput)
+                    {
+                        if (messageBoxHandler != null)
+                        {
+                            messageBoxHandler.OnButtonClick(this, ButtonType.OUTSIDE_BOUNDARY);
+                        }
+                        else
+                        {
+                            Destroy();
+                        }
+                    }
+                }
+                */
+
+        public void EnableButtons(ButtonChoiceType buttonChoice)
         {
-            if (_enableInput)
+            switch (buttonChoice)
             {
-                if (messageBoxHandler != null)
-                {
-                    messageBoxHandler.OnButtonClick(this, ButtonType.OUTSIDE_BOUNDARY);
-                }
-                else
-                {
-                    Destroy();
-                }
+                case ButtonChoiceType.BACK_ONLY:
+                    _buttonBack.gameObject.SetActive(true);
+                    break;
+                case ButtonChoiceType.CANCEL_ONLY:
+                    _buttonCancel.gameObject.SetActive(true);
+                    break;
+                case ButtonChoiceType.OK_CANCEL:
+                    _buttonOk.gameObject.SetActive(true);
+                    _buttonCancel.gameObject.SetActive(true);
+                    break;
+                case ButtonChoiceType.OK_ONLY:
+                    _buttonOk.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
             }
         }
-        */
+
     }
 }

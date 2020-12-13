@@ -3,29 +3,42 @@ using TMPro;
 using UnityEngine;
 using Actions;
 
-namespace UI.Panels
+namespace UI.Panels.PlayerDetails
 {
     public class JobPanel : MonoBehaviour, IActionCallback
     {
 #pragma warning disable 0649
         [SerializeField]
-        private TextMeshProUGUI _text;
+        private TextMeshProUGUI _textJob;
+        [SerializeField]
+        private TextMeshProUGUI _textSalary;
 #pragma warning restore 0649
 
         public Player player;
         public Profession job;
 
+        public void Refresh()
+        {
+            if (job != null)
+            {
+                _textJob.text = job.professionName;
+
+                Localization local = GameManager.Instance.Localization;
+                _textSalary.text = local.GetCurrency(job.salary);
+            }
+        }
+
         private void OnEnable()
         {
-            _text.text = string.Format(
-                "{0}\n{1}",
-                job.professionName,
-                GameManager.Instance.Localization.GetCurrency(job.salary));
+            Refresh();
         }
 
         public void OnQuitButton()
         {
-            new QuitJob(player, job, this).Start();
+            if (player != null && job != null)
+            {
+                new QuitJob(player, job, this).Start();
+            }
         }
 
         public void OnActionCallback(bool success)
@@ -35,7 +48,7 @@ namespace UI.Panels
                 JobListPanel panel = GetComponentInParent<JobListPanel>();
                 if (panel != null)
                 {
-                    panel.Restart();
+                    panel.Refresh();
                 }
             }
         }

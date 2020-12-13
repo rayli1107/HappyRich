@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Transaction;
 using UI.Panels;
-using UnityEngine;
+using UI.Panels.Templates;
 
 namespace Actions
 {

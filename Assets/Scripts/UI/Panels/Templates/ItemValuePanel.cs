@@ -36,9 +36,15 @@ namespace UI.Panels.Templates
             _label.text = s;
         }
 
+        public void removeValue()
+        {
+            _value.gameObject.SetActive(false);
+        }
+
         public void setValueAsCurrency(int i)
         {
             Localization local = GameManager.Instance.Localization;
+            _value.gameObject.SetActive(true);
             _value.text = local.GetCurrency(i);
 
             bool positive = i >= 0;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI.Panels
+namespace UI.Panels.PlayerDetails
 {
     public class PlayerStatusMenuPanel : MonoBehaviour
     {
@@ -22,20 +22,11 @@ namespace UI.Panels
 
         public void ShowJobListPanel()
         {
-/*
             Player player = GameManager.Instance.player;
-            if (player.jobs.Count > 0)
-            {
-                JobListPanel panel = Instantiate<JobListPanel>(_prefabJobListPanel);
-                panel.GetComponent<JobListPanel>().player = player;
-                UIManager.ShowMessageBox(panel.gameObject, null, ButtonChoiceType.NONE);
-            }
-            else
-            {
-                ShowSimpleMessageBox(
-                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
-            }
-            */
+            JobListPanel panel = Instantiate(
+                _prefabJobListPanel, UIManager.Instance.transform);
+            panel.player = player;
+            panel.Refresh();
         }
     }
 }

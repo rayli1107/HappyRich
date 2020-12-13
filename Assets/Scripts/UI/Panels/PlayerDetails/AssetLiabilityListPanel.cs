@@ -5,7 +5,7 @@ using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace UI.Panels.PlayerDetails
 {
     public class AssetLiabilityListPanel : MonoBehaviour
     {
@@ -13,39 +13,19 @@ namespace UI.Panels
         [SerializeField]
         private ItemValuePanel _panelNetWorth;
         [SerializeField]
-        private ItemValuePanel _panelAvailableCash;
-        [SerializeField]
         private ItemValuePanel _panelAssets;
         [SerializeField]
         private ItemValuePanel _panelLiabilities;
-        /*
-         *[SerializeField]
-                private ItemListPanel _panelAssets;
-                [SerializeField]
-                private ItemListPanel _panelStocks;
-                [SerializeField]
-                private ItemListPanel _panelOtherAssets;
-                [SerializeField]
-                private ItemListPanel _panelLiabilities;
-                [SerializeField]
-                private ItemListPanel _panelOtherLiabilities;
-                */
-
         [SerializeField]
         private ItemValuePanel _prefabItemValuePanel;
+        [SerializeField]
+        private bool _showTotalValues = false;
 #pragma warning restore 0649
 
         public Player player;
 
         private void Awake()
         {
-        }
-
-        private IEnumerator DelayedRefresh()
-        {
-            GameObject content = GetComponentInChildren<ScrollRect>().content.gameObject;
-            yield return new WaitForSeconds(0.5f);
-            content.SetActive(true);
         }
 
         private int AddItemValueAsCurrency(
@@ -59,7 +39,14 @@ namespace UI.Panels
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
             panel.colorFlip = flip;
             panel.setLabel(label);
-            panel.setValueAsCurrency(value);
+            if (value != 0)
+            {
+                panel.setValueAsCurrency(value);
+            }
+            else
+            {
+                panel.removeValue();
+            }
             panel.setTabCount(tab);
             panel.transform.SetSiblingIndex(index);
             return index + 1;
@@ -82,6 +69,16 @@ namespace UI.Panels
 
             int currentIndex = _panelAssets.transform.GetSiblingIndex() + 1;
 
+            // Cash
+            currentIndex = AddItemValueAsCurrency(
+                _panelAssets.transform.parent,
+                currentIndex,
+                _panelAssets.tabCount + 1,
+                "Cash",
+                player.cash,
+                false);
+            totalAssets = player.cash;
+
             // Stocks
             if (player.portfolio.stocks.Count > 0)
             {
@@ -95,7 +92,7 @@ namespace UI.Panels
                     currentIndex,
                     _panelAssets.tabCount + 1,
                     "Stocks",
-                    totalStocks,
+                    0,
                     false);
 
                 foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
@@ -110,6 +107,7 @@ namespace UI.Panels
                         false);
                 }
             }
+            totalAssets += totalStocks;
 
             // Other Assets
             if (player.portfolio.otherAssets.Count > 0)
@@ -128,7 +126,7 @@ namespace UI.Panels
                     currentIndex,
                     _panelAssets.tabCount + 1,
                     "Other Assets",
-                    totalOtherAssets,
+                    0,
                     false);
 
                 foreach (AbstractAsset asset in player.portfolio.otherAssets)
@@ -142,6 +140,7 @@ namespace UI.Panels
                         false);
                 }
             }
+            totalAssets += totalOtherAssets;
 
             // Other Liabilities
             currentIndex = _panelLiabilities.transform.GetSiblingIndex() + 1;
@@ -158,13 +157,14 @@ namespace UI.Panels
                     true);
             }
 
-            totalAssets = totalStocks + totalOtherAssets;
-            int netWorth = player.cash + totalAssets - totalLiabilities;
+            int netWorth = totalAssets - totalLiabilities;
 
-            _panelAssets.setValueAsCurrency(totalAssets);
-            _panelLiabilities.setValueAsCurrency(totalLiabilities);
+            if (_showTotalValues)
+            {
+                _panelAssets.setValueAsCurrency(totalAssets);
+                _panelLiabilities.setValueAsCurrency(totalLiabilities);
+            }
             _panelNetWorth.setValueAsCurrency(netWorth);
-            _panelAvailableCash.setValueAsCurrency(player.cash);
         }
 
         private void OnEnable()

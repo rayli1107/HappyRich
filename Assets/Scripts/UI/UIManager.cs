@@ -6,6 +6,9 @@ using UI.Panels;
 using UI.Panels.Assets;
 using TMPro;
 using Michsky.UI.ModernUIPack;
+using UI.Panels.PlayerDetails;
+using UI.Panels.Templates;
+using UI.Panels.Actions;
 
 namespace UI
 {
@@ -20,11 +23,15 @@ namespace UI
         private PlayerStatusMenuPanel _prefabPlayerStatusManeuPanel;
         [SerializeField]
         private AssetLiabilityListPanel _prefabAssetLiabilityListPanel;
+        [SerializeField]
+        private IncomeExpenseListPanel _prefabIncomeExpenseListPanel;
+        [SerializeField]
+        private SimpleTextMessageBox _prefabSimpleTextMessageBox;
+        [SerializeField]
+        private ActionMenuPanel _prefabActionMenuPanel;
 
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
-        [SerializeField]
-        private GameObject _prefabActionMenuPanel;
         [SerializeField]
         private GameObject _prefabScrollableTextPanel;
         [SerializeField]
@@ -146,15 +153,22 @@ namespace UI
             return msgBox;
         }
 
-        public MessageBox ShowSimpleMessageBox(
+        public SimpleTextMessageBox ShowSimpleMessageBox(
             string message,
             ButtonChoiceType buttonChoice,
             IMessageBoxHandler handler)
         {
+            SimpleTextMessageBox messageBox = Instantiate(
+                _prefabSimpleTextMessageBox, transform);
+            messageBox.text.text = message;
+            messageBox.messageBoxHandler = handler;
+            messageBox.EnableButtons(buttonChoice);
+            return messageBox;
+            /*
             GameObject gameObj = Instantiate(_prefabSimpleTextPanel);
             TextMeshProUGUI text = gameObj.GetComponent<TextMeshProUGUI>();
             text.text = message;
-            return ShowMessageBox(gameObj, handler, buttonChoice);
+            return ShowMessageBox(gameObj, handler, buttonChoice);*/ 
         }
 
         public void ShowPlayerStatusMenuPanel()
@@ -167,10 +181,14 @@ namespace UI
 
         public void ShowActionMenuPanel()
         {
+            ActionMenuPanel panel = Instantiate(_prefabActionMenuPanel, transform);
+            panel.player = GameManager.Instance.player;
+            /*
             GameObject gameObj = Instantiate(_prefabActionMenuPanel);
             ActionMenuPanel panel = gameObj.GetComponent<ActionMenuPanel>();
             panel.player = GameManager.Instance.player;
             ShowMessageBox(gameObj, null, ButtonChoiceType.BACK_ONLY);
+            */
         }
 
         public void ShowAssetLiabilityStatusPanel()
@@ -182,10 +200,9 @@ namespace UI
 
         public void ShowIncomeExpenseStatusPanel()
         {
-            GameObject gameObj = Instantiate(_prefabScrollableTextPanel);
-            IncomeExpenseListPanel panel = gameObj.AddComponent<IncomeExpenseListPanel>();
+            IncomeExpenseListPanel panel = Instantiate(_prefabIncomeExpenseListPanel, transform);
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, null, ButtonChoiceType.NONE);
+            panel.RefreshContent();
         }
 
         public void ShowStockMarketPanel()

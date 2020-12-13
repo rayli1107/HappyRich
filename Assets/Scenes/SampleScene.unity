@@ -1074,6 +1074,10 @@ MonoBehaviour:
     type: 3}
   _prefabAssetLiabilityListPanel: {fileID: 8869917891862180020, guid: a02ffacfb30b12349b52528c1e9d5755,
     type: 3}
+  _prefabIncomeExpenseListPanel: {fileID: 4968446294104557657, guid: 6b36c35ce316d054db3c18c53cd66147,
+    type: 3}
+  _prefabSimpleTextMessageBox: {fileID: 3353754232464925460, guid: 0530943b3bc76794bb6cc9c6c45b36da,
+    type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}
   _prefabActionMenuPanel: {fileID: 2616990972286926667, guid: adce1404d170688469fc42a3ec07619d,

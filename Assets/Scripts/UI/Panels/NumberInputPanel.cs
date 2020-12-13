@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace UI.Panels

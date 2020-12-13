@@ -1,5 +1,6 @@
 ﻿using ScriptableObjects;
 using UI.Panels;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Actions
@@ -17,8 +18,10 @@ namespace Actions
 
         public override void Start()
         {
+            Localization local = GameManager.Instance.Localization;
+
             string message = string.Format(
-                "Quit your {0} job?", _job.professionName);
+                "Quit your {0} job?", local.GetJobName(_job));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message, ButtonChoiceType.OK_CANCEL, this);
         }
@@ -35,7 +38,7 @@ namespace Actions
             {
                 RunCallback(false);
             }
-            msgBox.Destroy();
+//            msgBox.Destroy();
         }
     }
 }

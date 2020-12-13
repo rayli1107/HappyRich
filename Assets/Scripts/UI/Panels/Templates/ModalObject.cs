@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace UI.Panels.Templates
 {
     public class ModalObject : MonoBehaviour
     {

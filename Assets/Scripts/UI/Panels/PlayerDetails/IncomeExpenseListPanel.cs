@@ -33,11 +33,10 @@ namespace UI.Panels.PlayerDetails
             bool flip)
         {
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.colorFlip = flip;
             panel.setLabel(label);
             if (value != 0)
             {
-                panel.setValueAsCurrency(value);
+                panel.setValueAsCurrency(value, flip);
             }
             else
             {
@@ -173,7 +172,7 @@ namespace UI.Panels.PlayerDetails
             }
             if (_showTotalValues)
             {
-                _panelExpenses.setValueAsCurrency(expenses);
+                _panelExpenses.setValueAsCurrency(expenses, true);
             }
             else
             {
@@ -184,6 +183,11 @@ namespace UI.Panels.PlayerDetails
 
         public void RefreshContent()
         {
+            if (player == null)
+            {
+                return;
+            }
+
             AddActiveIncome();
             AddPassiveIncome();
             AddExpenses();

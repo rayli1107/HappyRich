@@ -1,16 +1,33 @@
 ﻿using ScriptableObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
-
-public class Localization
+public class Localization : MonoBehaviour
 {
+#pragma warning disable 0649
+    [SerializeField]
+    private Color _colorPositive = Color.green;
+    [SerializeField]
+    private Color _colorNegative = Color.red;
+    [SerializeField]
+    private Color _colorJob = Color.cyan;
+#pragma warning restore 0649
+
+    public static Localization Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private string colorWrap(string s, Color color)
+    {
+        return string.Format(
+            "<color=#{0}>{1}</color>", ColorUtility.ToHtmlStringRGBA(color), s);
+    }
+
     public string GetJobName(Profession job)
     {
-        return string.Format("<color=#00ffffff>{0}</color>", job.professionName);
+        return colorWrap(job.professionName, _colorJob);
     }
 
     private string GetCurrencyFactor(int amount, int unit, string prefix)
@@ -42,21 +59,28 @@ public class Localization
             return amount.ToString("C0");
         }
     }
-    public string GetCurrency(int amount)
+    public string GetCurrency(int amount, bool flipped=false)
     {
+        bool positive = amount >= 0;
+        if (flipped)
+        {
+            positive = !positive;
+        }
+
+        Color c = positive ? _colorPositive : _colorNegative;
         if (amount < 0)
         {
-            return "-" + GetAbsCurrency(-1 * amount);
+            return colorWrap("-" + GetAbsCurrency(-1 * amount), c);
         }
-        return GetAbsCurrency(amount);
+        return colorWrap(GetAbsCurrency(amount), c);
     }
 
     public string GetPercent(float pct)
     {
         if (pct >= 0)
         {
-            return "+" + pct.ToString("#0%");
+            return colorWrap("+" + pct.ToString("#0%"), _colorPositive);
         }
-        return pct.ToString("#0%");
+        return colorWrap(pct.ToString("#0%"), _colorNegative);
     }
 }

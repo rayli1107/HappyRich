@@ -14,14 +14,9 @@ namespace UI.Panels.Templates
         [SerializeField]
         private LayoutElement _tab;
         [SerializeField]
-        private Color _positiveColor = Color.green;
-        [SerializeField]
-        private Color _negativeColor = Color.red;
-        [SerializeField]
         private float tabWidth = 40;
 #pragma warning restore 0649
 
-        public bool colorFlip = false;
         public int tabCount { get; private set; }
 
         public void setTabCount(int i)
@@ -41,19 +36,13 @@ namespace UI.Panels.Templates
             _value.gameObject.SetActive(false);
         }
 
-        public void setValueAsCurrency(int i)
+        public void setValueAsCurrency(int i, bool flipped=false)
         {
-            Localization local = GameManager.Instance.Localization;
+            Localization local = Localization.Instance;
             _value.gameObject.SetActive(true);
-            _value.text = local.GetCurrency(i);
-
-            bool positive = i >= 0;
-            if (colorFlip)
-            {
-                positive = !positive;
-            }
-            _value.color = positive ? _positiveColor : _negativeColor;
+            _value.text = local.GetCurrency(i, flipped);
         }
+
         private void OnEnable()
         {
             tabCount = 0;

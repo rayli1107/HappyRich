@@ -35,19 +35,18 @@ namespace Actions
             {
                 _transactionHandler.OnTransactionFailure();
             }
-//            msgBox.Destroy();
         }
 
         public void Start()
         {
-            Localization local = GameManager.Instance.Localization;
+            Localization local = Localization.Instance;
             int loanAmount = _amount - _player.cash;
             int interst = loanAmount * InterestRateManager.Instance.personalLoanRate / 100;
             List<string> message = new List<string>();
             message.Add(string.Format("Take out a personal loan of {0}?",
-                local.GetCurrency(loanAmount)));
+                local.GetCurrency(loanAmount, true)));
             message.Add(string.Format("You will need to pay an additional annual interest of {0}",
-                local.GetCurrency(interst)));
+                local.GetCurrency(interst, true)));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 string.Join("\n", message), ButtonChoiceType.OK_CANCEL, this);
         }

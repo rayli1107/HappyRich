@@ -37,11 +37,10 @@ namespace UI.Panels.PlayerDetails
             bool flip)
         {
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.colorFlip = flip;
             panel.setLabel(label);
             if (value != 0)
             {
-                panel.setValueAsCurrency(value);
+                panel.setValueAsCurrency(value, flip);
             }
             else
             {
@@ -162,7 +161,7 @@ namespace UI.Panels.PlayerDetails
             if (_showTotalValues)
             {
                 _panelAssets.setValueAsCurrency(totalAssets);
-                _panelLiabilities.setValueAsCurrency(totalLiabilities);
+                _panelLiabilities.setValueAsCurrency(totalLiabilities, true);
             }
             _panelNetWorth.setValueAsCurrency(netWorth);
         }

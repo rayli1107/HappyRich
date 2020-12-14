@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 204261751}
   - component: {fileID: 204261754}
   - component: {fileID: 204261755}
+  - component: {fileID: 204261756}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -216,6 +217,21 @@ MonoBehaviour:
   _numGrowthStock: 5
   _growthStockRangeMin: 0.8
   _growthStockRangeMax: 1.4
+--- !u!114 &204261756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204261750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3b7ca8d6200ff45847652099554588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorPositive: {r: 0, g: 1, b: 0, a: 1}
+  _colorNegative: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
+  _colorJob: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &456001304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
@@ -1078,19 +1094,19 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleTextMessageBox: {fileID: 3353754232464925460, guid: 0530943b3bc76794bb6cc9c6c45b36da,
     type: 3}
-  _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
+  _prefabActionMenuPanel: {fileID: 8718143703676590498, guid: 63b16a0e5bb7d724ab8e70c4f2644a6b,
     type: 3}
-  _prefabActionMenuPanel: {fileID: 2616990972286926667, guid: adce1404d170688469fc42a3ec07619d,
+  _prefabStockMarketPanel: {fileID: 8913108381888134533, guid: e4cf50c6c3980ef44bcc368e3a7aeefd,
+    type: 3}
+  _prefabStockTradePanel: {fileID: 946307099505382972, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
+    type: 3}
+  _prefabNumberInputPanel: {fileID: 4878464304282494514, guid: 34aac3e9c8f1a444bae63522c6144c5e,
+    type: 3}
+  _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}
   _prefabScrollableTextPanel: {fileID: 1382692242357073638, guid: 0049d425f6e30c749b728a4c6d6cdf32,
     type: 3}
   _prefabSimpleTextPanel: {fileID: 7061017048023922611, guid: d6aa43a3069159948be94f7eb3338ee8,
-    type: 3}
-  _prefabStockMarketPanel: {fileID: 1856141655973065709, guid: 95dd5eb4c380dca4592c9b335b61e913,
-    type: 3}
-  _prefabStockTradePanel: {fileID: 3934114308770730067, guid: ad7ea9124dae432418f18827e6bc0fa6,
-    type: 3}
-  _prefabNumberInputPanel: {fileID: 8442406110688286688, guid: 608d6ee000ca6a84eb6921d3ec34038f,
     type: 3}
 --- !u!114 &1690758058
 MonoBehaviour:

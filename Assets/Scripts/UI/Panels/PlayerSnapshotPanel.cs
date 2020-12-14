@@ -27,7 +27,7 @@ namespace UI.Panels
 
         public void UpdatePlayerInfo(Player player)
         {
-            Localization local = GameManager.Instance.Localization;
+            Localization local = Localization.Instance;
             PlayerSnapshot snapshot = new PlayerSnapshot(player);
 
             if (_textAge)

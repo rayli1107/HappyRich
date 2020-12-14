@@ -28,10 +28,10 @@ namespace UI.Panels.Assets
         public Player player;
         public AbstractStock stock;
 
-        private void Refresh()
+        public void Refresh()
         {
 
-            Localization local = GameManager.Instance.Localization;
+            Localization local = Localization.Instance;
             if (_textName != null)
             {
                 _textName.text = stock.name;
@@ -42,16 +42,10 @@ namespace UI.Panels.Assets
                 _textValue.text = local.GetCurrency(stock.value);
             }
 
-            if (_textTotalValue != null && player != null)
-            {
-
-            }
-
             if (_textChange != null)
             {
                 float change = stock.change;
                 _textChange.text = local.GetPercent(change);
-                _textChange.color = (change >= 0) ? Color.green : Color.red;
             }
 
             int count = 0;
@@ -65,7 +59,7 @@ namespace UI.Panels.Assets
 
             if (_textShares != null)
             {
-                _textShares.text = string.Format("Shares: {0}", count);
+                _textShares.text = count.ToString();
             }
 
             if (_textTotalValue != null)

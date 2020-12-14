@@ -29,6 +29,12 @@ namespace UI
         private SimpleTextMessageBox _prefabSimpleTextMessageBox;
         [SerializeField]
         private ActionMenuPanel _prefabActionMenuPanel;
+        [SerializeField]
+        private StockMarketPanel _prefabStockMarketPanel;
+        [SerializeField]
+        private StockPanel _prefabStockTradePanel;
+        [SerializeField]
+        private NumberInputPanel _prefabNumberInputPanel;
 
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
@@ -36,12 +42,6 @@ namespace UI
         private GameObject _prefabScrollableTextPanel;
         [SerializeField]
         private GameObject _prefabSimpleTextPanel;
-        [SerializeField]
-        private GameObject _prefabStockMarketPanel;
-        [SerializeField]
-        private GameObject _prefabStockTradePanel;
-        [SerializeField]
-        private GameObject _prefabNumberInputPanel;
 
 #pragma warning restore 0649
 
@@ -207,29 +207,26 @@ namespace UI
 
         public void ShowStockMarketPanel()
         {
-            GameObject gameObject = Instantiate(_prefabStockMarketPanel);
-            StockMarketPanel panel = gameObject.GetComponent<StockMarketPanel>();
+            StockMarketPanel panel = Instantiate(_prefabStockMarketPanel, transform);
             panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObject, null, ButtonChoiceType.OK_ONLY);
+            panel.Refresh();
         }
 
         public void ShowStockTradePanel(Assets.AbstractStock stock)
         {
-            GameObject gameObject = Instantiate(_prefabStockTradePanel);
-            StockPanel panel = gameObject.GetComponent<StockPanel>();
+            StockPanel panel = Instantiate(_prefabStockTradePanel, transform);
             panel.player = GameManager.Instance.player;
             panel.stock = stock;
-            ShowMessageBox(gameObject, null, ButtonChoiceType.NONE);
+            panel.Refresh();
         }
 
         public void ShowNumberInputPanel(string message, int max, INumberInputCallback callback)
         {
-            GameObject gameObject = Instantiate(_prefabNumberInputPanel);
-            NumberInputPanel panel = gameObject.GetComponent<NumberInputPanel>();
+            NumberInputPanel panel = Instantiate(_prefabNumberInputPanel, transform);
             panel.message = message;
             panel.max = max;
             panel.callback = callback;
-            ShowMessageBox(gameObject, panel, ButtonChoiceType.NONE);
+            panel.Refresh();
         }
 
         public void DestroyAllModal()

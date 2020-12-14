@@ -73,8 +73,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278240256
-  m_fontColor: {r: 0, g: 0.76862746, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -286,8 +286,6 @@ MonoBehaviour:
   _label: {fileID: 2737775936446827802}
   _value: {fileID: 1582389989311730288}
   _tab: {fileID: 4877245556283341666}
-  _positiveColor: {r: 0, g: 1, b: 0, a: 1}
-  _negativeColor: {r: 1, g: 0, b: 0, a: 1}
   tabWidth: 40
   colorFlip: 0
 --- !u!1 &6188043321050654505

@@ -21,9 +21,8 @@ namespace UI.Panels.PlayerDetails
         {
             if (job != null)
             {
-                _textJob.text = job.professionName;
-
-                Localization local = GameManager.Instance.Localization;
+                Localization local = Localization.Instance;
+                _textJob.text = local.GetJobName(job);
                 _textSalary.text = local.GetCurrency(job.salary);
             }
         }

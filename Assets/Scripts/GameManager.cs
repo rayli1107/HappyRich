@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     public int defaultHappiness = 50;
 
     public static GameManager Instance { get; private set; }
-    public Localization Localization { get; private set; }
     public Player player { get; private set; }
 
     public StateMachine.StateMachine StateMachine { get; private set; }
@@ -29,7 +28,6 @@ public class GameManager : MonoBehaviour
         StockManager = GetComponent<StockManager>();
         StockManager.Initialize(Random);
 
-        Localization = new Localization();
         StateMachine = new StateMachine.StateMachine();
         StateMachine.Start();
     }

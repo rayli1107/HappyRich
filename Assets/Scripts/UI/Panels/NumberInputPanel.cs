@@ -6,11 +6,11 @@ namespace UI.Panels
 {
     public interface INumberInputCallback
     {
-        void OnNumberInput(NumberInputPanel messageBox, int number);
-        void OnNumberInputCancel(NumberInputPanel messageBox);
+        void OnNumberInput(int number);
+        void OnNumberInputCancel();
     }
 
-    public class NumberInputPanel : MonoBehaviour, IMessageBoxHandler
+    public class NumberInputPanel : ModalObject
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -27,11 +27,18 @@ namespace UI.Panels
 
         private int _number;
 
-        private void OnEnable()
+        public void Refresh()
         {
             _textMessage.text = message;
-            _textMax.text = string.Format("Max: {0}", max);
+            _textMax.text = max.ToString();
             OnClear();
+
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Refresh();
         }
 
         public void OnNumberInput(int n)
@@ -52,38 +59,23 @@ namespace UI.Panels
             _textNumber.text = _number.ToString();
         }
 
-        public void Destroy()
-        {
-            GetComponentInParent<MessageBox>().Destroy();
-        }
 
         public void OnConfirm()
         {
             if (callback != null)
             {
-                callback.OnNumberInput(this, _number);
+                callback.OnNumberInput(_number);
             }
-            else
-            {
-                Destroy();
-            }
+            Destroy();
         }
 
         public void OnCancel()
         {
             if (callback != null)
             {
-                callback.OnNumberInputCancel(this);
+                callback.OnNumberInputCancel();
             }
-            else
-            {
-                Destroy();
-            }
-        }
-
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
-        {
-            OnCancel();
+            Destroy();
         }
     }
 }

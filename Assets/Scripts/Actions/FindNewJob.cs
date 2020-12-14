@@ -9,7 +9,6 @@ namespace Actions
     public class FindNewJob : AbstractAction, ITransactionHandler, IMessageBoxHandler
     {
         private Player _player;
-        private MessageBox _msgBox;
         private Profession _job;
 
         public FindNewJob(Player player) : base(null)
@@ -21,28 +20,44 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                _msgBox = msgBox;
                 GameManager.Instance.TryDebit(_player, _job.jobCost, this);
             }
             else
             {
-                msgBox.Destroy();
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
+                RunCallback(false);
             }
         }
 
         public void OnTransactionFailure()
         {
-            RunCallback(false);
+            ShowApplyConfirmation();
         }
 
         public void OnTransactionSuccess()
         {
-            _msgBox.Destroy();
             _player.AddJob(_job);
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
             GameManager.Instance.StateMachine.OnPlayerActionDone();
             RunCallback(true);
+        }
+
+        private void ShowApplyConfirmation()
+        {
+            Localization local = Localization.Instance;
+
+            List<string> messages = new List<string>();
+            messages.Add(string.Format("Apply for the {0} job?", local.GetJobName(_job)));
+            messages.Add("");
+            messages.Add(string.Format(
+                "Training Cost: {0}", local.GetCurrency(_job.jobCost, true)));
+            messages.Add(string.Format(
+                "Salary: {0}", local.GetCurrency(_job.salary)));
+
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", messages),
+                ButtonChoiceType.OK_CANCEL,
+                this);
         }
 
         public override void Start()
@@ -51,8 +66,6 @@ namespace Actions
             {
                 return;
             }
-
-            Localization local = GameManager.Instance.Localization;
 
             bool hasFullTime = false;
             foreach (Profession job in _player.jobs)
@@ -64,16 +77,7 @@ namespace Actions
             }
             _job = JobManager.Instance.FindJob(
                 GameManager.Instance.Random, hasFullTime);
-
-            List<string> message = new List<string>();
-            message.Add(_job.professionName);
-            message.Add(string.Format(
-                "Training Cost: {0}", local.GetCurrency(_job.jobCost)));
-            message.Add(string.Format(
-                "Salary: {0}", local.GetCurrency(_job.salary)));
-            message.Add(string.Format("Apply?"));
-            UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", message), ButtonChoiceType.OK_CANCEL, this);
+            ShowApplyConfirmation();
         }
     }
 }

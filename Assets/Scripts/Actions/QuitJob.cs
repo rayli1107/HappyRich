@@ -18,7 +18,7 @@ namespace Actions
 
         public override void Start()
         {
-            Localization local = GameManager.Instance.Localization;
+            Localization local = Localization.Instance;
 
             string message = string.Format(
                 "Quit your {0} job?", local.GetJobName(_job));

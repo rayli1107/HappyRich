@@ -11,34 +11,40 @@ namespace UI.Panels.Assets
         [SerializeField]
         private StockPanel _prefabStockPanel;
         [SerializeField]
-        private GameObject _growthStockPanel;
-        [SerializeField]
-        private GameObject _yieldStockPanel;
+        private Transform _content;
 #pragma warning restore 0649
 
         public Player player;
 
-        private void SetupStockPanel(GameObject panelObject, List<AbstractStock> stocks)
+        private void SetupStockPanel(List<AbstractStock> stocks)
         {
-            panelObject.SetActive(true);
             foreach (AbstractStock stock in stocks)
             {
                 StockPanel childPanel = Instantiate(
-                    _prefabStockPanel, panelObject.transform);
+                    _prefabStockPanel, _content);
                 childPanel.player = player;
                 childPanel.stock = stock;
-                childPanel.gameObject.SetActive(false);
-                childPanel.gameObject.SetActive(true);
+                childPanel.Refresh();
+            }
+        }
+
+        public void Refresh()
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            StockManager stockManager = StockManager.Instance;
+            if (stockManager.growthStocks.Count > 0)
+            {
+                SetupStockPanel(stockManager.growthStocks);
             }
         }
 
         private void OnEnable()
         {
-            StockManager stockManager = StockManager.Instance;
-            if (stockManager.growthStocks.Count > 0)
-            {
-                SetupStockPanel(_growthStockPanel, stockManager.growthStocks);
-            }
+            Refresh();
         }
     }
 }

@@ -141,6 +141,7 @@
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
+    <Compile Include="Assets\Scripts\Actions\SellStocksAction.cs" />
     <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />

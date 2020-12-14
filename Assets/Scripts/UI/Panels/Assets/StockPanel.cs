@@ -94,10 +94,16 @@ namespace UI.Panels.Assets
             new BuyStocksAction(player, stock, this).Start();
         }
 
+        public void OnSell()
+        {
+            new SellStocksAction(player, stock, this).Start();
+        }
+
         public void OnActionCallback(bool success)
         {
             if (success)
             {
+                UIManager.Instance.UpdatePlayerInfo(player);
                 Refresh();
             }
         }

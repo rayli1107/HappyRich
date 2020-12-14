@@ -169,6 +169,24 @@ public class Portfolio
             stocks.Add(stock.name, purchasedStock);
         }
     }
+
+    public bool TryRemoveStock(Assets.AbstractStock stock, int number)
+    {
+        Assets.PurchasedStock purchasedStock = null;
+        if (stocks.TryGetValue(stock.name, out purchasedStock))
+        {
+            if (purchasedStock.count == number)
+            {
+                stocks.Remove(stock.name);
+                return true;
+            }
+            else if (purchasedStock.count > number)
+            {
+                return purchasedStock.TryRemoveCount(number);
+            }
+        }
+        return false;
+    }
 }
 
 public class Player

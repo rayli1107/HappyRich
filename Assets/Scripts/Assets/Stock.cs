@@ -21,6 +21,17 @@ namespace Assets
             count = Math.Max(count, 0);
         }
 
+        public bool TryRemoveCount(int amount)
+        {
+            if (count >= amount)
+            {
+                count -= amount;
+                return true;
+            }
+
+            return false;
+        }
+
         public override int getValue()
         {
             return count * stock.value;

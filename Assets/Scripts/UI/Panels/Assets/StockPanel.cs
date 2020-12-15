@@ -54,7 +54,7 @@ namespace UI.Panels.Assets
             if (player.portfolio.stocks.TryGetValue(stock.name, out result))
             {
                 count = result.count;
-                value = result.getValue();
+                value = result.value;
             }
 
             if (_textShares != null)

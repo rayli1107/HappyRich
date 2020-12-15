@@ -5,8 +5,9 @@ namespace Assets
     public class AbstractLiability
     {
         public string name { get; private set; }
-        public int amount { get; private set; }
+        public virtual int amount { get; private set; }
         public int interestRate { get; private set; }
+        public virtual int expense => amount * interestRate / 100;
 
         public AbstractLiability(
             string name, int amount, int interestRate)
@@ -14,11 +15,6 @@ namespace Assets
             this.name = name;
             this.amount = amount;
             this.interestRate = interestRate;
-        }
-
-        public virtual int getExpense()
-        {
-            return amount * interestRate / 100;
         }
 
         public virtual void PayOff(int amount)

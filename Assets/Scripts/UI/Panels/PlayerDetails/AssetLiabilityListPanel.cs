@@ -83,7 +83,7 @@ namespace UI.Panels.PlayerDetails
             {
                 foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
                 {
-                    totalStocks += entry.Value.getValue();
+                    totalStocks += entry.Value.value;
                 }
 
                 currentIndex = AddItemValueAsCurrency(
@@ -102,7 +102,7 @@ namespace UI.Panels.PlayerDetails
                         currentIndex,
                         _panelAssets.tabCount + 2,
                         stock.stock.name,
-                        stock.getValue(),
+                        stock.value,
                         false);
                 }
             }
@@ -113,10 +113,13 @@ namespace UI.Panels.PlayerDetails
             {
                 foreach (AbstractAsset asset in player.portfolio.otherAssets)
                 {
-                    totalOtherAssets += asset.getValue();
-                    if (asset.liability != null && asset.liability.amount > 0)
+                    totalOtherAssets += asset.value;
+                    foreach (AbstractLiability liability in asset.liabilities) 
                     {
-                        liabilities.Add(asset.liability);
+                        if (liability.amount > 0)
+                        {
+                            liabilities.Add(liability);
+                        }
                     }
                 }
 
@@ -135,7 +138,7 @@ namespace UI.Panels.PlayerDetails
                         currentIndex,
                         _panelAssets.tabCount + 2,
                         asset.name,
-                        asset.getValue(),
+                        asset.value,
                         false);
                 }
             }

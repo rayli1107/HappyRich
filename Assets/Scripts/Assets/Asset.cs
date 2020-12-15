@@ -1,44 +1,58 @@
-﻿namespace Assets
+﻿using System.Collections.Generic;
+
+namespace Assets
 {
     public class AbstractAsset
     {
         public string name { get; private set; }
-//        public int value { get; protected set; }
-        public AbstractLiability liability { get; private set; }
+        public virtual List<AbstractLiability> liabilities {
+            get
+            {
+                return new List<AbstractLiability>();
+            }
+        }
 
-        private int _passiveIncome;
-        private int _value;
+        public virtual int totalIncome { get; private set; }
+        public virtual int value { get; private set; }
+        public virtual int income {
+            get
+            {
+                int income = totalIncome;
+                foreach (AbstractLiability liability in liabilities)
+                {
+                    income -= liability.expense;
+                }
+                return income;
+            }
+        }
 
-        public AbstractAsset(
-            string name, int value, AbstractLiability liability, int passiveIncome)
+        public AbstractAsset(string name, int value, int totalIncome)
         {
             this.name = name;
-            _value = value;
-            this.liability = liability;
-            _passiveIncome = passiveIncome;
+            this.value = value;
+            this.totalIncome = totalIncome;
         }
 
-        public virtual int getValue()
+        public void addLiability(AbstractLiability liability)
         {
-            return _value;
-        }
-
-        public virtual int getIncome()
-        {
-            int income = _passiveIncome;
-            if (liability != null)
-            {
-                income -= liability.getExpense();
-            }
-            return income;
+            liabilities.Add(liability);
         }
     }
 
     public class Car : AbstractAsset
     {
-        public Car(int value) :
-            base("Car", value, new AutoLoan(value), 0)
+        public AutoLoan loan { get; private set; }
+        public override List<AbstractLiability> liabilities {
+            get {
+                List<AbstractLiability> ret = new List<AbstractLiability>();
+                ret.Add(loan);
+                return ret;
+            }
+        }
+
+        public Car(int value) :base("Car", value, 0)
         {
+            loan = new AutoLoan(value);
         }
     }
 }

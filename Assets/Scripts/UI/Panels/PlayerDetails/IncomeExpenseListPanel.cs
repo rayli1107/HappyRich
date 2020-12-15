@@ -82,7 +82,7 @@ namespace UI.Panels.PlayerDetails
 
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                int income = asset.getIncome();
+                int income = asset.income;
                 if (income > 0)
                 {
                     passiveIncome += income;
@@ -139,7 +139,7 @@ namespace UI.Panels.PlayerDetails
             // Assets with negative cashflow
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                int income = asset.getIncome();
+                int income = asset.income;
                 if (income < 0)
                 {
                     expenses -= income;
@@ -156,7 +156,7 @@ namespace UI.Panels.PlayerDetails
 
             foreach (AbstractLiability liability in player.portfolio.liabilities)
             {
-                int expense = liability.getExpense();
+                int expense = liability.expense;
                 if (expense > 0)
                 {
                     expenses += expense;

@@ -8,8 +8,10 @@ namespace Assets
     {
         public AbstractStock stock { get; private set; }
         public int count { get; private set; }
+        public override int value { get { return count * stock.value; } }
 
-        public PurchasedStock(AbstractStock stock) : base(stock.name, 0, null, 0)
+
+        public PurchasedStock(AbstractStock stock) : base(stock.name, 0, 0)
         {
             this.stock = stock;
             count = 0;
@@ -30,16 +32,6 @@ namespace Assets
             }
 
             return false;
-        }
-
-        public override int getValue()
-        {
-            return count * stock.value;
-        }
-
-        public override int getIncome()
-        {
-            return 0;
         }
     }
     public class AbstractStock

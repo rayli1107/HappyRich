@@ -10,6 +10,8 @@ public class Localization : MonoBehaviour
     private Color _colorNegative = Color.red;
     [SerializeField]
     private Color _colorJob = Color.cyan;
+    [SerializeField]
+    private Color _colorRealEstate = Color.yellow;
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -23,6 +25,16 @@ public class Localization : MonoBehaviour
     {
         return string.Format(
             "<color=#{0}>{1}</color>", ColorUtility.ToHtmlStringRGBA(color), s);
+    }
+
+    public string GetRealEstateDescription(RealEstateProfile profile)
+    {
+        return colorWrap(profile.description, _colorRealEstate);
+    }
+
+    public string GetRealEstateLabel(RealEstateProfile profile)
+    {
+        return colorWrap(profile.label, _colorRealEstate);
     }
 
     public string GetJobName(Profession job)

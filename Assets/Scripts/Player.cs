@@ -44,7 +44,7 @@ public class PlayerSnapshot
 
         foreach (Assets.AbstractAsset asset in player.portfolio.assets)
         {
-            int income = asset.getIncome();
+            int income = asset.income;
             if (income > 0)
             {
                 passiveIncome += income;
@@ -54,17 +54,17 @@ public class PlayerSnapshot
                 expenses -= income;
             }
 
-            netWorth += asset.getValue();
-            if (asset.liability != null)
+            netWorth += asset.value;
+            foreach (Assets.AbstractLiability liability in asset.liabilities)
             {
-                netWorth -= asset.liability.amount;
+                netWorth -= liability.amount;
             }
         }
 
         foreach (Assets.AbstractLiability liability in player.portfolio.liabilities)
         {
             netWorth -= liability.amount;
-            expenses += liability.getExpense();
+            expenses += liability.expense;
         }
     }
 }

@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 204261754}
   - component: {fileID: 204261755}
   - component: {fileID: 204261756}
+  - component: {fileID: 204261757}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -232,6 +233,20 @@ MonoBehaviour:
   _colorPositive: {r: 0, g: 1, b: 0, a: 1}
   _colorNegative: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
   _colorJob: {r: 0, g: 1, b: 1, a: 1}
+--- !u!114 &204261757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204261750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0a984b00d8fa441a07fbca2647f516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _profiles:
+  - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
 --- !u!1 &456001304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,

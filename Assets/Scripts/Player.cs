@@ -1,4 +1,5 @@
-﻿using ScriptableObjects;
+﻿using Assets;
+using ScriptableObjects;
 using System.Collections.Generic;
 
 public class Income
@@ -42,7 +43,7 @@ public class PlayerSnapshot
         expenses = player.personalExpenses;
         expenses += player.numChild * player.costPerChild;
 
-        foreach (Assets.AbstractAsset asset in player.portfolio.assets)
+        foreach (AbstractAsset asset in player.portfolio.assets)
         {
             int income = asset.income;
             if (income > 0)
@@ -55,13 +56,13 @@ public class PlayerSnapshot
             }
 
             netWorth += asset.value;
-            foreach (Assets.AbstractLiability liability in asset.liabilities)
+            foreach (AbstractLiability liability in asset.liabilities)
             {
                 netWorth -= liability.amount;
             }
         }
 
-        foreach (Assets.AbstractLiability liability in player.portfolio.liabilities)
+        foreach (AbstractLiability liability in player.portfolio.liabilities)
         {
             netWorth -= liability.amount;
             expenses += liability.expense;
@@ -71,31 +72,33 @@ public class PlayerSnapshot
 
 public class Portfolio
 {
-    public Assets.StudentLoan studentLoan { get; private set; }
-    public Assets.PersonalLoan personalLoan { get; private set; }
-    public Assets.Car car { get; private set; }
+    public StudentLoan studentLoan { get; private set; }
+    public PersonalLoan personalLoan { get; private set; }
+    public Car car { get; private set; }
     public int cash { get; private set; }
-    public Dictionary<string, Assets.PurchasedStock> stocks { get; private set; }
+    public Dictionary<string, PurchasedStock> stocks { get; private set; }
+    public List<AbstractRealEstate> properties { get; private set; }
 
-    public List<Assets.AbstractAsset> assets
+    public List<AbstractAsset> assets
     {
         get
         {
-            List<Assets.AbstractAsset> assets = new List<Assets.AbstractAsset>();
+            List<AbstractAsset> assets = new List<AbstractAsset>();
             assets.AddRange(otherAssets);
-            foreach (KeyValuePair<string, Assets.PurchasedStock> entry in stocks)
+            foreach (KeyValuePair<string, PurchasedStock> entry in stocks)
             {
                 assets.Add(entry.Value);
             }
+            assets.AddRange(properties);
             return assets;
         }
     }
 
-    public List<Assets.AbstractAsset> otherAssets
+    public List<AbstractAsset> otherAssets
     {
         get
         {
-            List<Assets.AbstractAsset> otherAssets = new List<Assets.AbstractAsset>();
+            List<AbstractAsset> otherAssets = new List<AbstractAsset>();
             if (car != null)
             {
                 otherAssets.Add(car);
@@ -104,11 +107,11 @@ public class Portfolio
         }
     }
 
-    public List<Assets.AbstractLiability> liabilities
+    public List<AbstractLiability> liabilities
     {
         get
         {
-            List<Assets.AbstractLiability> ret = new List<Assets.AbstractLiability>();
+            List<AbstractLiability> ret = new List<AbstractLiability>();
             if (studentLoan != null && studentLoan.amount > 0)
             {
                 ret.Add(studentLoan);
@@ -126,23 +129,24 @@ public class Portfolio
     {
         if (profession.autoLoan > 0)
         {
-            car = new Assets.Car(profession.autoLoan);
+            car = new Car(profession.autoLoan);
         }
 
         if (profession.jobCost > 0)
         {
-            studentLoan = new Assets.StudentLoan(profession.jobCost);
+            studentLoan = new StudentLoan(profession.jobCost);
         }
 
         cash = profession.startingCash;
-        stocks = new Dictionary<string, Assets.PurchasedStock>();
+        stocks = new Dictionary<string, PurchasedStock>();
+        properties = new List<AbstractRealEstate>();
     }
 
     public void AddPersonalLoan(int amount)
     {
         if (personalLoan == null)
         {
-            personalLoan = new Assets.PersonalLoan(amount);
+            personalLoan = new PersonalLoan(amount);
         }
         else
         {
@@ -155,24 +159,24 @@ public class Portfolio
         cash += amount;
     }
 
-    public void AddStock(Assets.AbstractStock stock, int number)
+    public void AddStock(AbstractStock stock, int number)
     {
-        Assets.PurchasedStock purchasedStock = null;
+        PurchasedStock purchasedStock = null;
         if (stocks.TryGetValue(stock.name, out purchasedStock))
         {
             purchasedStock.AddCount(number);
         } 
         else
         {
-            purchasedStock = new Assets.PurchasedStock(stock);
+            purchasedStock = new PurchasedStock(stock);
             purchasedStock.AddCount(number);
             stocks.Add(stock.name, purchasedStock);
         }
     }
 
-    public bool TryRemoveStock(Assets.AbstractStock stock, int number)
+    public bool TryRemoveStock(AbstractStock stock, int number)
     {
-        Assets.PurchasedStock purchasedStock = null;
+        PurchasedStock purchasedStock = null;
         if (stocks.TryGetValue(stock.name, out purchasedStock))
         {
             if (purchasedStock.count == number)

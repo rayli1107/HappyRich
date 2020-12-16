@@ -62,6 +62,7 @@ namespace UI.Panels.PlayerDetails
             liabilities.AddRange(player.portfolio.liabilities);
 
             int totalAssets = 0;
+            int totalRealEstate = 0;
             int totalLiabilities = 0;
             int totalStocks = 0;
             int totalOtherAssets = 0;
@@ -107,6 +108,42 @@ namespace UI.Panels.PlayerDetails
                 }
             }
             totalAssets += totalStocks;
+
+            // Real Estate
+            if (player.portfolio.properties.Count > 0)
+            {
+                foreach (AbstractRealEstate asset in player.portfolio.properties)
+                {
+                    totalRealEstate += asset.value;
+                    foreach (AbstractLiability liability in asset.liabilities)
+                    {
+                        if (liability.amount > 0)
+                        {
+                            liabilities.Add(liability);
+                        }
+                    }
+                }
+
+                currentIndex = AddItemValueAsCurrency(
+                    _panelAssets.transform.parent,
+                    currentIndex,
+                    _panelAssets.tabCount + 1,
+                    "Real Estate",
+                    0,
+                    false);
+
+                foreach (AbstractRealEstate asset in player.portfolio.properties)
+                {
+                    currentIndex = AddItemValueAsCurrency(
+                        _panelAssets.transform.parent,
+                        currentIndex,
+                        _panelAssets.tabCount + 2,
+                        asset.name,
+                        asset.value,
+                        false);
+                }
+            }
+            totalAssets += totalRealEstate;
 
             // Other Assets
             if (player.portfolio.otherAssets.Count > 0)

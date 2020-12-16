@@ -35,7 +35,8 @@ namespace UI
         private StockPanel _prefabStockTradePanel;
         [SerializeField]
         private NumberInputPanel _prefabNumberInputPanel;
-
+        [SerializeField]
+        private RentalRealEstatePurchasePanel _prefabRentalRealEstatePurchasePanel;
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
         [SerializeField]
@@ -226,6 +227,18 @@ namespace UI
             panel.message = message;
             panel.max = max;
             panel.callback = callback;
+            panel.Refresh();
+        }
+
+        public void ShowRentalRealEstatePurchasePanel(
+            Assets.AbstractRealEstate asset,
+            IMessageBoxHandler handler)
+        {
+            RentalRealEstatePurchasePanel panel = Instantiate(
+                _prefabRentalRealEstatePurchasePanel, transform);
+            panel.player = GameManager.Instance.player;
+            panel.asset = (Assets.RentalRealEstate)asset;
+            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }
 

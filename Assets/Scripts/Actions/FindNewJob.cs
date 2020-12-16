@@ -1,6 +1,5 @@
 ﻿using ScriptableObjects;
 using System.Collections.Generic;
-using Transaction;
 using UI.Panels;
 using UI.Panels.Templates;
 
@@ -16,11 +15,11 @@ namespace Actions
             _player = player;
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                GameManager.Instance.TryDebit(_player, _job.jobCost, this);
+                TransactionManager.ApplyJob(_player, _job, this);
             }
             else
             {
@@ -29,17 +28,18 @@ namespace Actions
             }
         }
 
-        public void OnTransactionFailure()
+        public void OnTransactionFinish(bool success)
         {
-            ShowApplyConfirmation();
-        }
-
-        public void OnTransactionSuccess()
-        {
-            _player.AddJob(_job);
-            UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            GameManager.Instance.StateMachine.OnPlayerActionDone();
-            RunCallback(true);
+            if (success)
+            {
+                UI.UIManager.Instance.UpdatePlayerInfo(_player);
+                GameManager.Instance.StateMachine.OnPlayerActionDone();
+                RunCallback(true);
+            }
+            else
+            {
+                ShowApplyConfirmation();
+            }
         }
 
         private void ShowApplyConfirmation()

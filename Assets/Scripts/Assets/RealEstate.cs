@@ -23,6 +23,19 @@ namespace Assets
         public int marketPrice { get; private set; }
         public RealEstateTemplate template { get; private set; }
 
+        public int downPayment
+        {
+            get
+            {
+                int downPayment = purchasePrice;
+                foreach (AbstractLiability liability in liabilities)
+                {
+                    downPayment -= liability.amount;
+                }
+                return downPayment;
+            }
+        }
+
         public AbstractRealEstate(
             RealEstateTemplate template,
             int purchasePrice,

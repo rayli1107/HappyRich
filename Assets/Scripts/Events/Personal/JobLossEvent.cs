@@ -50,9 +50,8 @@ namespace Events.Personal
                 string.Join("\n", messages), ButtonChoiceType.NONE, this);
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
-//            msgBox.Destroy();
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
             _state.OnEventDone();
         }

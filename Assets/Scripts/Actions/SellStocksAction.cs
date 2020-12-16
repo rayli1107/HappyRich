@@ -1,12 +1,10 @@
 ﻿using Assets;
-using Transaction;
 using UI.Panels;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Actions
 {
-    public class SellStocksAction : AbstractAction, INumberInputCallback, IMessageBoxHandler
+    public class SellStocksAction : AbstractAction, INumberInputCallback, IMessageBoxHandler, ITransactionHandler
     {
         private Player _player;
         private AbstractStock _stock;
@@ -61,18 +59,25 @@ namespace Actions
             RunCallback(false);
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                if (_player.portfolio.TryRemoveStock(_stock, _numSold))
-                {
-                    _player.portfolio.AddCash(_numSold * _stock.value);
-                    RunCallback(true);
-                    return;
-                }
+                TransactionManager.SellStock(_player, _stock, _numSold, this);
             }
-            RunCallback(false);
+            else
+            {
+                OnTransactionFinish(false);
+            }
+        }
+
+        public void OnTransactionFinish(bool success)
+        {
+            if (success)
+            {
+                UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            }
+            RunCallback(success);
         }
     }
 }

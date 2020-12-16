@@ -233,6 +233,7 @@ MonoBehaviour:
   _colorPositive: {r: 0, g: 1, b: 0, a: 1}
   _colorNegative: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
   _colorJob: {r: 0, g: 1, b: 1, a: 1}
+  _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &204261757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profiles:
   - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
+  _defaultMortgageRate: 80
 --- !u!1 &456001304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
@@ -1117,6 +1119,7 @@ MonoBehaviour:
     type: 3}
   _prefabNumberInputPanel: {fileID: 4878464304282494514, guid: 34aac3e9c8f1a444bae63522c6144c5e,
     type: 3}
+  _prefabRentalRealEstatePurchasePanel: {fileID: 0}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}
   _prefabScrollableTextPanel: {fileID: 1382692242357073638, guid: 0049d425f6e30c749b728a4c6d6cdf32,

@@ -26,7 +26,7 @@ namespace Actions
                 message, ButtonChoiceType.OK_CANCEL, this);
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {

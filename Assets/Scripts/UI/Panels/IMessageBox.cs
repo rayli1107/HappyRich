@@ -9,6 +9,6 @@
 
     public interface IMessageBoxHandler
     {
-        void OnButtonClick(Templates.MessageBox msgBox, ButtonType button);
+        void OnButtonClick(ButtonType button);
     }
 }

@@ -1,9 +1,6 @@
-﻿using ScriptableObjects;
-using System.Collections.Generic;
-using Transaction;
+﻿using System.Collections.Generic;
 using UI.Panels;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Actions
 {
@@ -22,19 +19,17 @@ namespace Actions
             _amount = amount;
             _transactionHandler = transactionHandler;
         }
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
+            bool success = false;
             if (button == ButtonType.OK)
             {
                 int loanAmount = _amount - _player.cash;
                 _player.portfolio.AddCash(-1 * _player.cash);
                 _player.portfolio.AddPersonalLoan(loanAmount);
-                _transactionHandler.OnTransactionSuccess();
+                success = true;
             }
-            else
-            {
-                _transactionHandler.OnTransactionFailure();
-            }
+            _transactionHandler.OnTransactionFinish(success);
         }
 
         public void Start()

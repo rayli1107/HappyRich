@@ -12,7 +12,7 @@ namespace UI.Panels.PlayerDetails
             _messageBox = messageBox;
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             _messageBox.Destroy();
         }

@@ -1,8 +1,6 @@
 ﻿using Assets;
-using Transaction;
 using UI.Panels;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Actions
 {
@@ -50,12 +48,11 @@ namespace Actions
             RunCallback(false);
         }
 
-        public void OnButtonClick(MessageBox msgBox, ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                int cost = _numPrurchased * _stock.value;
-                GameManager.Instance.TryDebit(_player, cost, this);
+                TransactionManager.BuyStock(_player, _stock, _numPrurchased, this);
             }
             else
             {
@@ -63,16 +60,13 @@ namespace Actions
             }
         }
 
-        public void OnTransactionSuccess()
+        public void OnTransactionFinish(bool success)
         {
-            _player.portfolio.AddStock(_stock, _numPrurchased);
-            UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            RunCallback(true);
-        }
-
-        public void OnTransactionFailure()
-        {
-            RunCallback(false);
+            if (success)
+            {
+                UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            }
+            RunCallback(success);
         }
     }
 }

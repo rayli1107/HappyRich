@@ -102,7 +102,7 @@ namespace UI.Panels.Templates
         {
             if (messageBoxHandler != null)
             {
-                messageBoxHandler.OnButtonClick(this, ButtonType.OK);
+                messageBoxHandler.OnButtonClick(ButtonType.OK);
             }
             Destroy();
         }
@@ -111,7 +111,7 @@ namespace UI.Panels.Templates
         {
             if (messageBoxHandler != null)
             {
-                messageBoxHandler.OnButtonClick(this, ButtonType.CANCEL);
+                messageBoxHandler.OnButtonClick(ButtonType.CANCEL);
             }
             Destroy();
         }
@@ -122,7 +122,7 @@ namespace UI.Panels.Templates
                     {
                         if (messageBoxHandler != null)
                         {
-                            messageBoxHandler.OnButtonClick(this, ButtonType.OUTSIDE_BOUNDARY);
+                            messageBoxHandler.OnButtonClick(ButtonType.OUTSIDE_BOUNDARY);
                         }
                         else
                         {

@@ -16,6 +16,6 @@ MonoBehaviour:
   description: Three Bedroom Single Family House
   label: 3BD SFH
   basePriceRange: {x: 150000, y: 200000}
-  priceVariance: 20
+  priceVariance: 0.2
   priceIncrement: 10000
-  rentalRange: {x: 4, y: 5}
+  rentalRange: {x: 5, y: 6}

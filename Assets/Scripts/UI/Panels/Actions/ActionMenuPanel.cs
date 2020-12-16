@@ -8,6 +8,8 @@ namespace UI.Panels.Actions
 #pragma warning disable 0649
         [SerializeField]
         private JobSearchPanel _prefabJobSearchPanel;
+        [SerializeField]
+        private InvestmentsPanel _prefabInvestmentsPanel;
 #pragma warning restore 0649
 
         public Player player;
@@ -15,6 +17,11 @@ namespace UI.Panels.Actions
         public void OnJobSearchButton()
         {
             Instantiate(_prefabJobSearchPanel, UIManager.Instance.transform).player = player;
+        }
+
+        public void OnInvestmentsButton()
+        {
+            Instantiate(_prefabInvestmentsPanel, UIManager.Instance.transform).player = player;
         }
     }
 }

@@ -142,6 +142,7 @@
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
     <Compile Include="Assets\Scripts\Actions\SellStocksAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\SmallInvestmentAction.cs" />
     <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Assets\Scripts\Manager\Localization.cs" />
     <Compile Include="Assets\Scripts\Manager\RealEstateManager.cs" />
     <Compile Include="Assets\Scripts\Manager\StockManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\TransactionManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />
@@ -172,10 +174,10 @@
     <Compile Include="Assets\Scripts\StateMachine\PlayerPostActionState.cs" />
     <Compile Include="Assets\Scripts\StateMachine\StateMachine.cs" />
     <Compile Include="Assets\Scripts\StateMachine\VictoryState.cs" />
-    <Compile Include="Assets\Scripts\Transaction\ITransactionHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\ActionMenuPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Actions\InvestmentsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\JobSearchPanel.cs" />
-    <Compile Include="Assets\Scripts\UI\Panels\Assets\RealEstatePurchasePanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\RentalRealEstatePurchasePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockMarketPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\IMessageBox.cs" />

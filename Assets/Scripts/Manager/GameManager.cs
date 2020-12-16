@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Transaction;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,18 +45,5 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         StateMachine.Update();
-    }
-
-    public void TryDebit(Player player, int amount, ITransactionHandler handler)
-    {
-        if (player.cash >= amount)
-        {
-            player.portfolio.AddCash(-1 * amount);
-            handler.OnTransactionSuccess();
-        }
-        else
-        {
-            new Actions.TakePersonalLoan(player, amount, handler).Start();
-        }
     }
 }

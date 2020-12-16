@@ -848,6 +848,105 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1277663898}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1536294796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1536294798}
+  - component: {fileID: 1536294797}
+  m_Layer: 0
+  m_Name: Networking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1536294797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536294796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0df5e00970b637b45a0a72c940e50b02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _profiles:
+  - {fileID: 11400000, guid: 4e6f8ee943f315743a4b6f785cd12f46, type: 2}
+  - {fileID: 11400000, guid: e8d09794176a66c4690b5e34fbee8c32, type: 2}
+  - {fileID: 11400000, guid: 719e63cb4ee903f4b854ee2c224ca239, type: 2}
+  - {fileID: 11400000, guid: 3ef4485192cfbc84a909a05fa3ec88f9, type: 2}
+  _names:
+  - Noah
+  - William
+  - James
+  - Ben
+  - Oliver
+  - Jacob
+  - Lucas
+  - Michael
+  - Alex
+  - Ethan
+  - Daniel
+  - Matt
+  - Henry
+  - Joseph
+  - Sam
+  - David
+  - John
+  - Luke
+  - Anthony
+  - Nathan
+  - Thomas
+  - Robert
+  - Leo
+  - Adam
+  - Kevin
+  - George
+  - Emma
+  - Olivia
+  - Isabella
+  - Sophia
+  - Mia
+  - Emily
+  - Elizabeth
+  - Grace
+  - Chloe
+  - Penelope
+  - Lillian
+  - Zoe
+  - Aubrey
+  - Audrey
+  - Violet
+  - Claire
+  - Lucy
+  - Anna
+  - Samantha
+  - Allison
+  - Saray
+  - Alice
+  - Vivian
+  - Katherine
+--- !u!4 &1536294798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536294796}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 221.0362, y: 1314.9078, z: -241.30153}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1676987064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1119,7 +1218,8 @@ MonoBehaviour:
     type: 3}
   _prefabNumberInputPanel: {fileID: 4878464304282494514, guid: 34aac3e9c8f1a444bae63522c6144c5e,
     type: 3}
-  _prefabRentalRealEstatePurchasePanel: {fileID: 0}
+  _prefabRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: a8c3d35e773ad6245986a79943288397,
+    type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}
   _prefabScrollableTextPanel: {fileID: 1382692242357073638, guid: 0049d425f6e30c749b728a4c6d6cdf32,

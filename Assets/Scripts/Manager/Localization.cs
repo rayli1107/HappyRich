@@ -12,6 +12,8 @@ public class Localization : MonoBehaviour
     private Color _colorJob = Color.cyan;
     [SerializeField]
     private Color _colorRealEstate = Color.yellow;
+    [SerializeField]
+    private Color _colorName = Color.blue;
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -52,6 +54,11 @@ public class Localization : MonoBehaviour
         {
             return ((float)amount / unit).ToString("C1") + prefix;
         }
+    }
+
+    public string GetName(string name)
+    {
+        return colorWrap(name, _colorName);
     }
 
     private string GetAbsCurrency(int amount)

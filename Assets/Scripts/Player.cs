@@ -206,6 +206,7 @@ public class Player
     public List<PlayerState.PlayerStateInterface> playerStates { get; private set; }
 
     private int _defaultHappiness;
+    public List<InvestmentPartner> contacts { get; private set; }
 
 
     public Player(Profession profession, int defaultHappiness)
@@ -221,6 +222,7 @@ public class Player
         age = profession.startingAge;
         _defaultHappiness = defaultHappiness;
 
+        contacts = new List<InvestmentPartner>();
         playerStates = new List<PlayerState.PlayerStateInterface>();
         playerStates.Add(new PlayerState.OneJobState());
         playerStates.Add(new PlayerState.TwoJobState());

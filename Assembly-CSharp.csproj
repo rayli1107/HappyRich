@@ -138,6 +138,7 @@
     <Compile Include="Assets\Modern UI Pack\Scripts\Window\WindowManagerEditor.cs" />
     <Compile Include="Assets\Scripts\Actions\AbstractAction.cs" />
     <Compile Include="Assets\Scripts\Actions\BuyStocksAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\FindNewInvestors.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\IAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Assets\Scripts\Events\Personal\PersonalEvent.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Manager\InterestRateManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\InvestmentPartnerManager.cs" />
     <Compile Include="Assets\Scripts\Manager\JobManager.cs" />
     <Compile Include="Assets\Scripts\Manager\Localization.cs" />
     <Compile Include="Assets\Scripts\Manager\RealEstateManager.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObjects\InvestmentPartnerProfile.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Profession.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\RealEstateProfile.cs" />
     <Compile Include="Assets\Scripts\StateMachine\GameInitState.cs" />

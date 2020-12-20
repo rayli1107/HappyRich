@@ -228,7 +228,27 @@ public class Player
         playerStates.Add(new PlayerState.TwoJobState());
     }
 
-    public void DistributeCashflow()
+    public void OnPlayerTurnStart()
+    {
+        DistributeCashflow();
+        UpdateContacts();
+    }
+
+    private void UpdateContacts()
+    {
+        List<InvestmentPartner> newContacts = new List<InvestmentPartner>();
+        foreach (InvestmentPartner contact in contacts)
+        {
+            contact.OnTurnStart();
+            if (contact.duration > 0)
+            {
+                newContacts.Add(contact);
+            }
+        }
+        contacts = newContacts;
+    }
+
+    private void DistributeCashflow()
     {
         PlayerSnapshot snapshot = new PlayerSnapshot(this);
         portfolio.AddCash(snapshot.cashflow);

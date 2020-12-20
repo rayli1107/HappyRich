@@ -28,5 +28,10 @@ namespace UI.Panels.PlayerDetails
             panel.player = player;
             panel.Refresh();
         }
+
+        public void ShowContactListPanel()
+        {
+            UIManager.Instance.ShowContactListPanel();
+        }
     }
 }

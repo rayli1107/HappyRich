@@ -22,7 +22,7 @@ namespace StateMachine
             }
             else
             {
-                player.DistributeCashflow();
+                player.OnPlayerTurnStart();
             }
             UI.UIManager.Instance.UpdatePlayerInfo(player);
         }

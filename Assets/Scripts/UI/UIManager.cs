@@ -38,6 +38,9 @@ namespace UI
         [SerializeField]
         private RentalRealEstatePurchasePanel _prefabRentalRealEstatePurchasePanel;
         [SerializeField]
+        private ContactListPanel _prefabContactListPanel;
+
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
         [SerializeField]
         private GameObject _prefabScrollableTextPanel;
@@ -239,6 +242,13 @@ namespace UI
             panel.player = GameManager.Instance.player;
             panel.asset = (Assets.RentalRealEstate)asset;
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+            panel.Refresh();
+        }
+
+        public void ShowContactListPanel()
+        {
+            ContactListPanel panel = Instantiate(_prefabContactListPanel, transform);
+            panel.player = GameManager.Instance.player;
             panel.Refresh();
         }
 

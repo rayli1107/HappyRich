@@ -1,17 +1,41 @@
 ﻿using ScriptableObjects;
+using System;
 using UnityEngine;
+
+public enum RiskTolerance
+{
+    kLow,
+    kMedium,
+    kHigh
+}
 
 public class InvestmentPartner
 {
     public string name { get; private set; }
     public int cash;
-    public int duration;
+    public int duration { get; private set; }
+    private int _initialDuration;
+    public RiskTolerance riskTolerance { get; private set; }
 
-    public InvestmentPartner(string name, int cash, int duration)
+
+    public InvestmentPartner(
+        string name, int cash, RiskTolerance riskTolerance, int duration)
     {
         this.name = name;
         this.cash = cash;
-        this.duration = duration;
+        this.riskTolerance = riskTolerance;
+        _initialDuration = duration;
+        RefreshDuration();
+    }
+
+    public void OnTurnStart()
+    {
+        --duration;
+    }
+
+    public void RefreshDuration()
+    {
+        duration = _initialDuration;
     }
 }
 
@@ -40,7 +64,12 @@ public class InvestmentPartnerManager : MonoBehaviour
         int max = profile.cashRange.y / profile.cashIncrement;
         int cash = random.Next(min, max + 1) * profile.cashIncrement;
         string name = _names[random.Next(_names.Length)];
-        return new InvestmentPartner(name, cash, _defaultDuration);
+
+        Array riskLevels = Enum.GetValues(typeof(RiskTolerance));
+        RiskTolerance riskTolerance = (RiskTolerance)riskLevels.GetValue(
+            random.Next(riskLevels.Length));
+
+        return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
     }
 
     public InvestmentPartner GetPartner(System.Random random)

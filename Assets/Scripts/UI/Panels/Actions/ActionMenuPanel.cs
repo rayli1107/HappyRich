@@ -10,6 +10,8 @@ namespace UI.Panels.Actions
         private JobSearchPanel _prefabJobSearchPanel;
         [SerializeField]
         private InvestmentsPanel _prefabInvestmentsPanel;
+        [SerializeField]
+        private NetworkingPanel _prefabNetworkingPanel;
 #pragma warning restore 0649
 
         public Player player;
@@ -22,6 +24,11 @@ namespace UI.Panels.Actions
         public void OnInvestmentsButton()
         {
             Instantiate(_prefabInvestmentsPanel, UIManager.Instance.transform).player = player;
+        }
+
+        public void OnNetworkingButton()
+        {
+            Instantiate(_prefabNetworkingPanel, UIManager.Instance.transform).player = player;
         }
     }
 }

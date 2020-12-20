@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UI.Panels;
+using UI;
 using UI.Panels.Templates;
 
 namespace Actions

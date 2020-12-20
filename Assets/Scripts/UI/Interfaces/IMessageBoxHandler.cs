@@ -1,4 +1,4 @@
-﻿namespace UI.Panels
+﻿namespace UI
 {
     public enum ButtonType
     {

@@ -1,7 +1,6 @@
 ﻿using ScriptableObjects;
-using UI.Panels;
+using UI;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Actions
 {
@@ -38,7 +37,6 @@ namespace Actions
             {
                 RunCallback(false);
             }
-//            msgBox.Destroy();
         }
     }
 }

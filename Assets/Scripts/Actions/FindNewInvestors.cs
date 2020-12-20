@@ -29,10 +29,26 @@ namespace Actions
                 UI.UIManager.Instance.UpdatePlayerInfo(_player);
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(true);
+                string description = null;
+                switch (partner.riskTolerance)
+                {
+                    case RiskTolerance.kHigh:
+                        description = "prefers investing as equity partners.";
+                        break;
+                    case RiskTolerance.kMedium:
+                        description = "is open to both equity and debt partnership.";
+                        break;
+                    case RiskTolerance.kLow:
+                    default:
+                        description = "prefers investing using debt.";
+                        break;
+                }
+
                 string message = string.Format(
-                    "You met {0}, a follow investor, who has {1} of available cash.",
+                    "You met {0}, a follow investor, who has {1} of available cash, and {2}",
                     Localization.Instance.GetName(partner.name),
-                    Localization.Instance.GetCurrency(partner.cash));
+                    Localization.Instance.GetCurrency(partner.cash),
+                    description);
                 UI.UIManager.Instance.ShowSimpleMessageBox(
                     message, ButtonChoiceType.OK_ONLY, null);
             }

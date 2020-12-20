@@ -1,5 +1,5 @@
 ﻿using Assets;
-using UI.Panels;
+using UI;
 using UI.Panels.Templates;
 
 namespace Actions
@@ -39,6 +39,7 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
+                _asset.OnPurchaseCancel();
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(false);
             }
@@ -90,7 +91,8 @@ namespace Actions
         {
             if (success)
             {
-                UI.UIManager.Instance.UpdatePlayerInfo(_player);
+                _asset.OnPurchase();
+                UIManager.Instance.UpdatePlayerInfo(_player);
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(true);
             }

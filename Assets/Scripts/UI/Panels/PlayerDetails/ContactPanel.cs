@@ -2,12 +2,17 @@
 using TMPro;
 using UnityEngine;
 using Actions;
+using UI.Panels.Assets;
+using UnityEngine.UI;
+using UI.Panels.Templates;
 
 namespace UI.Panels.PlayerDetails
 {
     public class ContactPanel : MonoBehaviour
     {
 #pragma warning disable 0649
+        [SerializeField]
+        private Button _buttonSelect;
         [SerializeField]
         private TextMeshProUGUI _textName;
         [SerializeField]
@@ -24,6 +29,7 @@ namespace UI.Panels.PlayerDetails
 
         public Player player;
         public InvestmentPartner partner;
+        public IContactSelectCallback callback;
 
         public void Refresh()
         {
@@ -33,6 +39,12 @@ namespace UI.Panels.PlayerDetails
             }
 
             Localization local = Localization.Instance;
+
+            if (_buttonSelect != null)
+            {
+                _buttonSelect.gameObject.SetActive(callback != null);
+            }
+
             if (_textName != null)
             {
                 _textName.text = local.GetName(partner.name);
@@ -70,6 +82,15 @@ namespace UI.Panels.PlayerDetails
         private void OnEnable()
         {
             Refresh();
+        }
+
+        public void OnSelectButton()
+        {
+            if (callback != null)
+            {
+                callback.ContactSelect(partner);
+                GetComponentInParent<MessageBox>().Destroy();
+            }
         }
     }
 }

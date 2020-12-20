@@ -1,9 +1,8 @@
 ﻿using ScriptableObjects;
 using StateMachine;
 using System.Collections.Generic;
-using UI.Panels;
+using UI;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Events.Personal
 {

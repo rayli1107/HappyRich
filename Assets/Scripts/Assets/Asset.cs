@@ -37,6 +37,16 @@ namespace Assets
         {
             liabilities.Add(liability);
         }
+
+        public virtual void OnPurchase()
+        {
+
+        }
+
+        public virtual void OnPurchaseCancel()
+        {
+
+        }
     }
 
     public class Car : AbstractAsset

@@ -4,12 +4,6 @@ using UnityEngine;
 
 namespace UI.Panels
 {
-    public interface INumberInputCallback
-    {
-        void OnNumberInput(int number);
-        void OnNumberInputCancel();
-    }
-
     public class NumberInputPanel : ModalObject
     {
 #pragma warning disable 0649

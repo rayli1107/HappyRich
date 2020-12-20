@@ -245,10 +245,16 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowContactListPanel()
+        public void ShowContactListPanel(
+            IContactSelectCallback callback=null,
+            bool showHighRiskContacts=true,
+            bool showLowRiskContacts=true)
         {
             ContactListPanel panel = Instantiate(_prefabContactListPanel, transform);
             panel.player = GameManager.Instance.player;
+            panel.callback = callback;
+            panel.showHighRiskContacts = showHighRiskContacts;
+            panel.showLowRiskContacts = showLowRiskContacts;
             panel.Refresh();
         }
 

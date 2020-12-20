@@ -1,6 +1,7 @@
 ﻿using Assets;
 using System.Collections;
 using System.Collections.Generic;
+using UI.Panels.Assets;
 using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,9 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
+        public IContactSelectCallback callback;
+        public bool showLowRiskContacts;
+        public bool showHighRiskContacts;
 
         public void Refresh()
         {
@@ -23,7 +27,33 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            if (player.contacts.Count == 0)
+            Transform content = GetComponentInChildren<ScrollRect>(true).content.transform;
+            foreach (InvestmentPartner partner in player.contacts)
+            {
+                bool show = false;
+                switch (partner.riskTolerance)
+                {
+                    case RiskTolerance.kHigh:
+                        show = showHighRiskContacts;
+                        break;
+                    case RiskTolerance.kMedium:
+                        show = true;
+                        break;
+                    case RiskTolerance.kLow:
+                        show = showLowRiskContacts;
+                        break;
+                }
+                if (show)
+                {
+                    ContactPanel panel = Instantiate(_prefabContactPanel, content);
+                    panel.player = player;
+                    panel.partner = partner;
+                    panel.callback = callback;
+                    panel.Refresh();
+                }
+            }
+
+            if (content.childCount == 0)
             {
                 UIManager.Instance.ShowSimpleMessageBox(
                     "You don't have any professional contacts yet.", ButtonChoiceType.OK_ONLY, null);
@@ -31,14 +61,7 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            Transform content = GetComponentInChildren<ScrollRect>(true).content.transform;
-            foreach (InvestmentPartner partner in player.contacts)
-            {
-                ContactPanel panel = Instantiate(_prefabContactPanel, content);
-                panel.player = player;
-                panel.partner = partner;
-                panel.Refresh();
-            }
+
         }
 
         private void OnEnable()

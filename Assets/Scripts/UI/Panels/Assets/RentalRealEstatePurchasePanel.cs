@@ -1,10 +1,51 @@
 ﻿using Assets;
 using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
+    public class DebtOfferCallback : IContactSelectCallback, INumberInputCallback
+    {
+        public RentalRealEstatePurchasePanel parent;
+        private InvestmentPartner _partner;
+        private int _interestRate;
+
+        public DebtOfferCallback(RentalRealEstatePurchasePanel parent)
+        {
+            this.parent = parent;
+            _interestRate = InterestRateManager.Instance.defaultPrivateLoanRate;
+        }
+
+        public void ContactSelect(InvestmentPartner partner)
+        {
+            _partner = partner;
+            Debug.LogFormat("Asset income {0}", parent.asset.income);
+            Debug.LogFormat("Interest Rate {0}", _interestRate);
+
+            int maxLoan = Mathf.Min(
+                partner.cash,
+                parent.asset.income * 100 / _interestRate);
+            Debug.LogFormat("Max Loan {0}", maxLoan);
+            parent.ShowDebtOfferingPanel(maxLoan, _interestRate, this);
+        }
+
+        public void OnNumberInput(int number)
+        {
+            if (number > 0)
+            {
+                parent.asset.AddPrivateLoan(
+                    new PrivateLoan(_partner, number, _interestRate));
+                parent.Refresh();
+            }
+        }
+
+        public void OnNumberInputCancel()
+        {
+        }
+    }
+
     public class RentalRealEstatePurchasePanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -20,6 +61,13 @@ namespace UI.Panels.Assets
         private TextMeshProUGUI _textMortgage;
         [SerializeField]
         private TextMeshProUGUI _textMortgagePercentage;
+        [SerializeField]
+        private TextMeshProUGUI _textPrivateLoanAmount;
+        [SerializeField]
+        private TextMeshProUGUI _textPrivateLoanPayment;
+
+        [SerializeField]
+        private DebtOfferingPanel _prefabDebtOfferingPanel;
         [SerializeField]
         private Slider _sliderMortgage;
         [SerializeField]
@@ -50,6 +98,16 @@ namespace UI.Panels.Assets
             if (_textMortgagePercentage != null)
             {
                 _textMortgagePercentage.text = string.Format("{0}%", asset.mortgage.ltv);
+            }
+
+            if (_textPrivateLoanAmount != null)
+            {
+                _textPrivateLoanAmount.text = local.GetCurrency(asset.privateLoanAmount, true);
+            }
+
+            if (_textPrivateLoanPayment != null)
+            {
+                _textPrivateLoanPayment.text = local.GetCurrency(asset.privateLoanPayment, true);
             }
         }
 
@@ -82,13 +140,40 @@ namespace UI.Panels.Assets
 
         public void OnSliderChange()
         {
-            asset.mortgage.ltv = Mathf.RoundToInt(
-                _sliderMortgage.value * _sliderMultiplier);
-            AdjustNumbers();
+            if (asset != null)
+            {
+                asset.mortgage.ltv = Mathf.RoundToInt(
+                    _sliderMortgage.value * _sliderMultiplier);
+                AdjustNumbers();
+            }
         }
 
         public void OnEnable()
         {
+            Refresh();
+        }
+
+        public void ShowDebtOfferingPanel(
+            int maxLoanAmount, int loanRate, INumberInputCallback callback)
+        {
+            DebtOfferingPanel panel = Instantiate(
+                _prefabDebtOfferingPanel, UIManager.Instance.transform);
+            panel.interestRate = loanRate;
+            panel.maxLoanAmount = maxLoanAmount;
+            panel.callback = callback;
+            panel.GetComponent<MessageBox>().messageBoxHandler = panel;
+            panel.OnNumberInput(maxLoanAmount);
+        }
+
+        public void OnOfferDebtButton()
+        {
+            DebtOfferCallback callback = new DebtOfferCallback(this);
+            UIManager.Instance.ShowContactListPanel(callback, false, true);
+        }
+
+        public void OnResetButton()
+        {
+            asset.ClearPrivateLoans();
             Refresh();
         }
     }

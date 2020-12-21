@@ -6,49 +6,55 @@ using UI;
 
 namespace UI.Panels.Assets
 {
-    public class DebtOfferingPanel : MonoBehaviour, IMessageBoxHandler, INumberInputCallback
+    public class EquityOfferingPanel : MonoBehaviour, IMessageBoxHandler, INumberInputCallback
     {
 #pragma warning disable 0649
         [SerializeField]
-        private TextMeshProUGUI _textInterestRate;
+        private TextMeshProUGUI _textEquity;
         [SerializeField]
-        private TextMeshProUGUI _textLoanAmount;
+        private TextMeshProUGUI _textInvestmentAmount;
         [SerializeField]
-        private TextMeshProUGUI _textAnnualInterest;
+        private TextMeshProUGUI _textInvestorCashflow;
         [SerializeField]
-        private Slider _sliderLoan;
+        private Slider _sliderInvestment;
 #pragma warning restore 0649
 
-        public int interestRate;
-        public int maxLoanAmount;
+        public int amountPerShare;
+        public float equityPerShare;
+        public int maxShares;
+        public int cashflow;
         public INumberInputCallback callback;
 
-        private int _loanAmount;
+        private int _shares;
 
         private void AdjustNumbers()
         {
             Localization local = Localization.Instance;
 
-            if (_textInterestRate != null)
+            float equity = _shares * equityPerShare;
+
+            if (_textEquity != null)
             {
-                _textInterestRate.text = string.Format("{0}%", interestRate);
+                _textEquity.text = local.GetPercent(equity);
             }
 
-            if (_textLoanAmount != null)
+            if (_textInvestmentAmount != null)
             {
-                _textLoanAmount.text = local.GetCurrency(_loanAmount);
+                int amount = amountPerShare * _shares;
+                _textInvestmentAmount.text = local.GetCurrency(amount);
             }
 
-            if (_textAnnualInterest != null)
+            if (_textInvestorCashflow != null)
             {
-                _textAnnualInterest.text = local.GetCurrency(
-                    _loanAmount * interestRate / 100, true);
+                int investorCashflow = Mathf.FloorToInt(cashflow * equity);
+                _textInvestorCashflow.text = local.GetCurrency(investorCashflow);
             }
         }
 
         public void AdjustSlider()
         {
-            _sliderLoan.value = (100f * _loanAmount) / maxLoanAmount;
+            _sliderInvestment.maxValue = maxShares;
+            _sliderInvestment.value = _shares;
         }
 
         public void Refresh()
@@ -59,12 +65,13 @@ namespace UI.Panels.Assets
 
         public void OnNumberInputButton()
         {
-            UIManager.Instance.ShowNumberInputPanel("Loan Amount", maxLoanAmount, this);
+            UIManager.Instance.ShowNumberInputPanel(
+                "Investment Amount", amountPerShare * maxShares, this);
         }
 
         public void OnSliderChange()
         {
-            _loanAmount = Mathf.FloorToInt(maxLoanAmount * _sliderLoan.value / 100);
+            _shares = Mathf.RoundToInt(_sliderInvestment.value);
             AdjustNumbers();
         }
 
@@ -79,7 +86,7 @@ namespace UI.Panels.Assets
             {
                 if (callback != null)
                 {
-                    callback.OnNumberInput(_loanAmount);
+                    callback.OnNumberInput(_shares);
                 }
             }
             else
@@ -93,7 +100,7 @@ namespace UI.Panels.Assets
 
         public void OnNumberInput(int number)
         {
-            _loanAmount = number;
+            _shares = Mathf.Min(number / amountPerShare, maxShares);
             Refresh();
         }
 

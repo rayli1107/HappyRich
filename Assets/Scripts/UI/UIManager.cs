@@ -234,13 +234,15 @@ namespace UI
         }
 
         public void ShowRentalRealEstatePurchasePanel(
-            Assets.AbstractRealEstate asset,
+            Assets.RentalRealEstate asset,
+            Assets.PartialRealEstate partialAsset,
             IMessageBoxHandler handler)
         {
             RentalRealEstatePurchasePanel panel = Instantiate(
                 _prefabRentalRealEstatePurchasePanel, transform);
             panel.player = GameManager.Instance.player;
-            panel.asset = (Assets.RentalRealEstate)asset;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset; 
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }

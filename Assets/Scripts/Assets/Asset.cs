@@ -5,6 +5,8 @@ namespace Assets
     public class AbstractAsset
     {
         public string name { get; private set; }
+        public CombinedLiability combinedLiability { get; private set; }
+
         public virtual List<AbstractLiability> liabilities {
             get
             {
@@ -14,23 +16,14 @@ namespace Assets
 
         public virtual int totalIncome { get; private set; }
         public virtual int value { get; private set; }
-        public virtual int income {
-            get
-            {
-                int income = totalIncome;
-                foreach (AbstractLiability liability in liabilities)
-                {
-                    income -= liability.expense;
-                }
-                return income;
-            }
-        }
+        public virtual int income => totalIncome - combinedLiability.expense;
 
         public AbstractAsset(string name, int value, int totalIncome)
         {
             this.name = name;
             this.value = value;
             this.totalIncome = totalIncome;
+            combinedLiability = new CombinedLiability(this);
         }
 
         public void addLiability(AbstractLiability liability)
@@ -60,7 +53,7 @@ namespace Assets
             }
         }
 
-        public Car(int value) :base("Car", value, 0)
+        public Car(int value) : base("Car", value, 0)
         {
             loan = new AutoLoan(value);
         }

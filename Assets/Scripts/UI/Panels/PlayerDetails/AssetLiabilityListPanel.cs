@@ -1,9 +1,7 @@
 ﻿using Assets;
-using System.Collections;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {
@@ -115,12 +113,9 @@ namespace UI.Panels.PlayerDetails
                 foreach (AbstractRealEstate asset in player.portfolio.properties)
                 {
                     totalRealEstate += asset.value;
-                    foreach (AbstractLiability liability in asset.liabilities)
+                    if (asset.combinedLiability.amount > 0)
                     {
-                        if (liability.amount > 0)
-                        {
-                            liabilities.Add(liability);
-                        }
+                        liabilities.Add(asset.combinedLiability);
                     }
                 }
 
@@ -151,12 +146,9 @@ namespace UI.Panels.PlayerDetails
                 foreach (AbstractAsset asset in player.portfolio.otherAssets)
                 {
                     totalOtherAssets += asset.value;
-                    foreach (AbstractLiability liability in asset.liabilities) 
+                    if (asset.combinedLiability.amount > 0)
                     {
-                        if (liability.amount > 0)
-                        {
-                            liabilities.Add(liability);
-                        }
+                        liabilities.Add(asset.combinedLiability);
                     }
                 }
 

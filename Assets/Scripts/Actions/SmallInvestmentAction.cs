@@ -16,6 +16,7 @@ namespace Actions
         private Player _player;
         private InvestmentState _state;
         private AbstractRealEstate _asset;
+        private PartialRealEstate _partialAsset;
 
         public SmallInvestmentAction(Player player) : base(null)
         {
@@ -67,7 +68,8 @@ namespace Actions
         public void ShowPurchasePanel()
         {
             _state = InvestmentState.kPurchasing;
-            UI.UIManager.Instance.ShowRentalRealEstatePurchasePanel(_asset, this);
+            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
+                (RentalRealEstate)_asset, _partialAsset, this);
         }
 
         public void ShowCancelConfirmPanel()
@@ -84,6 +86,8 @@ namespace Actions
             System.Random random = GameManager.Instance.Random;
             RealEstateManager manager = GameManager.Instance.RealEstateManager;
             _asset = manager.GetSmallInvestment(random);
+            _partialAsset = new PartialRealEstate(
+                _asset, RealEstateManager.Instance.defaultEquitySplit);
             ShowPurchasePanel();
         }
 

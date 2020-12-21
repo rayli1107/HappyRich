@@ -1,6 +1,7 @@
 ﻿using Assets;
 using ScriptableObjects;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Income
 {
@@ -54,12 +55,8 @@ public class PlayerSnapshot
             {
                 expenses -= income;
             }
-
             netWorth += asset.value;
-            foreach (AbstractLiability liability in asset.liabilities)
-            {
-                netWorth -= liability.amount;
-            }
+            netWorth -= asset.combinedLiability.amount;
         }
 
         foreach (AbstractLiability liability in player.portfolio.liabilities)

@@ -29,10 +29,20 @@ public class RealEstateManager : MonoBehaviour
     private RealEstateProfile[] _profiles;
     [SerializeField]
     private int _defaultMortgageRate = 80;
+    [SerializeField]
+    private float _defaultEquitySplit = 0.8f;
 #pragma warning restore 0649
+
+    public static RealEstateManager Instance { get; private set; }
+    public float defaultEquitySplit => _defaultEquitySplit;
 
     private List<RealEstateTemplate> _smallInvestments;
     private List<RealEstateTemplate> _largeInvestments;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void Initialize(System.Random random)
     {

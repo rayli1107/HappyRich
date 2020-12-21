@@ -111,10 +111,10 @@ MonoBehaviour:
     y: 30
     width: 1504
     height: 870
-  m_MinSize: {x: 681, y: 344}
-  m_MaxSize: {x: 12006, y: 8044}
+  m_MinSize: {x: 679, y: 344}
+  m_MaxSize: {x: 12004, y: 8044}
   vertical: 0
-  controlID: 53
+  controlID: 77
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -136,10 +136,10 @@ MonoBehaviour:
     y: 0
     width: 1093
     height: 870
-  m_MinSize: {x: 406, y: 344}
-  m_MaxSize: {x: 8006, y: 8044}
+  m_MinSize: {x: 404, y: 344}
+  m_MaxSize: {x: 8004, y: 8044}
   vertical: 1
-  controlID: 54
+  controlID: 78
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -161,10 +161,10 @@ MonoBehaviour:
     y: 0
     width: 1093
     height: 510
-  m_MinSize: {x: 406, y: 222}
-  m_MaxSize: {x: 8006, y: 4022}
+  m_MinSize: {x: 404, y: 222}
+  m_MaxSize: {x: 8004, y: 4022}
   vertical: 0
-  controlID: 55
+  controlID: 79
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -210,16 +210,16 @@ MonoBehaviour:
     y: 0
     width: 767
     height: 510
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 12}
+  m_MinSize: {x: 204, y: 222}
+  m_MaxSize: {x: 4004, y: 4022}
+  m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
   - {fileID: 12}
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -321,9 +321,9 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 0
-    m_VSlider: 1
+    m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -384,9 +384,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 4c910000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 8686feffdcdbfeff36defeff22e2feffa4e5feff14e8feff32e8fefffcf8feff3ef9feff1a18fffff41bfffff828ffff0229fffff829ffff3038ffff3638ffff4038ffff503effff5a3effff0643ffff7645ffffee45ffffb64dffffa84fffff9051ffff3c57ffffc057ffff305effffb45effff9a67ffff5e6fffff9470ffff3a7effff3e7effff9e81ffffde88ffff348affff668affff408cffff708dffffd698ffffb69effff4ca2ffff2ca3ffffeea3ffffeac8ffff08cbffff16efffff48efffff72fbffffee330000
+      m_ExpandedIDs: eac6f0fff6c6f0ff02c7f0ff8ac7f0ff94c7f0ff9cc7f0ffa6c7f0ffbcc7f0ffc6c7f0ffd4c7f0ff0c5bf3fffe5bf3fffa08f5ffc81ef5ffe61ef5ffe81ef5ffee1ef5fffe1ef5ff0621f5ff1221f5ff3429f5ff5429f5ff5a29f5ff6a29f5ff0612f6ffee66f6ff9067f6ffb0daf7ff34ddf7ff5cdef7ffccaaf8fff2aaf8ffccadf8ffceadf8ffd4adf8ffe4adf8ffa033fbffaa33fbffbe33fbffca33fbff703afbffbacafbffdccafbfffecafbfff0ccfbff80d3fbff02dcfbff3cdcfbffe8dcfbfff6dcfbffe4ddfbff76e2fbff7ee5fbffbee5fbffea33ffff6e34ffff8634ffffce34ffffd834ffffe034ffffea34ffff0035ffff0a35ffff1835ffff5036ffff6636ffff8a79ffff9479ffff9c79ffffa679ffffbc79ffffc679ffffd479ffff6091ffff6a91ffff7291ffff7c91ffff9291ffff9c91ffffaa91ffffe898ffff0099ffff4899ffff5299ffff5a99ffff6499ffff7a99ffff8499ffff9299ffff549dffff5c9dffff669dffff7c9dffff869dffff949dffff2cb9ffff34b9ffff3eb9ffff54b9ffff5eb9ffff6cb9ffff64c4ffff6ec4ffff7cc4ffffeccafffff6cafffffecaffff08cbffff1ecbffff28cbffff36cbffff26daffff30daffff38daffff42daffff58daffff62daffff70dafffff8e3ffff70e5ffff7ae5ffff82e5ffff8ce5ffffa2e5fffface5ffffbae5ffff08e7ffff12e7ffff20e7ffff54f3ffff8cf4ffff9ef4fffff4f4ffff06f5ffff1ef5ffff66f5ffff70f5ffff78f5ffff82f5ffff98f5ffffa2f5ffffb0f5ffff72fbffff624000007040000044ce00003ed1000044d30000d2dc0000c0df0000ecdf0000146601006e6601009add02007adf02000ce0020030e20200b4e3020042f00200eaf002007a4c0300884c0300ba4c0300d44c0300
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -446,9 +446,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0, y: 0, z: 0}
+    m_Target: {x: -21.319935, y: 1316.8187, z: -469.07065}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0}
+    m_Value: {x: -21.319935, y: 1316.8187, z: -469.07065}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -481,9 +481,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 10
+    m_Target: 1982.0104
     speed: 2
-    m_Value: 10
+    m_Value: 1982.0104
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -617,20 +617,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Events/Market
+    - Assets/Prefab/UI/New Panels/Real Estate
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Events/Market
+  - Assets/Prefab/UI/New Panels/Real Estate
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\rayli\Documents\Unity Projects\HappyRich
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 127}
-    m_SelectedIDs: 40910000
-    m_LastClickedID: 37184
-    m_ExpandedIDs: 00000000ba2d00001e2e0000de2e00004e2f00001a30000046300000b43100002a3200003291000000ca9a3b
+    scrollPos: {x: 0, y: 466.00024}
+    m_SelectedIDs: d2c80300
+    m_LastClickedID: 248018
+    m_ExpandedIDs: 00000000a0300000ca3100002e3200002034000036340000be3500001a360000fc37000006380000b23800008c3b00006c3d0000923d00001ada020000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -658,7 +658,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ba2d0000
+    m_ExpandedIDs: 00000000a0300000ca3100002034000082350000b23800008c3b00006c3d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -683,8 +683,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 4c910000
-    m_LastClickedInstanceID: 37196
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000325000002c500000544c000000560000fc550000aa570000b23e0000404a00003c460000da460000a67c0000e648000000000000dab40000b25e0000147a0000f2b400001ea30000dee20000f44e0000
     m_RenameOverlay:

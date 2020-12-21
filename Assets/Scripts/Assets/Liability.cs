@@ -73,4 +73,48 @@ namespace Assets
         }
     }
 
+    public class CombinedLiability : AbstractLiability
+    {
+        public AbstractAsset asset { get; private set; }
+
+        public override int amount
+        {
+            get
+            {
+                int amount = 0;
+                foreach (AbstractLiability liability in asset.liabilities)
+                {
+                    amount += liability.amount;
+                }
+                return amount;
+            }
+        }
+
+        public override int expense
+        {
+            get
+            {
+                int expense = 0;
+                foreach (AbstractLiability liability in asset.liabilities)
+                {
+                    expense += liability.expense;
+                }
+                return expense;
+            }
+        }
+
+        public CombinedLiability(AbstractAsset asset)
+            : base(string.Format("Liability - {0}", asset.name), 0, 0)
+        {
+            this.asset = asset;
+        }
+    }
+
+    public class PartialLiability : AbstractLiability
+    {
+        public PartialLiability(AbstractLiability liability, float equity) :
+            base(liability.name, Mathf.FloorToInt(liability.amount * equity), liability.interestRate)
+        {
+        }
+    }
 }

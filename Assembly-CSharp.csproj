@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{A36D296C-6CB9-9086-7419-C2BF88B67B5B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -164,7 +165,9 @@
     <Compile Include="Assets\Scripts\Manager\StockManager.cs" />
     <Compile Include="Assets\Scripts\Manager\TransactionManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\PlayerState\AbstractPlayerState.cs" />
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
+    <Compile Include="Assets\Scripts\PlayerState\MentalStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\InvestmentPartnerProfile.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Profession.cs" />

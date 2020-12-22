@@ -5,7 +5,7 @@ namespace Assets
     public class AbstractAsset
     {
         public string name { get; private set; }
-        public CombinedLiability combinedLiability { get; private set; }
+        public virtual CombinedLiability combinedLiability { get; private set; }
 
         public virtual List<AbstractLiability> liabilities {
             get

@@ -28,7 +28,7 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.BuyRealEstate(_player, _asset, this);
+                TransactionManager.BuyRealEstate(_player, _partialAsset, this);
             }
             else
             {
@@ -40,7 +40,7 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                _asset.OnPurchaseCancel();
+                _partialAsset.OnPurchaseCancel();
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(false);
             }
@@ -87,7 +87,9 @@ namespace Actions
             RealEstateManager manager = GameManager.Instance.RealEstateManager;
             _asset = manager.GetSmallInvestment(random);
             _partialAsset = new PartialRealEstate(
-                _asset, RealEstateManager.Instance.defaultEquitySplit);
+                _asset,
+                RealEstateManager.Instance.defaultEquitySplit,
+                RealEstateManager.Instance.defaultEquityPerShare);
             ShowPurchasePanel();
         }
 
@@ -95,7 +97,7 @@ namespace Actions
         {
             if (success)
             {
-                _asset.OnPurchase();
+                _partialAsset.OnPurchase();
                 UIManager.Instance.UpdatePlayerInfo(_player);
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(true);

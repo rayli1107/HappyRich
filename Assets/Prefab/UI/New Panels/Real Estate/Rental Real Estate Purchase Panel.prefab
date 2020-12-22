@@ -21,9 +21,14 @@ MonoBehaviour:
   _textMortgagePayment: {fileID: 1743177789114299922}
   _textPrivateLoanAmount: {fileID: 5807482420883524801}
   _textPrivateLoanPayment: {fileID: 8819855539899635088}
+  _textInvestorAmount: {fileID: 4772026534870408784}
+  _textInvestorCashflow: {fileID: 8557473120295774079}
   _prefabDebtOfferingPanel: {fileID: 3387045989487037642, guid: 753d04435e23a374c8ead7c48b0e2d67,
     type: 3}
+  _prefabEquityOfferingPanel: {fileID: 1812860790140663189, guid: 26a670d60ff26a14799742584f07d2ef,
+    type: 3}
   _sliderMortgage: {fileID: 1517047687859188542}
+  _buttonRaiseDebt: {fileID: 5109487863017774902}
   _sliderMultiplier: 5
 --- !u!114 &178617159131974099
 MonoBehaviour:
@@ -5098,7 +5103,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 365
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -5248,7 +5253,7 @@ PrefabInstance:
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 547.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -5288,7 +5293,7 @@ PrefabInstance:
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 182.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -5443,12 +5448,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5361037568229652298, guid: b5d29931ca13f7449831e611c76f2c4e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b5d29931ca13f7449831e611c76f2c4e, type: 3}
---- !u!1 &1053945172507171794 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 923882777225070681, guid: b5d29931ca13f7449831e611c76f2c4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 176229660527235979}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4838658624021388604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4707468395760701111, guid: b5d29931ca13f7449831e611c76f2c4e,
@@ -5458,6 +5457,12 @@ GameObject:
 --- !u!224 &1389563629324349070 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 176229660527235979}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1053945172507171794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 923882777225070681, guid: b5d29931ca13f7449831e611c76f2c4e,
     type: 3}
   m_PrefabInstance: {fileID: 176229660527235979}
   m_PrefabAsset: {fileID: 0}
@@ -5876,6 +5881,18 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2613940355335681890, guid: 3e340ab007e875b46a5ba0092f53ff7a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3e340ab007e875b46a5ba0092f53ff7a, type: 3}
+--- !u!1 &1486108224281786958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2726311948077596298, guid: 3e340ab007e875b46a5ba0092f53ff7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3551785172310115524}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1695140150950333458 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2795645991614597334, guid: 3e340ab007e875b46a5ba0092f53ff7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3551785172310115524}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1517047687859188542 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2614299032019269626, guid: 3e340ab007e875b46a5ba0092f53ff7a,
@@ -5888,18 +5905,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1695140150950333458 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2795645991614597334, guid: 3e340ab007e875b46a5ba0092f53ff7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 3551785172310115524}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1486108224281786958 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2726311948077596298, guid: 3e340ab007e875b46a5ba0092f53ff7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 3551785172310115524}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5081535584368192288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5975,7 +5980,7 @@ PrefabInstance:
     - target: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_Name
-      value: Button Blue
+      value: Button Raise Debt
       objectReference: {fileID: 0}
     - target: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -6090,6 +6095,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5081535584368192288}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5109487863017774902 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5081535584368192288}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5111103746662999001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6155,7 +6172,7 @@ PrefabInstance:
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnOfferDebtButton
+      value: OnOfferEquityButton
       objectReference: {fileID: 0}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}

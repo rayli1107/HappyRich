@@ -11,69 +11,74 @@ namespace Assets
     {
         public AbstractRealEstate asset { get; private set; }
         public float equitySplit { get; private set; }
+        public float equityPerShare { get; private set; }
+        public int amountPerShare => Mathf.FloorToInt(asset.downPayment * equityPerShare / equitySplit);
 
-        private List<Investment> _investments;
+        private List<Investment> _investorShares;
 
-        public int investorAmount {
+        public int investorShares
+        {
             get
             {
-                int amount = 0;
-                foreach (Investment investment in _investments)
+                int shares = 0;
+                foreach (Investment investment in _investorShares)
                 {
-                    amount += investment.Item2;
+                    shares += investment.Item2;
                 }
-                return amount;
+                return shares;
+
             }
         }
+        public int investorAmount => investorShares * amountPerShare;
+        public float investorEquity => investorShares * equityPerShare;
+        public int investorCashflow => Mathf.FloorToInt(investorEquity * asset.income);
 
-        public float investorEquity => (equitySplit * investorAmount) / asset.downPayment;
-        public int investorCashflow => Mathf.FloorToInt(investorEquity * income);
-
-        public bool hasInvestors => _investments.Count > 0;
+        public bool hasInvestors => _investorShares.Count > 0;
 
         public override int downPayment => asset.downPayment - investorAmount;
         public float equity => 1 - investorEquity;
 
-        public override int value
-        {
-            get
-            {
-                return downPayment + combinedLiability.amount;
-            }
-        }
+        public override int value => asset.value - investorAmount;
+        public override int income => asset.income - investorCashflow;
+        public override List<AbstractLiability> liabilities => asset.liabilities;
 
-        public override List<AbstractLiability> liabilities
-        {
-            get
-            {
-                List<AbstractLiability> liability = new List<AbstractLiability>();
-                liability.Add(new PartialLiability(asset.combinedLiability, equity));
-                return liability;
-            }
-        }
-
-        public PartialRealEstate(AbstractRealEstate asset, float equitySplit) :
+        public PartialRealEstate(
+            AbstractRealEstate asset, float equitySplit, float equityPerShare) :
             base(asset)
         {
             this.asset = asset;
             this.equitySplit = equitySplit;
+            this.equityPerShare = equityPerShare;
 
-            _investments = new List<Investment>();
+            _investorShares = new List<Investment>();
         }
 
         public void ClearInvestors()
         {
-            foreach (Investment investment in _investments)
+            foreach (Investment investment in _investorShares)
             {
-                investment.Item1.cash += investment.Item2;
+                investment.Item1.cash += investment.Item2 * amountPerShare;
             }
-            _investments.Clear();
+            _investorShares.Clear();
         }
 
-        public void AddInvestor(InvestmentPartner partner, int amount)
+        public void AddInvestor(InvestmentPartner partner, int shares)
         {
-            partner.cash -= amount;
-            _investments.Add(new Investment(partner, amount));
+            partner.cash -= shares * amountPerShare;
+            _investorShares.Add(new Investment(partner, shares));
+        }
+
+        public override void OnPurchase()
+        {
+            base.OnPurchase();
+            asset.OnPurchase();
+        }
+
+        public override void OnPurchaseCancel()
+        {
+            base.OnPurchaseCancel();
+            ClearInvestors();
+            asset.OnPurchaseCancel();
         }
     }
 

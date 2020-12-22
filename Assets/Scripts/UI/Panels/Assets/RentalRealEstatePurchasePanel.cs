@@ -19,20 +19,16 @@ namespace UI.Panels.Assets
         public void ContactSelect(InvestmentPartner partner)
         {
             _partner = partner;
-            int totalRaise = parent.asset.downPayment;
-            float equitySplit = parent.partialAsset.equitySplit;
-            float equityPerShare = 0.01f;
-
-            int maxLoan = Mathf.Min(partner.cash, parent.partialAsset.downPayment);
-            parent.ShowDebtOfferingPanel(maxLoan, _interestRate, this);
+            int maxRaise = Mathf.Min(partner.cash, parent.partialAsset.downPayment);
+            int maxShares = maxRaise / parent.partialAsset.amountPerShare;
+            parent.ShowEquityOfferingPanel(maxShares, this);
         }
 
         public void OnNumberInput(int number)
         {
             if (number > 0)
             {
-                parent.asset.AddPrivateLoan(
-                    new PrivateLoan(_partner, number, _interestRate));
+                parent.partialAsset.AddInvestor(_partner, number);
                 parent.Refresh();
             }
         }
@@ -41,7 +37,6 @@ namespace UI.Panels.Assets
         {
         }
     }
-
 
     public class DebtOfferCallback : IContactSelectCallback, INumberInputCallback
     {
@@ -110,6 +105,8 @@ namespace UI.Panels.Assets
         [SerializeField]
         private DebtOfferingPanel _prefabDebtOfferingPanel;
         [SerializeField]
+        private EquityOfferingPanel _prefabEquityOfferingPanel;
+        [SerializeField]
         private Slider _sliderMortgage;
         [SerializeField]
         private Button _buttonRaiseDebt;
@@ -130,12 +127,12 @@ namespace UI.Panels.Assets
 
             if (_textDownPayment != null)
             {
-                _textDownPayment.text = local.GetCurrency(asset.downPayment, true);
+                _textDownPayment.text = local.GetCurrency(partialAsset.downPayment, true);
             }
 
             if (_textAnnualIncome != null)
             {
-                _textAnnualIncome.text = local.GetCurrency(asset.income);
+                _textAnnualIncome.text = local.GetCurrency(partialAsset.income);
             }
 
             if (_textMortgage != null)
@@ -237,15 +234,35 @@ namespace UI.Panels.Assets
             panel.OnNumberInput(maxLoanAmount);
         }
 
+        public void ShowEquityOfferingPanel(int maxShares, INumberInputCallback callback)
+        {
+            EquityOfferingPanel panel = Instantiate(
+                _prefabEquityOfferingPanel, UIManager.Instance.transform);
+
+            panel.amountPerShare = partialAsset.amountPerShare;
+            panel.equityPerShare = partialAsset.equityPerShare;
+            panel.maxShares = maxShares;
+            panel.cashflow = partialAsset.income;
+            panel.callback = callback;
+            panel.GetComponent<MessageBox>().messageBoxHandler = panel;
+            panel.OnNumberInput(maxShares);
+        }
+
         public void OnOfferDebtButton()
         {
             DebtOfferCallback callback = new DebtOfferCallback(this);
             UIManager.Instance.ShowContactListPanel(callback, false, true);
         }
 
+        public void OnOfferEquityButton()
+        {
+            EquityOfferCallback callback = new EquityOfferCallback(this);
+            UIManager.Instance.ShowContactListPanel(callback, true, false);
+        }
+
         public void OnResetButton()
         {
-            asset.ClearPrivateLoans();
+            partialAsset.OnPurchaseCancel();
             Refresh();
         }
     }

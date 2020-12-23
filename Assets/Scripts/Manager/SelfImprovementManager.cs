@@ -17,7 +17,6 @@ public class SelfImprovementManager : MonoBehaviour
         _selfReflectionStates = new List<AbstractPlayerState>();
         _selfReflectionStates.Add(new Frugality());
         _selfReflectionStates.Add(new Minimalism());
-
     }
 
     public AbstractPlayerState GetSelfReflectionState(System.Random random)

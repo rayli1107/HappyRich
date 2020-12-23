@@ -9,6 +9,7 @@ using Michsky.UI.ModernUIPack;
 using UI.Panels.PlayerDetails;
 using UI.Panels.Templates;
 using UI.Panels.Actions;
+using PlayerState;
 
 namespace UI
 {
@@ -268,6 +269,13 @@ namespace UI
                 _prefabHappinessListPanel, transform);
             panel.player = GameManager.Instance.player;
             panel.Refresh();
+        }
+
+        public void ShowPlayerStateInfo(AbstractPlayerState state, IMessageBoxHandler callback)
+        {
+            Localization local = Localization.Instance;
+            string message = string.Join("\n", local.GetPlayerState(state), state.description);
+            UIManager.Instance.ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
         }
 
         public void DestroyAllModal()

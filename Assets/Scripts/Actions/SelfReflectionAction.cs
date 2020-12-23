@@ -19,9 +19,7 @@ namespace Actions
 
             _player.AddMentalState(state);
 
-            Localization local = Localization.Instance;
-            string message = string.Join("\n", local.GetPlayerState(state), state.description);
-            UI.UIManager.Instance.ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, null);
+            UI.UIManager.Instance.ShowPlayerStateInfo(state, null);
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
             GameManager.Instance.StateMachine.OnPlayerActionDone();
             RunCallback(true);

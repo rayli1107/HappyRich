@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Actions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ namespace UI.Panels.Templates
         private float tabWidth = 40;
 #pragma warning restore 0649
 
+        public IAction clickAction = null;
         public int tabCount { get; private set; }
 
         public void setTabCount(int i)
@@ -58,6 +60,16 @@ namespace UI.Panels.Templates
         private void OnEnable()
         {
             tabCount = 0;
+        }
+
+        public void EnableClick(bool enable)
+        {
+            _label.GetComponent<Button>().enabled = enable;
+        }
+
+        public void OnClick()
+        {
+            clickAction?.Start();
         }
     }
 }

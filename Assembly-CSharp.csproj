@@ -200,6 +200,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\AssetLiabilityListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\ContactListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\ContactPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\HappinessListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\IncomeExpenseListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\JobListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\JobPanel.cs" />

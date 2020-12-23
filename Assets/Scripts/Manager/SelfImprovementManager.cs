@@ -15,7 +15,7 @@ public class SelfImprovementManager : MonoBehaviour
     public void Initialize()
     {
         _selfReflectionStates = new List<AbstractPlayerState>();
-//        _selfReflectionStates.Add(new Frugality());
+        _selfReflectionStates.Add(new Frugality());
         _selfReflectionStates.Add(new Minimalism());
 
     }

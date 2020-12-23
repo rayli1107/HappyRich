@@ -33,5 +33,10 @@ namespace UI.Panels.PlayerDetails
         {
             UIManager.Instance.ShowContactListPanel();
         }
+
+        public void ShowHappinessListPanel()
+        {
+            UIManager.Instance.ShowHappinessListPanel();
+        }
     }
 }

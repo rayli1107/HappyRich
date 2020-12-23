@@ -43,6 +43,18 @@ namespace UI.Panels.Templates
             _value.text = local.GetCurrency(i, flipped);
         }
 
+        public void setValueAsChange(int value)
+        {
+            _value.gameObject.SetActive(true);
+            _value.text = Localization.Instance.GetValueAsChange(value);
+        }
+
+        public void setValuePlain(int value)
+        {
+            _value.gameObject.SetActive(true);
+            _value.text = value.ToString();
+        }
+
         private void OnEnable()
         {
             tabCount = 0;

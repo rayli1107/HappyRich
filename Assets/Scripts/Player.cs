@@ -222,7 +222,7 @@ public class Player
     {
         get
         {
-            int happiness = _defaultHappiness;
+            int happiness = defaultHappiness;
             foreach (AbstractPlayerState state in states)
             {
                 happiness += state.happinessModifier;
@@ -244,7 +244,7 @@ public class Player
         }
     }
 
-    private int _defaultHappiness;
+    public int defaultHappiness { get; private set; }
     public List<InvestmentPartner> contacts { get; private set; }
 
 
@@ -259,7 +259,7 @@ public class Player
         _costPerChild = profession.costPerChild;
         numChild = 0;
         age = profession.startingAge;
-        _defaultHappiness = defaultHappiness;
+        this.defaultHappiness = defaultHappiness;
 
         contacts = new List<InvestmentPartner>();
 

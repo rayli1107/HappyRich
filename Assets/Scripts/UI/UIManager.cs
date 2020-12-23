@@ -39,6 +39,8 @@ namespace UI
         private RentalRealEstatePurchasePanel _prefabRentalRealEstatePurchasePanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
+        [SerializeField]
+        private HappinessListPanel _prefabHappinessListPanel;
 
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
@@ -257,6 +259,14 @@ namespace UI
             panel.callback = callback;
             panel.showHighRiskContacts = showHighRiskContacts;
             panel.showLowRiskContacts = showLowRiskContacts;
+            panel.Refresh();
+        }
+
+        public void ShowHappinessListPanel()
+        {
+            HappinessListPanel panel = Instantiate(
+                _prefabHappinessListPanel, transform);
+            panel.player = GameManager.Instance.player;
             panel.Refresh();
         }
 

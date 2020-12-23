@@ -109,4 +109,16 @@ public class Localization : MonoBehaviour
         }
         return colorWrap(pct.ToString("#0%"), _colorNegative);
     }
+
+    public string GetValueAsChange(int value)
+    {
+        if (value >= 0)
+        {
+            return colorWrap("+" + value.ToString(), _colorPositive);
+        }
+        else
+        {
+            return colorWrap(value.ToString(), _colorNegative);
+        }
+    }
 }

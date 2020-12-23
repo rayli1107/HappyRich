@@ -308,4 +308,9 @@ public class Player
             oldJobs.Add(job);
         }
     }
+
+    public void AddMentalState(AbstractPlayerState state)
+    {
+        mentalStates.Add(state);
+    }
 }

@@ -10,7 +10,7 @@ namespace UI.Panels.Actions
         public void OnSelfReflectionButton()
         {
             UIManager.Instance.DestroyAllModal();
-//            new FindNewInvestors(player).Start();
+            new SelfReflectionAction(player).Start();
         }
     }
 }

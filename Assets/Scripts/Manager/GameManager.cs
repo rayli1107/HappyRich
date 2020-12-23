@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 
         StockManager = GetComponent<StockManager>();
         StockManager.Initialize(Random);
+        SelfImprovementManager.Instance.Initialize();
 
         StateMachine = new StateMachine.StateMachine();
         StateMachine.Start();

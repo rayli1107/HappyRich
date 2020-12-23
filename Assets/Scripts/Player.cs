@@ -1,8 +1,9 @@
 ﻿using Assets;
+using PlayerState;
 using ScriptableObjects;
 using System.Collections.Generic;
-using UnityEngine;
 
+/*
 public class Income
 {
     public string name { get; private set; }
@@ -13,25 +14,25 @@ public class Income
         this.name = name;
         this.income = income;
     }
-}
+}*/
 
 public class PlayerSnapshot
 {
-    public int age { get; private set; }
+    public Player player { get; private set; }
+    public int age => player.age;
     public int activeIncome { get; private set; }
     public int passiveIncome { get; private set; }
     public int expenses { get; private set; }
-    public int cash { get; private set; }
-    public int happiness {get; private set; }
+    public int cash => player.cash;
+    public int happiness => player.happiness;
     public int netWorth { get; private set; }
 
-    public int cashflow { get { return activeIncome + passiveIncome - expenses; } }
+    public int cashflow => activeIncome + passiveIncome - expenses;
 
     public PlayerSnapshot(Player player)
     {
-        age = player.age;
-        cash = player.cash;
-        happiness = player.getHappiness();
+        this.player = player;
+
         netWorth = player.cash;
 
         activeIncome = 0;
@@ -196,11 +197,52 @@ public class Player
     public List<Profession> oldJobs { get; private set; }
     public Portfolio portfolio { get; private set; }
     public int cash => portfolio.cash;
-    public int personalExpenses { get; private set; }
-    public int costPerChild { get; private set; }
+
+    private int _personalExpenses;
+    private int _costPerChild;
+
+    public int expenseModifier
+    {
+        get
+        {
+            int modifier = 100;
+            foreach (AbstractPlayerState state in states)
+            {
+                modifier += state.expenseModifier;
+            }
+            return modifier;
+        }
+    }
+    public int personalExpenses => (_personalExpenses * expenseModifier) / 100;
+    public int costPerChild => (_costPerChild * expenseModifier) / 100;
     public int numChild { get; private set; }
     public int age { get; private set; }
-    public List<PlayerState.PlayerStateInterface> playerStates { get; private set; }
+
+    public int happiness
+    {
+        get
+        {
+            int happiness = _defaultHappiness;
+            foreach (AbstractPlayerState state in states)
+            {
+                happiness += state.happinessModifier;
+            }
+            return happiness;
+        }
+    }
+
+    public List<AbstractPlayerState> passiveStates { get; private set; }
+    public List<AbstractPlayerState> mentalStates { get; private set; }
+    public List<AbstractPlayerState> states
+    {
+        get
+        {
+            List<AbstractPlayerState> states = new List<AbstractPlayerState>();
+            states.AddRange(passiveStates);
+            states.AddRange(mentalStates);
+            return states;
+        }
+    }
 
     private int _defaultHappiness;
     public List<InvestmentPartner> contacts { get; private set; }
@@ -213,16 +255,19 @@ public class Player
         jobs.Add(profession);
         portfolio = new Portfolio(profession);
 
-        personalExpenses = profession.personalExpenses;
-        costPerChild = profession.costPerChild;
+        _personalExpenses = profession.personalExpenses;
+        _costPerChild = profession.costPerChild;
         numChild = 0;
         age = profession.startingAge;
         _defaultHappiness = defaultHappiness;
 
         contacts = new List<InvestmentPartner>();
-        playerStates = new List<PlayerState.PlayerStateInterface>();
-        playerStates.Add(new PlayerState.OneJobState());
-        playerStates.Add(new PlayerState.TwoJobState());
+
+        passiveStates = new List<PlayerState.AbstractPlayerState>();
+        mentalStates = new List<PlayerState.AbstractPlayerState>();
+
+        passiveStates.Add(new PlayerState.OneJobState());
+        passiveStates.Add(new PlayerState.TwoJobState());
     }
 
     public void OnPlayerTurnStart()
@@ -254,16 +299,6 @@ public class Player
     public void AddJob(Profession job)
     {
         jobs.Add(job);
-    }
-
-    public int getHappiness()
-    {
-        int happiness = _defaultHappiness;
-        foreach (PlayerState.PlayerStateInterface state in playerStates)
-        {
-            happiness += state.getHappiness(this);
-        }
-        return happiness;
     }
 
     public void LoseJob(Profession job)

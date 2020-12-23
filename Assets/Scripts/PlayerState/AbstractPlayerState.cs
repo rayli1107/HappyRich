@@ -2,17 +2,15 @@
 {
     public class AbstractPlayerState
     {
-        public Player player { get; private set; }
+        protected Player player => GameManager.Instance.player;
         public string name { get; private set; }
-        public string description { get; private set; }
+        public virtual string description => "";
         public virtual int happinessModifier => 0;
         public virtual int expenseModifier => 0;
 
-        public AbstractPlayerState(Player player, string name, string description)
+        public AbstractPlayerState(string name)
         {
-            this.player = player;
             this.name = name;
-            this.description = description;
         }
     }
 }

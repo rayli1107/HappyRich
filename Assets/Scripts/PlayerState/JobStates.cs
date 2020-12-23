@@ -1,38 +1,32 @@
 ﻿namespace PlayerState
 {
-    public class OneJobState : PlayerStateInterface
+    public class OneJobState : AbstractPlayerState
     {
-        public string getDescription()
+        public override string description => string.Join(
+            "\n",
+            "Working naturally makes you stressed a bit.",
+            "",
+            "Happiness -10");
+
+        public OneJobState() : base("Stressed")
         {
-            return "Happiness -10 when working at least one job.";
         }
 
-        public int getHappiness(Player player)
-        {
-            return player.jobs.Count > 0 ? -10 : 0;
-        }
-
-        public string getName()
-        {
-            return "Working one job.";
-        }
+        public override int happinessModifier => player.jobs.Count > 0 ? -10 : 0;
     }
 
-    public class TwoJobState : PlayerStateInterface
+    public class TwoJobState : AbstractPlayerState
     {
-        public string getDescription()
+        public override string description => string.Join(
+            "\n",
+            "Working two jobs really stresses you out.",
+            "",
+            "Happiness -20");
+
+        public TwoJobState() : base("Overstressed")
         {
-            return "Happiness -20 when working two job.";
         }
 
-        public int getHappiness(Player player)
-        {
-            return player.jobs.Count > 1 ? -20 : 0;
-        }
-
-        public string getName()
-        {
-            return "Working two jobs.";
-        }
+        public override int happinessModifier => player.jobs.Count > 1 ? -20 : 0;
     }
 }

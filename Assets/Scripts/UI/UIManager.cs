@@ -37,7 +37,9 @@ namespace UI
         [SerializeField]
         private NumberInputPanel _prefabNumberInputPanel;
         [SerializeField]
-        private RentalRealEstatePurchasePanel _prefabRentalRealEstatePurchasePanel;
+        private RentalRealEstatePurchasePanel _prefabAdvancedRentalRealEstatePurchasePanel;
+        [SerializeField]
+        private RentalRealEstatePurchasePanel _prefabSimpleRentalRealEstatePurchasePanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
@@ -239,10 +241,15 @@ namespace UI
         public void ShowRentalRealEstatePurchasePanel(
             Assets.RentalRealEstate asset,
             Assets.PartialRealEstate partialAsset,
-            IMessageBoxHandler handler)
+            IMessageBoxHandler handler,
+            bool advanced)
         {
             RentalRealEstatePurchasePanel panel = Instantiate(
-                _prefabRentalRealEstatePurchasePanel, transform);
+                advanced ?
+                _prefabAdvancedRentalRealEstatePurchasePanel :
+                _prefabSimpleRentalRealEstatePurchasePanel,
+                transform);
+
             panel.player = GameManager.Instance.player;
             panel.asset = asset;
             panel.partialAsset = partialAsset; 

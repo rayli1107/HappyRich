@@ -69,7 +69,7 @@ namespace Actions
         {
             _state = InvestmentState.kPurchasing;
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                (RentalRealEstate)_asset, _partialAsset, this);
+                (RentalRealEstate)_asset, _partialAsset, this, false);
         }
 
         public void ShowCancelConfirmPanel()

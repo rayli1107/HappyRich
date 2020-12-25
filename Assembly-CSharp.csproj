@@ -186,6 +186,7 @@
     <Compile Include="Assets\Scripts\UI\Interfaces\IContactSelectCallback.cs" />
     <Compile Include="Assets\Scripts\UI\Interfaces\IMessageBoxHandler.cs" />
     <Compile Include="Assets\Scripts\UI\Interfaces\INumberInputCallback.cs" />
+    <Compile Include="Assets\Scripts\UI\Interfaces\IRefreshable.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\ActionMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\InvestmentsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\JobSearchPanel.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\Actions\SelfImprovementPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\DebtOfferingPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\EquityOfferingPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\MortgageControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\RentalRealEstatePurchasePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockMarketPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockPanel.cs" />

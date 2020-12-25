@@ -21,6 +21,15 @@ namespace UI.Panels.Assets
             _partner = partner;
             int maxRaise = Mathf.Min(partner.cash, parent.partialAsset.downPayment);
             int maxShares = maxRaise / parent.partialAsset.amountPerShare;
+
+            if (maxShares == 0)
+            {
+                string message = "You've raised the maximum amount needed.";
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, null);
+                return;
+            }
+
             parent.ShowEquityOfferingPanel(maxShares, this);
         }
 
@@ -58,6 +67,15 @@ namespace UI.Panels.Assets
                 partner.cash,
                 parent.asset.income * 100 / _interestRate,
                 parent.asset.downPayment);
+
+            if (maxLoan <= 0)
+            {
+                string message = "You've raised the maximum amount needed.";
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, null);
+                return;
+            }
+
             parent.ShowDebtOfferingPanel(maxLoan, _interestRate, this);
         }
 
@@ -101,7 +119,10 @@ namespace UI.Panels.Assets
         private TextMeshProUGUI _textInvestorAmount;
         [SerializeField]
         private TextMeshProUGUI _textInvestorCashflow;
-
+        [SerializeField]
+        private RectTransform _debtSummaryPanel;
+        [SerializeField]
+        private RectTransform _equitySummaryPanel;
         [SerializeField]
         private DebtOfferingPanel _prefabDebtOfferingPanel;
         [SerializeField]
@@ -164,11 +185,13 @@ namespace UI.Panels.Assets
             {
                 _sliderMortgage.enabled = privateLoanAmount == 0 && investorAmount == 0;
             }
-            
+/*            
             if (_buttonRaiseDebt != null) {
+                Debug.LogFormat("Investor Amount {0}", investorAmount);
                 _buttonRaiseDebt.enabled = investorAmount == 0;
+                Debug.LogFormat("_buttonRaiseDebt.enabled {0}", _buttonRaiseDebt.enabled);
             }
-    
+    */
             if (_textInvestorAmount != null)
             {
                 _textInvestorAmount.text = local.GetCurrency(investorAmount);
@@ -204,7 +227,10 @@ namespace UI.Panels.Assets
 
             AdjustNumbers();
 
-            _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
+            if (_sliderMortgage != null)
+            {
+                _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
+            }
         }
 
         public void OnSliderChange()
@@ -256,6 +282,14 @@ namespace UI.Panels.Assets
 
         public void OnOfferEquityButton()
         {
+            if (partialAsset.downPayment == 0)
+            {
+                string message = "You've raised the maximum amount needed.";
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, null);
+                return;
+            }
+
             EquityOfferCallback callback = new EquityOfferCallback(this);
             UIManager.Instance.ShowContactListPanel(callback, true, false);
         }
@@ -264,6 +298,41 @@ namespace UI.Panels.Assets
         {
             partialAsset.OnPurchaseCancel();
             Refresh();
+            _equitySummaryPanel.gameObject.SetActive(false);
+            _debtSummaryPanel.gameObject.SetActive(false);
+        }
+
+        public void OnRaiseDebtButton()
+        {
+            _debtSummaryPanel.gameObject.SetActive(true);
+        }
+
+        public void OnRaiseEquityButton()
+        {
+            _equitySummaryPanel.gameObject.SetActive(true);
+        }
+
+        public void OnCancelEquityButton()
+        {
+            partialAsset.ClearInvestors();
+            Refresh();
+            _equitySummaryPanel.gameObject.SetActive(false);
+        }
+
+        public void OnCancelDebtButton()
+        {
+            asset.ClearPrivateLoans();
+            Refresh();
+            _debtSummaryPanel.gameObject.SetActive(false);
+        }
+
+        public void OnSwitchViewButton(bool advanced)
+        {
+            MessageBox messageBox = GetComponent<MessageBox>();
+            gameObject.SetActive(false);
+            messageBox.Destroy();
+            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
+                asset, partialAsset, messageBox.messageBoxHandler, advanced);
         }
     }
 }

@@ -1267,7 +1267,9 @@ MonoBehaviour:
     type: 3}
   _prefabNumberInputPanel: {fileID: 4878464304282494514, guid: 34aac3e9c8f1a444bae63522c6144c5e,
     type: 3}
-  _prefabRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: a8c3d35e773ad6245986a79943288397,
+  _prefabAdvancedRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: a8c3d35e773ad6245986a79943288397,
+    type: 3}
+  _prefabSimpleRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: 8823dda7bf2d16840803217cbfe9ac3b,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

@@ -6,7 +6,7 @@ using UI.Panels.Templates;
 
 namespace Events.Personal
 {
-    public class JobLossEvent : IEvent, IMessageBoxHandler
+    public class JobLossEvent : IEvent
     {
         private IEventState _state;
 
@@ -46,10 +46,10 @@ namespace Events.Personal
             messages.Add("Personal Event:");
             messages.Add(string.Format("You lost your job as a {0}.", job.professionName));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages), ButtonChoiceType.NONE, this);
+                string.Join("\n", messages), ButtonChoiceType.NONE, messageBoxHandler);
         }
 
-        public void OnButtonClick(ButtonType button)
+        private void messageBoxHandler(ButtonType button)
         {
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
             _state.OnEventDone();

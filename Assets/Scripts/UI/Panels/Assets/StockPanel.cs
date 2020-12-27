@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class StockPanel : MonoBehaviour, IActionCallback
+    public class StockPanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -91,12 +91,12 @@ namespace UI.Panels.Assets
 
         public void OnBuy()
         {
-            new BuyStocksAction(player, stock, this).Start();
+            new BuyStocksAction(player, stock, OnActionCallback).Start();
         }
 
         public void OnSell()
         {
-            new SellStocksAction(player, stock, this).Start();
+            new SellStocksAction(player, stock, OnActionCallback).Start();
         }
 
         public void OnActionCallback(bool success)

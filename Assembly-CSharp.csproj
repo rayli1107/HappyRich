@@ -137,10 +137,10 @@
     <Compile Include="Assets\Modern UI Pack\Scripts\Window\WindowManagerButton.cs" />
     <Compile Include="Assets\Modern UI Pack\Scripts\Window\WindowManagerEditor.cs" />
     <Compile Include="Assets\Scripts\Actions\AbstractAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\ApplyOldJobs.cs" />
     <Compile Include="Assets\Scripts\Actions\BuyStocksAction.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewInvestors.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
-    <Compile Include="Assets\Scripts\Actions\IAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
     <Compile Include="Assets\Scripts\Actions\SelfReflectionAction.cs" />
     <Compile Include="Assets\Scripts\Actions\SellStocksAction.cs" />
@@ -184,8 +184,6 @@
     <Compile Include="Assets\Scripts\StateMachine\StateMachine.cs" />
     <Compile Include="Assets\Scripts\StateMachine\VictoryState.cs" />
     <Compile Include="Assets\Scripts\UI\Interfaces\IContactSelectCallback.cs" />
-    <Compile Include="Assets\Scripts\UI\Interfaces\IMessageBoxHandler.cs" />
-    <Compile Include="Assets\Scripts\UI\Interfaces\INumberInputCallback.cs" />
     <Compile Include="Assets\Scripts\UI\Interfaces\IRefreshable.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\ActionMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\InvestmentsPanel.cs" />

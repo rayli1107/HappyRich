@@ -5,17 +5,17 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class FindNewJob : AbstractAction, ITransactionHandler
+    /*
+    public class FindNewJob : AbstractAction, ITransactionHandler, IMessageBoxHandler
     {
         private Player _player;
-        private Profession _job;
 
         public FindNewJob(Player player) : base(null)
         {
             _player = player;
         }
 
-        private void messageBoxHandler(ButtonType button)
+        public void OnButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
@@ -57,7 +57,7 @@ namespace Actions
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 string.Join("\n", messages),
                 ButtonChoiceType.OK_CANCEL,
-                messageBoxHandler);
+                this);
         }
 
         public override void Start()
@@ -80,4 +80,5 @@ namespace Actions
             ShowApplyConfirmation();
         }
     }
+    */
 }

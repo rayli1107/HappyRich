@@ -11,17 +11,15 @@ namespace Actions
         kCancelling
     }
 
-    public class SmallInvestmentAction : AbstractAction, IMessageBoxHandler, ITransactionHandler
+    public class SmallInvestmentAction : AbstractAction, ITransactionHandler
     {
         private Player _player;
-        private InvestmentState _state;
         private AbstractRealEstate _asset;
         private PartialRealEstate _partialAsset;
 
         public SmallInvestmentAction(Player player) : base(null)
         {
             _player = player;
-            _state = InvestmentState.kStart;
         }
 
         private void OnPurchasePanelButtonClick(ButtonType button)
@@ -50,35 +48,18 @@ namespace Actions
             }
         }
 
-        public void OnButtonClick(ButtonType button)
-        {
-            switch (_state)
-            {
-                case InvestmentState.kPurchasing:
-                    OnPurchasePanelButtonClick(button);
-                    break;
-                case InvestmentState.kCancelling:
-                    OnCancelConfirmButtonClick(button);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         public void ShowPurchasePanel()
         {
-            _state = InvestmentState.kPurchasing;
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                (RentalRealEstate)_asset, _partialAsset, this, false);
+                (RentalRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
         }
 
         public void ShowCancelConfirmPanel()
         {
-            _state = InvestmentState.kCancelling;
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "Are you sure you don't want to purchase the property?",
                 ButtonChoiceType.OK_CANCEL,
-                this);
+                OnCancelConfirmButtonClick);
         }
 
         public override void Start()

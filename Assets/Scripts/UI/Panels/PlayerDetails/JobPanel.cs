@@ -1,21 +1,33 @@
-﻿using ScriptableObjects;
+﻿using Actions;
+using ScriptableObjects;
 using TMPro;
 using UnityEngine;
-using Actions;
+using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {
-    public class JobPanel : MonoBehaviour, IActionCallback
+    public enum JobPanelMode
+    {
+        kQuit,
+        kApply
+    }
+
+    public class JobPanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
         private TextMeshProUGUI _textJob;
         [SerializeField]
         private TextMeshProUGUI _textSalary;
+        [SerializeField]
+        private Button _buttonQuit;
+        [SerializeField]
+        private Button _buttonApply;
 #pragma warning restore 0649
 
         public Player player;
         public Profession job;
+        public JobPanelMode mode = JobPanelMode.kQuit;
 
         public void Refresh()
         {
@@ -24,6 +36,8 @@ namespace UI.Panels.PlayerDetails
                 Localization local = Localization.Instance;
                 _textJob.text = local.GetJobName(job);
                 _textSalary.text = local.GetCurrency(job.salary);
+                _buttonQuit.gameObject.SetActive(mode == JobPanelMode.kQuit);
+                _buttonApply.gameObject.SetActive(mode == JobPanelMode.kApply);
             }
         }
 
@@ -36,11 +50,11 @@ namespace UI.Panels.PlayerDetails
         {
             if (player != null && job != null)
             {
-                new QuitJob(player, job, this).Start();
+                new QuitJob(player, job, OnQuitActionCallback).Start();
             }
         }
 
-        public void OnActionCallback(bool success)
+        public void OnQuitActionCallback(bool success)
         {
             if (success)
             {

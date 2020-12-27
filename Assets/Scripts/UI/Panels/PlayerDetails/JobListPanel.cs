@@ -3,21 +3,6 @@ using UnityEngine;
 
 namespace UI.Panels.PlayerDetails
 {
-    public class JobListPanelDestroy : IMessageBoxHandler
-    {
-        private MessageBox _messageBox;
-
-        public JobListPanelDestroy(MessageBox messageBox)
-        {
-            _messageBox = messageBox;
-        }
-
-        public void OnButtonClick(ButtonType button)
-        {
-            _messageBox.Destroy();
-        }
-    }
-
     public class JobListPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -48,10 +33,9 @@ namespace UI.Panels.PlayerDetails
 
             if (player.jobs.Count == 0)
             {
-                JobListPanelDestroy handler = new JobListPanelDestroy(
-                    GetComponent<MessageBox>());
+                GetComponent<MessageBox>().Destroy();
                 UIManager.Instance.ShowSimpleMessageBox(
-                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, handler);
+                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
                 return;
             }
 

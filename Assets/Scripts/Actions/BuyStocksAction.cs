@@ -4,15 +4,14 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class BuyStocksAction
-        : AbstractAction, INumberInputCallback, ITransactionHandler, IMessageBoxHandler
+    public class BuyStocksAction : AbstractAction, ITransactionHandler
     {
         private Player _player;
         private AbstractStock _stock;
         private int _numPrurchased;
 
         public BuyStocksAction(
-            Player player, AbstractStock stock, IActionCallback callback)
+            Player player, AbstractStock stock, ActionCallback callback)
             : base(callback)
         {
             _player = player;
@@ -26,10 +25,10 @@ namespace Actions
                 "How many shares of {0} do you want to buy?",
                 _stock.name);
             UI.UIManager.Instance.ShowNumberInputPanel(
-                message, max, this);
+                message, max, onNumberInput, () => RunCallback(false));
         }
 
-        public void OnNumberInput(int number)
+        private void onNumberInput(int number)
         {
             int cost = number * _stock.value;
             _numPrurchased = number;
@@ -40,15 +39,10 @@ namespace Actions
                 number, number > 1 ? "s" : "", _stock.name,
                 local.GetCurrency(cost, true));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                message, ButtonChoiceType.OK_CANCEL, this);
+                message, ButtonChoiceType.OK_CANCEL, messageBoxHandler);
         }
 
-        public void OnNumberInputCancel()
-        {
-            RunCallback(false);
-        }
-
-        public void OnButtonClick(ButtonType button)
+        private void messageBoxHandler(ButtonType button)
         {
             if (button == ButtonType.OK)
             {

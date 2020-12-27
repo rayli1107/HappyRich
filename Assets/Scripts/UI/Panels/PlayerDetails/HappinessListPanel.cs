@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {
-    public class PlayerStateClickHandler : IAction
+    public class PlayerStateClickHandler : AbstractAction
     {
         private AbstractPlayerState _state;
 
@@ -17,9 +17,9 @@ namespace UI.Panels.PlayerDetails
             _state = state;
         }
 
-        public void Start()
+        public override void Start()
         {
-            UI.UIManager.Instance.ShowPlayerStateInfo(_state, null);
+            UIManager.Instance.ShowPlayerStateInfo(_state, null);
         }
     }
 
@@ -53,7 +53,7 @@ namespace UI.Panels.PlayerDetails
 
             if (state != null)
             {
-                panel.clickAction = new PlayerStateClickHandler(state);
+                panel.clickAction = new PlayerStateClickHandler(state).Start;
                 panel.EnableClick(true);
             }
         }

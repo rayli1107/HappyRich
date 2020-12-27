@@ -1,9 +1,12 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
 
 namespace UI.Panels
 {
+    public delegate void NumberInputCallback(int n);
+
     public class NumberInputPanel : ModalObject
     {
 #pragma warning disable 0649
@@ -17,7 +20,8 @@ namespace UI.Panels
 
         public string message;
         public int max = int.MaxValue;
-        public INumberInputCallback callback;
+        public NumberInputCallback numberCallback;
+        public Action cancelCallback;
 
         private int _number;
 
@@ -26,7 +30,6 @@ namespace UI.Panels
             _textMessage.text = message;
             _textMax.text = max.ToString();
             OnClear();
-
         }
 
         protected override void OnEnable()
@@ -56,19 +59,13 @@ namespace UI.Panels
 
         public void OnConfirm()
         {
-            if (callback != null)
-            {
-                callback.OnNumberInput(_number);
-            }
+            numberCallback?.Invoke(_number);
             Destroy();
         }
 
         public void OnCancel()
         {
-            if (callback != null)
-            {
-                callback.OnNumberInputCancel();
-            }
+            cancelCallback?.Invoke();
             Destroy();
         }
     }

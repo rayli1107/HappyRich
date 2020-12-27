@@ -4,7 +4,7 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class TakePersonalLoan : IAction, IMessageBoxHandler
+    public class TakePersonalLoan : AbstractAction
     {
         private Player _player;
         private int _amount;
@@ -19,7 +19,7 @@ namespace Actions
             _amount = amount;
             _transactionHandler = transactionHandler;
         }
-        public void OnButtonClick(ButtonType button)
+        private void messageBoxHandler(ButtonType button)
         {
             bool success = false;
             if (button == ButtonType.OK)
@@ -32,7 +32,7 @@ namespace Actions
             _transactionHandler.OnTransactionFinish(success);
         }
 
-        public void Start()
+        public override void Start()
         {
             Localization local = Localization.Instance;
             int loanAmount = _amount - _player.cash;
@@ -43,7 +43,7 @@ namespace Actions
             message.Add(string.Format("You will need to pay an additional annual interest of {0}",
                 local.GetCurrency(interst, true)));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", message), ButtonChoiceType.OK_CANCEL, this);
+                string.Join("\n", message), ButtonChoiceType.OK_CANCEL, messageBoxHandler);
         }
     }
 }

@@ -4,12 +4,12 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class QuitJob : AbstractAction, IMessageBoxHandler
+    public class QuitJob : AbstractAction
     {
         private Player _player;
         private Profession _job;
 
-        public QuitJob(Player player, Profession job, IActionCallback callback) : base(callback)
+        public QuitJob(Player player, Profession job, ActionCallback callback) : base(callback)
         {
             _player = player;
             _job = job;
@@ -22,10 +22,10 @@ namespace Actions
             string message = string.Format(
                 "Quit your {0} job?", local.GetJobName(_job));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                message, ButtonChoiceType.OK_CANCEL, this);
+                message, ButtonChoiceType.OK_CANCEL, messageBoxHandler);
         }
 
-        public void OnButtonClick(ButtonType button)
+        private void messageBoxHandler(ButtonType button)
         {
             if (button == ButtonType.OK)
             {

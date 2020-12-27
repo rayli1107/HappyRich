@@ -5,6 +5,13 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Templates
 {
+    public enum ButtonType
+    {
+        OK,
+        CANCEL,
+        OUTSIDE_BOUNDARY
+    }
+
     public enum ButtonChoiceType
     {
         OK_ONLY,
@@ -14,9 +21,11 @@ namespace UI.Panels.Templates
         NONE
     }
 
+    public delegate void MessageBoxHandler(ButtonType buttonType);
+
     public class MessageBox : ModalObject
     {
-        public IMessageBoxHandler messageBoxHandler;
+        public MessageBoxHandler messageBoxHandler;
 
 #pragma warning disable 0649
         [SerializeField]
@@ -100,19 +109,13 @@ namespace UI.Panels.Templates
 
         public void OnButtonOk()
         {
-            if (messageBoxHandler != null)
-            {
-                messageBoxHandler.OnButtonClick(ButtonType.OK);
-            }
+            messageBoxHandler?.Invoke(ButtonType.OK);
             Destroy();
         }
 
         public void OnButtonCancel()
         {
-            if (messageBoxHandler != null)
-            {
-                messageBoxHandler.OnButtonClick(ButtonType.CANCEL);
-            }
+            messageBoxHandler?.Invoke(ButtonType.CANCEL);
             Destroy();
         }
         /*

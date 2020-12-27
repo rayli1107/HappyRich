@@ -1,10 +1,12 @@
 ﻿namespace Actions
 {
-    public class AbstractAction : IAction
-    {
-        private IActionCallback _callback;
+    public delegate void ActionCallback(bool success);
 
-        public AbstractAction(IActionCallback callback)
+    public class AbstractAction
+    {
+        private ActionCallback _callback;
+
+        public AbstractAction(ActionCallback callback=null)
         {
             _callback = callback;
         }
@@ -15,10 +17,7 @@
 
         protected void RunCallback(bool success)
         {
-            if (_callback != null)
-            {
-                _callback.OnActionCallback(success);
-            }
+            _callback?.Invoke(success);
         }
     }
 }

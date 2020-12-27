@@ -1,12 +1,12 @@
-﻿using Assets;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UI;
+using UI.Panels.Templates;
 
 namespace UI.Panels.Assets
 {
-    public class EquityOfferingPanel : MonoBehaviour, IMessageBoxHandler, INumberInputCallback
+    public class EquityOfferingPanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -23,7 +23,8 @@ namespace UI.Panels.Assets
         public float equityPerShare;
         public int maxShares;
         public int cashflow;
-        public INumberInputCallback callback;
+        public NumberInputCallback numberInputCallback;
+        public Action numberCancelCallback;
 
         private int _shares;
 
@@ -66,7 +67,7 @@ namespace UI.Panels.Assets
         public void OnNumberInputButton()
         {
             UIManager.Instance.ShowNumberInputPanel(
-                "Investment Amount", amountPerShare * maxShares, this);
+                "Investment Amount", amountPerShare * maxShares, OnNumberInput, null);
         }
 
         public void OnSliderChange()
@@ -80,21 +81,15 @@ namespace UI.Panels.Assets
             Refresh();
         }
 
-        public void OnButtonClick(ButtonType button)
+        public void messageBoxHandler(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                if (callback != null)
-                {
-                    callback.OnNumberInput(_shares);
-                }
+                numberInputCallback?.Invoke(_shares);
             }
             else
             {
-                if (callback != null)
-                {
-                    callback.OnNumberInputCancel();
-                }
+                numberCancelCallback?.Invoke();
             }
         }
 
@@ -102,10 +97,6 @@ namespace UI.Panels.Assets
         {
             _shares = Mathf.Min(number / amountPerShare, maxShares);
             Refresh();
-        }
-
-        public void OnNumberInputCancel()
-        {
         }
     }
 }

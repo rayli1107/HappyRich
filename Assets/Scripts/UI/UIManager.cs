@@ -10,6 +10,7 @@ using UI.Panels.PlayerDetails;
 using UI.Panels.Templates;
 using UI.Panels.Actions;
 using PlayerState;
+using System;
 
 namespace UI
 {
@@ -145,7 +146,7 @@ namespace UI
 
         public MessageBox ShowMessageBox(
             GameObject childPanel,
-            IMessageBoxHandler handler,
+            MessageBoxHandler handler,
             ButtonChoiceType buttonChoice)
         {
             GameObject msgBoxObj = Instantiate(_prefabMessageBoxPanel, transform);
@@ -165,7 +166,7 @@ namespace UI
         public SimpleTextMessageBox ShowSimpleMessageBox(
             string message,
             ButtonChoiceType buttonChoice,
-            IMessageBoxHandler handler)
+            MessageBoxHandler handler)
         {
             SimpleTextMessageBox messageBox = Instantiate(
                 _prefabSimpleTextMessageBox, transform);
@@ -229,19 +230,24 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowNumberInputPanel(string message, int max, INumberInputCallback callback)
+        public void ShowNumberInputPanel(
+            string message,
+            int max,
+            NumberInputCallback numberInputCallback,
+            Action cancelCallback)
         {
             NumberInputPanel panel = Instantiate(_prefabNumberInputPanel, transform);
             panel.message = message;
             panel.max = max;
-            panel.callback = callback;
+            panel.numberCallback = numberInputCallback;
+            panel.cancelCallback = cancelCallback;
             panel.Refresh();
         }
 
         public void ShowRentalRealEstatePurchasePanel(
             Assets.RentalRealEstate asset,
             Assets.PartialRealEstate partialAsset,
-            IMessageBoxHandler handler,
+            MessageBoxHandler handler,
             bool advanced)
         {
             RentalRealEstatePurchasePanel panel = Instantiate(
@@ -278,7 +284,7 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowPlayerStateInfo(AbstractPlayerState state, IMessageBoxHandler callback)
+        public void ShowPlayerStateInfo(AbstractPlayerState state, MessageBoxHandler callback)
         {
             Localization local = Localization.Instance;
             string message = string.Join("\n", local.GetPlayerState(state), state.description);

@@ -1,12 +1,12 @@
-﻿using Assets;
+﻿using System;
 using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
-using UI;
 
 namespace UI.Panels.Assets
 {
-    public class DebtOfferingPanel : MonoBehaviour, IMessageBoxHandler, INumberInputCallback
+    public class DebtOfferingPanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -21,7 +21,8 @@ namespace UI.Panels.Assets
 
         public int interestRate;
         public int maxLoanAmount;
-        public INumberInputCallback callback;
+        public NumberInputCallback numberInputCallback;
+        public Action numberCancelCallback;
 
         private int _loanAmount;
 
@@ -59,7 +60,8 @@ namespace UI.Panels.Assets
 
         public void OnNumberInputButton()
         {
-            UIManager.Instance.ShowNumberInputPanel("Loan Amount", maxLoanAmount, this);
+            UIManager.Instance.ShowNumberInputPanel(
+                "Loan Amount", maxLoanAmount, OnNumberInput, null);
         }
 
         public void OnSliderChange()
@@ -73,21 +75,15 @@ namespace UI.Panels.Assets
             Refresh();
         }
 
-        public void OnButtonClick(ButtonType button)
+        public void messageBoxHandler(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                if (callback != null)
-                {
-                    callback.OnNumberInput(_loanAmount);
-                }
+                numberInputCallback?.Invoke(_loanAmount);
             }
             else
             {
-                if (callback != null)
-                {
-                    callback.OnNumberInputCancel();
-                }
+                numberCancelCallback?.Invoke();
             }
         }
 
@@ -95,10 +91,6 @@ namespace UI.Panels.Assets
         {
             _loanAmount = number;
             Refresh();
-        }
-
-        public void OnNumberInputCancel()
-        {
         }
     }
 }

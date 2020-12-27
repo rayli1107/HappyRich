@@ -1,4 +1,5 @@
 ﻿using Assets;
+using System;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class EquityOfferCallback : IContactSelectCallback, INumberInputCallback
+    public class EquityOfferCallback : IContactSelectCallback
     {
         public RentalRealEstatePurchasePanel parent;
         private InvestmentPartner _partner;
@@ -30,7 +31,7 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            parent.ShowEquityOfferingPanel(maxShares, this);
+            parent.ShowEquityOfferingPanel(maxShares, OnNumberInput, null);
         }
 
         public void OnNumberInput(int number)
@@ -41,13 +42,9 @@ namespace UI.Panels.Assets
                 parent.Refresh();
             }
         }
-
-        public void OnNumberInputCancel()
-        {
-        }
     }
 
-    public class DebtOfferCallback : IContactSelectCallback, INumberInputCallback
+    public class DebtOfferCallback : IContactSelectCallback
     {
         public RentalRealEstatePurchasePanel parent;
         private InvestmentPartner _partner;
@@ -76,7 +73,7 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            parent.ShowDebtOfferingPanel(maxLoan, _interestRate, this);
+            parent.ShowDebtOfferingPanel(maxLoan, _interestRate, OnNumberInput, null);
         }
 
         public void OnNumberInput(int number)
@@ -87,10 +84,6 @@ namespace UI.Panels.Assets
                     new PrivateLoan(_partner, number, _interestRate));
                 parent.Refresh();
             }
-        }
-
-        public void OnNumberInputCancel()
-        {
         }
     }
 
@@ -249,18 +242,26 @@ namespace UI.Panels.Assets
         }
 
         public void ShowDebtOfferingPanel(
-            int maxLoanAmount, int loanRate, INumberInputCallback callback)
+            int maxLoanAmount,
+            int loanRate,
+            NumberInputCallback numberInputCallback,
+            Action numberCancelCallback)
         {
             DebtOfferingPanel panel = Instantiate(
                 _prefabDebtOfferingPanel, UIManager.Instance.transform);
             panel.interestRate = loanRate;
             panel.maxLoanAmount = maxLoanAmount;
-            panel.callback = callback;
-            panel.GetComponent<MessageBox>().messageBoxHandler = panel;
+            panel.numberInputCallback = numberInputCallback;
+            panel.numberCancelCallback = numberCancelCallback;
+            panel.GetComponent<MessageBox>().messageBoxHandler = panel.messageBoxHandler;
             panel.OnNumberInput(maxLoanAmount);
         }
 
-        public void ShowEquityOfferingPanel(int maxShares, INumberInputCallback callback)
+        public void ShowEquityOfferingPanel(
+            int maxShares,
+            NumberInputCallback numberInputCallback,
+            Action numberCancelCallback)
+
         {
             EquityOfferingPanel panel = Instantiate(
                 _prefabEquityOfferingPanel, UIManager.Instance.transform);
@@ -269,8 +270,9 @@ namespace UI.Panels.Assets
             panel.equityPerShare = partialAsset.equityPerShare;
             panel.maxShares = maxShares;
             panel.cashflow = partialAsset.income;
-            panel.callback = callback;
-            panel.GetComponent<MessageBox>().messageBoxHandler = panel;
+            panel.numberInputCallback = numberInputCallback;
+            panel.numberCancelCallback = numberCancelCallback;
+            panel.GetComponent<MessageBox>().messageBoxHandler = panel.messageBoxHandler;
             panel.OnNumberInput(maxShares);
         }
 

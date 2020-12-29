@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e8e3bfd3f5e5f04287a15f683d35dfd, type: 3}
-  m_Name: 3bd SFH
+  m_Name: Large MF
   m_EditorClassIdentifier: 
-  smallInvestment: 1
-  description: Three Bedroom Single Family House
-  label: 3BD SFH
-  basePriceRange: {x: 150000, y: 200000}
+  smallInvestment: 0
+  description: '{0}-Unit MultiFamily Property'
+  label: '{0}-Unit MFH'
+  basePriceRange: {x: 60000, y: 60000}
   priceVariance: 0.2
   priceIncrement: 10000
-  rentalRange: {x: 40, y: 50}
-  rentalIncrement: 500
-  unitCount: 
-  commercial: 0
+  rentalRange: {x: 50, y: 65}
+  rentalIncrement: 100
+  unitCount: 320000003c00000050000000640000007800000096000000c8000000fa0000002c010000
+  commercial: 1

@@ -10,7 +10,13 @@ namespace UI.Panels.Actions
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            new SmallInvestmentAction(player).Start();
+            InvestmentAction.GetSmallInvestmentAction(player).Start();
+        }
+
+        public void OnLargeInvestmentButton()
+        {
+            UIManager.Instance.DestroyAllModal();
+            InvestmentAction.GetLargeInvestmentAction(player).Start();
         }
     }
 }

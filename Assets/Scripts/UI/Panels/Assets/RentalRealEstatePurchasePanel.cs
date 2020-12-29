@@ -94,17 +94,6 @@ namespace UI.Panels.Assets
                 _textPrivateLoanPayment.text = local.GetCurrency(asset.privateLoanPayment, true);
             }
 
-            if (_sliderMortgage != null)
-            {
-                _sliderMortgage.enabled = privateLoanAmount == 0 && investorAmount == 0;
-            }
-/*            
-            if (_buttonRaiseDebt != null) {
-                Debug.LogFormat("Investor Amount {0}", investorAmount);
-                _buttonRaiseDebt.enabled = investorAmount == 0;
-                Debug.LogFormat("_buttonRaiseDebt.enabled {0}", _buttonRaiseDebt.enabled);
-            }
-    */
             if (_textInvestorAmount != null)
             {
                 _textInvestorAmount.text = local.GetCurrency(investorAmount);
@@ -129,7 +118,7 @@ namespace UI.Panels.Assets
             {
                 _textMessage.text = string.Format(
                     "You found a {0} listed for sale. Purchase the property?",
-                    local.GetRealEstateDescription(asset.template.profile));
+                    local.GetRealEstateDescription(asset.description));
             }
 
             if (_textPurchasePrice != null)
@@ -142,6 +131,7 @@ namespace UI.Panels.Assets
 
             if (_sliderMortgage != null)
             {
+                _sliderMortgage.maxValue = asset.mortgage.maxltv / _sliderMultiplier;
                 _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
             }
         }

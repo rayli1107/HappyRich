@@ -253,7 +253,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profiles:
   - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
-  _defaultMortgageRate: 80
+  - {fileID: 11400000, guid: 9c707023f07168a4a86392f74219a520, type: 2}
+  _maxMortgageLTV: 75
   _defaultEquitySplit: 0.8
   _defaultEquityPerShare: 0.01
 --- !u!1 &456001304 stripped

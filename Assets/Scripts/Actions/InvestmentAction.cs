@@ -11,15 +11,16 @@ namespace Actions
         kCancelling
     }
 
-    public class SmallInvestmentAction : AbstractAction
+    public class InvestmentAction : AbstractAction
     {
         private Player _player;
         private AbstractRealEstate _asset;
         private PartialRealEstate _partialAsset;
 
-        public SmallInvestmentAction(Player player) : base(null)
+        public InvestmentAction(Player player, AbstractRealEstate asset) : base(null)
         {
             _player = player;
+            _asset = asset;
         }
 
         private void OnPurchasePanelButtonClick(ButtonType button)
@@ -65,9 +66,7 @@ namespace Actions
 
         public override void Start()
         {
-            System.Random random = GameManager.Instance.Random;
             RealEstateManager manager = GameManager.Instance.RealEstateManager;
-            _asset = manager.GetSmallInvestment(random);
             _partialAsset = new PartialRealEstate(
                 _asset,
                 RealEstateManager.Instance.defaultEquitySplit,
@@ -88,6 +87,21 @@ namespace Actions
             {
                 ShowPurchasePanel();
             }
+        }
+        public static InvestmentAction GetSmallInvestmentAction(Player player)
+        {
+            System.Random random = GameManager.Instance.Random;
+            AbstractRealEstate asset = RealEstateManager.Instance.GetSmallInvestment(
+                random);
+            return new InvestmentAction(player, asset);
+        }
+
+        public static InvestmentAction GetLargeInvestmentAction(Player player)
+        {
+            System.Random random = GameManager.Instance.Random;
+            AbstractRealEstate asset = RealEstateManager.Instance.GetLargeInvestment(
+                random);
+            return new InvestmentAction(player, asset);
         }
     }
 }

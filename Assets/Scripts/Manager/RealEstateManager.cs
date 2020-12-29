@@ -12,6 +12,9 @@ public class RealEstateTemplate
     public float priceVariance => profile.priceVariance;
     public Vector2Int rentalRange => profile.rentalRange;
     public int priceIncrement => profile.priceIncrement;
+    public int rentalIncrement => profile.rentalIncrement;
+    public bool commercial => profile.commercial;
+    public int[] unitCount => profile.unitCount;
 
     public RealEstateTemplate(RealEstateProfile profile, System.Random random)
     {
@@ -28,7 +31,7 @@ public class RealEstateManager : MonoBehaviour
     [SerializeField]
     private RealEstateProfile[] _profiles;
     [SerializeField]
-    private int _defaultMortgageRate = 80;
+    private int _maxMortgageLTV = 75;
     [SerializeField]
     private float _defaultEquitySplit = 0.8f;
     [SerializeField]
@@ -67,6 +70,14 @@ public class RealEstateManager : MonoBehaviour
         }
     }
 
+    private int calculateRent(
+        System.Random random, int price, Vector2Int range, int increment)
+    {
+        int rentMin = price / 1000 * range.x / increment;
+        int rentMax = price / 1000 * range.y / increment;
+        return random.Next(rentMin, rentMax + 1) * increment;
+    }
+
     private AbstractRealEstate GetInvestment(
         List<RealEstateTemplate> templates, System.Random random)
     {
@@ -76,15 +87,29 @@ public class RealEstateManager : MonoBehaviour
         int maxPrice = Mathf.FloorToInt(
             template.basePrice * (1 + template.priceVariance) / template.priceIncrement);
         int price = random.Next(minPrice, maxPrice + 1) * template.priceIncrement;
-        int rentRate = random.Next(template.rentalRange.x, template.rentalRange.y + 1);
-        int annualIncome = price * rentRate / 100;
+        int rentBasePrice = template.commercial ? price : template.basePrice;
+        int annualIncome = calculateRent(
+            random, rentBasePrice, template.rentalRange, template.rentalIncrement);
+
+        int unitCount = 1;
+        if (template.unitCount.Length > 0)
+        {
+            unitCount = template.unitCount[random.Next(template.unitCount.Length)];
+            price *= unitCount;
+            annualIncome *= unitCount;
+        }
 
         return new RentalRealEstate(
-            template, price, price, annualIncome, _defaultMortgageRate);
+            template, price, price, annualIncome, _maxMortgageLTV, unitCount);
     }
 
     public AbstractRealEstate GetSmallInvestment(System.Random random)
     {
         return GetInvestment(_smallInvestments, random);
+    }
+
+    public AbstractRealEstate GetLargeInvestment(System.Random random)
+    {
+        return GetInvestment(_largeInvestments, random);
     }
 }

@@ -14,5 +14,8 @@ namespace ScriptableObjects
         public float priceVariance;
         public int priceIncrement;
         public Vector2Int rentalRange;
+        public int rentalIncrement;
+        public int[] unitCount;
+        public bool commercial;
     }
 }

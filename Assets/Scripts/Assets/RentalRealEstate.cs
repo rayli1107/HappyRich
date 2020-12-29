@@ -6,8 +6,8 @@ namespace Assets
     public class RentalRealEstate : AbstractRealEstate
     {
         public Mortgage mortgage { get; private set; }
-        private List<PrivateLoan> _privateLoans;
 
+        private List<PrivateLoan> _privateLoans;
         public override List<AbstractLiability> liabilities
         {
             get
@@ -50,10 +50,11 @@ namespace Assets
             int purchasePrice,
             int marketPrice,
             int annualIncome,
-            int defaultMortgageRate)
-            : base(template, purchasePrice, marketPrice, annualIncome)
+            int ltv,
+            int unitCount)
+            : base(template, purchasePrice, marketPrice, annualIncome, unitCount)
         {
-            mortgage = new Mortgage(this, defaultMortgageRate);
+            mortgage = new Mortgage(this, ltv);
             _privateLoans = new List<PrivateLoan>();
         }
 

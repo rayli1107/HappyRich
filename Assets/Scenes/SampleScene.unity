@@ -202,6 +202,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3c94c11276e8ff3408697d911312f561, type: 2}
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
+  _applyOldJobSuccessChance: 0.5
 --- !u!114 &204261755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +238,7 @@ MonoBehaviour:
   _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _colorName: {r: 1, g: 0.62352943, b: 0, a: 1}
   _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
+  _colorWarning: {r: 255, g: 160, b: 0, a: 1}
 --- !u!114 &204261757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1274,6 +1276,8 @@ MonoBehaviour:
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}
   _prefabHappinessListPanel: {fileID: 1523913901218779723, guid: f0222205e8367154ab138d1e2a7fb96d,
+    type: 3}
+  _prefabJobListPanel: {fileID: 6644454022926503088, guid: 26ed666471391854495e3ed23f28b1ce,
     type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}

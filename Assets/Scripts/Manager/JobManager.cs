@@ -9,8 +9,11 @@ public class JobManager : MonoBehaviour
     private Profession[] _professions;
     [SerializeField]
     private Profession[] _partTimeJobs;
+    [SerializeField]
+    private float _applyOldJobSuccessChance = 0.5f;
 #pragma warning restore 0649
 
+    public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
     public static JobManager Instance { get; private set; }
 
     private void Awake()

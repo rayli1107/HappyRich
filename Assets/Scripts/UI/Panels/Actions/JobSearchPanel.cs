@@ -12,5 +12,11 @@ namespace UI.Panels.Actions
             UIManager.Instance.DestroyAllModal();
             new FindNewJob(player).Start();
         }
+
+        public void OnApplyOldJobButton()
+        {
+            UIManager.Instance.ShowJobListPanel(
+                PlayerDetails.JobListPanelMode.kOldJobs);
+        }
     }
 }

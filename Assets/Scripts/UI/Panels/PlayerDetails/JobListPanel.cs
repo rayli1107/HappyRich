@@ -1,8 +1,16 @@
-﻿using UI.Panels.Templates;
+﻿using ScriptableObjects;
+using System.Collections.Generic;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace UI.Panels.PlayerDetails
 {
+    public enum JobListPanelMode
+    {
+        kCurrentJobs,
+        kOldJobs
+    }
+
     public class JobListPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -13,6 +21,7 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
+        public JobListPanelMode mode = JobListPanelMode.kCurrentJobs;
 
         private void OnEnable()
         {
@@ -31,19 +40,44 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            if (player.jobs.Count == 0)
+            List<Profession> jobs;
+            JobPanelMode jobPanelMode;
+
+            if (mode == JobListPanelMode.kCurrentJobs)
             {
-                GetComponent<MessageBox>().Destroy();
-                UIManager.Instance.ShowSimpleMessageBox(
-                    "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
-                return;
+                if (player.jobs.Count == 0)
+                {
+                    GetComponent<MessageBox>().Destroy();
+                    UIManager.Instance.ShowSimpleMessageBox(
+                        "You are currently unemployed.", ButtonChoiceType.OK_ONLY, null);
+                    return;
+                }
+
+                jobs = player.jobs;
+                jobPanelMode = JobPanelMode.kQuit;
+            }
+            else
+            {
+                if (player.oldJobs.Count == 0)
+                {
+                    GetComponent<MessageBox>().Destroy();
+                    UIManager.Instance.ShowSimpleMessageBox(
+                        "You don't have any old jobs you can apply for.",
+                        ButtonChoiceType.OK_ONLY,
+                        null);
+                    return;
+                }
+
+                jobs = player.oldJobs;
+                jobPanelMode = JobPanelMode.kApply;
             }
 
-            for (int i = 0; i < player.jobs.Count; ++i)
+            foreach (Profession job in jobs)
             {
                 JobPanel childPanel = Instantiate(_prefabJobPanel, _content);
                 childPanel.player = player;
-                childPanel.job = player.jobs[i];
+                childPanel.job = job;
+                childPanel.mode = jobPanelMode;
                 childPanel.Refresh();
             }
         }

@@ -1,13 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace UI.Panels.PlayerDetails
 {
     public class PlayerStatusMenuPanel : MonoBehaviour
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private JobListPanel _prefabJobListPanel;
-#pragma warning restore 0649
         public Player player;
 
         public void ShowAssetLiabilityStatusPanel()
@@ -22,11 +19,7 @@ namespace UI.Panels.PlayerDetails
 
         public void ShowJobListPanel()
         {
-            Player player = GameManager.Instance.player;
-            JobListPanel panel = Instantiate(
-                _prefabJobListPanel, UIManager.Instance.transform);
-            panel.player = player;
-            panel.Refresh();
+            UIManager.Instance.ShowJobListPanel(JobListPanelMode.kCurrentJobs);
         }
 
         public void ShowContactListPanel()

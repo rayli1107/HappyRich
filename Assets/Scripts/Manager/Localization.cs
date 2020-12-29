@@ -16,6 +16,8 @@ public class Localization : MonoBehaviour
     private Color _colorName = Color.blue;
     [SerializeField]
     private Color _colorPlayerState = Color.white;
+    [SerializeField]
+    private Color _colorWarning = new Color(255, 160, 0);
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -46,6 +48,10 @@ public class Localization : MonoBehaviour
         return colorWrap(profile.label, _colorRealEstate);
     }
 
+    public string GetWarning(string message)
+    {
+        return colorWrap(message, _colorWarning);
+    }
     public string GetJobName(Profession job)
     {
         return colorWrap(job.professionName, _colorJob);
@@ -101,13 +107,22 @@ public class Localization : MonoBehaviour
         return colorWrap(GetAbsCurrency(amount), c);
     }
 
-    public string GetPercent(float pct)
+    public string GetPercentPlain(float pct, bool showPositive=true)
+    {
+        if (pct >= 0 && showPositive)
+        {
+            return "+" + pct.ToString("#0%");
+        }
+        return pct.ToString("#0%");
+    }
+
+    public string GetPercent(float pct, bool showPositive=true)
     {
         if (pct >= 0)
         {
-            return colorWrap("+" + pct.ToString("#0%"), _colorPositive);
+            return colorWrap(GetPercentPlain(pct, showPositive), _colorPositive);
         }
-        return colorWrap(pct.ToString("#0%"), _colorNegative);
+        return colorWrap(GetPercentPlain(pct, showPositive), _colorNegative);
     }
 
     public string GetValueAsChange(int value)

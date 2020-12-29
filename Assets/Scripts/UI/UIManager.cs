@@ -45,6 +45,8 @@ namespace UI
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
+        [SerializeField]
+        private JobListPanel _prefabJobListPanel;
 
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
@@ -273,6 +275,16 @@ namespace UI
             panel.callback = callback;
             panel.showHighRiskContacts = showHighRiskContacts;
             panel.showLowRiskContacts = showLowRiskContacts;
+            panel.Refresh();
+        }
+
+        public void ShowJobListPanel(JobListPanelMode mode)
+        {
+            Player player = GameManager.Instance.player;
+            JobListPanel panel = Instantiate(
+                _prefabJobListPanel, UIManager.Instance.transform);
+            panel.player = player;
+            panel.mode = mode;
             panel.Refresh();
         }
 

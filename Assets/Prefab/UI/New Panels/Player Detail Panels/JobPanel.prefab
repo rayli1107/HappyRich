@@ -466,9 +466,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: 600
-  m_MinHeight: 300
+  m_MinHeight: 200
   m_PreferredWidth: 600
-  m_PreferredHeight: 300
+  m_PreferredHeight: 200
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -537,7 +537,7 @@ PrefabInstance:
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitButton
+      value: OnApplyButton
       objectReference: {fileID: 0}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}

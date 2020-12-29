@@ -50,11 +50,11 @@ namespace UI.Panels.PlayerDetails
         {
             if (player != null && job != null)
             {
-                new QuitJob(player, job, OnQuitActionCallback).Start();
+                new QuitJob(player, job, onQuitActionCallback).Start();
             }
         }
 
-        public void OnQuitActionCallback(bool success)
+        private void onQuitActionCallback(bool success)
         {
             if (success)
             {
@@ -63,6 +63,23 @@ namespace UI.Panels.PlayerDetails
                 {
                     panel.Refresh();
                 }
+            }
+        }
+
+        public void OnApplyButton()
+        {
+            if (player != null && job != null)
+            {
+                new ApplyOldJob(player, job, onApplyJobCallback).Start();
+            }
+        }
+
+        private void onApplyJobCallback(bool success)
+        {
+            if (success)
+            {
+                UIManager.Instance.UpdatePlayerInfo(player);
+                UIManager.Instance.DestroyAllModal();
             }
         }
     }

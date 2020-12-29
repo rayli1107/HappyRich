@@ -1,10 +1,74 @@
 ﻿using ScriptableObjects;
-using System.Collections.Generic;
-using UI;
 using UI.Panels.Templates;
+using UnityEngine;
 
 namespace Actions
 {
+    public class ApplyOldJob : AbstractAction
+    {
+        private Player _player;
+        private Profession _job;
+
+        private float successChance => (
+            _job.searchable ? 1f : JobManager.Instance.applyOldJobSuccessChance);
+
+        public ApplyOldJob(Player player, Profession job, ActionCallback actionCallback)
+            : base(actionCallback)
+        {
+            _player = player;
+            _job = job;
+        }
+
+        public override void Start()
+        {
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "Apply for your old job as a {0}?",
+                local.GetJobName(_job));
+            if (successChance < 1)
+            {
+                string warning = string.Format(
+                    "({0} chance of success)",
+                    local.GetPercentPlain(successChance, false));
+                message = string.Format(
+                    "{0} {1}", message, local.GetWarning(warning));
+            }
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_CANCEL, messageBoxHandler);
+        }
+
+        private void messageBoxHandler(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.OK)
+            {
+                bool success = GameManager.Instance.Random.NextDouble() < successChance;
+                Localization local = Localization.Instance;
+                string message;
+                if (success)
+                {
+                    message = string.Format(
+                        "You've successfully applied for your old job as a {0}.",
+                        local.GetJobName(_job));
+                    _player.AddJob(_job);
+                }
+                else
+                {
+                    message = string.Format(
+                        "Unfortunately you were not able to apply for your old job as a {0}.",
+                        local.GetJobName(_job));
+                }
+                Debug.LogFormat("Showing message {0}", message);
+                GameManager.Instance.StateMachine.OnPlayerActionDone();
+                UI.UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, (_) => RunCallback(true));
+            }
+            else
+            {
+                RunCallback(false);
+            }
+        }
+    }
+
     /*
     public class FindNewJob : AbstractAction, ITransactionHandler, IMessageBoxHandler
     {

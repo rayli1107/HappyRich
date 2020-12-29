@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1139c2f84e4b8c44d84bd38de471f204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabJobListPanel: {fileID: 6644454022926503088, guid: 26ed666471391854495e3ed23f28b1ce,
-    type: 3}
 --- !u!114 &6212853153230068359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +429,7 @@ PrefabInstance:
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -451,7 +449,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -491,7 +489,7 @@ PrefabInstance:
     - target: {fileID: 2260030010190067794, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 2260030010190067794, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

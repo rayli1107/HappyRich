@@ -3,19 +3,6 @@ using PlayerState;
 using ScriptableObjects;
 using System.Collections.Generic;
 
-/*
-public class Income
-{
-    public string name { get; private set; }
-    public int income { get; private set; }
-
-    public Income(string name, int income)
-    {
-        this.name = name;
-        this.income = income;
-    }
-}*/
-
 public class PlayerSnapshot
 {
     public Player player { get; private set; }
@@ -299,6 +286,7 @@ public class Player
     public void AddJob(Profession job)
     {
         jobs.Add(job);
+        oldJobs.Remove(job);
     }
 
     public void LoseJob(Profession job)

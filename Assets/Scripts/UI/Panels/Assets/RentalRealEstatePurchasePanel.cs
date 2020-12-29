@@ -7,86 +7,6 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class EquityOfferCallback : IContactSelectCallback
-    {
-        public RentalRealEstatePurchasePanel parent;
-        private InvestmentPartner _partner;
-
-        public EquityOfferCallback(RentalRealEstatePurchasePanel parent)
-        {
-            this.parent = parent;
-        }
-
-        public void ContactSelect(InvestmentPartner partner)
-        {
-            _partner = partner;
-            int maxRaise = Mathf.Min(partner.cash, parent.partialAsset.downPayment);
-            int maxShares = maxRaise / parent.partialAsset.amountPerShare;
-
-            if (maxShares == 0)
-            {
-                string message = "You've raised the maximum amount needed.";
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
-                return;
-            }
-
-            parent.ShowEquityOfferingPanel(maxShares, OnNumberInput, null);
-        }
-
-        public void OnNumberInput(int number)
-        {
-            if (number > 0)
-            {
-                parent.partialAsset.AddInvestor(_partner, number);
-                parent.Refresh();
-            }
-        }
-    }
-
-    public class DebtOfferCallback : IContactSelectCallback
-    {
-        public RentalRealEstatePurchasePanel parent;
-        private InvestmentPartner _partner;
-        private int _interestRate;
-
-        public DebtOfferCallback(RentalRealEstatePurchasePanel parent)
-        {
-            this.parent = parent;
-            _interestRate = InterestRateManager.Instance.defaultPrivateLoanRate;
-        }
-
-        public void ContactSelect(InvestmentPartner partner)
-        {
-            _partner = partner;
-
-            int maxLoan = Mathf.Min(
-                partner.cash,
-                parent.asset.income * 100 / _interestRate,
-                parent.asset.downPayment);
-
-            if (maxLoan <= 0)
-            {
-                string message = "You've raised the maximum amount needed.";
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
-                return;
-            }
-
-            parent.ShowDebtOfferingPanel(maxLoan, _interestRate, OnNumberInput, null);
-        }
-
-        public void OnNumberInput(int number)
-        {
-            if (number > 0)
-            {
-                parent.asset.AddPrivateLoan(
-                    new PrivateLoan(_partner, number, _interestRate));
-                parent.Refresh();
-            }
-        }
-    }
-
     public class RentalRealEstatePurchasePanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -278,8 +198,7 @@ namespace UI.Panels.Assets
 
         public void OnOfferDebtButton()
         {
-            DebtOfferCallback callback = new DebtOfferCallback(this);
-            UIManager.Instance.ShowContactListPanel(callback, false, true);
+            UIManager.Instance.ShowContactListPanel(offerDebtContactSelect, false, true);
         }
 
         public void OnOfferEquityButton()
@@ -292,8 +211,7 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            EquityOfferCallback callback = new EquityOfferCallback(this);
-            UIManager.Instance.ShowContactListPanel(callback, true, false);
+            UIManager.Instance.ShowContactListPanel(offerEquityContactSelect, true, false);
         }
 
         public void OnResetButton()
@@ -336,5 +254,63 @@ namespace UI.Panels.Assets
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
                 asset, partialAsset, messageBox.messageBoxHandler, advanced);
         }
+
+        private void offerEquityContactSelect(InvestmentPartner partner)
+        {
+            int maxRaise = Mathf.Min(partner.cash, partialAsset.downPayment);
+            int maxShares = maxRaise / partialAsset.amountPerShare;
+
+            if (maxShares == 0)
+            {
+                string message = "You've raised the maximum amount needed.";
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, null);
+                return;
+            }
+
+            NumberInputCallback callback = (int n) => offerEquityNumberInput(partner, n);
+            ShowEquityOfferingPanel(maxShares, callback, null);
+        }
+
+        private void offerEquityNumberInput(InvestmentPartner partner, int number)
+        {
+            if (number > 0)
+            {
+                partialAsset.AddInvestor(partner, number);
+                Refresh();
+            }
+        }
+
+        private void offerDebtContactSelect(InvestmentPartner partner)
+        {
+            int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
+            int maxLoan = Mathf.Min(
+                partner.cash,
+                asset.income * 100 / rate,
+                asset.downPayment);
+
+            if (maxLoan <= 0)
+            {
+                string message = "You've raised the maximum amount needed.";
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_ONLY, null);
+                return;
+            }
+
+            NumberInputCallback callback = (int n) => offerDebtNumberInput(partner, rate, n);
+            ShowDebtOfferingPanel(maxLoan, rate, callback, null);
+        }
+
+        private void offerDebtNumberInput(
+            InvestmentPartner partner, int rate, int number)
+        {
+            if (number > 0)
+            {
+                asset.AddPrivateLoan(new PrivateLoan(partner, number, rate));
+                Refresh();
+            }
+        }
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace Actions
         kCancelling
     }
 
-    public class SmallInvestmentAction : AbstractAction, ITransactionHandler
+    public class SmallInvestmentAction : AbstractAction
     {
         private Player _player;
         private AbstractRealEstate _asset;
@@ -26,7 +26,8 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.BuyRealEstate(_player, _partialAsset, this);
+                TransactionManager.BuyRealEstate(
+                    _player, _partialAsset, onTransactionFinish);
             }
             else
             {
@@ -74,7 +75,7 @@ namespace Actions
             ShowPurchasePanel();
         }
 
-        public void OnTransactionFinish(bool success)
+        private void onTransactionFinish(bool success)
         {
             if (success)
             {

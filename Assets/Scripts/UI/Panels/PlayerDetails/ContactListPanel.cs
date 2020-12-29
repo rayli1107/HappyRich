@@ -16,7 +16,7 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
-        public IContactSelectCallback callback;
+        public ContactSelectCallback callback;
         public bool showLowRiskContacts;
         public bool showHighRiskContacts;
 

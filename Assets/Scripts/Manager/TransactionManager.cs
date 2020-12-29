@@ -1,72 +1,16 @@
 ﻿using Assets;
 using ScriptableObjects;
 
-public interface ITransactionHandler
-{
-    void OnTransactionFinish(bool success);
-}
-
-public class BuyRealEstateTransactionCallback : ITransactionHandler
-{
-    private Player _player;
-    private AbstractRealEstate _asset;
-    private ITransactionHandler _handler;
-
-    public BuyRealEstateTransactionCallback(
-        Player player,
-        AbstractRealEstate asset,
-        ITransactionHandler handler)
-    {
-        _player = player;
-        _asset = asset;
-        _handler = handler;
-    }
-
-    public void OnTransactionFinish(bool success)
-    {
-        if (success)
-        {
-            _player.portfolio.properties.Add(_asset);
-        }
-        _handler.OnTransactionFinish(success);
-    }
-}
-
-public class ApplyJobTransactionCallback : ITransactionHandler
-{
-    private Player _player;
-    private Profession _job;
-    private ITransactionHandler _handler;
-
-    public ApplyJobTransactionCallback(
-        Player player,
-        Profession job,
-        ITransactionHandler handler)
-    {
-        _player = player;
-        _job = job;
-        _handler = handler;
-    }
-
-    public void OnTransactionFinish(bool success)
-    {
-        if (success)
-        {
-            _player.AddJob(_job);
-        }
-
-        _handler.OnTransactionFinish(success);
-    }
-}
+public delegate void TransactionHandler(bool success);
 
 public static class TransactionManager
 {
-    private static void TryDebit(Player player, int amount, ITransactionHandler handler)
+    private static void TryDebit(Player player, int amount, TransactionHandler handler)
     {
         if (player.cash >= amount)
         {
             player.portfolio.AddCash(-1 * amount);
-            handler.OnTransactionFinish(true);
+            handler?.Invoke(true);
         }
         else
         {
@@ -74,27 +18,49 @@ public static class TransactionManager
         }
     }
 
-    public static void BuyRealEstate(
-        Player player, AbstractRealEstate asset, ITransactionHandler handler)
+    private static void buyRealEstateTransactionHandler(
+        Player player, AbstractRealEstate asset, TransactionHandler handler, bool success)
     {
-        ITransactionHandler newHandler = new BuyRealEstateTransactionCallback(
-            player, asset, handler);
-        TryDebit(player, asset.downPayment, newHandler);
+        if (success && player != null && asset != null)
+        {
+            player.portfolio.properties.Add(asset);
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyRealEstate(
+        Player player, AbstractRealEstate asset, TransactionHandler handler)
+    {
+        TryDebit(
+            player,
+            asset.downPayment,
+            (bool b) => buyRealEstateTransactionHandler(player, asset, handler, b));
+    }
+
+    private static void applyJobTransactionHandler(
+        Player player, Profession job, TransactionHandler handler, bool success)
+    {
+        if (success)
+        {
+            player.AddJob(job);
+        }
+        handler?.Invoke(success);
     }
 
     public static void ApplyJob(
-        Player player, Profession job, ITransactionHandler handler)
+        Player player, Profession job, TransactionHandler handler)
     {
-        ITransactionHandler newHandler = new ApplyJobTransactionCallback(
-            player, job, handler);
-        TryDebit(player, job.jobCost, newHandler);
+        TryDebit(
+            player,
+            job.jobCost,
+            (bool b) => applyJobTransactionHandler(player, job, handler, b));
     }
 
     public static void BuyStock(
         Player player,
         AbstractStock stock,
         int amount,
-        ITransactionHandler handler)
+        TransactionHandler handler)
     {
         bool success = false;
         int cost = amount * stock.value;
@@ -106,17 +72,14 @@ public static class TransactionManager
             success = true;
         }
 
-        if (handler != null)
-        {
-            handler.OnTransactionFinish(success);
-        }
+        handler?.Invoke(success);
     }
 
     public static void SellStock(
         Player player,
         AbstractStock stock,
         int amount,
-        ITransactionHandler handler)
+        TransactionHandler handler)
     {
         bool success = false;
         if (player.portfolio.TryRemoveStock(stock, amount))
@@ -125,9 +88,6 @@ public static class TransactionManager
             success = true;
         }
 
-        if (handler != null)
-        {
-            handler.OnTransactionFinish(success);
-        }
+        handler?.Invoke(success);
     }
 }

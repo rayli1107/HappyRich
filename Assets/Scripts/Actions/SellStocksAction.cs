@@ -4,7 +4,7 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class SellStocksAction : AbstractAction, ITransactionHandler
+    public class SellStocksAction : AbstractAction
     {
         private Player _player;
         private AbstractStock _stock;
@@ -58,15 +58,16 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.SellStock(_player, _stock, _numSold, this);
+                TransactionManager.SellStock(
+                    _player, _stock, _numSold, onTransactionFinish);
             }
             else
             {
-                OnTransactionFinish(false);
+                onTransactionFinish(false);
             }
         }
 
-        public void OnTransactionFinish(bool success)
+        private void onTransactionFinish(bool success)
         {
             if (success)
             {

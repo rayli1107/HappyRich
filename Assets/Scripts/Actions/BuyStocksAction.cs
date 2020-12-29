@@ -4,7 +4,7 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class BuyStocksAction : AbstractAction, ITransactionHandler
+    public class BuyStocksAction : AbstractAction
     {
         private Player _player;
         private AbstractStock _stock;
@@ -46,7 +46,8 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.BuyStock(_player, _stock, _numPrurchased, this);
+                TransactionManager.BuyStock(
+                    _player, _stock, _numPrurchased, onTransactionFinish);
             }
             else
             {
@@ -54,7 +55,7 @@ namespace Actions
             }
         }
 
-        public void OnTransactionFinish(bool success)
+        private void onTransactionFinish(bool success)
         {
             if (success)
             {

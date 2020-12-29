@@ -2,7 +2,7 @@
 
 namespace StateMachine
 {
-    public class PersonalEventState : IState, IEventState
+    public class PersonalEventState : IState
     {
         private StateMachine _stateMachine;
 
@@ -14,7 +14,7 @@ namespace StateMachine
         public void EnterState()
         {
             Debug.Log("PersonalEventState.EnterState");
-            new Events.Personal.PersonalEvent(this).Run();
+            new Events.Personal.PersonalEvent(onEventDone).Run();
         }
 
         public void ExitState()
@@ -25,7 +25,7 @@ namespace StateMachine
         {
         }
 
-        public void OnEventDone()
+        private void onEventDone()
         {
             _stateMachine.ChangeState(_stateMachine.MarketEventState);
         }

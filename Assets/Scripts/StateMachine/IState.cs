@@ -6,9 +6,4 @@
         void ExitState();
         void Update();
     }
-
-    public interface IEventState
-    {
-        void OnEventDone();
-    }
 }

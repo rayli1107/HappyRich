@@ -1,6 +1,6 @@
 ﻿namespace StateMachine
 {
-    public class MarketEventState : IState, IEventState
+    public class MarketEventState : IState
     {
         private StateMachine _stateMachine;
 
@@ -13,7 +13,7 @@
         {
             GameManager.Instance.StockManager.OnTurnStart(
                 GameManager.Instance.Random);
-            new Events.Market.MarketEvent(this).Run();
+            new Events.Market.MarketEvent(onEventDone).Run();
         }
 
         public void ExitState()
@@ -24,7 +24,7 @@
         {
         }
 
-        public void OnEventDone()
+        private void onEventDone()
         {
             _stateMachine.ChangeState(_stateMachine.PlayerActionState);
         }

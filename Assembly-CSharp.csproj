@@ -152,7 +152,6 @@
     <Compile Include="Assets\Scripts\Assets\RealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\RentalRealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\Stock.cs" />
-    <Compile Include="Assets\Scripts\Events\IEvent.cs" />
     <Compile Include="Assets\Scripts\Events\Market\MarketEvent.cs" />
     <Compile Include="Assets\Scripts\Events\Personal\JobLossEvent.cs" />
     <Compile Include="Assets\Scripts\Events\Personal\PersonalEvent.cs" />
@@ -169,7 +168,6 @@
     <Compile Include="Assets\Scripts\PlayerState\AbstractPlayerState.cs" />
     <Compile Include="Assets\Scripts\PlayerState\JobStates.cs" />
     <Compile Include="Assets\Scripts\PlayerState\MentalStates.cs" />
-    <Compile Include="Assets\Scripts\PlayerState\PlayerStateInterface.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\InvestmentPartnerProfile.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Profession.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\RealEstateProfile.cs" />
@@ -183,8 +181,6 @@
     <Compile Include="Assets\Scripts\StateMachine\PlayerPostActionState.cs" />
     <Compile Include="Assets\Scripts\StateMachine\StateMachine.cs" />
     <Compile Include="Assets\Scripts\StateMachine\VictoryState.cs" />
-    <Compile Include="Assets\Scripts\UI\Interfaces\IContactSelectCallback.cs" />
-    <Compile Include="Assets\Scripts\UI\Interfaces\IRefreshable.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\ActionMenuPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\InvestmentsPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\JobSearchPanel.cs" />

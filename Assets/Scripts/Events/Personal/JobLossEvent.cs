@@ -1,18 +1,18 @@
 ﻿using ScriptableObjects;
 using StateMachine;
+using System;
 using System.Collections.Generic;
-using UI;
 using UI.Panels.Templates;
 
 namespace Events.Personal
 {
-    public class JobLossEvent : IEvent
+    public class JobLossEvent
     {
-        private IEventState _state;
+        private Action _callback;
 
-        public JobLossEvent(IEventState state)
+        public JobLossEvent(Action eventDoneCallback)
         {
-            _state = state;
+            _callback = eventDoneCallback;
         }
 
         private Profession findJob(Player player)
@@ -37,7 +37,7 @@ namespace Events.Personal
             Profession job = findJob(player);
             if (job == null)
             {
-                _state.OnEventDone();
+                _callback?.Invoke();
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace Events.Personal
         private void messageBoxHandler(ButtonType button)
         {
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
-            _state.OnEventDone();
+            _callback?.Invoke();
         }
     }
 }

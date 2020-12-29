@@ -1,19 +1,20 @@
 ﻿using StateMachine;
+using System;
 
 namespace Events.Market
 {
-    public class MarketEvent : IEvent
+    public class MarketEvent
     {
-        private IEventState _state;
+        private Action _eventDoneCallback;
 
-        public MarketEvent(IEventState state)
+        public MarketEvent(Action eventDoneCallback)
         {
-            _state = state;
+            _eventDoneCallback = eventDoneCallback;
         }
 
         public void Run()
         {
-            _state.OnEventDone();
+            _eventDoneCallback?.Invoke();
         }
     }
 }

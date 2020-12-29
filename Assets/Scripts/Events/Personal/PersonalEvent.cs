@@ -1,19 +1,20 @@
 ﻿using StateMachine;
+using System;
 
 namespace Events.Personal
 {
-    public class PersonalEvent : IEvent
+    public class PersonalEvent
     {
-        private IEventState _state;
+        private Action _callback;
 
-        public PersonalEvent (IEventState state)
+        public PersonalEvent (Action eventDoneCallback)
         {
-            _state = state;
+            _callback = eventDoneCallback;
         }
 
         public void Run()
         {
-            _state.OnEventDone();
+            _callback?.Invoke();
 //            new JobLossEvent(_state).Run();
         }
     }

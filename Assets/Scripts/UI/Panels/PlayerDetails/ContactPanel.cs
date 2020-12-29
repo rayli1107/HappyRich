@@ -8,6 +8,8 @@ using UI.Panels.Templates;
 
 namespace UI.Panels.PlayerDetails
 {
+    public delegate void ContactSelectCallback(InvestmentPartner partner);
+
     public class ContactPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -29,7 +31,7 @@ namespace UI.Panels.PlayerDetails
 
         public Player player;
         public InvestmentPartner partner;
-        public IContactSelectCallback callback;
+        public ContactSelectCallback callback;
 
         public void Refresh()
         {
@@ -86,11 +88,8 @@ namespace UI.Panels.PlayerDetails
 
         public void OnSelectButton()
         {
-            if (callback != null)
-            {
-                callback.ContactSelect(partner);
-                GetComponentInParent<MessageBox>().Destroy();
-            }
+            callback?.Invoke(partner);
+            GetComponentInParent<MessageBox>().Destroy();
         }
     }
 }

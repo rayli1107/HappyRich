@@ -5,7 +5,7 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class FindNewJob : AbstractAction, ITransactionHandler
+    public class FindNewJob : AbstractAction
     {
         private Player _player;
         private Profession _job;
@@ -19,7 +19,8 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.ApplyJob(_player, _job, this);
+                TransactionManager.ApplyJob(
+                    _player, _job, onTransactionFinish);
             }
             else
             {
@@ -28,7 +29,7 @@ namespace Actions
             }
         }
 
-        public void OnTransactionFinish(bool success)
+        private void onTransactionFinish(bool success)
         {
             if (success)
             {

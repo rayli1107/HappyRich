@@ -8,12 +8,12 @@ namespace Actions
     {
         private Player _player;
         private int _amount;
-        private ITransactionHandler _transactionHandler;
+        private TransactionHandler _transactionHandler;
 
         public TakePersonalLoan(
             Player player,
             int amount,
-            ITransactionHandler transactionHandler)
+            TransactionHandler transactionHandler)
         {
             _player = player;
             _amount = amount;
@@ -29,7 +29,7 @@ namespace Actions
                 _player.portfolio.AddPersonalLoan(loanAmount);
                 success = true;
             }
-            _transactionHandler.OnTransactionFinish(success);
+            _transactionHandler?.Invoke(success);
         }
 
         public override void Start()

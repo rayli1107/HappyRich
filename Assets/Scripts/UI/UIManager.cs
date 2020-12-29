@@ -264,7 +264,7 @@ namespace UI
         }
 
         public void ShowContactListPanel(
-            IContactSelectCallback callback=null,
+            ContactSelectCallback callback=null,
             bool showHighRiskContacts=true,
             bool showLowRiskContacts=true)
         {

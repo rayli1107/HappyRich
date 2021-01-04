@@ -32,6 +32,7 @@ namespace Assets
             unitCount > 1 ? string.Format(template.label, unitCount) : template.label;
         public string description =>
             unitCount > 1 ? string.Format(template.description, unitCount) : template.description;
+        public override string name => label;
 
         public virtual int downPayment => purchasePrice - combinedLiability.amount;
 

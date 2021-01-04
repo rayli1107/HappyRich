@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 
         RealEstateManager = GetComponent<RealEstateManager>();
         RealEstateManager.Initialize(Random);
-        RealEstateManager.GetSmallInvestment(Random);
 
         StockManager = GetComponent<StockManager>();
         StockManager.Initialize(Random);

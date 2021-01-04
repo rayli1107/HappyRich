@@ -2,7 +2,7 @@
 using PlayerState;
 using ScriptableObjects;
 using System.Collections.Generic;
-
+using UnityEngine;
 public class PlayerSnapshot
 {
     public Player player { get; private set; }
@@ -15,6 +15,18 @@ public class PlayerSnapshot
     public int netWorth { get; private set; }
 
     public int cashflow => activeIncome + passiveIncome - expenses;
+    public int availablePersonalLoanAmount
+    {
+        get
+        {
+            int amount = cashflow / InterestRateManager.Instance.personalLoanRate * 100;
+            if (player.portfolio.personalLoan != null)
+            {
+                amount -= player.portfolio.personalLoan.amount;
+            }
+            return Mathf.Max(amount, 0);
+        }
+    }
 
     public PlayerSnapshot(Player player)
     {

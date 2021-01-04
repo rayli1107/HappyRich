@@ -142,6 +142,7 @@
     <Compile Include="Assets\Scripts\Actions\FindNewInvestors.cs" />
     <Compile Include="Assets\Scripts\Actions\FindNewJob.cs" />
     <Compile Include="Assets\Scripts\Actions\InvestmentAction.cs" />
+    <Compile Include="Assets\Scripts\Actions\MaintainRelationshipAction.cs" />
     <Compile Include="Assets\Scripts\Actions\QuitJob.cs" />
     <Compile Include="Assets\Scripts\Actions\SelfReflectionAction.cs" />
     <Compile Include="Assets\Scripts\Actions\SellStocksAction.cs" />

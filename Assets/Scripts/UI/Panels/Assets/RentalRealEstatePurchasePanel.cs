@@ -19,6 +19,10 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textAnnualIncome;
         [SerializeField]
+        private TextMeshProUGUI _textTotalLTV;
+        [SerializeField]
+        private TextMeshProUGUI _textOwnershipInterest;
+        [SerializeField]
         private TextMeshProUGUI _textMortgage;
         [SerializeField]
         private TextMeshProUGUI _textMortgagePercentage;
@@ -67,6 +71,18 @@ namespace UI.Panels.Assets
             if (_textAnnualIncome != null)
             {
                 _textAnnualIncome.text = local.GetCurrency(partialAsset.income);
+            }
+
+            if (_textTotalLTV != null)
+            {
+                float totalLTV = (float)asset.combinedLiability.amount / asset.value;
+                _textTotalLTV.text = local.GetPercentPlain(totalLTV, false);
+            }
+
+            if (_textOwnershipInterest != null)
+            {
+                _textOwnershipInterest.text = local.GetPercentPlain(
+                    partialAsset.equity, false);
             }
 
             if (_textMortgage != null)
@@ -134,6 +150,9 @@ namespace UI.Panels.Assets
                 _sliderMortgage.maxValue = asset.mortgage.maxltv / _sliderMultiplier;
                 _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
             }
+
+            _debtSummaryPanel.gameObject.SetActive(asset.privateLoanAmount > 0);
+            _equitySummaryPanel.gameObject.SetActive(partialAsset.investorShares > 0);
         }
 
         public void OnSliderChange()
@@ -208,8 +227,6 @@ namespace UI.Panels.Assets
         {
             partialAsset.OnPurchaseCancel();
             Refresh();
-            _equitySummaryPanel.gameObject.SetActive(false);
-            _debtSummaryPanel.gameObject.SetActive(false);
         }
 
         public void OnRaiseDebtButton()
@@ -226,14 +243,12 @@ namespace UI.Panels.Assets
         {
             partialAsset.ClearInvestors();
             Refresh();
-            _equitySummaryPanel.gameObject.SetActive(false);
         }
 
         public void OnCancelDebtButton()
         {
             asset.ClearPrivateLoans();
             Refresh();
-            _debtSummaryPanel.gameObject.SetActive(false);
         }
 
         public void OnSwitchViewButton(bool advanced)
@@ -267,7 +282,7 @@ namespace UI.Panels.Assets
             if (number > 0)
             {
                 partialAsset.AddInvestor(partner, number);
-                Refresh();
+                AdjustNumbers();
             }
         }
 
@@ -297,7 +312,7 @@ namespace UI.Panels.Assets
             if (number > 0)
             {
                 asset.AddPrivateLoan(new PrivateLoan(partner, number, rate));
-                Refresh();
+                AdjustNumbers();
             }
         }
 

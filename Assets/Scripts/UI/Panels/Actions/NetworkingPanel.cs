@@ -12,5 +12,11 @@ namespace UI.Panels.Actions
             UIManager.Instance.DestroyAllModal();
             new FindNewInvestors(player).Start();
         }
+
+        public void OnMaintainRelationshipButton()
+        {
+            UIManager.Instance.DestroyAllModal();
+            new MaintainRelationshipAction(player).Start();
+        }
     }
 }

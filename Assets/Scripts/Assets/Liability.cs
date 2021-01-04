@@ -4,7 +4,7 @@ namespace Assets
 {
     public class AbstractLiability
     {
-        public string name { get; private set; }
+        public virtual string name { get; private set; }
         public virtual int amount { get; private set; }
         public int interestRate { get; private set; }
         public virtual int expense => amount * interestRate / 100;
@@ -76,7 +76,7 @@ namespace Assets
     public class CombinedLiability : AbstractLiability
     {
         public AbstractAsset asset { get; private set; }
-
+        public override string name => string.Format("Liability - {0}", asset.name);
         public override int amount
         {
             get
@@ -103,8 +103,7 @@ namespace Assets
             }
         }
 
-        public CombinedLiability(AbstractAsset asset)
-            : base(string.Format("Liability - {0}", asset.name), 0, 0)
+        public CombinedLiability(AbstractAsset asset) : base("", 0, 0)
         {
             this.asset = asset;
         }

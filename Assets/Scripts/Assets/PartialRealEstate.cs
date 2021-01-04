@@ -15,6 +15,7 @@ namespace Assets
         public int amountPerShare => Mathf.FloorToInt(asset.downPayment * equityPerShare / equitySplit);
 
         private List<Investment> _investorShares;
+        public override string name => asset.name;
 
         public int investorShares
         {

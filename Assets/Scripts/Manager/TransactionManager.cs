@@ -14,7 +14,25 @@ public static class TransactionManager
         }
         else
         {
-            new Actions.TakePersonalLoan(player, amount, handler).Start();
+            int loanAmount = amount - player.cash;
+            int maxLoanAmount = new PlayerSnapshot(player).availablePersonalLoanAmount;
+            if (loanAmount <= maxLoanAmount)
+            {
+                new Actions.TakePersonalLoan(player, amount, handler).Start();
+            }
+            else
+            {
+                Localization local = Localization.Instance;
+                string message = string.Format(
+                    "You'd need to take out a personal loan of {0} but the maximum amount " +
+                    "you can borrow is {1}",
+                    local.GetCurrency(loanAmount),
+                    local.GetCurrency(maxLoanAmount));
+                UI.UIManager.Instance.ShowSimpleMessageBox(
+                    message,
+                    UI.Panels.Templates.ButtonChoiceType.OK_ONLY,
+                    (_) => handler?.Invoke(false));
+            }
         }
     }
 

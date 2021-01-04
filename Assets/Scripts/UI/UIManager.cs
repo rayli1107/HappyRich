@@ -300,7 +300,7 @@ namespace UI
         {
             Localization local = Localization.Instance;
             string message = string.Join("\n", local.GetPlayerState(state), state.description);
-            UIManager.Instance.ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
+            ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
         }
 
         public void DestroyAllModal()

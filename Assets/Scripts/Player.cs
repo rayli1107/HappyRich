@@ -245,7 +245,7 @@ public class Player
 
     public int defaultHappiness { get; private set; }
     public List<InvestmentPartner> contacts { get; private set; }
-
+    public List<SkillInfo> skills { get; private set; }
 
     public Player(Profession profession, int defaultHappiness)
     {
@@ -253,6 +253,7 @@ public class Player
         jobs = new List<Profession>();
         jobs.Add(profession);
         portfolio = new Portfolio(profession);
+        skills = new List<SkillInfo>();
 
         _personalExpenses = profession.personalExpenses;
         _costPerChild = profession.costPerChild;
@@ -262,11 +263,13 @@ public class Player
 
         contacts = new List<InvestmentPartner>();
 
-        passiveStates = new List<PlayerState.AbstractPlayerState>();
-        mentalStates = new List<PlayerState.AbstractPlayerState>();
+        passiveStates = new List<AbstractPlayerState>()
+        {
+            new OneJobState(),
+            new TwoJobState()
+        };
 
-        passiveStates.Add(new PlayerState.OneJobState());
-        passiveStates.Add(new PlayerState.TwoJobState());
+        mentalStates = new List<AbstractPlayerState>();
     }
 
     public void OnPlayerTurnStart()
@@ -312,5 +315,25 @@ public class Player
     public void AddMentalState(AbstractPlayerState state)
     {
         mentalStates.Add(state);
+    }
+
+    public bool HasSkill(SkillType skillType)
+    {
+        foreach (SkillInfo skillInfo in skills)
+        {
+            if (skillInfo.skillType == skillType)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void AddSkill(SkillInfo skillInfo)
+    {
+        if (!HasSkill(skillInfo.skillType))
+        {
+            skills.Add(skillInfo);
+        }
     }
 }

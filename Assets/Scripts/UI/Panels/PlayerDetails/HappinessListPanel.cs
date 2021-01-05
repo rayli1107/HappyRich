@@ -1,6 +1,7 @@
 ﻿using Actions;
 using Assets;
 using PlayerState;
+using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
@@ -8,21 +9,6 @@ using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {
-    public class PlayerStateClickHandler : AbstractAction
-    {
-        private AbstractPlayerState _state;
-
-        public PlayerStateClickHandler(AbstractPlayerState state)
-        {
-            _state = state;
-        }
-
-        public override void Start()
-        {
-            UIManager.Instance.ShowPlayerStateInfo(_state, null);
-        }
-    }
-
     public class HappinessListPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -39,7 +25,7 @@ namespace UI.Panels.PlayerDetails
         }
 
         private void AddItem(
-            Transform parentTranform, string label, int value, AbstractPlayerState state)
+            Transform parentTranform, string label, int value, Action clickAction)
         {
             if (value == 0)
             {
@@ -51,9 +37,9 @@ namespace UI.Panels.PlayerDetails
             panel.setValueAsChange(value);
             panel.setTabCount(1);
 
-            if (state != null)
+            if (clickAction != null)
             {
-                panel.clickAction = new PlayerStateClickHandler(state).Start;
+                panel.clickAction = clickAction;
                 panel.EnableClick(true);
             }
         }
@@ -72,7 +58,8 @@ namespace UI.Panels.PlayerDetails
             foreach (AbstractPlayerState state in player.states)
             {
                 int modifier = state.happinessModifier;
-                AddItem(parentTransform, state.name, modifier, state);
+                Action action = () => UIManager.Instance.ShowPlayerStateInfo(state, null);
+                AddItem(parentTransform, state.name, modifier, action);
                 totalHappiness += modifier;
             }
             _panelTotalHappiness.setValuePlain(totalHappiness);

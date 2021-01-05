@@ -11,6 +11,7 @@ using UI.Panels.Templates;
 using UI.Panels.Actions;
 using PlayerState;
 using System;
+using ScriptableObjects;
 
 namespace UI
 {
@@ -47,14 +48,10 @@ namespace UI
         private HappinessListPanel _prefabHappinessListPanel;
         [SerializeField]
         private JobListPanel _prefabJobListPanel;
-
+        [SerializeField]
+        private TraitsSkillsListPanel _prefabTraitsSkillsListPanel;
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
-        [SerializeField]
-        private GameObject _prefabScrollableTextPanel;
-        [SerializeField]
-        private GameObject _prefabSimpleTextPanel;
-
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
@@ -278,6 +275,14 @@ namespace UI
             panel.Refresh();
         }
 
+        public void ShowTraitsSkillsListPanel()
+        {
+            TraitsSkillsListPanel panel = Instantiate(
+                _prefabTraitsSkillsListPanel, transform);
+            panel.player = GameManager.Instance.player;
+            panel.Refresh();
+        }
+
         public void ShowJobListPanel(JobListPanelMode mode)
         {
             Player player = GameManager.Instance.player;
@@ -299,9 +304,19 @@ namespace UI
         public void ShowPlayerStateInfo(AbstractPlayerState state, MessageBoxHandler callback)
         {
             Localization local = Localization.Instance;
-            string message = string.Join("\n", local.GetPlayerState(state), state.description);
+            string message = string.Join(
+                "\n", local.GetPlayerState(state), state.description);
             ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
         }
+
+        public void ShowSkillInfo(SkillInfo skillInfo, MessageBoxHandler callback)
+        {
+            Localization local = Localization.Instance;
+            string message = string.Join(
+                "\n", local.GetSkill(skillInfo), skillInfo.skillDescription);
+            ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
+        }
+
 
         public void DestroyAllModal()
         {

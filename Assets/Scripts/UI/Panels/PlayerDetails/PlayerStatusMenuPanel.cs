@@ -31,5 +31,10 @@ namespace UI.Panels.PlayerDetails
         {
             UIManager.Instance.ShowHappinessListPanel();
         }
+
+        public void ShowTraitsSkillListPanel()
+        {
+            UIManager.Instance.ShowTraitsSkillsListPanel();
+        }
     }
 }

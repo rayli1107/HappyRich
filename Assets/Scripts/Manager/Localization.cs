@@ -1,4 +1,5 @@
 ﻿using ScriptableObjects;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Localization : MonoBehaviour
@@ -18,6 +19,8 @@ public class Localization : MonoBehaviour
     private Color _colorPlayerState = Color.white;
     [SerializeField]
     private Color _colorWarning = new Color(255, 160, 0);
+    [SerializeField]
+    private Color _colorSkill = Color.yellow;
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -97,6 +100,16 @@ public class Localization : MonoBehaviour
             return amount.ToString("C0");
         }
     }
+
+    public string GetCurrencyPlain(int amount)
+    {
+        if (amount < 0)
+        {
+            return "-" + GetAbsCurrency(-1 * amount);
+        }
+        return GetAbsCurrency(amount);
+    }
+
     public string GetCurrency(int amount, bool flipped=false)
     {
         bool positive = amount >= 0;
@@ -108,9 +121,9 @@ public class Localization : MonoBehaviour
         Color c = positive ? _colorPositive : _colorNegative;
         if (amount < 0)
         {
-            return colorWrap("-" + GetAbsCurrency(-1 * amount), c);
+            return colorWrap(GetCurrencyPlain(amount), c);
         }
-        return colorWrap(GetAbsCurrency(amount), c);
+        return colorWrap(GetCurrencyPlain(amount), c);
     }
 
     public string GetPercentPlain(float pct, bool showPositive=true)
@@ -141,5 +154,10 @@ public class Localization : MonoBehaviour
         {
             return colorWrap(value.ToString(), _colorNegative);
         }
+    }
+
+    public string GetSkill(SkillInfo skill)
+    {
+        return colorWrap(skill.skillName, _colorSkill);
     }
 }

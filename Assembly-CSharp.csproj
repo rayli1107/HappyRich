@@ -147,6 +147,7 @@
     <Compile Include="Assets\Scripts\Actions\SelfReflectionAction.cs" />
     <Compile Include="Assets\Scripts\Actions\SellStocksAction.cs" />
     <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
+    <Compile Include="Assets\Scripts\Actions\TrainingAction.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
     <Compile Include="Assets\Scripts\Assets\PartialRealEstate.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Assets\Scripts\Manager\Localization.cs" />
     <Compile Include="Assets\Scripts\Manager\RealEstateManager.cs" />
     <Compile Include="Assets\Scripts\Manager\SelfImprovementManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\SkillManager.cs" />
     <Compile Include="Assets\Scripts\Manager\StockManager.cs" />
     <Compile Include="Assets\Scripts\Manager\TransactionManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Assets\Scripts\ScriptableObjects\InvestmentPartnerProfile.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Profession.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\RealEstateProfile.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObjects\SkillInfo.cs" />
     <Compile Include="Assets\Scripts\StateMachine\GameInitState.cs" />
     <Compile Include="Assets\Scripts\StateMachine\GameOverState.cs" />
     <Compile Include="Assets\Scripts\StateMachine\IState.cs" />
@@ -202,6 +205,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\JobListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\JobPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\PlayerStatusMenuPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\PlayerDetails\TraitsSkillsListPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\PlayerSnapshotPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Templates\ExpandableContent.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Templates\ItemListPanel.cs" />

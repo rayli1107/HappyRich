@@ -108,4 +108,26 @@ public static class TransactionManager
 
         handler?.Invoke(success);
     }
+
+    private static void learnSkillTransactionHandler(
+        Player player, SkillInfo skill, TransactionHandler handler, bool success)
+    {
+        if (success)
+        {
+            player.AddSkill(skill);
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void LearnSkill(
+        Player player,
+        SkillInfo skill,
+        int cost,
+        TransactionHandler handler)
+    {
+        TryDebit(
+            player,
+            cost,
+            (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Actions;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,7 +20,7 @@ namespace UI.Panels.Templates
         private float tabWidth = 40;
 #pragma warning restore 0649
 
-        public UnityAction clickAction = null;
+        public Action clickAction = null;
         public int tabCount { get; private set; }
 
         public void setTabCount(int i)

@@ -1,4 +1,5 @@
 ﻿using Assets;
+using ScriptableObjects;
 using System;
 using TMPro;
 using UI.Panels.Templates;
@@ -14,6 +15,8 @@ namespace UI.Panels.Assets
         private TextMeshProUGUI _textMessage;
         [SerializeField]
         private TextMeshProUGUI _textPurchasePrice;
+        [SerializeField]
+        private TextMeshProUGUI _textEstimatedValue;
         [SerializeField]
         private TextMeshProUGUI _textDownPayment;
         [SerializeField]
@@ -139,8 +142,21 @@ namespace UI.Panels.Assets
 
             if (_textPurchasePrice != null)
             {
-                _textPurchasePrice.text = local.GetCurrency(
-                    asset.purchasePrice, true);
+                _textPurchasePrice.text = local.GetCurrencyPlain(
+                    asset.purchasePrice);
+            }
+
+            if (_textEstimatedValue != null)
+            {
+                if (player.HasSkill(SkillType.REAL_ESTATE_VALUATION))
+                {
+                    _textEstimatedValue.text = local.GetCurrencyPlain(
+                        asset.template.basePrice);
+                }
+                else
+                {
+                    _textEstimatedValue.text = "???";
+                }
             }
 
             AdjustNumbers();

@@ -12,5 +12,11 @@ namespace UI.Panels.Actions
             UIManager.Instance.DestroyAllModal();
             new SelfReflectionAction(player).Start();
         }
+
+        public void OnTrainingButton()
+        {
+            UIManager.Instance.DestroyAllModal();
+            new TrainingAction(player).Start();
+        }
     }
 }

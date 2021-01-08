@@ -5,9 +5,8 @@ using UnityEngine;
 using Investment = System.Tuple<InvestmentPartner, int>;
 
 namespace Assets
-{
-    
-    public class PartialRealEstate : AbstractRealEstate
+{    
+    public class PartialRealEstate : AbstractAsset
     {
         public AbstractRealEstate asset { get; private set; }
         public float equitySplit { get; private set; }
@@ -36,7 +35,7 @@ namespace Assets
 
         public bool hasInvestors => _investorShares.Count > 0;
 
-        public override int downPayment => asset.downPayment - investorAmount;
+        public int fundsNeeded => asset.downPayment - investorAmount;
         public float equity => 1 - investorEquity;
 
         public override int value => asset.value - investorAmount;
@@ -45,7 +44,7 @@ namespace Assets
 
         public PartialRealEstate(
             AbstractRealEstate asset, float equitySplit, float equityPerShare) :
-            base(asset)
+            base("", 0, 0)
         {
             this.asset = asset;
             this.equitySplit = equitySplit;

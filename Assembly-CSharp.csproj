@@ -149,6 +149,7 @@
     <Compile Include="Assets\Scripts\Actions\TakePersonalLoan.cs" />
     <Compile Include="Assets\Scripts\Actions\TrainingAction.cs" />
     <Compile Include="Assets\Scripts\Assets\Asset.cs" />
+    <Compile Include="Assets\Scripts\Assets\DistressedRealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
     <Compile Include="Assets\Scripts\Assets\PartialRealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\RealEstate.cs" />
@@ -191,9 +192,11 @@
     <Compile Include="Assets\Scripts\UI\Panels\Actions\NetworkingPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\SelfImprovementPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\DebtOfferingPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\DistressedRealEstatePurchasePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\EquityOfferingPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\MortgageControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\RentalRealEstatePurchasePanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\RentalRealEstateRefinancePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockMarketPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\StockPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\NumberInputPanel.cs" />

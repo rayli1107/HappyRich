@@ -52,8 +52,10 @@ namespace Actions
 
         public void ShowPurchasePanel()
         {
-            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                (RentalRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
+            //            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
+            //                (RentalRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
+            UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
+                (DistressedRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
         }
 
         public void ShowCancelConfirmPanel()
@@ -66,7 +68,6 @@ namespace Actions
 
         public override void Start()
         {
-            RealEstateManager manager = GameManager.Instance.RealEstateManager;
             _partialAsset = new PartialRealEstate(
                 _asset,
                 RealEstateManager.Instance.defaultEquitySplit,

@@ -110,7 +110,7 @@ namespace UI.Panels.PlayerDetails
             // Real Estate
             if (player.portfolio.properties.Count > 0)
             {
-                foreach (AbstractRealEstate asset in player.portfolio.properties)
+                foreach (PartialRealEstate asset in player.portfolio.properties)
                 {
                     totalRealEstate += asset.value;
                     if (asset.combinedLiability.amount > 0)
@@ -127,7 +127,7 @@ namespace UI.Panels.PlayerDetails
                     0,
                     false);
 
-                foreach (AbstractRealEstate asset in player.portfolio.properties)
+                foreach (PartialRealEstate asset in player.portfolio.properties)
                 {
                     currentIndex = AddItemValueAsCurrency(
                         _panelAssets.transform.parent,

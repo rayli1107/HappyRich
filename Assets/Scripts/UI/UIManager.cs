@@ -43,6 +43,10 @@ namespace UI
         [SerializeField]
         private RentalRealEstatePurchasePanel _prefabSimpleRentalRealEstatePurchasePanel;
         [SerializeField]
+        private DistressedRealEstatePurchasePanel _prefabAdvancedDistressedRealEstatePurchasePanel;
+        [SerializeField]
+        private DistressedRealEstatePurchasePanel _prefabSimpleDistressedRealEstatePurchasePanel;
+        [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
@@ -262,15 +266,36 @@ namespace UI
             panel.Refresh();
         }
 
+        public void ShowDistressedRealEstatePurchasePanel(
+            Assets.DistressedRealEstate asset,
+            Assets.PartialRealEstate partialAsset,
+            MessageBoxHandler handler,
+            bool advanced)
+        {
+            DistressedRealEstatePurchasePanel panel = Instantiate(
+                advanced ?
+                _prefabAdvancedDistressedRealEstatePurchasePanel :
+                _prefabSimpleDistressedRealEstatePurchasePanel,
+                transform);
+
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+            panel.Refresh();
+        }
+
         public void ShowContactListPanel(
             ContactSelectCallback callback=null,
             bool showHighRiskContacts=true,
+            bool showMidRiskContacts=true,
             bool showLowRiskContacts=true)
         {
             ContactListPanel panel = Instantiate(_prefabContactListPanel, transform);
             panel.player = GameManager.Instance.player;
             panel.callback = callback;
             panel.showHighRiskContacts = showHighRiskContacts;
+            panel.showMidRiskContacts = showMidRiskContacts;
             panel.showLowRiskContacts = showLowRiskContacts;
             panel.Refresh();
         }

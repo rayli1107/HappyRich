@@ -18,6 +18,7 @@ namespace UI.Panels.PlayerDetails
         public Player player;
         public ContactSelectCallback callback;
         public bool showLowRiskContacts;
+        public bool showMidRiskContacts;
         public bool showHighRiskContacts;
 
         public void Refresh()
@@ -37,7 +38,7 @@ namespace UI.Panels.PlayerDetails
                         show = showHighRiskContacts;
                         break;
                     case RiskTolerance.kMedium:
-                        show = true;
+                        show = showMidRiskContacts;
                         break;
                     case RiskTolerance.kLow:
                         show = showLowRiskContacts;

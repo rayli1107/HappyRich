@@ -4,11 +4,10 @@ using System;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class RentalRealEstatePurchasePanel : MonoBehaviour
+    public class DistressedRealEstatePurchasePanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -16,47 +15,31 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textPurchasePrice;
         [SerializeField]
+        private TextMeshProUGUI _textRehabPrice;
+        [SerializeField]
+        private TextMeshProUGUI _textInterestFee;
+        [SerializeField]
         private TextMeshProUGUI _textEstimatedValue;
         [SerializeField]
-        private TextMeshProUGUI _textDownPayment;
-        [SerializeField]
-        private TextMeshProUGUI _textAnnualIncome;
+        private TextMeshProUGUI _textFundsNeeded;
         [SerializeField]
         private TextMeshProUGUI _textTotalLTV;
         [SerializeField]
         private TextMeshProUGUI _textOwnershipInterest;
         [SerializeField]
-        private TextMeshProUGUI _textMortgage;
-        [SerializeField]
-        private TextMeshProUGUI _textMortgagePercentage;
-        [SerializeField]
-        private TextMeshProUGUI _textMortgagePayment;
-        [SerializeField]
         private TextMeshProUGUI _textPrivateLoanAmount;
         [SerializeField]
-        private TextMeshProUGUI _textPrivateLoanPayment;
-        [SerializeField]
         private TextMeshProUGUI _textInvestorAmount;
-        [SerializeField]
-        private TextMeshProUGUI _textInvestorCashflow;
-        [SerializeField]
-        private RectTransform _debtSummaryPanel;
         [SerializeField]
         private RectTransform _equitySummaryPanel;
         [SerializeField]
         private DebtOfferingPanel _prefabDebtOfferingPanel;
         [SerializeField]
         private EquityOfferingPanel _prefabEquityOfferingPanel;
-        [SerializeField]
-        private Slider _sliderMortgage;
-        [SerializeField]
-        private Button _buttonRaiseDebt;
-        [SerializeField]
-        private int _sliderMultiplier = 5;
 #pragma warning restore 0649
 
         public Player player;
-        public RentalRealEstate asset;
+        public DistressedRealEstate asset;
         public PartialRealEstate partialAsset;
 
         private void AdjustNumbers()
@@ -66,14 +49,9 @@ namespace UI.Panels.Assets
             int privateLoanAmount = asset.privateLoanAmount;
             int investorAmount = partialAsset.investorAmount;
 
-            if (_textDownPayment != null)
+            if (_textFundsNeeded != null)
             {
-                _textDownPayment.text = local.GetCurrency(partialAsset.fundsNeeded, true);
-            }
-
-            if (_textAnnualIncome != null)
-            {
-                _textAnnualIncome.text = local.GetCurrency(partialAsset.income);
+                _textFundsNeeded.text = local.GetCurrency(partialAsset.fundsNeeded, true);
             }
 
             if (_textTotalLTV != null)
@@ -88,39 +66,20 @@ namespace UI.Panels.Assets
                     partialAsset.equity, false);
             }
 
-            if (_textMortgage != null)
-            {
-                _textMortgage.text = local.GetCurrency(asset.mortgage.amount, true);
-            }
-
-            if (_textMortgagePercentage != null)
-            {
-                _textMortgagePercentage.text = string.Format("{0}%", asset.mortgage.ltv);
-            }
-
-            if (_textMortgagePayment != null)
-            {
-                _textMortgagePayment.text = local.GetCurrency(asset.mortgage.expense, true);
-            }
-
             if (_textPrivateLoanAmount != null)
             {
                 _textPrivateLoanAmount.text = local.GetCurrency(privateLoanAmount, true);
             }
 
-            if (_textPrivateLoanPayment != null)
+            if (_textInterestFee != null)
             {
-                _textPrivateLoanPayment.text = local.GetCurrency(asset.privateLoanPayment, true);
+                _textInterestFee.text = local.GetCurrencyPlain(
+                    asset.privateLoanDelayedPayment);
             }
 
             if (_textInvestorAmount != null)
             {
                 _textInvestorAmount.text = local.GetCurrency(investorAmount);
-            }
-
-            if (_textInvestorCashflow != null)
-            {
-                _textInvestorCashflow.text = local.GetCurrency(partialAsset.investorCashflow);
             }
         }
 
@@ -146,6 +105,11 @@ namespace UI.Panels.Assets
                     asset.purchasePrice);
             }
 
+            if (_textRehabPrice != null)
+            {
+                _textRehabPrice.text = local.GetCurrencyPlain(asset.rehabPrice);
+            }
+
             if (_textEstimatedValue != null)
             {
                 if (player.HasSkill(SkillType.REAL_ESTATE_VALUATION))
@@ -161,30 +125,9 @@ namespace UI.Panels.Assets
 
             AdjustNumbers();
 
-            if (_sliderMortgage != null)
-            {
-                _sliderMortgage.maxValue = asset.mortgage.maxltv / _sliderMultiplier;
-                _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
-            }
-
-            if (_debtSummaryPanel != null)
-            {
-                _debtSummaryPanel.gameObject.SetActive(asset.privateLoanAmount > 0);
-            }
-
             if (_equitySummaryPanel != null)
             {
                 _equitySummaryPanel.gameObject.SetActive(partialAsset.investorShares > 0);
-            }
-        }
-
-        public void OnSliderChange()
-        {
-            if (asset != null)
-            {
-                asset.mortgage.ltv = Mathf.RoundToInt(
-                    _sliderMortgage.value * _sliderMultiplier);
-                AdjustNumbers();
             }
         }
 
@@ -231,7 +174,7 @@ namespace UI.Panels.Assets
         public void OnOfferDebtButton()
         {
             UIManager.Instance.ShowContactListPanel(
-                offerDebtContactSelect, false, true, true);
+                offerDebtContactSelect, false, true, false);
         }
 
         public void OnOfferEquityButton()
@@ -245,18 +188,13 @@ namespace UI.Panels.Assets
             }
 
             UIManager.Instance.ShowContactListPanel(
-                offerEquityContactSelect, true, true, false);
+                offerEquityContactSelect, true, false, false);
         }
 
         public void OnResetButton()
         {
             partialAsset.OnPurchaseCancel();
             Refresh();
-        }
-
-        public void OnRaiseDebtButton()
-        {
-            _debtSummaryPanel.gameObject.SetActive(true);
         }
 
         public void OnRaiseEquityButton()
@@ -270,18 +208,12 @@ namespace UI.Panels.Assets
             Refresh();
         }
 
-        public void OnCancelDebtButton()
-        {
-            asset.ClearPrivateLoans();
-            Refresh();
-        }
-
         public void OnSwitchViewButton(bool advanced)
         {
             MessageBox messageBox = GetComponent<MessageBox>();
             gameObject.SetActive(false);
             messageBox.Destroy();
-            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
+            UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
                 asset, partialAsset, messageBox.messageBoxHandler, advanced);
         }
 
@@ -313,11 +245,8 @@ namespace UI.Panels.Assets
 
         private void offerDebtContactSelect(InvestmentPartner partner)
         {
-            int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
-            int maxLoan = Mathf.Min(
-                partner.cash,
-                asset.income * 100 / rate,
-                asset.downPayment);
+            int rate = InterestRateManager.Instance.distressedLoanRate;
+            int maxLoan = Mathf.Min(partner.cash, asset.purchasePrice);
 
             if (maxLoan <= 0)
             {
@@ -337,7 +266,7 @@ namespace UI.Panels.Assets
             if (number > 0)
             {
                 asset.AddPrivateLoan(
-                    new PrivateLoan(partner, number, rate, false));
+                    new PrivateLoan(partner, number, rate, true));
                 AdjustNumbers();
             }
         }

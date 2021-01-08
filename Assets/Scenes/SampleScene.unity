@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 204261755}
   - component: {fileID: 204261756}
   - component: {fileID: 204261757}
+  - component: {fileID: 204261758}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -157,6 +158,7 @@ MonoBehaviour:
   _studentLoanRate: 3
   _autoLoanRate: 3
   _realEstateLoanRate: 4
+  _distressedLoanRate: 10
   _personalLoanRate: 15
   _defaultPrivateLoanRate: 6
 --- !u!114 &204261752
@@ -239,6 +241,7 @@ MonoBehaviour:
   _colorName: {r: 1, g: 0.62352943, b: 0, a: 1}
   _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
+  _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &204261757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +260,24 @@ MonoBehaviour:
   _maxMortgageLTV: 75
   _defaultEquitySplit: 0.8
   _defaultEquityPerShare: 0.01
+  _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
+  _distressedRehabPriceRange: {x: 0.1, y: 0.3}
+--- !u!114 &204261758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204261750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8019abc950083504b88f855b37d9fd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skills:
+  - {fileID: 11400000, guid: b67043cd54bc8b241a6e846cdfb28ef8, type: 2}
+  _initialCost: 20000
+  _additionalCost: 10000
 --- !u!1 &456001304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
@@ -1274,17 +1295,19 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: 8823dda7bf2d16840803217cbfe9ac3b,
     type: 3}
+  _prefabAdvancedDistressedRealEstatePurchasePanel: {fileID: 6591950491861933537,
+    guid: 34980d2eaf7e72445bbdab62b900ac00, type: 3}
+  _prefabSimpleDistressedRealEstatePurchasePanel: {fileID: 6591950491861933537, guid: 5c32221f9476e244da257ba92000d174,
+    type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}
   _prefabHappinessListPanel: {fileID: 1523913901218779723, guid: f0222205e8367154ab138d1e2a7fb96d,
     type: 3}
   _prefabJobListPanel: {fileID: 6644454022926503088, guid: 26ed666471391854495e3ed23f28b1ce,
     type: 3}
+  _prefabTraitsSkillsListPanel: {fileID: 5051386895941644146, guid: e8df78297be4a7146b2223cc3ed3adc2,
+    type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
-    type: 3}
-  _prefabScrollableTextPanel: {fileID: 1382692242357073638, guid: 0049d425f6e30c749b728a4c6d6cdf32,
-    type: 3}
-  _prefabSimpleTextPanel: {fileID: 7061017048023922611, guid: d6aa43a3069159948be94f7eb3338ee8,
     type: 3}
 --- !u!114 &1690758058
 MonoBehaviour:

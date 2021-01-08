@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class RentalRealEstatePurchasePanel : MonoBehaviour
+    public class RentalRealEstateRefinancePanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -167,15 +167,8 @@ namespace UI.Panels.Assets
                 _sliderMortgage.value = asset.mortgage.ltv / _sliderMultiplier;
             }
 
-            if (_debtSummaryPanel != null)
-            {
-                _debtSummaryPanel.gameObject.SetActive(asset.privateLoanAmount > 0);
-            }
-
-            if (_equitySummaryPanel != null)
-            {
-                _equitySummaryPanel.gameObject.SetActive(partialAsset.investorShares > 0);
-            }
+            _debtSummaryPanel.gameObject.SetActive(asset.privateLoanAmount > 0);
+            _equitySummaryPanel.gameObject.SetActive(partialAsset.investorShares > 0);
         }
 
         public void OnSliderChange()

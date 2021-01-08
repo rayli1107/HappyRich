@@ -74,7 +74,7 @@ public class Portfolio
     public Car car { get; private set; }
     public int cash { get; private set; }
     public Dictionary<string, PurchasedStock> stocks { get; private set; }
-    public List<AbstractRealEstate> properties { get; private set; }
+    public List<PartialRealEstate> properties { get; private set; }
 
     public List<AbstractAsset> assets
     {
@@ -136,7 +136,7 @@ public class Portfolio
 
         cash = profession.startingCash;
         stocks = new Dictionary<string, PurchasedStock>();
-        properties = new List<AbstractRealEstate>();
+        properties = new List<PartialRealEstate>();
     }
 
     public void AddPersonalLoan(int amount)

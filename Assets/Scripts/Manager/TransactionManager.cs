@@ -37,7 +37,7 @@ public static class TransactionManager
     }
 
     private static void buyRealEstateTransactionHandler(
-        Player player, AbstractRealEstate asset, TransactionHandler handler, bool success)
+        Player player, PartialRealEstate asset, TransactionHandler handler, bool success)
     {
         if (success && player != null && asset != null)
         {
@@ -47,11 +47,11 @@ public static class TransactionManager
     }
 
     public static void BuyRealEstate(
-        Player player, AbstractRealEstate asset, TransactionHandler handler)
+        Player player, PartialRealEstate asset, TransactionHandler handler)
     {
         TryDebit(
             player,
-            asset.downPayment,
+            asset.fundsNeeded,
             (bool b) => buyRealEstateTransactionHandler(player, asset, handler, b));
     }
 

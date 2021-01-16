@@ -17,9 +17,7 @@ namespace UI.Panels.PlayerDetails
 
         public Player player;
         public ContactSelectCallback callback;
-        public bool showLowRiskContacts;
-        public bool showMidRiskContacts;
-        public bool showHighRiskContacts;
+        public List<InvestmentPartner> partners;
 
         public void Refresh()
         {
@@ -31,27 +29,11 @@ namespace UI.Panels.PlayerDetails
             Transform content = GetComponentInChildren<ScrollRect>(true).content.transform;
             foreach (InvestmentPartner partner in player.contacts)
             {
-                bool show = false;
-                switch (partner.riskTolerance)
-                {
-                    case RiskTolerance.kHigh:
-                        show = showHighRiskContacts;
-                        break;
-                    case RiskTolerance.kMedium:
-                        show = showMidRiskContacts;
-                        break;
-                    case RiskTolerance.kLow:
-                        show = showLowRiskContacts;
-                        break;
-                }
-                if (show)
-                {
-                    ContactPanel panel = Instantiate(_prefabContactPanel, content);
-                    panel.player = player;
-                    panel.partner = partner;
-                    panel.callback = callback;
-                    panel.Refresh();
-                }
+                ContactPanel panel = Instantiate(_prefabContactPanel, content);
+                panel.player = player;
+                panel.partner = partner;
+                panel.callback = callback;
+                panel.Refresh();
             }
 
             if (content.childCount == 0)
@@ -61,8 +43,6 @@ namespace UI.Panels.PlayerDetails
                 GetComponent<MessageBox>().Destroy();
                 return;
             }
-
-
         }
 
         private void OnEnable()

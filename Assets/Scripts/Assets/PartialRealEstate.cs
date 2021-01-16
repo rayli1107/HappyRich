@@ -38,7 +38,34 @@ namespace Assets
         public int fundsNeeded => asset.downPayment - investorAmount;
         public float equity => 1 - investorEquity;
 
-        public override int value => asset.value - investorAmount;
+        public override int value
+        {
+            get
+            {
+                Localization local = Localization.Instance;
+                int loanAmount = combinedLiability.amount;
+                int loanEquity = Mathf.Min(loanAmount, asset.value);
+                Debug.LogFormat("Loan Equity {0}", loanEquity);
+
+                int capital = asset.downPayment;
+                int capitalEquity = fundsNeeded;
+                Debug.LogFormat(
+                    "Capital {0} {1}",
+                    local.GetCurrencyPlain(capital),
+                    local.GetCurrencyPlain(capitalEquity));
+
+                int newEquityTotal = Mathf.Max(asset.value - asset.purchasePrice, 0);
+                int newEquity = Mathf.FloorToInt(equity * newEquityTotal);
+                Debug.LogFormat(
+                    "New Equity {0} {1} {2}",
+                    local.GetCurrencyPlain(newEquityTotal),
+                    local.GetPercentPlain(equity),
+                    local.GetCurrencyPlain(newEquity));
+
+                return loanEquity + capitalEquity + newEquity;
+            }
+        }
+
         public override int income => asset.income - investorCashflow;
         public override List<AbstractLiability> liabilities => asset.liabilities;
 

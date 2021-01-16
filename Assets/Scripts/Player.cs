@@ -336,4 +336,34 @@ public class Player
             skills.Add(skillInfo);
         }
     }
+
+    public List<InvestmentPartner> GetPartners(
+        bool showLowRiskPartners=true,
+        bool showMediumRiskPartners=true,
+        bool showHighRiskPartners=true)
+    {
+        List<InvestmentPartner> ret = new List<InvestmentPartner>();
+
+        foreach (InvestmentPartner partner in contacts)
+        {
+            bool show = false;
+            switch (partner.riskTolerance)
+            {
+                case RiskTolerance.kHigh:
+                    show = showHighRiskPartners;
+                    break;
+                case RiskTolerance.kMedium:
+                    show = showMediumRiskPartners;
+                    break;
+                case RiskTolerance.kLow:
+                    show = showLowRiskPartners;
+                    break;
+            }
+            if (show)
+            {
+                ret.Add(partner);
+            }
+        }
+        return ret;
+    }
 }

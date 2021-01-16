@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI.Panels.PlayerDetails
@@ -24,7 +25,7 @@ namespace UI.Panels.PlayerDetails
 
         public void ShowContactListPanel()
         {
-            UIManager.Instance.ShowContactListPanel();
+            UIManager.Instance.ShowContactListPanel(player.GetPartners());
         }
 
         public void ShowHappinessListPanel()

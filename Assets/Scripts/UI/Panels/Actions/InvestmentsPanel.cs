@@ -10,13 +10,15 @@ namespace UI.Panels.Actions
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            InvestmentAction.GetSmallInvestmentAction(player).Start();
+            RealEstateManager.Instance.GetSmallInvestmentAction(
+                player, GameManager.Instance.Random).Start();
         }
 
         public void OnLargeInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            InvestmentAction.GetLargeInvestmentAction(player).Start();
+            RealEstateManager.Instance.GetLargeInvestmentAction(
+                player, GameManager.Instance.Random).Start();
         }
     }
 }

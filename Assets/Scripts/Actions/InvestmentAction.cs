@@ -11,24 +11,26 @@ namespace Actions
         kCancelling
     }
 
-    public class InvestmentAction : AbstractAction
+
+
+    public abstract class InvestmentAction : AbstractAction
     {
-        private Player _player;
+        protected Player player { get; private set; }
         private AbstractRealEstate _asset;
-        private PartialRealEstate _partialAsset;
+        protected PartialRealEstate partialAsset { get; private set; }
 
         public InvestmentAction(Player player, AbstractRealEstate asset) : base(null)
         {
-            _player = player;
+            this.player = player;
             _asset = asset;
         }
 
-        private void OnPurchasePanelButtonClick(ButtonType button)
+        protected void OnPurchasePanelButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
                 TransactionManager.BuyRealEstate(
-                    _player, _partialAsset, onTransactionFinish);
+                    player, partialAsset, onTransactionFinish);
             }
             else
             {
@@ -40,7 +42,7 @@ namespace Actions
         {
             if (button == ButtonType.OK)
             {
-                _partialAsset.OnPurchaseCancel();
+                partialAsset.OnPurchaseCancel();
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(false);
             }
@@ -50,13 +52,7 @@ namespace Actions
             }
         }
 
-        public void ShowPurchasePanel()
-        {
-            //            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-            //                (RentalRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
-            UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
-                (DistressedRealEstate)_asset, _partialAsset, OnPurchasePanelButtonClick, false);
-        }
+        public abstract void ShowPurchasePanel();
 
         public void ShowCancelConfirmPanel()
         {
@@ -68,7 +64,7 @@ namespace Actions
 
         public override void Start()
         {
-            _partialAsset = new PartialRealEstate(
+            partialAsset = new PartialRealEstate(
                 _asset,
                 RealEstateManager.Instance.defaultEquitySplit,
                 RealEstateManager.Instance.defaultEquityPerShare);
@@ -79,8 +75,8 @@ namespace Actions
         {
             if (success)
             {
-                _partialAsset.OnPurchase();
-                UIManager.Instance.UpdatePlayerInfo(_player);
+                partialAsset.OnPurchase();
+                UIManager.Instance.UpdatePlayerInfo(player);
                 GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(true);
             }
@@ -89,20 +85,39 @@ namespace Actions
                 ShowPurchasePanel();
             }
         }
-        public static InvestmentAction GetSmallInvestmentAction(Player player)
+    }
+
+    public class BuyRentalRealEstateAction : InvestmentAction
+    {
+        private RentalRealEstate _rentalAsset;
+
+        public BuyRentalRealEstateAction(
+            Player player, RentalRealEstate asset) : base(player, asset)
         {
-            System.Random random = GameManager.Instance.Random;
-            AbstractRealEstate asset = RealEstateManager.Instance.GetSmallInvestment(
-                random);
-            return new InvestmentAction(player, asset);
+            _rentalAsset = asset;
         }
 
-        public static InvestmentAction GetLargeInvestmentAction(Player player)
+        public override void ShowPurchasePanel()
         {
-            System.Random random = GameManager.Instance.Random;
-            AbstractRealEstate asset = RealEstateManager.Instance.GetLargeInvestment(
-                random);
-            return new InvestmentAction(player, asset);
+            UIManager.Instance.ShowRentalRealEstatePurchasePanel(
+                _rentalAsset, partialAsset, OnPurchasePanelButtonClick, false);
+        }
+    }
+
+    public class BuyDistressedRealEstateAction : InvestmentAction
+    {
+        private DistressedRealEstate _distressedAsset;
+
+        public BuyDistressedRealEstateAction(
+            Player player, DistressedRealEstate asset) : base(player, asset)
+        {
+            _distressedAsset = asset;
+        }
+
+        public override void ShowPurchasePanel()
+        {
+            UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
+                _distressedAsset, partialAsset, OnPurchasePanelButtonClick, false);
         }
     }
 }

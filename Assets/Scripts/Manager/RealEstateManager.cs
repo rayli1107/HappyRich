@@ -1,4 +1,5 @@
-﻿using Assets;
+﻿using Actions;
+using Assets;
 using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,8 @@ public class RealEstateManager : MonoBehaviour
     [SerializeField]
     private int _maxMortgageLTV = 75;
     [SerializeField]
+    private int _maxPrivateLoanLTV = 90;
+    [SerializeField]
     private float _defaultEquitySplit = 0.8f;
     [SerializeField]
     private float _defaultEquityPerShare = 0.01f;
@@ -45,6 +48,7 @@ public class RealEstateManager : MonoBehaviour
     public static RealEstateManager Instance { get; private set; }
     public float defaultEquitySplit => _defaultEquitySplit;
     public float defaultEquityPerShare => _defaultEquityPerShare;
+    public int maxPrivateLoanLTV => _maxPrivateLoanLTV;
 
     private List<RealEstateTemplate> _smallInvestments;
     private List<RealEstateTemplate> _largeInvestments;
@@ -90,8 +94,8 @@ public class RealEstateManager : MonoBehaviour
         return random.Next(x, y + 1) * increment;
     }
 
-    private AbstractRealEstate GetDistressedRealEstate(
-        RealEstateTemplate template, System.Random random)
+    private InvestmentAction GetDistressedRealEstateAction(
+        Player player, RealEstateTemplate template, System.Random random)
     {
         float variance = template.priceVariance / 2;
         Vector2 varianceRange = new Vector2(1 - variance, 1 + variance);
@@ -116,12 +120,13 @@ public class RealEstateManager : MonoBehaviour
             rehabPrice *= unitCount;
         }
 
-        return new DistressedRealEstate(
+        DistressedRealEstate asset = new DistressedRealEstate(
             template, purchasePrice, rehabPrice, appraisalPrice, annualIncome, unitCount);
+        return new BuyDistressedRealEstateAction(player, asset);
     }
 
-    private AbstractRealEstate GetRentalRealEstate(
-        RealEstateTemplate template, System.Random random)
+    private InvestmentAction GetRentalRealEstateAction(
+        Player player, RealEstateTemplate template, System.Random random)
     {
         Vector2 variance = new Vector2(
             1 - template.priceVariance, 1 + template.priceVariance);
@@ -139,24 +144,40 @@ public class RealEstateManager : MonoBehaviour
             annualIncome *= unitCount;
         }
 
-        return new RentalRealEstate(
+        RentalRealEstate asset = new RentalRealEstate(
             template, price, price, annualIncome, _maxMortgageLTV, unitCount);
+        return new BuyRentalRealEstateAction(player, asset);
     }
 
-    private AbstractRealEstate GetInvestment(
-        List<RealEstateTemplate> templates, System.Random random)
+    private InvestmentAction GetInvestmentAction(
+        Player player, List<RealEstateTemplate> templates, System.Random random)
     {
         RealEstateTemplate template = templates[random.Next(templates.Count)];
-        return GetDistressedRealEstate(template, random);
+//        return GetDistressedRealEstateAction(player, template, random);
+        return GetRentalRealEstateAction(player, template, random);
     }
 
-    public AbstractRealEstate GetSmallInvestment(System.Random random)
+    public InvestmentAction GetSmallInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestment(_smallInvestments, random);
+        return GetInvestmentAction(player, _smallInvestments, random);
     }
 
-    public AbstractRealEstate GetLargeInvestment(System.Random random)
+    public InvestmentAction GetLargeInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestment(_largeInvestments, random);
+        return GetInvestmentAction(player, _largeInvestments, random);
+    }
+
+    public RentalRealEstate RefinanceExistingProperty(DistressedRealEstate oldAsset)
+    {
+        RentalRealEstate newAsset = new RentalRealEstate(
+            oldAsset.template,
+            oldAsset.value,
+            oldAsset.appraisalPrice,
+            oldAsset.actualIncome,
+            0,
+            oldAsset.unitCount);
+        return newAsset;
     }
 }

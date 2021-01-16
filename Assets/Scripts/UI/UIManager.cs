@@ -248,7 +248,7 @@ namespace UI
         }
 
         public void ShowRentalRealEstatePurchasePanel(
-            Assets.RentalRealEstate asset,
+            Assets.AbstractRealEstate asset,
             Assets.PartialRealEstate partialAsset,
             MessageBoxHandler handler,
             bool advanced)
@@ -279,6 +279,7 @@ namespace UI
                 transform);
 
             panel.player = GameManager.Instance.player;
+            panel.distressedAsset = asset;
             panel.asset = asset;
             panel.partialAsset = partialAsset;
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
@@ -286,17 +287,13 @@ namespace UI
         }
 
         public void ShowContactListPanel(
-            ContactSelectCallback callback=null,
-            bool showHighRiskContacts=true,
-            bool showMidRiskContacts=true,
-            bool showLowRiskContacts=true)
+            List<InvestmentPartner> partners,
+            ContactSelectCallback callback=null)
         {
             ContactListPanel panel = Instantiate(_prefabContactListPanel, transform);
             panel.player = GameManager.Instance.player;
             panel.callback = callback;
-            panel.showHighRiskContacts = showHighRiskContacts;
-            panel.showMidRiskContacts = showMidRiskContacts;
-            panel.showLowRiskContacts = showLowRiskContacts;
+            panel.partners = partners;
             panel.Refresh();
         }
 

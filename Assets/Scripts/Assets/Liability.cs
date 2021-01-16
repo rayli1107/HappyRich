@@ -56,7 +56,7 @@ namespace Assets
 
     public class PrivateLoan : AbstractLiability
     {
-        private InvestmentPartner _partner;
+        public InvestmentPartner partner { get; private set; }
         private bool _delayed;
         public override int expense => _delayed ? 0 : base.expense;
         public int delayedExpense => _delayed ? base.expense : 0;
@@ -65,15 +65,15 @@ namespace Assets
             InvestmentPartner partner, int amount, int interestRate, bool delayed) :
             base("Private Loan", amount, interestRate)
         {
-            _partner = partner;
-            _partner.cash -= amount;
+            this.partner = partner;
+            partner.cash -= amount;
             _delayed = delayed;
         }
 
         public override int PayOff(int payment)
         {
             payment = base.PayOff(payment);
-            _partner.cash += payment;
+            partner.cash += payment;
             return payment;
         }
     }

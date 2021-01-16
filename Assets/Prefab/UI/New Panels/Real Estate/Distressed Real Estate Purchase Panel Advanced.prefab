@@ -188,21 +188,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b6a5d32a15b9d14aa2cc21e6194adfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _selectContact: 0
   _textMessage: {fileID: 7252498357197491488}
   _textPurchasePrice: {fileID: 8732439789641882633}
-  _textRehabPrice: {fileID: 8803570388646914142}
-  _textInterestFee: {fileID: 8944410427118650095}
   _textEstimatedValue: {fileID: 817461529019974085}
-  _textFundsNeeded: {fileID: 2679322408225507319}
+  _textDownPayment: {fileID: 2679322408225507319}
+  _textAnnualIncome: {fileID: 0}
   _textTotalLTV: {fileID: 8003281593243997634}
   _textOwnershipInterest: {fileID: 6746537587671702506}
+  _textMortgage: {fileID: 0}
+  _textMortgagePercentage: {fileID: 0}
+  _textMortgagePayment: {fileID: 0}
   _textPrivateLoanAmount: {fileID: 5807482420883524801}
+  _textPrivateLoanPayment: {fileID: 0}
   _textInvestorAmount: {fileID: 4772026534870408784}
-  _equitySummaryPanel: {fileID: 422597116845880159}
+  _textInvestorCashflow: {fileID: 0}
   _prefabDebtOfferingPanel: {fileID: 3387045989487037642, guid: 753d04435e23a374c8ead7c48b0e2d67,
     type: 3}
   _prefabEquityOfferingPanel: {fileID: 1812860790140663189, guid: 26a670d60ff26a14799742584f07d2ef,
     type: 3}
+  _textRehabPrice: {fileID: 8803570388646914142}
+  _textInterestFee: {fileID: 8944410427118650095}
+  _equitySummaryPanel: {fileID: 422597116845880159}
 --- !u!114 &178617159131974099
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -153,6 +153,7 @@
     <Compile Include="Assets\Scripts\Assets\Liability.cs" />
     <Compile Include="Assets\Scripts\Assets\PartialRealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\RealEstate.cs" />
+    <Compile Include="Assets\Scripts\Assets\RealEstateLoan.cs" />
     <Compile Include="Assets\Scripts\Assets\RentalRealEstate.cs" />
     <Compile Include="Assets\Scripts\Assets\Stock.cs" />
     <Compile Include="Assets\Scripts\Events\Market\MarketEvent.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AbstractRealEstatePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetLoanControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetMortgageControlPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetPrivateLoanControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\DebtOfferingPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\DistressedRealEstatePurchasePanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\EquityOfferingPanel.cs" />

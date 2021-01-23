@@ -62,7 +62,7 @@ namespace UI.Panels.Assets
         {
             Localization local = Localization.Instance;
 
-            int privateLoanAmount = asset.privateLoanAmount;
+            int privateLoanAmount = asset.privateLoan == null ? 0 : asset.privateLoan.amount;
             int investorAmount = partialAsset.investorAmount;
 
             if (_textDownPayment != null)
@@ -109,7 +109,8 @@ namespace UI.Panels.Assets
 
             if (_textPrivateLoanPayment != null)
             {
-                _textPrivateLoanPayment.text = local.GetCurrency(asset.privateLoanPayment, true);
+                _textPrivateLoanPayment.text = local.GetCurrency(
+                    asset.privateLoan == null ? 0 : asset.privateLoan.expense, true);
             }
 
             if (_textInvestorAmount != null)
@@ -200,12 +201,11 @@ namespace UI.Panels.Assets
             panel.GetComponent<MessageBox>().messageBoxHandler = panel.messageBoxHandler;
             panel.OnNumberInput(maxShares);
         }
-
+/*
         public void OnOfferDebtButton()
         {
             List<InvestmentPartner> partners = new List<InvestmentPartner>();
-            partners.AddRange(player.GetPartners(true, false, false));
-            partners.AddRange(player.GetPartners(false, true, false));
+            partners.AddRange(player.GetDebtPartners());
             partners.RemoveAll((InvestmentPartner p) => p.cash <= 0);
             int maxLoanAmount = 0;
             foreach (InvestmentPartner partner in partners)
@@ -214,12 +214,12 @@ namespace UI.Panels.Assets
                 maxLoanAmount += partner.cash;
             }
             Debug.LogFormat("Total - {0}", maxLoanAmount);
-            Debug.LogFormat("Max Private Loan Amount - {0}", asset.maxPrivateLoanAmount);
+            Debug.LogFormat("Max Private Loan Amount - {0}", asset.privateLoan?.amount);
             Debug.LogFormat("Combined Liability Amount - {0}", asset.combinedLiability.amount);
 
             maxLoanAmount = Mathf.Min(
                 maxLoanAmount,
-                asset.maxPrivateLoanAmount - asset.combinedLiability.amount);
+                asset.privateLoan?.amount - asset.combinedLiability.amount);
 
             if (maxLoanAmount == 0)
             {
@@ -288,7 +288,7 @@ namespace UI.Panels.Assets
                 ShowEquityOfferingPanel(maxShares, callback, null);
             }
         }
-
+*/
         public void OnResetButton()
         {
             partialAsset.OnPurchaseCancel();
@@ -306,6 +306,7 @@ namespace UI.Panels.Assets
             asset.ClearPrivateLoans();
             Refresh();
         }
+        /*
 
         private void offerEquityContactSelect(InvestmentPartner partner)
         {
@@ -391,5 +392,6 @@ namespace UI.Panels.Assets
                 AdjustNumbers();
             }
         }
+        */
     }
 }

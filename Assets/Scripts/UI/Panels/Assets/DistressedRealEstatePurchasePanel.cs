@@ -32,7 +32,7 @@ namespace UI.Panels.Assets
             if (_textInterestFee != null)
             {
                 _textInterestFee.text = local.GetCurrency(
-                    asset.privateLoanDelayedPayment, true);
+                    asset.privateLoan == null ? 0 : asset.privateLoan.delayedExpense, true);
             }
 
             Debug.LogFormat("Original Price {0}", distressedAsset.originalPrice);

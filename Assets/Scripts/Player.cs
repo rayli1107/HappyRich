@@ -337,6 +337,16 @@ public class Player
         }
     }
 
+    public List<InvestmentPartner> GetDebtPartners()
+    {
+        return GetPartners(true, false, false);
+    }
+
+    public List<InvestmentPartner> GetEquityPartners()
+    {
+        return GetPartners(false, false, true);
+    }
+
     public List<InvestmentPartner> GetPartners(
         bool showLowRiskPartners=true,
         bool showMediumRiskPartners=true,

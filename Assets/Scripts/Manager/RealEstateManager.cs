@@ -36,6 +36,8 @@ public class RealEstateManager : MonoBehaviour
     [SerializeField]
     private int _maxPrivateLoanLTV = 90;
     [SerializeField]
+    private int _maxDistressedLoanLTV = 100;
+    [SerializeField]
     private float _defaultEquitySplit = 0.8f;
     [SerializeField]
     private float _defaultEquityPerShare = 0.01f;
@@ -121,7 +123,14 @@ public class RealEstateManager : MonoBehaviour
         }
 
         DistressedRealEstate asset = new DistressedRealEstate(
-            template, purchasePrice, rehabPrice, appraisalPrice, annualIncome, unitCount);
+            template,
+            player.GetDebtPartners(),
+            purchasePrice,
+            rehabPrice,
+            appraisalPrice,
+            annualIncome,
+            unitCount,
+            _maxDistressedLoanLTV);
         return new BuyDistressedRealEstateAction(player, asset);
     }
 
@@ -145,7 +154,7 @@ public class RealEstateManager : MonoBehaviour
         }
 
         RentalRealEstate asset = new RentalRealEstate(
-            template, price, price, annualIncome, _maxMortgageLTV, unitCount);
+            template, price, price, annualIncome, _maxMortgageLTV, _maxMortgageLTV, unitCount);
         return new BuyRentalRealEstateAction(player, asset);
     }
 
@@ -169,15 +178,14 @@ public class RealEstateManager : MonoBehaviour
         return GetInvestmentAction(player, _largeInvestments, random);
     }
 
-    public RentalRealEstate RefinanceExistingProperty(DistressedRealEstate oldAsset)
+    public RentalRealEstate RefinanceExistingProperty(
+        Player player, DistressedRealEstate oldAsset)
     {
-        RentalRealEstate newAsset = new RentalRealEstate(
-            oldAsset.template,
-            oldAsset.value,
-            oldAsset.appraisalPrice,
-            oldAsset.actualIncome,
-            0,
-            oldAsset.unitCount);
+        RentalRealEstate newAsset = new RefinancedRealEstate(
+            oldAsset,
+            player.GetDebtPartners(),
+            _maxMortgageLTV,
+            _maxPrivateLoanLTV);
         return newAsset;
     }
 }

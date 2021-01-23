@@ -131,25 +131,4 @@ public static class TransactionManager
             cost,
             (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
     }
-
-    public static void AutoRaiseDebtPartners(
-        Player player,
-        AbstractRealEstate asset,
-        bool showLowRiskContacts,
-        bool showMidRiskContacts,
-        bool showHighRiskContacts)
-    {
-        asset.ClearPrivateLoans();
-
-        List<InvestmentPartner> partners = player.GetPartners(
-            showLowRiskContacts, showMidRiskContacts, showHighRiskContacts);
-        int maxLoanAmount = 0;
-        foreach (InvestmentPartner partner in partners)
-        {
-//            maxLoanAmount
-        }
-
-
-
-    }
 }

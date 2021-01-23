@@ -18,15 +18,32 @@ namespace UI.Panels.Assets
         private RectTransform _equitySummaryPanel;
         [SerializeField]
         private AssetMortgageControlPanel _mortgageControlPanel;
+        [SerializeField]
+        private AssetPrivateLoanControlPanel _privateLoanControlPanel;
 #pragma warning restore 0649
+
+        private bool checkRaiseDebt()
+        {
+            int maxltv = RealEstateManager.Instance.maxPrivateLoanLTV;
+            int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
+            RealEstatePrivateLoan loan = new RealEstatePrivateLoan(
+                asset, player.GetDebtPartners(), maxltv, rate, false);
+            return loan.maxltv > 0;
+        }
 
         private void Awake()
         {
             if (_mortgageControlPanel != null)
             {
                 _mortgageControlPanel.adjustNumberCallback = AdjustNumbers;
-                _mortgageControlPanel.checkRaiseDebtCallback = () => false;
+                _mortgageControlPanel.checkRaiseDebtCallback = checkRaiseDebt;
                 _mortgageControlPanel.checkRaiseEquityCallback = () => false;
+            }
+
+            if (_privateLoanControlPanel != null)
+            {
+                _privateLoanControlPanel.adjustNumberCallback = AdjustNumbers;
+                _privateLoanControlPanel.checkRaiseEquityCallback = () => false;
             }
         }
 
@@ -45,6 +62,14 @@ namespace UI.Panels.Assets
                 _mortgageControlPanel.asset = asset;
                 _mortgageControlPanel.gameObject.SetActive(true);
                 _mortgageControlPanel.Refresh();
+            }
+
+            if (_privateLoanControlPanel != null)
+            {
+                _mortgageControlPanel.player = player;
+                _mortgageControlPanel.asset = asset;
+                _privateLoanControlPanel.gameObject.SetActive(true);
+                _privateLoanControlPanel.Refresh();
             }
             /*
                         if (_debtSummaryPanel != null)

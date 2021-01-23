@@ -47,7 +47,7 @@ namespace Assets
         public AutoLoan loan { get; private set; }
         public override List<AbstractLiability> liabilities {
             get {
-                List<AbstractLiability> ret = new List<AbstractLiability>();
+                List<AbstractLiability> ret = base.liabilities;
                 ret.Add(loan);
                 return ret;
             }

@@ -66,8 +66,8 @@ public class InvestmentPartnerManager : MonoBehaviour
         string name = _names[random.Next(_names.Length)];
 
         Array riskLevels = Enum.GetValues(typeof(RiskTolerance));
-        RiskTolerance riskTolerance = (RiskTolerance)riskLevels.GetValue(
-            random.Next(riskLevels.Length));
+        RiskTolerance riskTolerance =
+            random.Next(2) == 0 ? RiskTolerance.kLow : RiskTolerance.kHigh;
 
         return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
     }

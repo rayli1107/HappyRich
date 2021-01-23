@@ -176,7 +176,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!1 &418667732340038095
+--- !u!1 &552582487889123480
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,27 +184,28 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8878936680265675835}
-  - component: {fileID: 3413379122459072478}
-  - component: {fileID: 7884147363392456436}
+  - component: {fileID: 1111317535132073627}
+  - component: {fileID: 6635677946346902957}
+  - component: {fileID: 4426758889618383249}
   m_Layer: 5
-  m_Name: Label
+  m_Name: Panel - Cancel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8878936680265675835
+--- !u!224 &1111317535132073627
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418667732340038095}
+  m_GameObject: {fileID: 552582487889123480}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3217565782128011687}
   m_Father: {fileID: 3717374006863439429}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -213,21 +214,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3413379122459072478
+--- !u!222 &6635677946346902957
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418667732340038095}
+  m_GameObject: {fileID: 552582487889123480}
   m_CullTransparentMesh: 0
---- !u!114 &7884147363392456436
+--- !u!114 &4426758889618383249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418667732340038095}
+  m_GameObject: {fileID: 552582487889123480}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
@@ -305,7 +306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mortgage Payment:'
+  m_text: 'Debt Payment:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -374,7 +375,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1192355532969224041}
-    characterCount: 17
+    characterCount: 13
     spriteCount: 0
     spaceCount: 1
     wordCount: 2
@@ -606,7 +607,7 @@ GameObject:
   - component: {fileID: 5075678208518996441}
   - component: {fileID: 5595569951547456070}
   m_Layer: 5
-  m_Name: Text - Mortgage Payment
+  m_Name: Text - Debt Payment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,7 +865,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8878936680265675835}
+  - {fileID: 1111317535132073627}
   - {fileID: 5172847982556618527}
   m_Father: {fileID: 4883135133476526303}
   m_RootOrder: 8
@@ -940,7 +941,7 @@ GameObject:
   - component: {fileID: 4126000956341006757}
   - component: {fileID: 459512526325552899}
   m_Layer: 5
-  m_Name: Text - Mortgage
+  m_Name: Text - Debt Amount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1116,7 +1117,7 @@ GameObject:
   - component: {fileID: 2008370334988680823}
   - component: {fileID: 7611727486599301825}
   m_Layer: 5
-  m_Name: Panel - Mortgage Payment
+  m_Name: Panel - Debt Payment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1325,7 +1326,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mortgage:'
+  m_text: 'Debt Amount:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1394,10 +1395,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1282583171892472787}
-    characterCount: 9
+    characterCount: 12
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1521,7 +1522,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mortgage
+  m_text: Raise Debt
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1556,7 +1557,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_textAlignment: 513
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -1590,10 +1591,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4777510778989801245}
-    characterCount: 8
+    characterCount: 10
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1624,9 +1625,10 @@ GameObject:
   - component: {fileID: 4883135133476526303}
   - component: {fileID: 4752701645207040650}
   - component: {fileID: 2054064536330221308}
-  - component: {fileID: 5617705873841529192}
+  - component: {fileID: 9136090555895452025}
+  - component: {fileID: 3703750413166069011}
   m_Layer: 5
-  m_Name: Panel Mortgage
+  m_Name: Panel - Private Loan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1693,7 +1695,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &5617705873841529192
+--- !u!114 &9136090555895452025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1702,16 +1704,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 4532636780559602027}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36ce5a04e486fdf45bbf3f57412cd22e, type: 3}
+  m_Script: {fileID: 11500000, guid: 383d48b486603674687921ffb9b55f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 5425938509072024821}
-  _multiplier: 5
+  _multiplier: 1
   _textAmount: {fileID: 4126000956341006757}
   _textRate: {fileID: 4995917140734656885}
   _textPayment: {fileID: 5075678208518996441}
-  _buttonRaiseDebt: {fileID: 967500960271037320}
   _buttonRaiseEquity: {fileID: 7276038630556348130}
+--- !u!114 &3703750413166069011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4532636780559602027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!114 &865846193555194203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2108,7 +2129,7 @@ GameObject:
   - component: {fileID: 2905731065256881806}
   - component: {fileID: 4837933599515989281}
   m_Layer: 5
-  m_Name: Panel - Mortgage
+  m_Name: Panel - Debt Amount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2293,7 +2314,7 @@ GameObject:
   - component: {fileID: 961413240789754877}
   - component: {fileID: 4168379018727643277}
   m_Layer: 5
-  m_Name: Panel - Raise Debt
+  m_Name: Panel - Raise Equity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2310,7 +2331,6 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1146657357076618492}
   - {fileID: 7385147615122981270}
   m_Father: {fileID: 3717374006863439429}
   m_RootOrder: 1
@@ -2348,12 +2368,12 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!1001 &937014170401900446
+--- !u!1001 &3336701878724653765
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 5172847982556618527}
+    m_TransformParent: {fileID: 1111317535132073627}
     m_Modifications:
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2363,12 +2383,12 @@ PrefabInstance:
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2383,12 +2403,12 @@ PrefabInstance:
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_text
-      value: Raise Debt
+      value: Cancel
       objectReference: {fileID: 0}
     - target: {fileID: 27793808163224070, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2423,7 +2443,7 @@ PrefabInstance:
     - target: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_Name
-      value: Button Raise Debt
+      value: Button Cancel
       objectReference: {fileID: 0}
     - target: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2532,24 +2552,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90076b73e2ce698429481b5d419a664a, type: 3}
---- !u!224 &1146657357076618492 stripped
+--- !u!224 &3217565782128011687 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
     type: 3}
-  m_PrefabInstance: {fileID: 937014170401900446}
+  m_PrefabInstance: {fileID: 3336701878724653765}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &967500960271037320 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
-    type: 3}
-  m_PrefabInstance: {fileID: 937014170401900446}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7247451813707340532
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2665,7 +2673,7 @@ PrefabInstance:
     - target: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2798,7 +2806,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5617705873841529192}
+      objectReference: {fileID: 0}
     - target: {fileID: 2614299032019269626, guid: 3e340ab007e875b46a5ba0092f53ff7a,
         type: 3}
       propertyPath: m_MaxValue
@@ -2982,15 +2990,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2613940355335681890, guid: 3e340ab007e875b46a5ba0092f53ff7a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3e340ab007e875b46a5ba0092f53ff7a, type: 3}
---- !u!224 &5316275586099903449 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2795645991614597334, guid: 3e340ab007e875b46a5ba0092f53ff7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 8001512584123396879}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5394990233298095493 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2726311948077596298, guid: 3e340ab007e875b46a5ba0092f53ff7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8001512584123396879}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &5316275586099903449 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2795645991614597334, guid: 3e340ab007e875b46a5ba0092f53ff7a,
     type: 3}
   m_PrefabInstance: {fileID: 8001512584123396879}
   m_PrefabAsset: {fileID: 0}

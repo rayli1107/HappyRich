@@ -5,7 +5,7 @@ namespace Assets
     public class AbstractLiability
     {
         public virtual string name { get; private set; }
-        public virtual int amount { get; private set; }
+        public virtual int amount { get; protected set; }
         public int interestRate { get; private set; }
         public virtual int expense => amount * interestRate / 100;
 
@@ -53,7 +53,7 @@ namespace Assets
         {
         }
     }
-
+    /*
     public class PrivateLoan : AbstractLiability
     {
         public InvestmentPartner partner { get; private set; }
@@ -76,7 +76,7 @@ namespace Assets
             partner.cash += payment;
             return payment;
         }
-    }
+    }*/
 
     public class CombinedLiability : AbstractLiability
     {

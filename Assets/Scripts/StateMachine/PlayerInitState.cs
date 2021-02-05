@@ -12,7 +12,12 @@
         public void EnterState()
         {
             GameManager.Instance.CreatePlayer();
+            GameManager.Instance.player.contacts.Add(
+                new InvestmentPartner("Alice", 100000, RiskTolerance.kHigh, 10));
+            GameManager.Instance.player.contacts.Add(
+                new InvestmentPartner("Bob", 100000, RiskTolerance.kLow, 10));
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
+
         }
 
         public void ExitState()

@@ -10,30 +10,39 @@ namespace Assets
     {
         public AbstractRealEstate asset { get; private set; }
         public float equitySplit { get; private set; }
-        public float equityPerShare { get; private set; }
-        public int amountPerShare => Mathf.FloorToInt(asset.downPayment * equityPerShare / equitySplit);
+        public int maxShares { get; private set; }
+        public float equityPerShare => equitySplit / maxShares;
+        public int amountPerShare { get; private set; }
 
-        private List<Investment> _investorShares;
+        private List<Investment> _investments;
         public override string name => asset.name;
+        public int totalShares { get; private set; }
 
-        public int investorShares
+        private int _shares;
+        public int shares
         {
-            get
+            get => _shares;
+            set
             {
-                int shares = 0;
-                foreach (Investment investment in _investorShares)
+                int newValue = Mathf.Clamp(value, 0, totalShares);
+                int delta = newValue - _shares;
+                if (delta > 0)
                 {
-                    shares += investment.Item2;
+                    AddShares(delta);
                 }
-                return shares;
-
+                else if (delta < 0)
+                {
+                    RemoveShares(-1 * delta);
+                }
+                _shares = newValue;
             }
         }
-        public int investorAmount => investorShares * amountPerShare;
-        public float investorEquity => investorShares * equityPerShare;
+ 
+        public int investorAmount => shares * amountPerShare;
+        public float investorEquity => shares * equityPerShare;
         public int investorCashflow => Mathf.FloorToInt(investorEquity * asset.income);
 
-        public bool hasInvestors => _investorShares.Count > 0;
+        public bool hasInvestors => shares > 0;
 
         public int fundsNeeded => asset.downPayment - investorAmount;
         public float equity => 1 - investorEquity;
@@ -70,29 +79,75 @@ namespace Assets
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
         public PartialRealEstate(
-            AbstractRealEstate asset, float equitySplit, float equityPerShare) :
+            AbstractRealEstate asset,
+            List<InvestmentPartner> partners,
+            float equitySplit,
+            int maxShares) :
             base("", 0, 0)
         {
             this.asset = asset;
             this.equitySplit = equitySplit;
-            this.equityPerShare = equityPerShare;
+            this.maxShares = maxShares;
 
-            _investorShares = new List<Investment>();
-        }
+            totalShares = 0;
+            _shares = 0;
 
-        public void ClearInvestors()
-        {
-            foreach (Investment investment in _investorShares)
+            _investments = new List<Investment>();
+            foreach (InvestmentPartner partner in partners)
             {
-                investment.Item1.cash += investment.Item2 * amountPerShare;
+                _investments.Add(new Investment(partner, 0));
             }
-            _investorShares.Clear();
+
+            Reset();
         }
 
-        public void AddInvestor(InvestmentPartner partner, int shares)
+        public void Reset()
         {
-            partner.cash -= shares * amountPerShare;
-            _investorShares.Add(new Investment(partner, shares));
+            shares = 0;
+            amountPerShare = Mathf.FloorToInt(asset.downPayment / maxShares);
+
+            totalShares = 0;
+            for (int i = 0; i < _investments.Count; ++i)
+            {
+                totalShares += _investments[i].Item1.cash / amountPerShare;
+            }
+
+            totalShares = Mathf.Min(totalShares, maxShares);
+        }
+
+        private void AddShares(int delta)
+        {
+            for (int i = 0; i < _investments.Count; ++i)
+            {
+                InvestmentPartner partner = _investments[i].Item1;
+                int availableShares = Mathf.Min(
+                    delta, partner.cash / amountPerShare);
+                if (availableShares > 0)
+                {
+                    delta -= availableShares;
+                    partner.cash -= availableShares * amountPerShare;
+                    _investments[i] = new Investment(
+                        partner, _investments[i].Item2 + availableShares);
+                }
+            }
+            Debug.Assert(delta == 0);
+        }
+
+        private void RemoveShares(int delta)
+        {
+            for (int i = 0; i < _investments.Count; ++i)
+            {
+                InvestmentPartner partner = _investments[i].Item1;
+                int removedShares = Mathf.Min(delta, _investments[i].Item2);
+                if (removedShares > 0)
+                {
+                    delta -= removedShares;
+                    partner.cash += removedShares * amountPerShare;
+                    _investments[i] = new Investment(
+                        partner, _investments[i].Item2 - removedShares);
+                }
+            }
+            Debug.Assert(delta == 0);
         }
 
         public override void OnPurchase()
@@ -104,7 +159,7 @@ namespace Assets
         public override void OnPurchaseCancel()
         {
             base.OnPurchaseCancel();
-            ClearInvestors();
+            Reset();
             asset.OnPurchaseCancel();
         }
     }

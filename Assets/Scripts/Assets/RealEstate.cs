@@ -54,7 +54,20 @@ namespace Assets
             }
         }
 
-        public void ClearPrivateLoans()
+        public void AddPrivateLoan(
+            List<InvestmentPartner> partners,
+            int maxltv,
+            int rate,
+            bool delayed)
+        {
+            if (privateLoan == null)
+            {
+                privateLoan = new RealEstatePrivateLoan(
+                    this, partners, maxltv, rate, delayed);
+            }
+        }
+
+        public void ClearPrivateLoan()
         {
             if (privateLoan != null)
             {
@@ -66,7 +79,7 @@ namespace Assets
         public override void OnPurchaseCancel()
         {
             base.OnPurchaseCancel();
-            ClearPrivateLoans();
+            ClearPrivateLoan();
         }
     }
 }

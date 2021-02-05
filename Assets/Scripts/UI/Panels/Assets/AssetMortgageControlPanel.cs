@@ -51,17 +51,7 @@ namespace UI.Panels.Assets
                 _textRate.text = string.Format("{0}%", asset.mortgage.interestRate);
             }
 
-            if (checkRaiseDebtCallback.Invoke())
-            {
-                enableButton(_buttonRaiseDebt, true);
-                enableButton(_buttonRaiseEquity, false);
-            }
-            else
-            {
-                enableButton(_buttonRaiseDebt, false);
-                enableButton(_buttonRaiseEquity, checkRaiseEquityCallback.Invoke());
-            }
-
+            enableButton(_buttonRaiseDebt, checkRaiseDebtCallback.Invoke());
             AdjustNumbers();
         }
 
@@ -71,12 +61,6 @@ namespace UI.Panels.Assets
             {
                 asset.mortgage.ltv = value;
                 AdjustNumbers();
-
-                Debug.LogFormat(
-                    "LTV {0} Amount {1} Expense {2}",
-                    asset.mortgage.ltv,
-                    asset.mortgage.amount,
-                    asset.mortgage.expense);
             }
         }
 
@@ -94,6 +78,11 @@ namespace UI.Panels.Assets
             {
                 _textPayment.text = local.GetCurrency(asset.mortgage.expense, true);
             }
+
+            bool debtButtonActive =
+                _buttonRaiseDebt != null && _buttonRaiseDebt.gameObject.activeInHierarchy;
+            enableButton(_buttonRaiseEquity,
+                !debtButtonActive && checkRaiseEquityCallback.Invoke());
         }
 
         private void OnEnable()

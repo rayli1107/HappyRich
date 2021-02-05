@@ -57,7 +57,7 @@ namespace Assets
         {
             this.distressedAsset = distressedAsset;
             originalLoanAmount = distressedAsset.combinedLiability.amount;
-            distressedAsset.ClearPrivateLoans();
+            distressedAsset.ClearPrivateLoan();
 
             mortgage.setLoanAmount(originalLoanAmount);
 

@@ -66,8 +66,9 @@ namespace Actions
         {
             partialAsset = new PartialRealEstate(
                 _asset,
+                player.GetEquityPartners(),
                 RealEstateManager.Instance.defaultEquitySplit,
-                RealEstateManager.Instance.defaultEquityPerShare);
+                RealEstateManager.Instance.maxEquityShares);
             ShowPurchasePanel();
         }
 

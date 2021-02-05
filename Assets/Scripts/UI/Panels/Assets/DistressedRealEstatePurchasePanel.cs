@@ -62,7 +62,7 @@ namespace UI.Panels.Assets
 
             if (_equitySummaryPanel != null)
             {
-                _equitySummaryPanel.gameObject.SetActive(partialAsset.investorShares > 0);
+                _equitySummaryPanel.gameObject.SetActive(partialAsset.shares > 0);
             }
         }
 

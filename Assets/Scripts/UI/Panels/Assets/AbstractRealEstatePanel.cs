@@ -122,6 +122,11 @@ namespace UI.Panels.Assets
             {
                 _textInvestorCashflow.text = local.GetCurrency(partialAsset.investorCashflow);
             }
+
+            if (partialAsset.shares == 0)
+            {
+                partialAsset.Reset();
+            }
         }
 
         public virtual void Refresh()
@@ -297,15 +302,16 @@ namespace UI.Panels.Assets
 
         public void OnCancelEquityButton()
         {
-            partialAsset.ClearInvestors();
+            partialAsset.Reset();
             Refresh();
         }
 
         public void OnCancelDebtButton()
         {
-            asset.ClearPrivateLoans();
+            asset.ClearPrivateLoan();
             Refresh();
         }
+
         /*
 
         private void offerEquityContactSelect(InvestmentPartner partner)

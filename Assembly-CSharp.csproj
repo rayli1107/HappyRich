@@ -193,6 +193,7 @@
     <Compile Include="Assets\Scripts\UI\Panels\Actions\NetworkingPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Actions\SelfImprovementPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AbstractRealEstatePanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetEquityControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetLoanControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetMortgageControlPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Panels\Assets\AssetPrivateLoanControlPanel.cs" />

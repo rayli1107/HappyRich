@@ -40,7 +40,7 @@ public class RealEstateManager : MonoBehaviour
     [SerializeField]
     private float _defaultEquitySplit = 0.8f;
     [SerializeField]
-    private float _defaultEquityPerShare = 0.01f;
+    private int _maxEquityShares = 100;
     [SerializeField]
     private Vector2 _distressedPurchasePriceRange = new Vector2(0.5f, 0.7f);
     [SerializeField]
@@ -49,7 +49,7 @@ public class RealEstateManager : MonoBehaviour
 
     public static RealEstateManager Instance { get; private set; }
     public float defaultEquitySplit => _defaultEquitySplit;
-    public float defaultEquityPerShare => _defaultEquityPerShare;
+    public int maxEquityShares => _maxEquityShares;
     public int maxPrivateLoanLTV => _maxPrivateLoanLTV;
 
     private List<RealEstateTemplate> _smallInvestments;

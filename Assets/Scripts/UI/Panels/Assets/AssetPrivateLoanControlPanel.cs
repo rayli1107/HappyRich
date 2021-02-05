@@ -26,14 +26,6 @@ namespace UI.Panels.Assets
         public Action adjustNumberCallback;
         public Func<bool> checkRaiseEquityCallback;
 
-        private void enableButton(Button button, bool enable)
-        {
-            if (button != null)
-            {
-                button.gameObject.SetActive(enable);
-            }
-        }
-
         public void Refresh()
         {
             if (player == null || asset == null || asset.privateLoan == null)
@@ -49,8 +41,6 @@ namespace UI.Panels.Assets
             {
                 _textRate.text = string.Format("{0}%", asset.privateLoan.interestRate);
             }
-
-            enableButton(_buttonRaiseEquity, checkRaiseEquityCallback.Invoke());
 
             AdjustNumbers();
         }
@@ -79,6 +69,12 @@ namespace UI.Panels.Assets
             {
                 _textPayment.text = local.GetCurrency(
                     asset.privateLoan.expense, true);
+            }
+
+            if (_buttonRaiseEquity != null)
+            {
+                _buttonRaiseEquity.gameObject.SetActive(
+                    checkRaiseEquityCallback.Invoke());
             }
         }
 

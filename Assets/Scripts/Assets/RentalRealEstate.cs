@@ -59,7 +59,8 @@ namespace Assets
             originalLoanAmount = distressedAsset.combinedLiability.amount;
             distressedAsset.ClearPrivateLoan();
 
-            mortgage.setLoanAmount(originalLoanAmount);
+            mortgage.setMinimumLoanAmount(originalLoanAmount);
+            mortgage.ltv = maxMortgageLtv;
 
             int remainingLoanAmount = Mathf.Max(originalLoanAmount - mortgage.amount, 0);
             if (remainingLoanAmount > 0)
@@ -67,8 +68,13 @@ namespace Assets
                 int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
                 mandatoryPrivateLoan = new RealEstatePrivateLoan(
                     this, debtPartners, maxPrivateLoanLtv, rate, false);
-                mandatoryPrivateLoan.setLoanAmount(remainingLoanAmount);
+                mandatoryPrivateLoan.setMinimumLoanAmount(remainingLoanAmount);
             }
+
+            Debug.LogFormat(
+                "Refinance mortgage ltv {0} private loan ltv {1}",
+                mortgage.ltv,
+                mandatoryPrivateLoan.ltv);
         }
     }
 }

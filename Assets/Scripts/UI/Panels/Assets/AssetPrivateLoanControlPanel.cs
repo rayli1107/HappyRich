@@ -1,6 +1,6 @@
 ﻿using Assets;
+using PlayerInfo;
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +28,12 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
+            Debug.LogFormat("Player {0}", player != null);
+            Debug.LogFormat("Asset {0}", asset != null);
+            if (asset != null)
+            {
+                Debug.LogFormat("Asset.PrivateLoan {0}", asset.privateLoan != null);
+            }
             if (player == null || asset == null || asset.privateLoan == null)
             {
                 return;

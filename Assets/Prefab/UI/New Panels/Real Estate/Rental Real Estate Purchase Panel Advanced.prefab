@@ -188,6 +188,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b49d279444f00419f07ec324912c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mortgageControlPanel: {fileID: 1420733110542554787}
+  _privateLoanControlPanel: {fileID: 2491916427527035580}
+  _equityControlPanel: {fileID: 5229164664495212716}
   _selectContact: 0
   _textMessage: {fileID: 7252498357197491488}
   _textPurchasePrice: {fileID: 8732439789641882633}
@@ -207,9 +210,6 @@ MonoBehaviour:
     type: 3}
   _prefabEquityOfferingPanel: {fileID: 1812860790140663189, guid: 26a670d60ff26a14799742584f07d2ef,
     type: 3}
-  _mortgageControlPanel: {fileID: 1420733110542554787}
-  _privateLoanControlPanel: {fileID: 2491916427527035580}
-  _equityControlPanel: {fileID: 5229164664495212716}
 --- !u!114 &178617159131974099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3360,7 +3360,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 390
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3510,7 +3510,7 @@ PrefabInstance:
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 585
       objectReference: {fileID: 0}
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3550,7 +3550,7 @@ PrefabInstance:
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 195
       objectReference: {fileID: 0}
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

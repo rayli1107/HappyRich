@@ -1,4 +1,5 @@
 ﻿using Assets;
+using PlayerInfo;
 using System;
 using TMPro;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            minValue = 0;
+            minValue = asset.mortgage.minltv;
             maxValue = asset.mortgage.maxltv;
             value = asset.mortgage.ltv;
 

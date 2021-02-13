@@ -1,4 +1,5 @@
 ﻿using Actions;
+using PlayerInfo;
 using UnityEngine;
 
 namespace UI.Panels.Actions

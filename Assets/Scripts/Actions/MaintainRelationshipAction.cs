@@ -1,4 +1,4 @@
-﻿using UI.Panels;
+﻿using PlayerInfo;
 using UI.Panels.Templates;
 
 namespace Actions

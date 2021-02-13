@@ -1,6 +1,6 @@
-﻿using ScriptableObjects;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using System.Collections.Generic;
-using UI;
 using UI.Panels.Templates;
 
 namespace Actions

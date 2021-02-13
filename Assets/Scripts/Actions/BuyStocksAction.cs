@@ -1,5 +1,5 @@
 ﻿using Assets;
-using UI;
+using PlayerInfo;
 using UI.Panels.Templates;
 
 namespace Actions

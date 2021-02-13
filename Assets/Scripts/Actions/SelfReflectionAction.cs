@@ -1,5 +1,5 @@
-﻿using PlayerState;
-using UI.Panels.Templates;
+﻿using PlayerInfo;
+using PlayerState;
 
 namespace Actions
 {

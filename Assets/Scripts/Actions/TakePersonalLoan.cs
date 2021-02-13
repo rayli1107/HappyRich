@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UI;
+﻿using PlayerInfo;
+using System.Collections.Generic;
 using UI.Panels.Templates;
 
 namespace Actions

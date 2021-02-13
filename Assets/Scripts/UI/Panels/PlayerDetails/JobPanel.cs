@@ -1,4 +1,5 @@
 ﻿using Actions;
+using PlayerInfo;
 using ScriptableObjects;
 using TMPro;
 using UnityEngine;

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UI.Panels.Templates;
+﻿using PlayerInfo;
+using UnityEngine;
 
 namespace UI.Panels.Actions
 {

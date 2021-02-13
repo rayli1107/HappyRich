@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using PlayerInfo;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UI.Panels;
@@ -46,6 +47,10 @@ namespace UI
         private DistressedRealEstatePurchasePanel _prefabAdvancedDistressedRealEstatePurchasePanel;
         [SerializeField]
         private DistressedRealEstatePurchasePanel _prefabSimpleDistressedRealEstatePurchasePanel;
+        [SerializeField]
+        private RentalRealEstateRefinancePanel _prefabAdvancedRentalRealEstateRefinancePanel;
+        [SerializeField]
+        private RentalRealEstateRefinancePanel _prefabSimpleRentalRealEstateRefinancePanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
@@ -262,6 +267,26 @@ namespace UI
             panel.player = GameManager.Instance.player;
             panel.asset = asset;
             panel.partialAsset = partialAsset; 
+            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+            panel.Refresh();
+        }
+
+        public void ShowRentalRealEstateRefinancePanel(
+            Assets.RefinancedRealEstate asset,
+            Assets.PartialRealEstate partialAsset,
+            MessageBoxHandler handler,
+            bool advanced)
+        {
+            RentalRealEstateRefinancePanel panel = Instantiate(
+                advanced ?
+                _prefabAdvancedRentalRealEstateRefinancePanel :
+                _prefabSimpleRentalRealEstateRefinancePanel,
+                transform);
+
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+            panel.refinancedAsset = asset;
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }

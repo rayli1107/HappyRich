@@ -1,4 +1,5 @@
-﻿using ScriptableObjects;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;

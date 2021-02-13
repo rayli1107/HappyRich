@@ -1,5 +1,5 @@
-﻿using ScriptableObjects;
-using StateMachine;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;

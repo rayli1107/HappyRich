@@ -1,7 +1,5 @@
-﻿using Assets;
-using System.Collections;
+﻿using PlayerInfo;
 using System.Collections.Generic;
-using UI.Panels.Assets;
 using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;

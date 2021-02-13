@@ -1,5 +1,5 @@
-﻿using ScriptableObjects;
-using System;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -9,6 +9,8 @@ namespace Assets
     {
         public AbstractRealEstate asset { get; private set; }
         public int maxltv { get; protected set; }
+        public int minltv { get; protected set; }
+
         public override int amount => ltv * asset.loanUnitValue;
 
         private int _ltv;
@@ -18,7 +20,7 @@ namespace Assets
             get => _ltv;
             set
             {
-                int newltv = Mathf.Clamp(value, 0, maxltv);
+                int newltv = Mathf.Clamp(value, minltv, maxltv);
                 int delta = (newltv - _ltv) * asset.loanUnitValue;
                 if (delta > 0)
                 {
@@ -48,6 +50,7 @@ namespace Assets
             this.asset = asset;
             this.maxltv = getUnitCount(
                 maxltv * asset.loanUnitValue - asset.combinedLiability.amount);
+            minltv = 0;
             _ltv = 0;
         }
 
@@ -62,6 +65,12 @@ namespace Assets
         public override int PayOff(int _)
         {
             return 0;
+        }
+
+        public void setMinimumLoanAmount(int loanAmount)
+        {
+            minltv = Mathf.Min(getUnitCount(loanAmount), maxltv);
+            ltv = ltv;
         }
 
         public void setLoanAmount(int loanAmount)
@@ -86,7 +95,6 @@ namespace Assets
     {
         private List<Investment> _investments;
         private bool _delayed;
-        private int _ltv;
 
         public override int expense => _delayed ? 0 : base.expense;
         public int delayedExpense => _delayed ? base.expense : 0;

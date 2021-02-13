@@ -46,6 +46,7 @@ namespace Assets
 
         public int fundsNeeded => asset.downPayment - investorAmount;
         public float equity => 1 - investorEquity;
+        public float capitalEquity => fundsNeeded / (float)asset.downPayment;
 
         public override int value
         {

@@ -1,4 +1,5 @@
 ﻿using Assets;
+using PlayerInfo;
 using UI;
 using UI.Panels.Templates;
 
@@ -11,26 +12,28 @@ namespace Actions
         kCancelling
     }
 
-
-
     public abstract class InvestmentAction : AbstractAction
     {
         protected Player player { get; private set; }
         private AbstractRealEstate _asset;
         protected PartialRealEstate partialAsset { get; private set; }
 
-        public InvestmentAction(Player player, AbstractRealEstate asset) : base(null)
+        public InvestmentAction(
+            Player player,
+            AbstractRealEstate asset,
+            ActionCallback callback) : base(callback)
         {
             this.player = player;
             _asset = asset;
         }
 
+        protected abstract void BuyProperty();
+
         protected void OnPurchasePanelButtonClick(ButtonType button)
         {
             if (button == ButtonType.OK)
             {
-                TransactionManager.BuyRealEstate(
-                    player, partialAsset, onTransactionFinish);
+                BuyProperty();
             }
             else
             {
@@ -43,7 +46,6 @@ namespace Actions
             if (button == ButtonType.OK)
             {
                 partialAsset.OnPurchaseCancel();
-                GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(false);
             }
             else
@@ -72,13 +74,11 @@ namespace Actions
             ShowPurchasePanel();
         }
 
-        private void onTransactionFinish(bool success)
+        protected void onTransactionFinish(bool success)
         {
             if (success)
             {
                 partialAsset.OnPurchase();
-                UIManager.Instance.UpdatePlayerInfo(player);
-                GameManager.Instance.StateMachine.OnPlayerActionDone();
                 RunCallback(true);
             }
             else
@@ -93,7 +93,9 @@ namespace Actions
         private RentalRealEstate _rentalAsset;
 
         public BuyRentalRealEstateAction(
-            Player player, RentalRealEstate asset) : base(player, asset)
+            Player player,
+            RentalRealEstate asset,
+            ActionCallback callback) : base(player, asset, callback)
         {
             _rentalAsset = asset;
         }
@@ -103,6 +105,12 @@ namespace Actions
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
                 _rentalAsset, partialAsset, OnPurchasePanelButtonClick, false);
         }
+
+        protected override void BuyProperty()
+        {
+            TransactionManager.BuyRentalRealEstate(
+                player, partialAsset, _rentalAsset, onTransactionFinish);
+        }
     }
 
     public class BuyDistressedRealEstateAction : InvestmentAction
@@ -110,7 +118,9 @@ namespace Actions
         private DistressedRealEstate _distressedAsset;
 
         public BuyDistressedRealEstateAction(
-            Player player, DistressedRealEstate asset) : base(player, asset)
+            Player player,
+            DistressedRealEstate asset,
+            ActionCallback callback) : base(player, asset, callback)
         {
             _distressedAsset = asset;
         }
@@ -119,6 +129,12 @@ namespace Actions
         {
             UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
                 _distressedAsset, partialAsset, OnPurchasePanelButtonClick, false);
+        }
+
+        protected override void BuyProperty()
+        {
+            TransactionManager.BuyDistressedRealEstate(
+                player, partialAsset, _distressedAsset, onTransactionFinish);
         }
     }
 }

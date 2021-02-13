@@ -1,4 +1,6 @@
-﻿namespace PlayerState
+﻿using PlayerInfo;
+
+namespace PlayerState
 {
     public class AbstractPlayerState
     {

@@ -1,5 +1,5 @@
-﻿using ScriptableObjects;
-using UI;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using UI.Panels.Templates;
 
 namespace Actions

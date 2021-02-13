@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PlayerInfo;
 using TMPro;
 using UnityEngine;
 
@@ -28,7 +24,7 @@ namespace UI.Panels
         public void UpdatePlayerInfo(Player player)
         {
             Localization local = Localization.Instance;
-            PlayerSnapshot snapshot = new PlayerSnapshot(player);
+            Snapshot snapshot = new Snapshot(player);
 
             if (_textAge)
             {

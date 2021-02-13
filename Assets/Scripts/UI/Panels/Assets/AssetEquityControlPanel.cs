@@ -1,9 +1,8 @@
 ﻿using Assets;
+using PlayerInfo;
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {

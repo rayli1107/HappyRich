@@ -1,18 +1,23 @@
 ﻿using Assets;
+using PlayerInfo;
 using ScriptableObjects;
 using System;
-using System.Collections.Generic;
 using TMPro;
-using UI.Panels.PlayerDetails;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
     public class AbstractRealEstatePanel : MonoBehaviour
     {
 #pragma warning disable 0649
+        [SerializeField]
+        protected AssetMortgageControlPanel _mortgageControlPanel;
+        [SerializeField]
+        protected AssetPrivateLoanControlPanel _privateLoanControlPanel;
+        [SerializeField]
+        protected AssetEquityControlPanel _equityControlPanel;
+
         [SerializeField]
         protected bool _selectContact;
 
@@ -57,6 +62,41 @@ namespace UI.Panels.Assets
         protected virtual int _privateLoanRate =>
             InterestRateManager.Instance.defaultPrivateLoanRate;
         protected virtual bool _privateLoanDelayed => false;
+
+        protected virtual void Awake()
+        {
+            if (_mortgageControlPanel != null)
+            {
+                _mortgageControlPanel.adjustNumberCallback = AdjustNumbers;
+                _mortgageControlPanel.checkRaiseDebtCallback = checkRaiseDebt;
+                _mortgageControlPanel.checkRaiseEquityCallback = checkRaiseEquity;
+            }
+
+            if (_privateLoanControlPanel != null)
+            {
+                _privateLoanControlPanel.adjustNumberCallback = AdjustNumbers;
+                _privateLoanControlPanel.checkRaiseEquityCallback = checkRaiseEquity;
+            }
+
+            if (_equityControlPanel != null)
+            {
+                _equityControlPanel.adjustNumberCallback = AdjustNumbers;
+            }
+        }
+
+        private bool checkRaiseDebt()
+        {
+            int maxltv = RealEstateManager.Instance.maxPrivateLoanLTV;
+            int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
+            RealEstatePrivateLoan loan = new RealEstatePrivateLoan(
+                asset, player.GetDebtPartners(), maxltv, rate, false);
+            return loan.maxltv > 0;
+        }
+
+        private bool checkRaiseEquity()
+        {
+            return partialAsset.maxShares > 0;
+        }
 
         protected virtual void AdjustNumbers()
         {
@@ -206,97 +246,163 @@ namespace UI.Panels.Assets
             panel.GetComponent<MessageBox>().messageBoxHandler = panel.messageBoxHandler;
             panel.OnNumberInput(maxShares);
         }
-/*
-        public void OnOfferDebtButton()
+
+        protected void EnableMortgagePanel(bool enable)
         {
-            List<InvestmentPartner> partners = new List<InvestmentPartner>();
-            partners.AddRange(player.GetDebtPartners());
-            partners.RemoveAll((InvestmentPartner p) => p.cash <= 0);
-            int maxLoanAmount = 0;
-            foreach (InvestmentPartner partner in partners)
+            if (enable)
             {
-                Debug.LogFormat("{0} - {1}", partner.name, partner.cash);
-                maxLoanAmount += partner.cash;
-            }
-            Debug.LogFormat("Total - {0}", maxLoanAmount);
-            Debug.LogFormat("Max Private Loan Amount - {0}", asset.privateLoan?.amount);
-            Debug.LogFormat("Combined Liability Amount - {0}", asset.combinedLiability.amount);
-
-            maxLoanAmount = Mathf.Min(
-                maxLoanAmount,
-                asset.privateLoan?.amount - asset.combinedLiability.amount);
-
-            if (maxLoanAmount == 0)
-            {
-                string message = "You've raised the maximum allowed amount of debt.";
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
-                return;
-            }
-
-            if (_selectContact)
-            {
-                ContactSelectCallback callback =
-                    (InvestmentPartner p) => offerDebtContactSelect(p, maxLoanAmount);
-                UIManager.Instance.ShowContactListPanel(partners, callback);
+                _mortgageControlPanel.player = player;
+                _mortgageControlPanel.asset = asset;
+                _mortgageControlPanel.gameObject.SetActive(true);
+                _mortgageControlPanel.Refresh();
             }
             else
             {
-                NumberInputCallback callback =
-                    (int n) => offerDebtNumberInput(partners, _privateLoanRate, n);
-                ShowDebtOfferingPanel(
-                    maxLoanAmount, _privateLoanRate, callback, null);
+                _mortgageControlPanel.gameObject.SetActive(false);
             }
         }
 
-        public void OnOfferEquityButton()
+        protected void EnablePrivateLoanPanel(bool enable)
         {
-            int sharesNeeded = partialAsset.fundsNeeded / partialAsset.amountPerShare;
-            if (sharesNeeded == 0)
+            if (enable)
             {
-                string message = "You've raised the maximum amount needed.";
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
-                return;
-            }
-
-            List<InvestmentPartner> partners = new List<InvestmentPartner>();
-            partners.AddRange(player.GetPartners(false, false, true));
-            partners.AddRange(player.GetPartners(false, true, false));
-            partners.RemoveAll(
-                (InvestmentPartner p) => p.cash < partialAsset.amountPerShare);
-            int sharesAvailable = 0;
-            foreach (InvestmentPartner partner in partners)
-            {
-                sharesAvailable += partner.cash / partialAsset.amountPerShare;
-            }
-
-            if (sharesAvailable == 0)
-            {
-                string message = "You don't have any investors with available funds.";
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
-                return;
-            }
-
-            int maxShares = Mathf.Min(sharesAvailable, sharesNeeded);
-
-            if (_selectContact)
-            {
-                UIManager.Instance.ShowContactListPanel(
-                    partners, offerEquityContactSelect);
+                _privateLoanControlPanel.player = player;
+                _privateLoanControlPanel.asset = asset;
+                _privateLoanControlPanel.gameObject.SetActive(true);
+                _privateLoanControlPanel.Refresh();
             }
             else
             {
-                NumberInputCallback callback =
-                    (int n) => offerEquityNumberInput(partners, n);
-                ShowEquityOfferingPanel(maxShares, callback, null);
+                _privateLoanControlPanel.gameObject.SetActive(false);
             }
         }
-*/
+
+        protected void EnableEquityPanel(bool enable)
+        {
+            if (enable)
+            {
+                _equityControlPanel.player = player;
+                _equityControlPanel.asset = asset;
+                _equityControlPanel.partialAsset = partialAsset;
+                _equityControlPanel.gameObject.SetActive(true);
+                _equityControlPanel.Refresh();
+            }
+            else
+            {
+                _equityControlPanel.gameObject.SetActive(false);
+            }
+        }
+
+        public void OnRaiseDebtButton()
+        {
+            asset.AddPrivateLoan(
+                player.GetDebtPartners(),
+                RealEstateManager.Instance.maxPrivateLoanLTV,
+                InterestRateManager.Instance.defaultPrivateLoanRate,
+                false);
+            EnablePrivateLoanPanel(true);
+        }
+
+        public void OnRaiseEquityButton()
+        {
+            partialAsset.Reset();
+            EnableEquityPanel(true);
+        }
+
+
+
+        /*
+                public void OnOfferDebtButton()
+                {
+                    List<InvestmentPartner> partners = new List<InvestmentPartner>();
+                    partners.AddRange(player.GetDebtPartners());
+                    partners.RemoveAll((InvestmentPartner p) => p.cash <= 0);
+                    int maxLoanAmount = 0;
+                    foreach (InvestmentPartner partner in partners)
+                    {
+                        Debug.LogFormat("{0} - {1}", partner.name, partner.cash);
+                        maxLoanAmount += partner.cash;
+                    }
+                    Debug.LogFormat("Total - {0}", maxLoanAmount);
+                    Debug.LogFormat("Max Private Loan Amount - {0}", asset.privateLoan?.amount);
+                    Debug.LogFormat("Combined Liability Amount - {0}", asset.combinedLiability.amount);
+
+                    maxLoanAmount = Mathf.Min(
+                        maxLoanAmount,
+                        asset.privateLoan?.amount - asset.combinedLiability.amount);
+
+                    if (maxLoanAmount == 0)
+                    {
+                        string message = "You've raised the maximum allowed amount of debt.";
+                        UIManager.Instance.ShowSimpleMessageBox(
+                            message, ButtonChoiceType.OK_ONLY, null);
+                        return;
+                    }
+
+                    if (_selectContact)
+                    {
+                        ContactSelectCallback callback =
+                            (InvestmentPartner p) => offerDebtContactSelect(p, maxLoanAmount);
+                        UIManager.Instance.ShowContactListPanel(partners, callback);
+                    }
+                    else
+                    {
+                        NumberInputCallback callback =
+                            (int n) => offerDebtNumberInput(partners, _privateLoanRate, n);
+                        ShowDebtOfferingPanel(
+                            maxLoanAmount, _privateLoanRate, callback, null);
+                    }
+                }
+
+                public void OnOfferEquityButton()
+                {
+                    int sharesNeeded = partialAsset.fundsNeeded / partialAsset.amountPerShare;
+                    if (sharesNeeded == 0)
+                    {
+                        string message = "You've raised the maximum amount needed.";
+                        UIManager.Instance.ShowSimpleMessageBox(
+                            message, ButtonChoiceType.OK_ONLY, null);
+                        return;
+                    }
+
+                    List<InvestmentPartner> partners = new List<InvestmentPartner>();
+                    partners.AddRange(player.GetPartners(false, false, true));
+                    partners.AddRange(player.GetPartners(false, true, false));
+                    partners.RemoveAll(
+                        (InvestmentPartner p) => p.cash < partialAsset.amountPerShare);
+                    int sharesAvailable = 0;
+                    foreach (InvestmentPartner partner in partners)
+                    {
+                        sharesAvailable += partner.cash / partialAsset.amountPerShare;
+                    }
+
+                    if (sharesAvailable == 0)
+                    {
+                        string message = "You don't have any investors with available funds.";
+                        UIManager.Instance.ShowSimpleMessageBox(
+                            message, ButtonChoiceType.OK_ONLY, null);
+                        return;
+                    }
+
+                    int maxShares = Mathf.Min(sharesAvailable, sharesNeeded);
+
+                    if (_selectContact)
+                    {
+                        UIManager.Instance.ShowContactListPanel(
+                            partners, offerEquityContactSelect);
+                    }
+                    else
+                    {
+                        NumberInputCallback callback =
+                            (int n) => offerEquityNumberInput(partners, n);
+                        ShowEquityOfferingPanel(maxShares, callback, null);
+                    }
+                }
+        */
         public void OnResetButton()
         {
             partialAsset.OnPurchaseCancel();
+            asset.mortgage.ltv = asset.mortgage.maxltv;
             Refresh();
         }
 

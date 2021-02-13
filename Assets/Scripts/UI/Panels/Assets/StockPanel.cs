@@ -1,5 +1,6 @@
 ﻿using Actions;
 using Assets;
+using PlayerInfo;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

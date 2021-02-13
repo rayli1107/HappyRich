@@ -24,6 +24,32 @@ namespace UI.Panels.Assets
             InterestRateManager.Instance.distressedLoanRate;
         protected override bool _privateLoanDelayed => true;
 
+        public override void Refresh()
+        {
+            base.Refresh();
+
+            if (player == null || asset == null)
+            {
+                return;
+            }
+
+            if (_privateLoanControlPanel != null)
+            {
+                EnablePrivateLoanPanel(true);
+            }
+
+            if (_equityControlPanel != null)
+            {
+                EnableEquityPanel(partialAsset.shares > 0);
+            }
+
+            Localization local = Localization.Instance;
+            if (_textRehabPrice != null)
+            {
+                _textRehabPrice.text = local.GetCurrencyPlain(distressedAsset.rehabPrice);
+            }
+        }
+
         protected override void AdjustNumbers()
         {
             base.AdjustNumbers();
@@ -43,38 +69,9 @@ namespace UI.Panels.Assets
             Debug.LogFormat("Funds Needed {0}", partialAsset.fundsNeeded);
         }
 
-        public override void Refresh()
-        {
-            base.Refresh();
-
-            if (player == null || asset == null)
-            {
-                return;
-            }
-
-            AdjustNumbers();
-
-            Localization local = Localization.Instance;
-            if (_textRehabPrice != null)
-            {
-                _textRehabPrice.text = local.GetCurrencyPlain(distressedAsset.rehabPrice);
-            }
-
-            if (_equitySummaryPanel != null)
-            {
-                _equitySummaryPanel.gameObject.SetActive(partialAsset.shares > 0);
-            }
-        }
-
-        public void OnRaiseEquityButton()
-        {
-            _equitySummaryPanel.gameObject.SetActive(true);
-        }
-
         public void OnSwitchViewButton(bool advanced)
         {
             MessageBox messageBox = GetComponent<MessageBox>();
-            gameObject.SetActive(false);
             messageBox.Destroy();
             UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
                 distressedAsset, partialAsset, messageBox.messageBoxHandler, advanced);

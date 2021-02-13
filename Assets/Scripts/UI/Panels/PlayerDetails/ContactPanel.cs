@@ -1,10 +1,8 @@
-﻿using ScriptableObjects;
+﻿using PlayerInfo;
 using TMPro;
-using UnityEngine;
-using Actions;
-using UI.Panels.Assets;
-using UnityEngine.UI;
 using UI.Panels.Templates;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {

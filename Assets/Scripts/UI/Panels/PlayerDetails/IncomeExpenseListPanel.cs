@@ -1,5 +1,5 @@
 ﻿using Assets;
-using System.Collections.Generic;
+using PlayerInfo;
 using UI.Panels.Templates;
 using UnityEngine;
 
@@ -192,7 +192,7 @@ namespace UI.Panels.PlayerDetails
             AddPassiveIncome();
             AddExpenses();
 
-            PlayerSnapshot snapshot = new PlayerSnapshot(player);
+            Snapshot snapshot = new Snapshot(player);
             _panelTotalCashflow.setValueAsCurrency(snapshot.cashflow);
         }
 

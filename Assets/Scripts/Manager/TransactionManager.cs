@@ -1,6 +1,11 @@
 ﻿using Assets;
+using PlayerInfo;
 using ScriptableObjects;
-using System.Collections.Generic;
+
+using DistressedProperty = System.Tuple<
+    Assets.PartialRealEstate, Assets.DistressedRealEstate>;
+using RentalProperty = System.Tuple<
+    Assets.PartialRealEstate, Assets.RentalRealEstate>;
 
 public delegate void TransactionHandler(bool success);
 
@@ -16,7 +21,7 @@ public static class TransactionManager
         else
         {
             int loanAmount = amount - player.cash;
-            int maxLoanAmount = new PlayerSnapshot(player).availablePersonalLoanAmount;
+            int maxLoanAmount = new Snapshot(player).availablePersonalLoanAmount;
             if (loanAmount <= maxLoanAmount)
             {
                 new Actions.TakePersonalLoan(player, amount, handler).Start();
@@ -37,23 +42,66 @@ public static class TransactionManager
         }
     }
 
-    private static void buyRealEstateTransactionHandler(
-        Player player, PartialRealEstate asset, TransactionHandler handler, bool success)
+    private static void buyRentalTransactionHandler(
+        Player player,
+        PartialRealEstate partialAsset,
+        RentalRealEstate rentalAsset,
+        TransactionHandler handler,
+        bool success)
     {
-        if (success && player != null && asset != null)
+        if (success &&
+            player != null &&
+            partialAsset != null &&
+            rentalAsset != null)
         {
-            player.portfolio.properties.Add(asset);
+            player.portfolio.rentalProperties.Add(
+                new RentalProperty(partialAsset, rentalAsset));
         }
         handler?.Invoke(success);
     }
 
-    public static void BuyRealEstate(
-        Player player, PartialRealEstate asset, TransactionHandler handler)
+    public static void BuyRentalRealEstate(
+        Player player,
+        PartialRealEstate partialasset,
+        RentalRealEstate rentalAsset,
+        TransactionHandler handler)
     {
         TryDebit(
             player,
-            asset.fundsNeeded,
-            (bool b) => buyRealEstateTransactionHandler(player, asset, handler, b));
+            partialasset.fundsNeeded,
+            (bool b) => buyRentalTransactionHandler(
+                player, partialasset, rentalAsset, handler, b));
+    }
+
+    private static void buyDistressedTransactionHandler(
+        Player player,
+        PartialRealEstate partialAsset,
+        DistressedRealEstate distressedAsset,
+        TransactionHandler handler,
+        bool success)
+    {
+        if (success &&
+            player != null &&
+            partialAsset != null &&
+            distressedAsset != null)
+        {
+            player.portfolio.distressedProperties.Add(
+                new DistressedProperty(partialAsset, distressedAsset));
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyDistressedRealEstate(
+        Player player,
+        PartialRealEstate partialAsset,
+        DistressedRealEstate distressedAsset,
+        TransactionHandler handler)
+    {
+        TryDebit(
+            player,
+            partialAsset.fundsNeeded,
+            (bool b) => buyDistressedTransactionHandler(
+                player, partialAsset, distressedAsset, handler, b));
     }
 
     private static void applyJobTransactionHandler(

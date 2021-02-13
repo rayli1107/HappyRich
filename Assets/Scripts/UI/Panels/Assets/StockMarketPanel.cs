@@ -1,7 +1,7 @@
 ﻿using Assets;
+using PlayerInfo;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {

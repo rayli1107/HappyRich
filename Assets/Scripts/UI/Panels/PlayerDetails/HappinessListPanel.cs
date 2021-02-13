@@ -1,11 +1,8 @@
-﻿using Actions;
-using Assets;
+﻿using PlayerInfo;
 using PlayerState;
 using System;
-using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {

@@ -52,7 +52,7 @@ namespace Assets
         {
             get
             {
-                Localization local = Localization.Instance;
+//                Localization local = Localization.Instance;
                 int loanAmount = combinedLiability.amount;
                 int loanEquity = Mathf.Min(loanAmount, asset.value);
 //                Debug.LogFormat("Loan Equity {0}", loanEquity);

@@ -27,7 +27,7 @@ namespace Assets
 
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
-
+        /*
         public RealEstatePrivateLoan mandatoryPrivateLoan { get; private set; }
 
         public override List<AbstractLiability> liabilities
@@ -42,7 +42,7 @@ namespace Assets
                 return ret;
             }
         }
-
+        */
         public RefinancedRealEstate(
             DistressedRealEstate distressedAsset,
             List<InvestmentPartner> debtPartners,
@@ -67,16 +67,24 @@ namespace Assets
             int remainingLoanAmount = Mathf.Max(originalLoanAmount - mortgage.amount, 0);
             if (remainingLoanAmount > 0)
             {
+                AddPrivateLoan(
+                    debtPartners,
+                    RealEstateManager.Instance.maxPrivateLoanLTV,
+                    InterestRateManager.Instance.defaultPrivateLoanRate,
+                    false);
+                privateLoan.setMinimumLoanAmount(remainingLoanAmount);
+                /*
                 int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
                 mandatoryPrivateLoan = new RealEstatePrivateLoan(
                     this, debtPartners, maxPrivateLoanLtv, rate, false);
                 mandatoryPrivateLoan.setMinimumLoanAmount(remainingLoanAmount);
+                */
             }
 
             Debug.LogFormat(
                 "Refinance mortgage ltv {0} private loan ltv {1}",
                 mortgage.ltv,
-                mandatoryPrivateLoan == null ? 0 : mandatoryPrivateLoan.ltv);
+                privateLoan == null ? 0 : privateLoan.ltv);
             Debug.LogFormat(
                 "Refinance income {0} {1}",
                 distressedAsset.actualIncome,

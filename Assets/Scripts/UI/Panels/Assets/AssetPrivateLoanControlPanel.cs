@@ -18,6 +18,10 @@ namespace UI.Panels.Assets
         private TextMeshProUGUI _textPayment;
         [SerializeField]
         private Button _buttonRaiseEquity;
+        [SerializeField]
+        private Button _buttonCancel;
+        [SerializeField]
+        private bool _disableCancel = false;
 #pragma warning restore 0649
 
         public Player player;
@@ -33,13 +37,18 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            minValue = 0;
+            minValue = asset.privateLoan.minltv;
             maxValue = asset.privateLoan.maxltv;
             value = asset.privateLoan.ltv;
 
             if (_textRate != null)
             {
                 _textRate.text = string.Format("{0}%", asset.privateLoan.interestRate);
+            }
+
+            if (!_disableCancel && _buttonCancel != null)
+            {
+                _buttonCancel.gameObject.SetActive(minValue == 0);
             }
 
             AdjustNumbers();

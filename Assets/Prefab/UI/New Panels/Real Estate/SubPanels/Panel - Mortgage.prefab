@@ -1626,7 +1626,7 @@ GameObject:
   - component: {fileID: 2054064536330221308}
   - component: {fileID: 5617705873841529192}
   m_Layer: 5
-  m_Name: Panel Mortgage
+  m_Name: Panel - Mortgage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1706,7 +1706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 5425938509072024821}
-  _multiplier: 5
+  _multiplier: 1
   _textAmount: {fileID: 4126000956341006757}
   _textRate: {fileID: 4995917140734656885}
   _textPayment: {fileID: 5075678208518996441}

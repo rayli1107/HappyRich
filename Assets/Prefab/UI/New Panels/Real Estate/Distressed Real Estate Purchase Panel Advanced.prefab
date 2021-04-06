@@ -3807,7 +3807,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 390
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3957,7 +3957,7 @@ PrefabInstance:
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 585
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3997,7 +3997,7 @@ PrefabInstance:
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 195
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -5051,6 +5051,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136090555895452025, guid: bb89a6d80ad700f41934310c8508563b,
+        type: 3}
+      propertyPath: _disableCancel
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb89a6d80ad700f41934310c8508563b, type: 3}

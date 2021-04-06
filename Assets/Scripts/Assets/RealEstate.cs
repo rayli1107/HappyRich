@@ -7,7 +7,7 @@ namespace Assets
     public class AbstractRealEstate : AbstractAsset
     {
         public int originalPrice { get; private set; }
-        public virtual int purchasePrice => value;
+        public virtual int totalCost => originalPrice;
         public virtual int loanValue => value;
         public virtual int loanUnitValue => loanValue / 100;
         public RealEstateTemplate template { get; private set; }
@@ -18,7 +18,8 @@ namespace Assets
             unitCount > 1 ? string.Format(template.description, unitCount) : template.description;
         public override string name => label;
 
-        public virtual int downPayment => value - combinedLiability.amount;
+        public virtual int downPayment => Mathf.Max(
+            totalCost - combinedLiability.amount, 0);
 
         public Mortgage mortgage { get; protected set; }
         public RealEstatePrivateLoan privateLoan { get; protected set; }
@@ -69,6 +70,7 @@ namespace Assets
 
         public void ClearPrivateLoan()
         {
+            Debug.Log("ClearPrivateLoan");
             if (privateLoan != null)
             {
                 privateLoan.ltv = 0;

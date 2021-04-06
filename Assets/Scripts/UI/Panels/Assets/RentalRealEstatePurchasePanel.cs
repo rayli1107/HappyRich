@@ -25,7 +25,7 @@ namespace UI.Panels.Assets
                 EnableMortgagePanel(true);
             }
 
-            bool enableEquityPanel = partialAsset.shares > 0;
+            bool enableEquityPanel = partialAsset.investorShares > 0;
             bool enableDebtPanel = asset.privateLoan != null;
 
             if (_equityControlPanel != null)

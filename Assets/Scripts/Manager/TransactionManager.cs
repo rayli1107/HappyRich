@@ -1,12 +1,13 @@
 ﻿using Assets;
 using PlayerInfo;
 using ScriptableObjects;
-
+using System.Collections.Generic;
 using DistressedProperty = System.Tuple<
     Assets.PartialRealEstate, Assets.DistressedRealEstate>;
 using RentalProperty = System.Tuple<
     Assets.PartialRealEstate, Assets.RentalRealEstate>;
 
+using Investment = System.Tuple<InvestmentPartner, int>;
 public delegate void TransactionHandler(bool success);
 
 public static class TransactionManager
@@ -178,5 +179,31 @@ public static class TransactionManager
             player,
             cost,
             (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
+    }
+
+    public static void RefinanceProperty(
+        Player player,
+        PartialRealEstate partialAsset,
+        RefinancedRealEstate refinancedAsset)
+    {
+        List<Investment> returnedCapitalList =
+            RealEstateManager.Instance.CalculateReturnedCapital(
+                refinancedAsset, partialAsset);
+        foreach (Investment returnedCapital in returnedCapitalList)
+        {
+            InvestmentPartner partner = returnedCapital.Item1;
+            int amount = returnedCapital.Item2;
+            if (partner == null)
+            {
+                player.portfolio.AddCash(amount);
+            }
+            else
+            {
+                partner.cash += amount;
+            }
+        }
+        partialAsset.Refinance(refinancedAsset);
+        player.portfolio.rentalProperties.Add(
+            new RentalProperty(partialAsset, refinancedAsset));
     }
 }

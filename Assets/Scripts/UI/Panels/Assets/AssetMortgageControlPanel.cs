@@ -58,6 +58,7 @@ namespace UI.Panels.Assets
 
         public void OnSliderChange()
         {
+//            Debug.LogFormat("Mortgage.OnSliderChange {0}", asset);
             if (asset != null)
             {
                 asset.mortgage.ltv = value;
@@ -67,6 +68,7 @@ namespace UI.Panels.Assets
 
         private void AdjustNumbers()
         {
+//            Debug.Log("Mortgage.AdjustNumbers");
             adjustNumberCallback?.Invoke();
 
             Localization local = Localization.Instance;

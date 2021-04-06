@@ -1,8 +1,10 @@
 ﻿using Assets;
+using System.Collections.Generic;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.UI;
+
+using Investment = System.Tuple<InvestmentPartner, int>;
 
 namespace UI.Panels.Assets
 {
@@ -17,6 +19,8 @@ namespace UI.Panels.Assets
 
         protected override void Awake()
         {
+            base.Awake();
+
             if (_mortgageControlPanel != null)
             {
                 _mortgageControlPanel.checkRaiseEquityCallback = () => false;
@@ -71,10 +75,26 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
             if (_textReturnedCapital != null)
             {
-                int returnedCapital = RealEstateManager.Instance.CalculateReturnedCapital(
-                    refinancedAsset, partialAsset);
-                _textReturnedCapital.text = local.GetCurrency(returnedCapital);
+/*                Debug.LogFormat("Returned Capital {0}",
+                    refinancedAsset.returnedCapital);
+                    */
+                List<Investment> returnedCapitalList =
+                    RealEstateManager.Instance.CalculateReturnedCapital(
+                        refinancedAsset, partialAsset);
+                _textReturnedCapital.text = local.GetCurrency(
+                    returnedCapitalList[0].Item2);
             }
+
+            int actualIncome = refinancedAsset.income;
+            int investorCashflow = Mathf.FloorToInt(
+                partialAsset.investorEquity * actualIncome);
+            int ownerIncome = actualIncome - investorCashflow;
+
+            if (_textAnnualIncome != null)
+            {
+                _textAnnualIncome.text = local.GetCurrency(ownerIncome);
+            }
+
         }
 
         public void OnResetRefinanceButton()

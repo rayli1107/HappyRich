@@ -23,6 +23,7 @@ namespace Assets
     {
         public DistressedRealEstate distressedAsset { get; private set; }
         public int originalLoanAmount { get; private set; }
+        public int originalTotalCost { get; private set; }
 
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
@@ -48,7 +49,7 @@ namespace Assets
             int maxMortgageLtv,
             int maxPrivateLoanLtv)
             : base(distressedAsset.template,
-                   distressedAsset.value,
+                   distressedAsset.totalCost,
                    distressedAsset.appraisalPrice,
                    distressedAsset.actualIncome,
                    0,
@@ -56,6 +57,7 @@ namespace Assets
                    distressedAsset.unitCount)
         {
             this.distressedAsset = distressedAsset;
+            originalTotalCost = distressedAsset.totalCost;
             originalLoanAmount = distressedAsset.combinedLiability.amount;
             distressedAsset.ClearPrivateLoan();
 
@@ -74,7 +76,11 @@ namespace Assets
             Debug.LogFormat(
                 "Refinance mortgage ltv {0} private loan ltv {1}",
                 mortgage.ltv,
-                mandatoryPrivateLoan.ltv);
+                mandatoryPrivateLoan == null ? 0 : mandatoryPrivateLoan.ltv);
+            Debug.LogFormat(
+                "Refinance income {0} {1}",
+                distressedAsset.actualIncome,
+                income);
         }
     }
 }

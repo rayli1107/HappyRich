@@ -103,7 +103,7 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
 
             int privateLoanAmount = asset.privateLoan == null ? 0 : asset.privateLoan.amount;
-            int investorAmount = partialAsset.investorAmount;
+            int investorAmount = partialAsset.investorCapital;
 
             if (_textDownPayment != null)
             {
@@ -112,6 +112,7 @@ namespace UI.Panels.Assets
 
             if (_textAnnualIncome != null)
             {
+                //Debug.LogFormat("Annual Income {0}", partialAsset.income);
                 _textAnnualIncome.text = local.GetCurrency(partialAsset.income);
             }
 
@@ -163,7 +164,7 @@ namespace UI.Panels.Assets
                 _textInvestorCashflow.text = local.GetCurrency(partialAsset.investorCashflow);
             }
 
-            if (partialAsset.shares == 0)
+            if (partialAsset.investorShares == 0)
             {
                 partialAsset.Reset();
             }
@@ -237,7 +238,7 @@ namespace UI.Panels.Assets
             EquityOfferingPanel panel = Instantiate(
                 _prefabEquityOfferingPanel, UIManager.Instance.transform);
 
-            panel.amountPerShare = partialAsset.amountPerShare;
+            panel.amountPerShare = partialAsset.capitalPerShare;
             panel.equityPerShare = partialAsset.equityPerShare;
             panel.maxShares = maxShares;
             panel.cashflow = partialAsset.income;

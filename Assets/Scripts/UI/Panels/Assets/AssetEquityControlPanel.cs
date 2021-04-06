@@ -34,13 +34,13 @@ namespace UI.Panels.Assets
 
             minValue = 0;
             maxValue = partialAsset.totalShares;
-            value = partialAsset.shares;
+            value = partialAsset.investorShares;
 
             if (_textAmountPerShare != null)
             {
                 Localization local = Localization.Instance;
                 _textAmountPerShare.text = local.GetCurrency(
-                    partialAsset.amountPerShare);
+                    partialAsset.capitalPerShare);
             }
 
             AdjustNumbers();
@@ -50,7 +50,7 @@ namespace UI.Panels.Assets
         {
             if (partialAsset != null)
             {
-                partialAsset.shares = value;
+                partialAsset.investorShares = value;
                 AdjustNumbers();
             }
         }
@@ -63,7 +63,7 @@ namespace UI.Panels.Assets
 
             if (_textShares != null)
             {
-                _textShares.text = partialAsset.shares.ToString();
+                _textShares.text = partialAsset.investorShares.ToString();
             }
 
             if (_textInvestorCashflow != null)
@@ -74,7 +74,7 @@ namespace UI.Panels.Assets
             if (_textAmountRaised != null)
             {
                 _textAmountRaised.text = local.GetCurrency(
-                    partialAsset.shares * partialAsset.amountPerShare);
+                    partialAsset.investorShares * partialAsset.capitalPerShare);
             }
         }
 

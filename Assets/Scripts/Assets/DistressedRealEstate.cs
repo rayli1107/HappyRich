@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets
 {
@@ -7,7 +8,8 @@ namespace Assets
         public int rehabPrice { get; private set; }
 
         public override int value =>
-            originalPrice + rehabPrice + privateLoan.delayedExpense;
+            originalPrice + rehabPrice + (privateLoan == null ? 0 : privateLoan.delayedExpense);
+        public override int totalCost => value;
         public override int loanValue => originalPrice;
 
         public override string label =>

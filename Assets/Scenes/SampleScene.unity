@@ -258,8 +258,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
   - {fileID: 11400000, guid: 9c707023f07168a4a86392f74219a520, type: 2}
   _maxMortgageLTV: 75
+  _maxPrivateLoanLTV: 90
+  _maxDistressedLoanLTV: 100
   _defaultEquitySplit: 0.8
-  _defaultEquityPerShare: 0.01
+  _maxEquityShares: 100
   _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
   _distressedRehabPriceRange: {x: 0.1, y: 0.3}
 --- !u!114 &204261758
@@ -1298,6 +1300,10 @@ MonoBehaviour:
   _prefabAdvancedDistressedRealEstatePurchasePanel: {fileID: 6591950491861933537,
     guid: 34980d2eaf7e72445bbdab62b900ac00, type: 3}
   _prefabSimpleDistressedRealEstatePurchasePanel: {fileID: 6591950491861933537, guid: 5c32221f9476e244da257ba92000d174,
+    type: 3}
+  _prefabAdvancedRentalRealEstateRefinancePanel: {fileID: 6795058498585578170, guid: 019afb281c3d68c4a98a115cff82fbdb,
+    type: 3}
+  _prefabSimpleRentalRealEstateRefinancePanel: {fileID: 6795058498585578170, guid: b99ec3ea8eba43741b1b81c185bc9c78,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

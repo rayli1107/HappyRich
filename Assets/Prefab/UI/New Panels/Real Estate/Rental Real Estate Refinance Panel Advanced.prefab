@@ -3358,7 +3358,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 390
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3548,7 +3548,7 @@ PrefabInstance:
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 390
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -3782,7 +3782,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6795058498585578170}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -4352,7 +4352,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6795058498585578170}
     - target: {fileID: 3324757398708487891, guid: bb89a6d80ad700f41934310c8508563b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -5099,6 +5099,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 6795058498585578170}
+    - target: {fileID: 967500960271037320, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRaiseDebtButton
       objectReference: {fileID: 0}
     - target: {fileID: 1320149085478735848, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}

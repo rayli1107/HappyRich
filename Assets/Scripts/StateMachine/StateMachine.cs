@@ -7,6 +7,7 @@ namespace StateMachine
         public GameInitState GameInitState { get; private set; }
         public PlayerInitState PlayerInitState { get; private set; }
         public MarketEventState MarketEventState { get; private set; }
+        public RefinancePropertyState RefinancePropertyState { get; private set; }
         public PlayerActionState PlayerActionState { get; private set; }
         public PlayerPostActionState PlayerPostActionState { get; private set; }
         public PersonalEventState PersonalEventState { get; private set; }
@@ -20,6 +21,7 @@ namespace StateMachine
             GameInitState = new GameInitState(this);
             PlayerInitState = new PlayerInitState(this);
             MarketEventState = new MarketEventState(this);
+            RefinancePropertyState = new RefinancePropertyState(this);
             PlayerActionState = new PlayerActionState(this);
             PlayerPostActionState = new PlayerPostActionState(this);
             PersonalEventState = new PersonalEventState(this);

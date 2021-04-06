@@ -5,6 +5,8 @@ using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Investment = System.Tuple<InvestmentPartner, int>;
+
 public class RealEstateTemplate
 {
     public RealEstateProfile profile { get; private set; }
@@ -172,7 +174,7 @@ public class RealEstateManager : MonoBehaviour
         ActionCallback callback)
     {
         RealEstateTemplate template = templates[random.Next(templates.Count)];
-        bool rental = true;
+        bool rental = false;
         if (rental)
         {
             return GetRentalRealEstateAction(player, template, random, callback);
@@ -195,10 +197,10 @@ public class RealEstateManager : MonoBehaviour
         return GetInvestmentAction(player, _largeInvestments, random, callback);
     }
 
-    public RentalRealEstate RefinanceExistingProperty(
+    public RefinancedRealEstate RefinanceDistressedProperty(
         Player player, DistressedRealEstate oldAsset)
     {
-        RentalRealEstate newAsset = new RefinancedRealEstate(
+        RefinancedRealEstate newAsset = new RefinancedRealEstate(
             oldAsset,
             player.GetDebtPartners(),
             _maxMortgageLTV,
@@ -206,11 +208,46 @@ public class RealEstateManager : MonoBehaviour
         return newAsset;
     }
 
-    public int CalculateReturnedCapital(
+    public List<Investment> CalculateReturnedCapital(
         RefinancedRealEstate asset,
         PartialRealEstate partialAsset)
     {
-        return Mathf.FloorToInt(
-            asset.returnedCapital * partialAsset.capitalEquity);
+        int returnedCapital = asset.returnedCapital;
+        int capital1 = Mathf.Min(
+            returnedCapital, asset.originalTotalCost - asset.originalLoanAmount);
+        int capital2 = returnedCapital - capital1;
+/*
+        Debug.LogFormat("Returned capital {0}", returnedCapital);
+        Debug.LogFormat("Downpayment {0}", asset.distressedAsset.downPayment);
+        Debug.LogFormat("Capital stack {0} {1}", capital1, capital2);
+        */
+        List<Investment> returnedCapitalList = new List<Investment>();
+        returnedCapitalList.Add(null);
+        foreach (Investment investment in partialAsset.investments)
+        {
+            float investorCapitalEquity = investment.Item2 / (float)partialAsset.maxShares;
+            float investorEquity = investment.Item2 * partialAsset.equityPerShare;
+/*
+            Debug.LogFormat("Investor {0} equity {1} {2}",
+                investment.Item1.name,
+                investorCapitalEquity,
+                investorEquity);
+                */
+            int investorCapital1 = Mathf.FloorToInt(capital1 * investorCapitalEquity);
+            int investorCapital2 = Mathf.FloorToInt(capital2 * investorEquity);
+            int investorCapital = investorCapital1 + investorCapital2;
+            returnedCapitalList.Add(new Investment(investment.Item1, investorCapital));
+/*
+ *Debug.LogFormat(
+                "Investor {0} returned capital {1} {2}",
+                investment.Item1.name,
+                investorCapital1,
+                investorCapital2);
+                */
+            returnedCapital -= investorCapital;
+        }
+//        Debug.LogFormat("Owner returned capital: {0}", returnedCapital);
+        returnedCapitalList[0] = new Investment(null, returnedCapital);
+        return returnedCapitalList;
     }
 }

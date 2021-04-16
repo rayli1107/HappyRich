@@ -27,6 +27,7 @@ namespace Assets
 
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
+
         /*
         public RealEstatePrivateLoan mandatoryPrivateLoan { get; private set; }
 

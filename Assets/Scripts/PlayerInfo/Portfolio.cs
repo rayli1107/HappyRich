@@ -1,7 +1,7 @@
 ﻿using Assets;
 using ScriptableObjects;
 using System.Collections.Generic;
-
+using UnityEngine;
 using DistressedProperty = System.Tuple<
     Assets.PartialRealEstate, Assets.DistressedRealEstate>;
 using RentalProperty = System.Tuple<
@@ -112,6 +112,7 @@ namespace PlayerInfo
 
         public void AddCash(int amount)
         {
+            Debug.LogFormat("Add Cash {0}", amount);
             cash += amount;
         }
 

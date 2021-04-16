@@ -52,6 +52,8 @@ namespace UI
         [SerializeField]
         private RentalRealEstateRefinancePanel _prefabSimpleRentalRealEstateRefinancePanel;
         [SerializeField]
+        private RealEstateSalePanel _prefabSimpleRealEstateSalePanel;
+        [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
@@ -308,6 +310,25 @@ namespace UI
             panel.asset = asset;
             panel.partialAsset = partialAsset;
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+            panel.Refresh();
+        }
+
+        public void ShowRealEstateSalePanel(
+            Assets.RentalRealEstate asset,
+            Assets.PartialRealEstate partialAsset,
+            int initialOffer,
+            int finalOffer,
+            MessageBoxHandler handler,
+            bool advanced)
+        {
+            RealEstateSalePanel panel = Instantiate(
+                _prefabSimpleRealEstateSalePanel, transform);
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+            panel.initialOffer = initialOffer;
+            panel.finalOffer = finalOffer;
+            panel.handler = handler;
             panel.Refresh();
         }
 

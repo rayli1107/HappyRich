@@ -79,7 +79,7 @@ namespace UI.Panels.Assets
                     refinancedAsset.returnedCapital);
                     */
                 List<Investment> returnedCapitalList =
-                    RealEstateManager.Instance.CalculateReturnedCapital(
+                    RealEstateManager.Instance.CalculateReturnedCapitalForRefinance(
                         refinancedAsset, partialAsset);
                 _textReturnedCapital.text = local.GetCurrency(
                     returnedCapitalList[0].Item2);

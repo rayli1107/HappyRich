@@ -181,13 +181,36 @@ public static class TransactionManager
             (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
     }
 
+    public static void SellProperty(Player player, int index, int price)
+    {
+        PartialRealEstate partialAsset = player.portfolio.rentalProperties[index].Item1;
+        RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
+        List<Investment> returnedCapitalList =
+            RealEstateManager.Instance.CalculateReturnedCapitalForSale(
+                asset, partialAsset, price);
+        foreach (Investment returnedCapital in returnedCapitalList)
+        {
+            InvestmentPartner partner = returnedCapital.Item1;
+            int amount = returnedCapital.Item2;
+            if (partner == null)
+            {
+                player.portfolio.AddCash(amount);
+            }
+            else
+            {
+                partner.cash += amount;
+            }
+        }
+        player.portfolio.rentalProperties.RemoveAt(index);
+    }
+
     public static void RefinanceProperty(
         Player player,
         PartialRealEstate partialAsset,
         RefinancedRealEstate refinancedAsset)
     {
         List<Investment> returnedCapitalList =
-            RealEstateManager.Instance.CalculateReturnedCapital(
+            RealEstateManager.Instance.CalculateReturnedCapitalForRefinance(
                 refinancedAsset, partialAsset);
         foreach (Investment returnedCapital in returnedCapitalList)
         {

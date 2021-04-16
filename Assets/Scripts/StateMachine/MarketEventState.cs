@@ -26,7 +26,7 @@
 
         private void onEventDone()
         {
-            _stateMachine.ChangeState(_stateMachine.RefinancePropertyState);
+            _stateMachine.ChangeState(_stateMachine.SellPropertyState);
         }
 
     }

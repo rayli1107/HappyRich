@@ -48,12 +48,16 @@ public class RealEstateManager : MonoBehaviour
     private Vector2 _distressedPurchasePriceRange = new Vector2(0.5f, 0.7f);
     [SerializeField]
     private Vector2 _distressedRehabPriceRange = new Vector2(0.1f, 0.3f);
+    [SerializeField]
+    private float _sellChance = 1f;
 #pragma warning restore 0649
 
     public static RealEstateManager Instance { get; private set; }
     public float defaultEquitySplit => _defaultEquitySplit;
     public int maxEquityShares => _maxEquityShares;
     public int maxPrivateLoanLTV => _maxPrivateLoanLTV;
+    public float sellChance => _sellChance;
+
 
     private List<RealEstateTemplate> _smallInvestments;
     private List<RealEstateTemplate> _largeInvestments;
@@ -99,16 +103,23 @@ public class RealEstateManager : MonoBehaviour
         return random.Next(x, y + 1) * increment;
     }
 
+    public int calculateOfferPrice(
+        RealEstateTemplate template,
+        System.Random random)
+    {
+        float variance = template.priceVariance / 2;
+        Vector2 varianceRange = new Vector2(1 - variance, 1 + variance);
+        return calculatePrice(
+            random, template.basePrice, varianceRange, template.priceIncrement);
+    }
+
     private InvestmentAction GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random,
         ActionCallback callback)
     {
-        float variance = template.priceVariance / 2;
-        Vector2 varianceRange = new Vector2(1 - variance, 1 + variance);
-        int appraisalPrice = calculatePrice(
-            random, template.basePrice, varianceRange, template.priceIncrement);
+        int appraisalPrice = calculateOfferPrice(template, random);
 
         int rentBasePrice = template.commercial ? appraisalPrice : template.basePrice;
         int annualIncome = calculateRent(
@@ -208,14 +219,47 @@ public class RealEstateManager : MonoBehaviour
         return newAsset;
     }
 
-    public List<Investment> CalculateReturnedCapital(
+    public List<Investment> CalculateReturnedCapitalForRefinance(
         RefinancedRealEstate asset,
         PartialRealEstate partialAsset)
     {
-        int returnedCapital = asset.returnedCapital;
-        int capital1 = Mathf.Min(
-            returnedCapital, asset.originalTotalCost - asset.originalLoanAmount);
-        int capital2 = returnedCapital - capital1;
+        return calculateReturnedCapital(
+            partialAsset,
+            asset.originalTotalCost,
+            asset.originalLoanAmount,
+            asset.combinedLiability.amount);
+    }
+
+    public List<Investment> CalculateReturnedCapitalForSale(
+        RentalRealEstate asset,
+        PartialRealEstate partialAsset,
+        int price)
+    {
+        return calculateReturnedCapital(
+            partialAsset,
+            asset.totalCost,
+            asset.combinedLiability.amount,
+            price);
+    }
+
+    private List<Investment> calculateReturnedCapital(
+        PartialRealEstate partialAsset,
+        int originalTotalCost,
+        int oldCapitalAmount,
+        int newCapitalAmount)
+    {
+        int totalReturnedCapital = newCapitalAmount - oldCapitalAmount;
+        int capital1 = Mathf.Max(
+            Mathf.Min(newCapitalAmount, originalTotalCost) - oldCapitalAmount, 0);
+        int capital2 = totalReturnedCapital - capital1;
+
+        List<string> messages = new List<string>()
+        {
+            "calculateReturnedCapital()",
+            string.Format("originalTotalCost: {0}", originalTotalCost),
+            string.Format("oldCapitalAmount: {0}", oldCapitalAmount),
+            string.Format("newCapitalAmount: {0}", newCapitalAmount),
+        };
 /*
         Debug.LogFormat("Returned capital {0}", returnedCapital);
         Debug.LogFormat("Downpayment {0}", asset.distressedAsset.downPayment);
@@ -237,17 +281,25 @@ public class RealEstateManager : MonoBehaviour
             int investorCapital2 = Mathf.FloorToInt(capital2 * investorEquity);
             int investorCapital = investorCapital1 + investorCapital2;
             returnedCapitalList.Add(new Investment(investment.Item1, investorCapital));
-/*
- *Debug.LogFormat(
-                "Investor {0} returned capital {1} {2}",
+            /*
+             *Debug.LogFormat(
+                            "Investor {0} returned capital {1} {2}",
+                            investment.Item1.name,
+                            investorCapital1,
+                            investorCapital2);
+                            */
+            totalReturnedCapital -= investorCapital;
+            messages.Add(string.Format(
+                "Investor {0} equity {1} {2} returned capital {3} {4}",
                 investment.Item1.name,
+                investorCapitalEquity,
+                investorEquity,
                 investorCapital1,
-                investorCapital2);
-                */
-            returnedCapital -= investorCapital;
+                investorCapital2));
         }
-//        Debug.LogFormat("Owner returned capital: {0}", returnedCapital);
-        returnedCapitalList[0] = new Investment(null, returnedCapital);
+        messages.Add(string.Format("Owner returned capital: {0}", totalReturnedCapital));
+        Debug.Log(string.Join("\n", messages));
+        returnedCapitalList[0] = new Investment(null, totalReturnedCapital);
         return returnedCapitalList;
     }
 }

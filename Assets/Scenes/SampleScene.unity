@@ -264,6 +264,7 @@ MonoBehaviour:
   _maxEquityShares: 100
   _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
   _distressedRehabPriceRange: {x: 0.1, y: 0.3}
+  _sellChance: 1
 --- !u!114 &204261758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,6 +1305,8 @@ MonoBehaviour:
   _prefabAdvancedRentalRealEstateRefinancePanel: {fileID: 6795058498585578170, guid: 019afb281c3d68c4a98a115cff82fbdb,
     type: 3}
   _prefabSimpleRentalRealEstateRefinancePanel: {fileID: 6795058498585578170, guid: b99ec3ea8eba43741b1b81c185bc9c78,
+    type: 3}
+  _prefabSimpleRealEstateSalePanel: {fileID: 2977606715860159181, guid: 8b6a5d7fd31bc9644a87c134ba87690b,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

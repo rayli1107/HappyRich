@@ -5,6 +5,7 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
+/*
     public abstract class RefinanceAction : AbstractAction
     {
         private Player _player;
@@ -22,4 +23,5 @@ namespace Actions
             _partialRealEstate = partialAsset;
         }
     }
+    */
 }

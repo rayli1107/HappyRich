@@ -20,6 +20,7 @@ namespace UI.Panels.Assets
         protected override void Awake()
         {
             base.Awake();
+            GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
 
             if (_mortgageControlPanel != null)
             {
@@ -110,6 +111,19 @@ namespace UI.Panels.Assets
             messageBox.Destroy();
             UIManager.Instance.ShowRentalRealEstateRefinancePanel(
                 refinancedAsset, partialAsset, messageBox.messageBoxHandler, advanced);
+        }
+
+        private string GetConfirmMessage(ButtonType buttonType)
+        {
+            Localization local = Localization.Instance;
+            if (buttonType == ButtonType.OK)
+            {
+                return string.Format(
+                    "Refinance the {0} for a new loan of {1}?",
+                    local.GetRealEstateDescription(asset.description),
+                    local.GetCurrency(refinancedAsset.combinedLiability.amount));
+            }
+            return null;
         }
     }
 }

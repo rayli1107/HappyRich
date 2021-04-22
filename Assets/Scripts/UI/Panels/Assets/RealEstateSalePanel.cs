@@ -28,11 +28,10 @@ namespace UI.Panels.Assets
         public PartialRealEstate partialAsset;
         public int initialOffer;
         public int finalOffer;
-        public MessageBoxHandler handler;
 
         private void Awake()
         {
-            GetComponent<MessageBox>().messageBoxHandler = messageBoxHandler;
+            GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
         }
 
         public virtual void Refresh()
@@ -74,37 +73,21 @@ namespace UI.Panels.Assets
             Refresh();
         }
 
-        private void handleAction(ButtonType buttonType, ButtonType actualButtonType)
-        {
-            if (buttonType == ButtonType.OK)
-            {
-                handler?.Invoke(actualButtonType);
-            }
-        }
-
-        private void messageBoxHandler(ButtonType buttonType)
+        private string GetConfirmMessage(ButtonType buttonType)
         {
             Localization local = Localization.Instance;
             if (buttonType == ButtonType.OK)
             {
-                string message = string.Format(
+                return string.Format(
                     "Sell the {0} for {1}?",
                     local.GetRealEstateDescription(asset.description),
                     local.GetCurrency(finalOffer));
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_CANCEL,
-                    (ButtonType t) => handleAction(t, ButtonType.OK));
             }
             else
             {
-                string message = string.Format(
-                    "Reject the offer for {0}?",
-                    local.GetRealEstateDescription(asset.description));
-                UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_CANCEL,
-                    (ButtonType t) => handleAction(t, ButtonType.CANCEL));
+                return string.Format(
+                        "Reject the offer for {0}?",
+                        local.GetRealEstateDescription(asset.description));
             }
         }
     }

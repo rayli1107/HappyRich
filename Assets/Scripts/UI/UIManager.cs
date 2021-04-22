@@ -328,7 +328,7 @@ namespace UI
             panel.partialAsset = partialAsset;
             panel.initialOffer = initialOffer;
             panel.finalOffer = finalOffer;
-            panel.handler = handler;
+            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }
 

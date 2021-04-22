@@ -22,10 +22,12 @@ namespace UI.Panels.Templates
     }
 
     public delegate void MessageBoxHandler(ButtonType buttonType);
+    public delegate string GetConfirmMessageCallback(ButtonType buttonType);
 
     public class MessageBox : ModalObject
     {
         public MessageBoxHandler messageBoxHandler;
+        public GetConfirmMessageCallback confirmMessageHandler;
 
 #pragma warning disable 0649
         [SerializeField]
@@ -35,105 +37,46 @@ namespace UI.Panels.Templates
         [SerializeField]
         private GameObject _buttonBack;
 #pragma warning restore 0649
-        //        public RectTransform childRect;
-        //        public ButtonChoiceType buttonChoice = ButtonChoiceType.OK_ONLY;
 
-        /*
-#pragma warning disable 0649
-        [SerializeField]
-        private int padding = 20;
-        [SerializeField]
-        private RectTransform _panelButtons;
-        [SerializeField]
-        private RectTransform _buttonOk;
-        [SerializeField]
-        private RectTransform _buttonCancel;
-        [SerializeField]
-        private RectTransform _buttonBack;
-#pragma warning restore 0649
-        */
-        /*
-                protected override void OnEnable()
-                {
-                    base.OnEnable();
-
-                    List<RectTransform> buttons = new List<RectTransform>();
-                    switch (buttonChoice)
-                    {
-                        case ButtonChoiceType.BACK_ONLY:
-                            buttons.Add(_buttonBack);
-                            break;
-                        case ButtonChoiceType.CANCEL_ONLY:
-                            buttons.Add(_buttonCancel);
-                            break;
-                        case ButtonChoiceType.OK_CANCEL:
-                            buttons.Add(_buttonOk);
-                            buttons.Add(_buttonCancel);
-                            break;
-                        case ButtonChoiceType.OK_ONLY:
-                            buttons.Add(_buttonOk);
-                            break;
-                        default:
-                            break;
-                    }
-                    foreach (RectTransform buttonPanel in buttons)
-                    {
-                        buttonPanel.gameObject.SetActive(true);
-                    }
-        /*
-                    float width = childRect.sizeDelta.x + 2 * padding;
-                    float height = childRect.sizeDelta.y + 2 * padding;
-
-                    if (buttons.Count > 0)
-                    {
-                        height += _panelButtons.sizeDelta.y;
-                        _panelButtons.gameObject.SetActive(true);
-
-                        float deltaX = 1.0f / buttons.Count;
-                        for (int i = 0; i < buttons.Count; ++i)
-                        {
-                            RectTransform rectButton = buttons[i];
-                            rectButton.gameObject.SetActive(true);
-                            rectButton.anchorMin = new Vector2(i * deltaX, 0);
-                            rectButton.anchorMax = new Vector2((i + 1) * deltaX, 1);
-                        }
-                    }
-
-                    RectTransform rect = GetComponent<RectTransform>();
-                    rect.sizeDelta = new Vector2(width, height);
-                    childRect.anchorMin = childRect.anchorMax = childRect.pivot = new Vector2(0, 1);
-                    childRect.anchoredPosition = new Vector2(padding, -1 * padding);
-
-                }
-                */
-
-        public void OnButtonOk()
+        private void onFinish(ButtonType buttonType)
         {
-            messageBoxHandler?.Invoke(ButtonType.OK);
+            messageBoxHandler?.Invoke(buttonType);
             Destroy();
         }
 
-        public void OnButtonCancel()
+        private void handleConfirm(ButtonType buttonType, ButtonType actualButtonType)
         {
-            messageBoxHandler?.Invoke(ButtonType.CANCEL);
-            Destroy();
+            if (buttonType == ButtonType.OK)
+            {
+                onFinish(actualButtonType);
+            }
         }
-        /*
-                public override void OnClickOutsideBoundary()
-                {
-                    if (_enableInput)
-                    {
-                        if (messageBoxHandler != null)
-                        {
-                            messageBoxHandler.OnButtonClick(ButtonType.OUTSIDE_BOUNDARY);
-                        }
-                        else
-                        {
-                            Destroy();
-                        }
-                    }
-                }
-                */
+
+        private void handleButton(ButtonType buttonType)
+        {
+            string message = confirmMessageHandler?.Invoke(buttonType);
+            if (message == null || message.Length == 0)
+            {
+                onFinish(buttonType);
+            }
+            else
+            {
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message,
+                    ButtonChoiceType.OK_CANCEL,
+                    (ButtonType t) => handleConfirm(t, buttonType));
+            }
+        }
+
+        public virtual void OnButtonOk()
+        {
+            handleButton(ButtonType.OK);
+        }
+
+        public virtual void OnButtonCancel()
+        {
+            handleButton(ButtonType.CANCEL);
+        }
 
         public void EnableButtons(ButtonChoiceType buttonChoice)
         {
@@ -156,6 +99,5 @@ namespace UI.Panels.Templates
                     break;
             }
         }
-
     }
 }

@@ -22,11 +22,13 @@ namespace UI.Panels.Templates
     }
 
     public delegate void MessageBoxHandler(ButtonType buttonType);
+    public delegate void StartTransactionHandler(TransactionHandler handler);
     public delegate string GetConfirmMessageCallback(ButtonType buttonType);
 
     public class MessageBox : ModalObject
     {
         public MessageBoxHandler messageBoxHandler;
+        public StartTransactionHandler startTransactionHandler;
         public GetConfirmMessageCallback confirmMessageHandler;
 
 #pragma warning disable 0649
@@ -38,17 +40,37 @@ namespace UI.Panels.Templates
         private GameObject _buttonBack;
 #pragma warning restore 0649
 
+        private void transactionHandler(bool success, ButtonType buttonType)
+        {
+            if (success)
+            {
+                onFinish(buttonType);
+            }
+        }
+
         private void onFinish(ButtonType buttonType)
         {
             messageBoxHandler?.Invoke(buttonType);
             Destroy();
         }
 
+        private void tryFinish(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.OK && startTransactionHandler != null)
+            {
+                startTransactionHandler((bool b) => transactionHandler(b, buttonType));
+            }
+            else
+            {
+                onFinish(buttonType);
+            }
+        }
+
         private void handleConfirm(ButtonType buttonType, ButtonType actualButtonType)
         {
             if (buttonType == ButtonType.OK)
             {
-                onFinish(actualButtonType);
+                tryFinish(actualButtonType);
             }
         }
 
@@ -57,7 +79,7 @@ namespace UI.Panels.Templates
             string message = confirmMessageHandler?.Invoke(buttonType);
             if (message == null || message.Length == 0)
             {
-                onFinish(buttonType);
+                tryFinish(buttonType);
             }
             else
             {

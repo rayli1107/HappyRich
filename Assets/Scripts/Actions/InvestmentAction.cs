@@ -12,13 +12,13 @@ namespace Actions
         kCancelling
     }
 
-    public abstract class InvestmentAction : AbstractAction
+    public abstract class AbstractBuyInvestmentAction : AbstractAction
     {
         protected Player player { get; private set; }
         private AbstractRealEstate _asset;
         protected PartialRealEstate partialAsset { get; private set; }
 
-        public InvestmentAction(
+        public AbstractBuyInvestmentAction(
             Player player,
             AbstractRealEstate asset,
             ActionCallback callback) : base(callback)
@@ -27,42 +27,21 @@ namespace Actions
             _asset = asset;
         }
 
-        protected abstract void BuyProperty();
-
-        protected void OnPurchasePanelButtonClick(ButtonType button)
+        protected void messageBoxHandler(ButtonType buttonType)
         {
-            if (button == ButtonType.OK)
+            if (buttonType == ButtonType.OK)
             {
-                BuyProperty();
+                partialAsset.OnPurchase();
+                RunCallback(true);
             }
             else
-            {
-                ShowCancelConfirmPanel();
-            }
-        }
-
-        private void OnCancelConfirmButtonClick(ButtonType button)
-        {
-            if (button == ButtonType.OK)
             {
                 partialAsset.OnPurchaseCancel();
                 RunCallback(false);
             }
-            else
-            {
-                ShowPurchasePanel();
-            }
         }
 
         public abstract void ShowPurchasePanel();
-
-        public void ShowCancelConfirmPanel()
-        {
-            UI.UIManager.Instance.ShowSimpleMessageBox(
-                "Are you sure you don't want to purchase the property?",
-                ButtonChoiceType.OK_CANCEL,
-                OnCancelConfirmButtonClick);
-        }
 
         public override void Start()
         {
@@ -73,22 +52,9 @@ namespace Actions
                 RealEstateManager.Instance.maxEquityShares);
             ShowPurchasePanel();
         }
-
-        protected void onTransactionFinish(bool success)
-        {
-            if (success)
-            {
-                partialAsset.OnPurchase();
-                RunCallback(true);
-            }
-            else
-            {
-                ShowPurchasePanel();
-            }
-        }
     }
 
-    public class BuyRentalRealEstateAction : InvestmentAction
+    public class BuyRentalRealEstateAction : AbstractBuyInvestmentAction
     {
         private RentalRealEstate _rentalAsset;
 
@@ -103,17 +69,21 @@ namespace Actions
         public override void ShowPurchasePanel()
         {
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                _rentalAsset, partialAsset, OnPurchasePanelButtonClick, false);
+                _rentalAsset,
+                partialAsset,
+                messageBoxHandler,
+                startTransactionHandler,
+                false);
         }
 
-        protected override void BuyProperty()
+        private void startTransactionHandler(TransactionHandler handler)
         {
             TransactionManager.BuyRentalRealEstate(
-                player, partialAsset, _rentalAsset, onTransactionFinish);
+                player, partialAsset, _rentalAsset, handler);
         }
     }
 
-    public class BuyDistressedRealEstateAction : InvestmentAction
+    public class BuyDistressedRealEstateAction : AbstractBuyInvestmentAction
     {
         private DistressedRealEstate _distressedAsset;
 
@@ -128,13 +98,17 @@ namespace Actions
         public override void ShowPurchasePanel()
         {
             UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
-                _distressedAsset, partialAsset, OnPurchasePanelButtonClick, false);
+                _distressedAsset,
+                partialAsset,
+                messageBoxHandler,
+                startTransactionHandler,
+                false);
         }
 
-        protected override void BuyProperty()
+        private void startTransactionHandler(TransactionHandler handler)
         {
             TransactionManager.BuyDistressedRealEstate(
-                player, partialAsset, _distressedAsset, onTransactionFinish);
+                player, partialAsset, _distressedAsset, handler);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Assets
 {
     public class AbstractAsset
     {
-        public virtual string name { get; private set; }
+        public virtual string name { get; protected set; }
         public virtual CombinedLiability combinedLiability { get; private set; }
 
         public virtual List<AbstractLiability> liabilities {

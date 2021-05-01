@@ -257,7 +257,8 @@ namespace UI
         public void ShowRentalRealEstatePurchasePanel(
             Assets.AbstractRealEstate asset,
             Assets.PartialRealEstate partialAsset,
-            MessageBoxHandler handler,
+            MessageBoxHandler messageBoxHandler,
+            StartTransactionHandler startTransactionHandler,
             bool advanced)
         {
             RentalRealEstatePurchasePanel panel = Instantiate(
@@ -268,8 +269,12 @@ namespace UI
 
             panel.player = GameManager.Instance.player;
             panel.asset = asset;
-            panel.partialAsset = partialAsset; 
-            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+            panel.partialAsset = partialAsset;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+            messageBox.startTransactionHandler = startTransactionHandler;
+
             panel.Refresh();
         }
 
@@ -296,7 +301,8 @@ namespace UI
         public void ShowDistressedRealEstatePurchasePanel(
             Assets.DistressedRealEstate asset,
             Assets.PartialRealEstate partialAsset,
-            MessageBoxHandler handler,
+            MessageBoxHandler messageBoxHandler,
+            StartTransactionHandler startTransactionHandler,
             bool advanced)
         {
             DistressedRealEstatePurchasePanel panel = Instantiate(
@@ -309,7 +315,11 @@ namespace UI
             panel.distressedAsset = asset;
             panel.asset = asset;
             panel.partialAsset = partialAsset;
-            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+            messageBox.startTransactionHandler = startTransactionHandler;
+
             panel.Refresh();
         }
 

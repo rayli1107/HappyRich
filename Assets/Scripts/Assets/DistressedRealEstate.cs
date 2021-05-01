@@ -12,11 +12,6 @@ namespace Assets
         public override int totalCost => value;
         public override int loanValue => originalPrice;
 
-        public override string label =>
-            string.Format("Distressed {0}", base.label);
-        public override string description =>
-            string.Format("Distressed {0}", base.description);
-
         public int appraisalPrice { get; private set; }
         public int actualIncome { get; private set; }
 
@@ -38,6 +33,9 @@ namespace Assets
             int rate = InterestRateManager.Instance.distressedLoanRate;
             privateLoan = new RealEstatePrivateLoan(
                 this, debtPartners, maxLtv, rate, true);
+
+            label = string.Format("Distressed {0}", label);
+            description = string.Format("Distressed {0}", description);
         }
     }
 }

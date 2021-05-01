@@ -113,7 +113,7 @@ public class RealEstateManager : MonoBehaviour
             random, template.basePrice, varianceRange, template.priceIncrement);
     }
 
-    private InvestmentAction GetDistressedRealEstateAction(
+    private AbstractBuyInvestmentAction GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random,
@@ -151,7 +151,7 @@ public class RealEstateManager : MonoBehaviour
         return new BuyDistressedRealEstateAction(player, asset, callback);
     }
 
-    private InvestmentAction GetRentalRealEstateAction(
+    private AbstractBuyInvestmentAction GetRentalRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random,
@@ -178,7 +178,7 @@ public class RealEstateManager : MonoBehaviour
         return new BuyRentalRealEstateAction(player, asset, callback);
     }
 
-    private InvestmentAction GetInvestmentAction(
+    private AbstractBuyInvestmentAction GetInvestmentAction(
         Player player,
         List<RealEstateTemplate> templates,
         System.Random random,
@@ -196,13 +196,13 @@ public class RealEstateManager : MonoBehaviour
         }
     }
 
-    public InvestmentAction GetSmallInvestmentAction(
+    public AbstractBuyInvestmentAction GetSmallInvestmentAction(
         Player player, System.Random random, ActionCallback callback)
     {
         return GetInvestmentAction(player, _smallInvestments, random, callback);
     }
 
-    public InvestmentAction GetLargeInvestmentAction(
+    public AbstractBuyInvestmentAction GetLargeInvestmentAction(
         Player player, System.Random random, ActionCallback callback)
     {
         return GetInvestmentAction(player, _largeInvestments, random, callback);

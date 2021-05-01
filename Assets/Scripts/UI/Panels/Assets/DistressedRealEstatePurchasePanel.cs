@@ -81,7 +81,11 @@ namespace UI.Panels.Assets
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
             UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
-                distressedAsset, partialAsset, messageBox.messageBoxHandler, advanced);
+                distressedAsset,
+                partialAsset,
+                messageBox.messageBoxHandler,
+                messageBox.startTransactionHandler,
+                advanced);
         }
 
         private string GetConfirmMessage(ButtonType buttonType)

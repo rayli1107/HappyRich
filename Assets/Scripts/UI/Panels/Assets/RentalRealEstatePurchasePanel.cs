@@ -50,7 +50,11 @@ namespace UI.Panels.Assets
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                asset, partialAsset, messageBox.messageBoxHandler, advanced);
+                asset,
+                partialAsset,
+                messageBox.messageBoxHandler,
+                messageBox.startTransactionHandler,
+                advanced);
         }
 
         private string GetConfirmMessage(ButtonType buttonType)

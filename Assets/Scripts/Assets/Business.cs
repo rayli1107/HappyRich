@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class AbstractRealEstate : AbstractInvestment
+    public class AbstractBusiness : AbstractInvestment
     {
         public RealEstateTemplate template { get; private set; }
         public int unitCount { get; private set; }
         public Mortgage mortgage { get; protected set; }
         public RealEstatePrivateLoan privateLoan { get; protected set; }
 
-        public AbstractRealEstate(
+        public AbstractBusiness(
             RealEstateTemplate template,
             int originalPrice,
             int marketValue,
@@ -46,7 +46,7 @@ namespace Assets
                 return ret;
             }
         }
-
+        /*
         public void AddPrivateLoan(
             List<InvestmentPartner> partners,
             int maxltv,
@@ -59,7 +59,7 @@ namespace Assets
                     this, partners, maxltv, rate, delayed);
             }
         }
-
+        */
         public void ClearPrivateLoan()
         {
             Debug.Log("ClearPrivateLoan");

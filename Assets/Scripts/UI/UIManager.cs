@@ -206,6 +206,7 @@ namespace UI
             prompt.confirmMessageHandler = confirmMessageHandler;
             prompt.cancelEnabled = cancelEnabled;
             prompt.requireNonEmpty = requireNonEmpty;
+            prompt.gameObject.SetActive(true);
             return prompt;
         }
 

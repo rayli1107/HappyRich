@@ -23,8 +23,8 @@ MonoBehaviour:
   - Video Game Store
   priceRange: {x: 50000, y: 200000}
   priceIncrement: 10000
-  minIncomeRange: {x: 0, y: 4}
-  maxIncomeRange: {x: 12, y: 16}
+  minIncomeRange: {x: 0, y: 40}
+  maxIncomeRange: {x: 120, y: 160}
   incomeIncrement: 1000
   franchise: 0
   franchiseFeeRange: {x: 0, y: 0}

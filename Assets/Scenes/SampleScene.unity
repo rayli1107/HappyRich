@@ -1338,6 +1338,8 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleTextMessageBox: {fileID: 3353754232464925460, guid: 0530943b3bc76794bb6cc9c6c45b36da,
     type: 3}
+  _prefabSimpleTextPrompt: {fileID: 9019924363112762818, guid: 3b12655bb02dfd34486387755fe68b27,
+    type: 3}
   _prefabActionMenuPanel: {fileID: 8718143703676590498, guid: 63b16a0e5bb7d724ab8e70c4f2644a6b,
     type: 3}
   _prefabStockMarketPanel: {fileID: 8913108381888134533, guid: e4cf50c6c3980ef44bcc368e3a7aeefd,

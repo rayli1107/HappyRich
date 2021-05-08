@@ -16,7 +16,7 @@ namespace UI.Panels.Templates
         [SerializeField]
         private TMP_InputField _input;
         [SerializeField]
-        private Button _buttonCancel;
+        private GameObject _buttonCancelPanel;
 #pragma warning restore 0649
 
         public TextInputCallback textInputCallback;
@@ -31,8 +31,8 @@ namespace UI.Panels.Templates
 
         public bool cancelEnabled
         {
-            get => _buttonCancel.gameObject.activeSelf;
-            set { _buttonCancel.gameObject.SetActive(value); }
+            get => _buttonCancelPanel.activeSelf;
+            set { _buttonCancelPanel.SetActive(value); }
         }
 
         private void onFinish()

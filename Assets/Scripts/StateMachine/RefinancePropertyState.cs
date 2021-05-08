@@ -13,7 +13,7 @@ namespace StateMachine
 
         private void handleRefinancePanelResult(
             int index,
-            PartialRealEstate partialAsset,
+            PartialInvestment partialAsset,
             RefinancedRealEstate refinancedAsset) {
             TransactionManager.RefinanceProperty(
                 GameManager.Instance.player,
@@ -33,7 +33,7 @@ namespace StateMachine
                 return;
             }
 
-            PartialRealEstate partialAsset = portfolio.distressedProperties[index].Item1;
+            PartialInvestment partialAsset = portfolio.distressedProperties[index].Item1;
             DistressedRealEstate distressedAsset = portfolio.distressedProperties[index].Item2;
             RefinancedRealEstate refinancedAsset =
                 RealEstateManager.Instance.RefinanceDistressedProperty(player, distressedAsset);

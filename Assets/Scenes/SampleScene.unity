@@ -130,11 +130,8 @@ GameObject:
   m_Component:
   - component: {fileID: 204261753}
   - component: {fileID: 204261752}
-  - component: {fileID: 204261751}
   - component: {fileID: 204261754}
-  - component: {fileID: 204261755}
   - component: {fileID: 204261756}
-  - component: {fileID: 204261757}
   - component: {fileID: 204261758}
   m_Layer: 0
   m_Name: Game Manager
@@ -143,24 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &204261751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204261750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8271894cd2ef0444aac7edfe3bc75a3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _studentLoanRate: 3
-  _autoLoanRate: 3
-  _realEstateLoanRate: 4
-  _distressedLoanRate: 10
-  _personalLoanRate: 15
-  _defaultPrivateLoanRate: 6
 --- !u!114 &204261752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,23 +184,6 @@ MonoBehaviour:
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
   _applyOldJobSuccessChance: 0.5
---- !u!114 &204261755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204261750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c188891f23909a641abfdfc1e93dc8ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialPriceMin: 20
-  _initialPriceMax: 100
-  _numGrowthStock: 5
-  _growthStockRangeMin: 0.8
-  _growthStockRangeMax: 1.4
 --- !u!114 &204261756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,33 +200,11 @@ MonoBehaviour:
   _colorNegative: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
   _colorJob: {r: 0, g: 1, b: 1, a: 1}
   _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _colorBusiness: {r: 1, g: 0.8, b: 0, a: 1}
   _colorName: {r: 1, g: 0.62352943, b: 0, a: 1}
   _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
---- !u!114 &204261757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204261750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c0a984b00d8fa441a07fbca2647f516, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _profiles:
-  - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
-  - {fileID: 11400000, guid: 9c707023f07168a4a86392f74219a520, type: 2}
-  _maxMortgageLTV: 75
-  _maxPrivateLoanLTV: 90
-  _maxDistressedLoanLTV: 100
-  _defaultEquitySplit: 0.8
-  _maxEquityShares: 100
-  _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
-  _distressedRehabPriceRange: {x: 0.1, y: 0.3}
-  _sellChance: 1
 --- !u!114 &204261758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,6 +638,118 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90076b73e2ce698429481b5d419a664a, type: 3}
+--- !u!1 &1128526758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128526763}
+  - component: {fileID: 1128526762}
+  - component: {fileID: 1128526761}
+  - component: {fileID: 1128526760}
+  - component: {fileID: 1128526759}
+  m_Layer: 0
+  m_Name: Investment Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1128526759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f480dae899948de428dd89029cf2a5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _smallInvestments:
+  - {fileID: 11400000, guid: 84e1207c2e20bff468daea763c8ffa73, type: 2}
+  _largeInvestments: []
+  _maxBusinessLoanLTV: 75
+  _maxPrivateLoanLTV: 90
+  _defaultEquitySplit: 0.6
+  _maxEquityShares: 100
+--- !u!114 &1128526760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0a984b00d8fa441a07fbca2647f516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _profiles:
+  - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
+  - {fileID: 11400000, guid: 9c707023f07168a4a86392f74219a520, type: 2}
+  _maxMortgageLTV: 75
+  _maxPrivateLoanLTV: 90
+  _maxDistressedLoanLTV: 100
+  _defaultEquitySplit: 0.8
+  _maxEquityShares: 100
+  _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
+  _distressedRehabPriceRange: {x: 0.1, y: 0.3}
+  _sellChance: 1
+--- !u!114 &1128526761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c188891f23909a641abfdfc1e93dc8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initialPriceMin: 20
+  _initialPriceMax: 100
+  _numGrowthStock: 5
+  _growthStockRangeMin: 0.8
+  _growthStockRangeMax: 1.4
+--- !u!114 &1128526762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8271894cd2ef0444aac7edfe3bc75a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _studentLoanRate: 3
+  _autoLoanRate: 3
+  _realEstateLoanRate: 4
+  _businessLoanRate: 4
+  _distressedLoanRate: 10
+  _personalLoanRate: 15
+  _defaultPrivateLoanRate: 6
+--- !u!4 &1128526763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1277663898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1307,6 +1359,10 @@ MonoBehaviour:
   _prefabSimpleRentalRealEstateRefinancePanel: {fileID: 6795058498585578170, guid: b99ec3ea8eba43741b1b81c185bc9c78,
     type: 3}
   _prefabSimpleRealEstateSalePanel: {fileID: 2977606715860159181, guid: 8b6a5d7fd31bc9644a87c134ba87690b,
+    type: 3}
+  _prefabAdvancedStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: e5d10030208fecc4e949e546cac8e12a,
+    type: 3}
+  _prefabSimpleStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: 0854a6f72ffc14f4785633bf5f2f19d7,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

@@ -4,76 +4,39 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class AbstractBusiness : AbstractInvestment
+    public class Business : AbstractInvestment
     {
-        public RealEstateTemplate template { get; private set; }
-        public int unitCount { get; private set; }
-        public Mortgage mortgage { get; protected set; }
-        public RealEstatePrivateLoan privateLoan { get; protected set; }
+        public int startupCost { get; private set; }
+        public int franchiseFee { get; private set; }
+        public override int value => startupCost + franchiseFee;
+        public override int totalCost => value;
+        public int minIncome { get; private set; }
+        public int maxIncome { get; private set; }
 
-        public AbstractBusiness(
-            RealEstateTemplate template,
-            int originalPrice,
-            int marketValue,
-            int annualIncome,
-            int unitCount)
-            : base("", originalPrice, marketValue, annualIncome)
+        public Business(
+            string description,
+            int startupCost,
+            int franchiseFee,
+            int minIncome,
+            int maxIncome,
+            int actualIncome,
+            int loanLtv,
+            int maxLoanLtv)
+            : base("", 0, 0, actualIncome)
         {
-            label = unitCount > 1 ?
-                string.Format(template.label, unitCount) :
-                template.label;
-            description = unitCount > 1 ?
-                string.Format(template.description, unitCount) :
-                template.description;
+            this.description = description;
+            this.startupCost = startupCost;
+            this.franchiseFee = franchiseFee;
+            this.minIncome = minIncome;
+            this.maxIncome = maxIncome;
+            originalPrice = value;
 
-            this.template = template;
-            this.unitCount = unitCount;
+            primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv);
         }
 
-        public override List<AbstractLiability> liabilities
+        public void SetName(string name)
         {
-            get
-            {
-                List<AbstractLiability> ret = base.liabilities;
-                if (mortgage != null)
-                {
-                    ret.Add(mortgage);
-                }
-                if (privateLoan != null)
-                {
-                    ret.Add(privateLoan);
-                }
-                return ret;
-            }
-        }
-        /*
-        public void AddPrivateLoan(
-            List<InvestmentPartner> partners,
-            int maxltv,
-            int rate,
-            bool delayed)
-        {
-            if (privateLoan == null)
-            {
-                privateLoan = new RealEstatePrivateLoan(
-                    this, partners, maxltv, rate, delayed);
-            }
-        }
-        */
-        public void ClearPrivateLoan()
-        {
-            Debug.Log("ClearPrivateLoan");
-            if (privateLoan != null)
-            {
-                privateLoan.ltv = 0;
-                privateLoan = null;
-            }
-        }
-
-        public override void OnPurchaseCancel()
-        {
-            base.OnPurchaseCancel();
-            ClearPrivateLoan();
+            label = name;
         }
     }
 }

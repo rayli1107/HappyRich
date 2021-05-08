@@ -56,7 +56,7 @@ namespace StateMachine
             {
                 int index = random.Next(portfolio.rentalProperties.Count);
                 RentalRealEstate asset = portfolio.rentalProperties[index].Item2;
-                PartialRealEstate partialAsset = portfolio.rentalProperties[index].Item1;
+                PartialInvestment partialAsset = portfolio.rentalProperties[index].Item1;
                 int initialOffer = RealEstateManager.Instance.calculateOfferPrice(
                     asset.template, random);
                 int finalOffer = initialOffer;

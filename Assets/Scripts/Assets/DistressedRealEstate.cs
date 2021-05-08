@@ -31,8 +31,7 @@ namespace Assets
             actualIncome = annualIncome;
 
             int rate = InterestRateManager.Instance.distressedLoanRate;
-            privateLoan = new RealEstatePrivateLoan(
-                this, debtPartners, maxLtv, rate, true);
+            AddPrivateLoan(debtPartners, maxLtv, rate, true);
 
             label = string.Format("Distressed {0}", label);
             description = string.Format("Distressed {0}", description);

@@ -11,8 +11,7 @@
 
         public void EnterState()
         {
-            GameManager.Instance.StockManager.OnTurnStart(
-                GameManager.Instance.Random);
+            StockManager.Instance.OnTurnStart(GameManager.Instance.Random);
             new Events.Market.MarketEvent(onEventDone).Run();
         }
 

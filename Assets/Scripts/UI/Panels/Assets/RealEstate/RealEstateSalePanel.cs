@@ -25,7 +25,7 @@ namespace UI.Panels.Assets
 
         public Player player;
         public AbstractRealEstate asset;
-        public PartialRealEstate partialAsset;
+        public PartialInvestment partialAsset;
         public int initialOffer;
         public int finalOffer;
 

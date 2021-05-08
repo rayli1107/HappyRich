@@ -11,9 +11,6 @@ public class GameManager : MonoBehaviour
     public StateMachine.StateMachine StateMachine { get; private set; }
     public System.Random Random { get; private set; }
 
-    public RealEstateManager RealEstateManager { get; private set; }
-    public StockManager StockManager { get; private set; }
-
     private void Awake()
     {
         Instance = this;
@@ -23,13 +20,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Random = new System.Random(System.Guid.NewGuid().GetHashCode());
-
-        RealEstateManager = GetComponent<RealEstateManager>();
-        RealEstateManager.Initialize(Random);
-
-        StockManager = GetComponent<StockManager>();
-        StockManager.Initialize(Random);
-        SelfImprovementManager.Instance.Initialize();
 
         StateMachine = new StateMachine.StateMachine();
         StateMachine.Start();

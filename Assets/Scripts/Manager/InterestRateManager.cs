@@ -12,6 +12,8 @@ public class InterestRateManager : MonoBehaviour
     [SerializeField]
     private int _realEstateLoanRate = 4;
     [SerializeField]
+    private int _businessLoanRate = 4;
+    [SerializeField]
     private int _distressedLoanRate = 10;
     [SerializeField]
     private int _personalLoanRate = 15;
@@ -25,6 +27,7 @@ public class InterestRateManager : MonoBehaviour
     public int personalLoanRate => _personalLoanRate;
     public int defaultPrivateLoanRate => _defaultPrivateLoanRate;
     public int distressedLoanRate => _distressedLoanRate;
+    public int businessLoanRate => _businessLoanRate;
 
     public static InterestRateManager Instance { get; private set; }
     private void Awake()

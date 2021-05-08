@@ -19,7 +19,9 @@ namespace UI.Panels.Actions
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            RealEstateManager.Instance.GetSmallInvestmentAction(
+//            RealEstateManager.Instance.GetSmallInvestmentAction(
+//                player, GameManager.Instance.Random, InvesmtmentActionCallback).Start();
+            BusinessManager.Instance.GetSmallInvestmentAction(
                 player, GameManager.Instance.Random, InvesmtmentActionCallback).Start();
         }
 

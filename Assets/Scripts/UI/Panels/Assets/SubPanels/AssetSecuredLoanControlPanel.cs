@@ -3,11 +3,12 @@ using PlayerInfo;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class AssetMortgageControlPanel : AssetLoanControlPanel
+    public class AssetSecuredLoanControlPanel : AssetLoanControlPanel
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -23,10 +24,12 @@ namespace UI.Panels.Assets
 #pragma warning restore 0649
 
         public Player player;
-        public AbstractRealEstate asset;
+        public AbstractInvestment asset;
         public Action adjustNumberCallback;
         public Func<bool> checkRaiseDebtCallback;
         public Func<bool> checkRaiseEquityCallback;
+        public UnityAction onRaiseDebtCallback;
+        public UnityAction onRaiseEquityCallback;
 
         private void enableButton(Button button, bool enable)
         {
@@ -43,14 +46,27 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            minValue = asset.mortgage.minltv;
-            maxValue = asset.mortgage.maxltv;
-            value = asset.mortgage.ltv;
+            minValue = asset.primaryLoan.minltv;
+            maxValue = asset.primaryLoan.maxltv;
+            value = asset.primaryLoan.ltv;
 
             if (_textRate != null)
             {
-                _textRate.text = string.Format("{0}%", asset.mortgage.interestRate);
+                _textRate.text = string.Format("{0}%", asset.primaryLoan.interestRate);
             }
+
+            if (_buttonRaiseDebt != null)
+            {
+                _buttonRaiseDebt.onClick.RemoveAllListeners();
+                _buttonRaiseDebt.onClick.AddListener(onRaiseDebtCallback);
+            }
+
+            if (_buttonRaiseEquity != null)
+            {
+                _buttonRaiseEquity.onClick.RemoveAllListeners();
+                _buttonRaiseEquity.onClick.AddListener(onRaiseEquityCallback);
+            }
+
 
             enableButton(_buttonRaiseDebt, checkRaiseDebtCallback.Invoke());
             AdjustNumbers();
@@ -58,28 +74,26 @@ namespace UI.Panels.Assets
 
         public void OnSliderChange()
         {
-//            Debug.LogFormat("Mortgage.OnSliderChange {0}", asset);
             if (asset != null)
             {
-                asset.mortgage.ltv = value;
+                asset.primaryLoan.ltv = value;
                 AdjustNumbers();
             }
         }
 
         private void AdjustNumbers()
         {
-//            Debug.Log("Mortgage.AdjustNumbers");
             adjustNumberCallback?.Invoke();
 
             Localization local = Localization.Instance;
 
             if (_textAmount != null) {
-                _textAmount.text = local.GetCurrency(asset.mortgage.amount, true);
+                _textAmount.text = local.GetCurrency(asset.primaryLoan.amount, true);
             }
 
             if (_textPayment != null)
             {
-                _textPayment.text = local.GetCurrency(asset.mortgage.expense, true);
+                _textPayment.text = local.GetCurrency(asset.primaryLoan.expense, true);
             }
 
             bool debtButtonActive =

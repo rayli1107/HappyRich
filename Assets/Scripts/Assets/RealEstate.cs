@@ -8,8 +8,6 @@ namespace Assets
     {
         public RealEstateTemplate template { get; private set; }
         public int unitCount { get; private set; }
-        public Mortgage mortgage { get; protected set; }
-        public RealEstatePrivateLoan privateLoan { get; protected set; }
 
         public AbstractRealEstate(
             RealEstateTemplate template,
@@ -28,52 +26,6 @@ namespace Assets
 
             this.template = template;
             this.unitCount = unitCount;
-        }
-
-        public override List<AbstractLiability> liabilities
-        {
-            get
-            {
-                List<AbstractLiability> ret = base.liabilities;
-                if (mortgage != null)
-                {
-                    ret.Add(mortgage);
-                }
-                if (privateLoan != null)
-                {
-                    ret.Add(privateLoan);
-                }
-                return ret;
-            }
-        }
-
-        public void AddPrivateLoan(
-            List<InvestmentPartner> partners,
-            int maxltv,
-            int rate,
-            bool delayed)
-        {
-            if (privateLoan == null)
-            {
-                privateLoan = new RealEstatePrivateLoan(
-                    this, partners, maxltv, rate, delayed);
-            }
-        }
-
-        public void ClearPrivateLoan()
-        {
-            Debug.Log("ClearPrivateLoan");
-            if (privateLoan != null)
-            {
-                privateLoan.ltv = 0;
-                privateLoan = null;
-            }
-        }
-
-        public override void OnPurchaseCancel()
-        {
-            base.OnPurchaseCancel();
-            ClearPrivateLoan();
         }
     }
 }

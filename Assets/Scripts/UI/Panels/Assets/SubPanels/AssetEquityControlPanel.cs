@@ -3,6 +3,8 @@ using PlayerInfo;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
@@ -17,13 +19,16 @@ namespace UI.Panels.Assets
         private TextMeshProUGUI _textAmountPerShare;
         [SerializeField]
         private TextMeshProUGUI _textInvestorCashflow;
+        [SerializeField]
+        private Button _buttonCancel;
 #pragma warning restore 0649
 
         public Player player;
-        public AbstractRealEstate asset;
-        public PartialRealEstate partialAsset;
+        public AbstractInvestment asset;
+        public PartialInvestment partialAsset;
 
         public Action adjustNumberCallback;
+        public UnityAction onCancelCallback;
 
         public void Refresh()
         {
@@ -43,6 +48,11 @@ namespace UI.Panels.Assets
                     partialAsset.capitalPerShare);
             }
 
+            if (_buttonCancel != null)
+            {
+                _buttonCancel.onClick.RemoveAllListeners();
+                _buttonCancel.onClick.AddListener(onCancelCallback);
+            }
             AdjustNumbers();
         }
 

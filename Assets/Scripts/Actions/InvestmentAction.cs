@@ -15,12 +15,12 @@ namespace Actions
     public abstract class AbstractBuyInvestmentAction : AbstractAction
     {
         protected Player player { get; private set; }
-        private AbstractRealEstate _asset;
-        protected PartialRealEstate partialAsset { get; private set; }
+        private AbstractInvestment _asset;
+        protected PartialInvestment partialAsset { get; private set; }
 
         public AbstractBuyInvestmentAction(
             Player player,
-            AbstractRealEstate asset,
+            AbstractInvestment asset,
             ActionCallback callback) : base(callback)
         {
             this.player = player;
@@ -45,7 +45,7 @@ namespace Actions
 
         public override void Start()
         {
-            partialAsset = new PartialRealEstate(
+            partialAsset = new PartialInvestment(
                 _asset,
                 player.GetEquityPartners(),
                 RealEstateManager.Instance.defaultEquitySplit,
@@ -111,4 +111,79 @@ namespace Actions
                 player, partialAsset, _distressedAsset, handler);
         }
     }
+
+    public class BuyBusinessAction : AbstractBuyInvestmentAction
+    {
+        private Business _business;
+
+        public BuyBusinessAction(
+            Player player,
+            Business asset,
+            ActionCallback callback) : base(player, asset, callback)
+        {
+            _business = asset;
+        }
+
+        public override void ShowPurchasePanel()
+        {
+            UIManager.Instance.ShowStartupBusinessPurchasePanel(
+                _business,
+                partialAsset,
+                messageBoxHandler,
+                startTransactionHandler,
+                false);
+        }
+
+        private void nameInputCallback(TransactionHandler handler, string name)
+        {
+            _business.SetName(name);
+
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "After stabilizing business operations, {0} started generating " +
+                "a total revenue of {1}",
+                local.GetBusinessDescription(name),
+                local.GetCurrency(_business.totalIncome));
+            UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_ONLY, (_) => handler?.Invoke(true));
+        }
+
+        private string confirmMessageCallback(string name)
+        {
+            Localization local = Localization.Instance;
+            return string.Format(
+                "Name your business {0}?",
+                local.GetBusinessDescription(name));
+        }
+
+        private void startNameInput(TransactionHandler handler, bool transactionSuccess)
+        {
+            if (!transactionSuccess)
+            {
+                handler?.Invoke(false);
+                return;
+            }
+
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "Choose a name for your {0} business.",
+                local.GetBusinessDescription(_business.description));
+            UIManager.Instance.ShowSimpleTextPrompt(
+                message,
+                (string n) => nameInputCallback(handler, n),
+                confirmMessageCallback,
+                false,
+                true);
+        }
+
+        private void startTransactionHandler(TransactionHandler handler)
+        {
+            TransactionManager.BuyBusiness(
+                player,
+                partialAsset,
+                _business,
+                (bool b) => startNameInput(handler, b));
+        }
+    }
+
 }

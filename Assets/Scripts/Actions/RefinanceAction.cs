@@ -10,12 +10,12 @@ namespace Actions
     {
         private Player _player;
         private DistressedRealEstate _distressedAsset;
-        private PartialRealEstate _partialRealEstate;
+        private PartialInvestment _partialRealEstate;
 
         public RefinanceAction(
             Player player,
             DistressedRealEstate distressedAsset,
-            PartialRealEstate partialAsset,
+            PartialInvestment partialAsset,
             ActionCallback callback) : base(callback)
         {
             _player = player;

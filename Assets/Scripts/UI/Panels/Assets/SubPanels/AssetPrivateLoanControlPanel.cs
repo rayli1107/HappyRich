@@ -3,6 +3,7 @@ using PlayerInfo;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UI.Panels.Assets
@@ -25,10 +26,12 @@ namespace UI.Panels.Assets
 #pragma warning restore 0649
 
         public Player player;
-        public AbstractRealEstate asset;
+        public AbstractInvestment asset;
 
         public Action adjustNumberCallback;
         public Func<bool> checkRaiseEquityCallback;
+        public UnityAction onRaiseEquityCallback;
+        public UnityAction onCancelCallback;
 
         public void Refresh()
         {
@@ -49,6 +52,18 @@ namespace UI.Panels.Assets
             if (!_disableCancel && _buttonCancel != null)
             {
                 _buttonCancel.gameObject.SetActive(minValue == 0);
+            }
+
+            if (_buttonRaiseEquity != null)
+            {
+                _buttonRaiseEquity.onClick.RemoveAllListeners();
+                _buttonRaiseEquity.onClick.AddListener(onRaiseEquityCallback);
+            }
+
+            if (_buttonCancel != null)
+            {
+                _buttonCancel.onClick.RemoveAllListeners();
+                _buttonCancel.onClick.AddListener(onCancelCallback);
             }
 
             AdjustNumbers();

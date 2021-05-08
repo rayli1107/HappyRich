@@ -221,7 +221,7 @@ public class RealEstateManager : MonoBehaviour
 
     public List<Investment> CalculateReturnedCapitalForRefinance(
         RefinancedRealEstate asset,
-        PartialRealEstate partialAsset)
+        PartialInvestment partialAsset)
     {
         return calculateReturnedCapital(
             partialAsset,
@@ -232,7 +232,7 @@ public class RealEstateManager : MonoBehaviour
 
     public List<Investment> CalculateReturnedCapitalForSale(
         RentalRealEstate asset,
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         int price)
     {
         return calculateReturnedCapital(
@@ -243,7 +243,7 @@ public class RealEstateManager : MonoBehaviour
     }
 
     private List<Investment> calculateReturnedCapital(
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         int originalTotalCost,
         int oldCapitalAmount,
         int newCapitalAmount)

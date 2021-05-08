@@ -32,6 +32,8 @@ namespace UI
         [SerializeField]
         private SimpleTextMessageBox _prefabSimpleTextMessageBox;
         [SerializeField]
+        private SimpleTextPrompt _prefabSimpleTextPrompt;
+        [SerializeField]
         private ActionMenuPanel _prefabActionMenuPanel;
         [SerializeField]
         private StockMarketPanel _prefabStockMarketPanel;
@@ -53,6 +55,10 @@ namespace UI
         private RentalRealEstateRefinancePanel _prefabSimpleRentalRealEstateRefinancePanel;
         [SerializeField]
         private RealEstateSalePanel _prefabSimpleRealEstateSalePanel;
+        [SerializeField]
+        private StartupBusinessPurchasePanel _prefabAdvancedStartupBusinessPurchasePanel;
+        [SerializeField]
+        private StartupBusinessPurchasePanel _prefabSimpleStartupBusinessPurchasePanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
@@ -184,11 +190,23 @@ namespace UI
             messageBox.messageBoxHandler = handler;
             messageBox.EnableButtons(buttonChoice);
             return messageBox;
-            /*
-            GameObject gameObj = Instantiate(_prefabSimpleTextPanel);
-            TextMeshProUGUI text = gameObj.GetComponent<TextMeshProUGUI>();
-            text.text = message;
-            return ShowMessageBox(gameObj, handler, buttonChoice);*/ 
+        }
+
+        public SimpleTextPrompt ShowSimpleTextPrompt(
+            string message,
+            TextInputCallback textInputCallback,
+            TextInputConfirmMessageHandler confirmMessageHandler,
+            bool cancelEnabled,
+            bool requireNonEmpty)
+        {
+            SimpleTextPrompt prompt = Instantiate(
+                _prefabSimpleTextPrompt, transform);
+            prompt.message = message;
+            prompt.textInputCallback = textInputCallback;
+            prompt.confirmMessageHandler = confirmMessageHandler;
+            prompt.cancelEnabled = cancelEnabled;
+            prompt.requireNonEmpty = requireNonEmpty;
+            return prompt;
         }
 
         public void ShowPlayerStatusMenuPanel()
@@ -256,7 +274,7 @@ namespace UI
 
         public void ShowRentalRealEstatePurchasePanel(
             Assets.AbstractRealEstate asset,
-            Assets.PartialRealEstate partialAsset,
+            Assets.PartialInvestment partialAsset,
             MessageBoxHandler messageBoxHandler,
             StartTransactionHandler startTransactionHandler,
             bool advanced)
@@ -280,7 +298,7 @@ namespace UI
 
         public void ShowRentalRealEstateRefinancePanel(
             Assets.RefinancedRealEstate asset,
-            Assets.PartialRealEstate partialAsset,
+            Assets.PartialInvestment partialAsset,
             MessageBoxHandler handler,
             bool advanced)
         {
@@ -300,7 +318,7 @@ namespace UI
 
         public void ShowDistressedRealEstatePurchasePanel(
             Assets.DistressedRealEstate asset,
-            Assets.PartialRealEstate partialAsset,
+            Assets.PartialInvestment partialAsset,
             MessageBoxHandler messageBoxHandler,
             StartTransactionHandler startTransactionHandler,
             bool advanced)
@@ -325,7 +343,7 @@ namespace UI
 
         public void ShowRealEstateSalePanel(
             Assets.RentalRealEstate asset,
-            Assets.PartialRealEstate partialAsset,
+            Assets.PartialInvestment partialAsset,
             int initialOffer,
             int finalOffer,
             MessageBoxHandler handler,
@@ -341,6 +359,31 @@ namespace UI
             panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }
+
+        public void ShowStartupBusinessPurchasePanel(
+            Assets.Business asset,
+            Assets.PartialInvestment partialAsset,
+            MessageBoxHandler messageBoxHandler,
+            StartTransactionHandler startTransactionHandler,
+            bool advanced)
+        {
+            StartupBusinessPurchasePanel panel = Instantiate(
+                advanced ?
+                _prefabAdvancedStartupBusinessPurchasePanel :
+                _prefabSimpleStartupBusinessPurchasePanel,
+                transform);
+
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+            messageBox.startTransactionHandler = startTransactionHandler;
+
+            panel.Refresh();
+        }
+
 
         public void ShowContactListPanel(
             List<InvestmentPartner> partners,

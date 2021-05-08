@@ -26,9 +26,9 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            if (_mortgageControlPanel != null)
+            if (_securedLoanControlPanel != null)
             {
-                EnableMortgagePanel(true);
+                EnableSecuredLoanPanel(true);
             }
 
             bool enableEquityPanel = partialAsset.investorShares > 0;
@@ -50,7 +50,7 @@ namespace UI.Panels.Assets
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
             UIManager.Instance.ShowRentalRealEstatePurchasePanel(
-                asset,
+                (AbstractRealEstate)asset,
                 partialAsset,
                 messageBox.messageBoxHandler,
                 messageBox.startTransactionHandler,

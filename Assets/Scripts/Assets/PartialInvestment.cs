@@ -6,9 +6,9 @@ using Investment = System.Tuple<InvestmentPartner, int>;
 
 namespace Assets
 {
-    public class PartialRealEstate : AbstractAsset
+    public class PartialInvestment : AbstractAsset
     {
-        public AbstractRealEstate asset { get; private set; }
+        public AbstractInvestment asset { get; private set; }
         public float equitySplit { get; private set; }
         public int maxShares { get; private set; }
         public float equityPerShare => equitySplit / maxShares;
@@ -81,8 +81,8 @@ namespace Assets
         public override int income => asset.income - investorCashflow;
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
-        public PartialRealEstate(
-            AbstractRealEstate asset,
+        public PartialInvestment(
+            AbstractInvestment asset,
             List<InvestmentPartner> partners,
             float equitySplit,
             int maxShares) :

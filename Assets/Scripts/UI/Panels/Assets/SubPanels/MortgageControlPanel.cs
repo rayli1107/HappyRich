@@ -27,7 +27,7 @@ namespace UI.Panels.Assets
         {
             Localization local = Localization.Instance;
 
-            Mortgage mortgage = _purchasePanel.asset.mortgage;
+            AbstractSecuredLoan mortgage = _purchasePanel.asset.primaryLoan;
 
             if (_textMortgage != null)
             {
@@ -54,14 +54,14 @@ namespace UI.Panels.Assets
 
             AdjustNumbers();
 
-            _sliderMortgage.value = _purchasePanel.asset.mortgage.ltv / _sliderMultiplier;
+            _sliderMortgage.value = _purchasePanel.asset.primaryLoan.ltv / _sliderMultiplier;
         }
 
         public void OnSliderChange()
         {
             if (_purchasePanel.asset != null)
             {
-                _purchasePanel.asset.mortgage.ltv = Mathf.RoundToInt(
+                _purchasePanel.asset.primaryLoan.ltv = Mathf.RoundToInt(
                     _sliderMortgage.value * _sliderMultiplier);
                 AdjustNumbers();
                 _purchasePanel.Refresh();

@@ -5,15 +5,16 @@ using Investment = System.Tuple<InvestmentPartner, int>;
 
 namespace Assets
 {
-    public class AbstractRealEstateLoan : AbstractLiability
+    public class AbstractSecuredLoan : AbstractLiability
     {
-        public AbstractRealEstate asset { get; private set; }
+        public AbstractInvestment asset { get; private set; }
         public int maxltv { get; protected set; }
         public int minltv { get; protected set; }
 
         public override int amount => ltv * asset.loanUnitValue;
 
         private int _ltv;
+        public int defaultltv { get; private set; }
 
         public int ltv
         {
@@ -40,9 +41,10 @@ namespace Assets
             return (loanAmount + unitValue - 1) / unitValue;
         }
 
-        public AbstractRealEstateLoan(
-            AbstractRealEstate asset,
+        public AbstractSecuredLoan(
+            AbstractInvestment asset,
             string label,
+            int defaultltv,
             int maxltv,
             int interestRate) :
             base(label, 0, interestRate)
@@ -51,7 +53,9 @@ namespace Assets
             this.maxltv = getUnitCount(
                 maxltv * asset.loanUnitValue - asset.combinedLiability.amount);
             minltv = 0;
+            this.defaultltv = defaultltv;
             _ltv = 0;
+            ltv = defaultltv;
         }
 
         protected virtual void AddLoan(int delta)
@@ -79,19 +83,31 @@ namespace Assets
         }
     }
 
-    public class Mortgage : AbstractRealEstateLoan
+    public class Mortgage : AbstractSecuredLoan
     {
-        public Mortgage(AbstractRealEstate asset, int ltv, int maxltv)
+        public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv)
             : base(asset,
-                   string.Format("Mortgage - {0}", asset.template.label),
+                   string.Format("Mortgage - {0}", asset.label),
+                   defaultltv,
                    maxltv,
                    InterestRateManager.Instance.realEstateLoanRate)
         {
-            this.ltv = ltv;
         }
     }
 
-    public class RealEstatePrivateLoan : AbstractRealEstateLoan
+    public class BusinessLoan : AbstractSecuredLoan
+    {
+        public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv)
+            : base(asset,
+                   string.Format("Business Loan - {0}", asset.label),
+                   defaultltv,
+                   maxltv,
+                   InterestRateManager.Instance.businessLoanRate)
+        {
+        }
+    }
+
+    public class PrivateLoan : AbstractSecuredLoan
     {
         private List<Investment> _investments;
         private bool _delayed;
@@ -115,14 +131,15 @@ namespace Assets
             }
         }
 
-        public RealEstatePrivateLoan(
-            AbstractRealEstate asset,
+        public PrivateLoan(
+            AbstractInvestment asset,
             List<InvestmentPartner> partners,
             int maxltv,
             int interestRate,
             bool delayed) :
             base(asset,
                  string.Format("Private Loan - %s", asset.label),
+                 0,
                  maxltv,
                  interestRate)
         {

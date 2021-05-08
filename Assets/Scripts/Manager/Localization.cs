@@ -14,6 +14,8 @@ public class Localization : MonoBehaviour
     [SerializeField]
     private Color _colorRealEstate = Color.yellow;
     [SerializeField]
+    private Color _colorBusiness = new Color(1f, 0.8f, 0f);
+    [SerializeField]
     private Color _colorName = Color.blue;
     [SerializeField]
     private Color _colorPlayerState = Color.white;
@@ -55,6 +57,11 @@ public class Localization : MonoBehaviour
     public string GetRealEstateLabel(RealEstateProfile profile)
     {
         return colorWrap(profile.label, _colorRealEstate);
+    }
+
+    public string GetBusinessDescription(string description)
+    {
+        return colorWrap(description, _colorBusiness);
     }
 
     public string GetWarning(string message)

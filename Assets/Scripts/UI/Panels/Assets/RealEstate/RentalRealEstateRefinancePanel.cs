@@ -22,9 +22,9 @@ namespace UI.Panels.Assets
             base.Awake();
             GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
 
-            if (_mortgageControlPanel != null)
+            if (_securedLoanControlPanel != null)
             {
-                _mortgageControlPanel.checkRaiseEquityCallback = () => false;
+                _securedLoanControlPanel.checkRaiseEquityCallback = () => false;
             }
 
             if (_privateLoanControlPanel != null)
@@ -44,22 +44,15 @@ namespace UI.Panels.Assets
 
             Localization local = Localization.Instance;
 
-            if (_textMessage != null)
-            {
-                _textMessage.text = string.Format(
-                    "You finished repairing the {0} and rented it out. Refinance existing loans?",
-                    local.GetRealEstateDescription(asset.description));
-            }
-
             if (_textPurchasePrice != null)
             {
                 _textPurchasePrice.text = local.GetCurrencyPlain(
                     asset.value);
             }
 
-            if (_mortgageControlPanel != null)
+            if (_securedLoanControlPanel != null)
             {
-                EnableMortgagePanel(true);
+                EnableSecuredLoanPanel(true);
             }
 
             bool enableDebtPanel = asset.privateLoan != null;
@@ -101,7 +94,7 @@ namespace UI.Panels.Assets
         public void OnResetRefinanceButton()
         {
             asset.ClearPrivateLoan();
-            asset.mortgage.ltv = asset.mortgage.maxltv;
+            asset.primaryLoan.ltv = asset.primaryLoan.maxltv;
             Refresh();
         }
 

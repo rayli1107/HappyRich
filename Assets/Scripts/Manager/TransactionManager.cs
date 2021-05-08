@@ -3,9 +3,11 @@ using PlayerInfo;
 using ScriptableObjects;
 using System.Collections.Generic;
 using DistressedProperty = System.Tuple<
-    Assets.PartialRealEstate, Assets.DistressedRealEstate>;
+    Assets.PartialInvestment, Assets.DistressedRealEstate>;
 using RentalProperty = System.Tuple<
-    Assets.PartialRealEstate, Assets.RentalRealEstate>;
+    Assets.PartialInvestment, Assets.RentalRealEstate>;
+using BusinessEntity = System.Tuple<
+    Assets.PartialInvestment, Assets.Business>;
 
 using Investment = System.Tuple<InvestmentPartner, int>;
 public delegate void TransactionHandler(bool success);
@@ -45,7 +47,7 @@ public static class TransactionManager
 
     private static void buyRentalTransactionHandler(
         Player player,
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         RentalRealEstate rentalAsset,
         TransactionHandler handler,
         bool success)
@@ -63,7 +65,7 @@ public static class TransactionManager
 
     public static void BuyRentalRealEstate(
         Player player,
-        PartialRealEstate partialasset,
+        PartialInvestment partialasset,
         RentalRealEstate rentalAsset,
         TransactionHandler handler)
     {
@@ -76,7 +78,7 @@ public static class TransactionManager
 
     private static void buyDistressedTransactionHandler(
         Player player,
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         DistressedRealEstate distressedAsset,
         TransactionHandler handler,
         bool success)
@@ -94,7 +96,7 @@ public static class TransactionManager
 
     public static void BuyDistressedRealEstate(
         Player player,
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         DistressedRealEstate distressedAsset,
         TransactionHandler handler)
     {
@@ -104,6 +106,38 @@ public static class TransactionManager
             (bool b) => buyDistressedTransactionHandler(
                 player, partialAsset, distressedAsset, handler, b));
     }
+
+    private static void buyBusinessHandler(
+        Player player,
+        PartialInvestment partialAsset,
+        Business asset,
+        TransactionHandler handler,
+        bool success)
+    {
+        if (success &&
+            player != null &&
+            partialAsset != null &&
+            asset != null)
+        {
+            player.portfolio.businessEntities.Add(
+                new BusinessEntity(partialAsset, asset));
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyBusiness(
+        Player player,
+        PartialInvestment partialasset,
+        Business asset,
+        TransactionHandler handler)
+    {
+        TryDebit(
+            player,
+            partialasset.fundsNeeded,
+            (bool b) => buyBusinessHandler(
+                player, partialasset, asset, handler, b));
+    }
+
 
     private static void applyJobTransactionHandler(
         Player player, Profession job, TransactionHandler handler, bool success)
@@ -183,7 +217,7 @@ public static class TransactionManager
 
     public static void SellProperty(Player player, int index, int price)
     {
-        PartialRealEstate partialAsset = player.portfolio.rentalProperties[index].Item1;
+        PartialInvestment partialAsset = player.portfolio.rentalProperties[index].Item1;
         RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
         List<Investment> returnedCapitalList =
             RealEstateManager.Instance.CalculateReturnedCapitalForSale(
@@ -206,7 +240,7 @@ public static class TransactionManager
 
     public static void RefinanceProperty(
         Player player,
-        PartialRealEstate partialAsset,
+        PartialInvestment partialAsset,
         RefinancedRealEstate refinancedAsset)
     {
         List<Investment> returnedCapitalList =

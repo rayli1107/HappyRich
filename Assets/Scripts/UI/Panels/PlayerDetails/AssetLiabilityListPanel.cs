@@ -61,6 +61,7 @@ namespace UI.Panels.PlayerDetails
             liabilities.AddRange(player.portfolio.liabilities);
 
             int totalAssets = 0;
+            int totalBusiness = 0;
             int totalRealEstate = 0;
             int totalLiabilities = 0;
             int totalStocks = 0;
@@ -111,7 +112,7 @@ namespace UI.Panels.PlayerDetails
             // Real Estate
             if (player.portfolio.properties.Count > 0)
             {
-                foreach (PartialRealEstate asset in player.portfolio.properties)
+                foreach (PartialInvestment asset in player.portfolio.properties)
                 {
                     totalRealEstate += asset.value;
                     if (asset.combinedLiability.amount > 0)
@@ -128,7 +129,7 @@ namespace UI.Panels.PlayerDetails
                     0,
                     false);
 
-                foreach (PartialRealEstate asset in player.portfolio.properties)
+                foreach (PartialInvestment asset in player.portfolio.properties)
                 {
                     currentIndex = AddItemValueAsCurrency(
                         _panelAssets.transform.parent,
@@ -140,6 +141,36 @@ namespace UI.Panels.PlayerDetails
                 }
             }
             totalAssets += totalRealEstate;
+
+            // Business
+            if (player.portfolio.businesses.Count > 0)
+            {
+                currentIndex = AddItemValueAsCurrency(
+                    _panelAssets.transform.parent,
+                    currentIndex,
+                    _panelAssets.tabCount + 1,
+                    "Business",
+                    0,
+                    false);
+
+                foreach (PartialInvestment asset in player.portfolio.businesses)
+                {
+                    totalBusiness += asset.value;
+                    if (asset.combinedLiability.amount > 0)
+                    {
+                        liabilities.Add(asset.combinedLiability);
+                    }
+
+                    currentIndex = AddItemValueAsCurrency(
+                        _panelAssets.transform.parent,
+                        currentIndex,
+                        _panelAssets.tabCount + 2,
+                        asset.name,
+                        asset.value,
+                        false);
+                }
+            }
+            totalAssets += totalBusiness;
 
             // Other Assets
             if (player.portfolio.otherAssets.Count > 0)

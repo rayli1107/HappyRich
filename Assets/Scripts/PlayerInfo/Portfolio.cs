@@ -3,9 +3,11 @@ using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 using DistressedProperty = System.Tuple<
-    Assets.PartialRealEstate, Assets.DistressedRealEstate>;
+    Assets.PartialInvestment, Assets.DistressedRealEstate>;
 using RentalProperty = System.Tuple<
-    Assets.PartialRealEstate, Assets.RentalRealEstate>;
+    Assets.PartialInvestment, Assets.RentalRealEstate>;
+using BusinessEntity = System.Tuple<
+    Assets.PartialInvestment, Assets.Business>;
 
 namespace PlayerInfo
 {
@@ -18,10 +20,11 @@ namespace PlayerInfo
         public Dictionary<string, PurchasedStock> stocks { get; private set; }
         public List<RentalProperty> rentalProperties { get; private set; }
         public List<DistressedProperty> distressedProperties { get; private set; }
-        public List<PartialRealEstate> properties {
+        public List<BusinessEntity> businessEntities { get; private set; }
+        public List<PartialInvestment> properties {
             get
             {
-                List<PartialRealEstate> properties = new List<PartialRealEstate>();
+                List<PartialInvestment> properties = new List<PartialInvestment>();
                 foreach (RentalProperty property in rentalProperties)
                 {
                     properties.Add(property.Item1);
@@ -31,6 +34,18 @@ namespace PlayerInfo
                     properties.Add(property.Item1);
                 }
                 return properties;
+            }
+        }
+        public List<PartialInvestment> businesses
+        {
+            get
+            {
+                List<PartialInvestment> businesses = new List<PartialInvestment>();
+                foreach (BusinessEntity entity in businessEntities)
+                {
+                    businesses.Add(entity.Item1);
+                }
+                return businesses;
             }
         }
 
@@ -45,6 +60,7 @@ namespace PlayerInfo
                     assets.Add(entry.Value);
                 }
                 assets.AddRange(properties);
+                assets.AddRange(businesses);
                 return assets;
             }
         }
@@ -96,6 +112,7 @@ namespace PlayerInfo
             stocks = new Dictionary<string, PurchasedStock>();
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
+            businessEntities = new List<BusinessEntity>();
         }
 
         public void AddPersonalLoan(int amount)

@@ -15,7 +15,7 @@ namespace Assets
             int unitCount)
             : base(template, purchasePrice, marketValue, annualIncome, unitCount)
         {
-            mortgage = new Mortgage(this, mortgageLtv, maxMortgageLtv);
+            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv);
         }
     }
     
@@ -62,10 +62,10 @@ namespace Assets
             originalLoanAmount = distressedAsset.combinedLiability.amount;
             distressedAsset.ClearPrivateLoan();
 
-            mortgage.setMinimumLoanAmount(originalLoanAmount);
-            mortgage.ltv = maxMortgageLtv;
+            primaryLoan.setMinimumLoanAmount(originalLoanAmount);
+            primaryLoan.ltv = maxMortgageLtv;
 
-            int remainingLoanAmount = Mathf.Max(originalLoanAmount - mortgage.amount, 0);
+            int remainingLoanAmount = Mathf.Max(originalLoanAmount - primaryLoan.amount, 0);
             if (remainingLoanAmount > 0)
             {
                 AddPrivateLoan(
@@ -84,7 +84,7 @@ namespace Assets
 
             Debug.LogFormat(
                 "Refinance mortgage ltv {0} private loan ltv {1}",
-                mortgage.ltv,
+                primaryLoan.ltv,
                 privateLoan == null ? 0 : privateLoan.ltv);
             Debug.LogFormat(
                 "Refinance income {0} {1}",

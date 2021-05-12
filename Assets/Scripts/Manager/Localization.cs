@@ -18,6 +18,8 @@ public class Localization : MonoBehaviour
     [SerializeField]
     private Color _colorName = Color.blue;
     [SerializeField]
+    private Color _colorFranchise = Color.blue;
+    [SerializeField]
     private Color _colorPlayerState = Color.white;
     [SerializeField]
     private Color _colorWarning = new Color(255, 160, 0);
@@ -68,6 +70,7 @@ public class Localization : MonoBehaviour
     {
         return colorWrap(message, _colorWarning);
     }
+
     public string GetJobName(Profession job)
     {
         return colorWrap(job.professionName, _colorJob);

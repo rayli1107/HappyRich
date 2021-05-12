@@ -15,6 +15,7 @@ namespace Assets
         public override string name => label;
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
+
         public AbstractSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
 

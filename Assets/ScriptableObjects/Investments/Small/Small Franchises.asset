@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94fc3dc043149846aa6311afbb03dd6, type: 3}
+  m_Name: Small Franchises
+  m_EditorClassIdentifier: 
+  descriptions:
+  - Taco Queen
+  - Boba Express
+  - McBurgers
+  - Pizza King
+  - Moonbucks Coffee
+  - Carl's Sr
+  - Four Gals
+  - Texas Fried Chicken
+  priceRange: {x: 50000, y: 200000}
+  priceIncrement: 10000
+  minIncomeRange: {x: 30, y: 50}
+  maxIncomeRange: {x: 90, y: 110}
+  incomeIncrement: 1000
+  franchise: 1
+  franchiseFeeRange: {x: 100, y: 200}

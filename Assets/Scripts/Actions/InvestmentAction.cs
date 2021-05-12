@@ -112,11 +112,11 @@ namespace Actions
         }
     }
 
-    public class BuyBusinessAction : AbstractBuyInvestmentAction
+    public class PurchaseStartupBusinessAction : AbstractBuyInvestmentAction
     {
         private Business _business;
 
-        public BuyBusinessAction(
+        public PurchaseStartupBusinessAction(
             Player player,
             Business asset,
             ActionCallback callback) : base(player, asset, callback)
@@ -186,4 +186,53 @@ namespace Actions
         }
     }
 
+    public class JoinFranchiseAction : AbstractBuyInvestmentAction
+    {
+        private Business _business;
+
+        public JoinFranchiseAction(
+            Player player,
+            Business asset,
+            ActionCallback callback) : base(player, asset, callback)
+        {
+            _business = asset;
+        }
+
+        public override void ShowPurchasePanel()
+        {
+            UIManager.Instance.ShowFranchiseJoinPanel(
+                _business,
+                partialAsset,
+                messageBoxHandler,
+                startTransactionHandler,
+                false);
+        }
+
+        private void transactionHandler(TransactionHandler handler, bool transactionSuccess)
+        {
+            if (!transactionSuccess)
+            {
+                handler?.Invoke(false);
+                return;
+            }
+
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "After stabilizing business operations, your {0} store " +
+                "started generating a total revenue of {1}",
+                local.GetBusinessDescription(_business.description),
+                local.GetCurrency(_business.totalIncome));
+            UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_ONLY, (_) => handler?.Invoke(true));
+        }
+
+        private void startTransactionHandler(TransactionHandler handler)
+        {
+            TransactionManager.BuyBusiness(
+                player,
+                partialAsset,
+                _business,
+                (bool b) => transactionHandler(handler, b));
+        }
+    }
 }

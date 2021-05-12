@@ -60,6 +60,10 @@ namespace UI
         [SerializeField]
         private StartupBusinessPurchasePanel _prefabSimpleStartupBusinessPurchasePanel;
         [SerializeField]
+        private FranchiseJoinPanel _prefabAdvancedFranchiseJoinPanel;
+        [SerializeField]
+        private FranchiseJoinPanel _prefabSimpleFranchiseJoinPanel;
+        [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
@@ -385,6 +389,29 @@ namespace UI
             panel.Refresh();
         }
 
+        public void ShowFranchiseJoinPanel(
+            Assets.Business asset,
+            Assets.PartialInvestment partialAsset,
+            MessageBoxHandler messageBoxHandler,
+            StartTransactionHandler startTransactionHandler,
+            bool advanced)
+        {
+            FranchiseJoinPanel panel = Instantiate(
+                advanced ?
+                _prefabAdvancedFranchiseJoinPanel :
+                _prefabSimpleFranchiseJoinPanel,
+                transform);
+
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+            messageBox.startTransactionHandler = startTransactionHandler;
+
+            panel.Refresh();
+        }
 
         public void ShowContactListPanel(
             List<InvestmentPartner> partners,

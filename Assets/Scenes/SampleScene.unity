@@ -202,6 +202,7 @@ MonoBehaviour:
   _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _colorBusiness: {r: 1, g: 0.8, b: 0, a: 1}
   _colorName: {r: 1, g: 0.62352943, b: 0, a: 1}
+  _colorFranchise: {r: 0, g: 0, b: 1, a: 1}
   _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -671,7 +672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smallInvestments:
-  - {fileID: 11400000, guid: 84e1207c2e20bff468daea763c8ffa73, type: 2}
+  - {fileID: 11400000, guid: c4569814d1a2aa7469e708624d0e5748, type: 2}
   _largeInvestments: []
   _maxBusinessLoanLTV: 75
   _maxPrivateLoanLTV: 90
@@ -1365,6 +1366,10 @@ MonoBehaviour:
   _prefabAdvancedStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: e5d10030208fecc4e949e546cac8e12a,
     type: 3}
   _prefabSimpleStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: 0854a6f72ffc14f4785633bf5f2f19d7,
+    type: 3}
+  _prefabAdvancedFranchiseJoinPanel: {fileID: 6776270187309231469, guid: 40ade565a5e71d54a9f15e8ee6bfb478,
+    type: 3}
+  _prefabSimpleFranchiseJoinPanel: {fileID: 6776270187309231469, guid: aeae722e694657945a605652dc81558d,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

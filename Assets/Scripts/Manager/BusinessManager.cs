@@ -69,18 +69,20 @@ public class BusinessManager : MonoBehaviour
         BusinessProfile profile = templates[random.Next(templates.Length)];
         int price = calculatePrice(
             random, profile.priceRange, profile.priceIncrement);
-        int minIncome = calculateValueFactor(
-            random, price, profile.minIncomeRange, profile.incomeIncrement);
-        int maxIncome = calculateValueFactor(
-            random, price, profile.maxIncomeRange, profile.incomeIncrement);
-        int actualIncome = calculateValue(
-            random, minIncome, maxIncome, profile.incomeIncrement);
         int franchiseFee = 0;
         if (profile.franchise)
         {
             franchiseFee = calculateValueFactor(
                 random, price, profile.franchiseFeeRange, profile.priceIncrement);
+            franchiseFee = Mathf.Min(franchiseFee, profile.priceIncrement);
         }
+
+        int minIncome = calculateValueFactor(
+            random, price + franchiseFee, profile.minIncomeRange, profile.incomeIncrement);
+        int maxIncome = calculateValueFactor(
+            random, price + franchiseFee, profile.maxIncomeRange, profile.incomeIncrement);
+        int actualIncome = calculateValue(
+            random, minIncome, maxIncome, profile.incomeIncrement);
         string description = profile.descriptions[random.Next(profile.descriptions.Length)];
         Debug.LogFormat("Min income {0} max income {1} actual {2}", minIncome, maxIncome, actualIncome);
         Business business = new Business(
@@ -92,7 +94,14 @@ public class BusinessManager : MonoBehaviour
             actualIncome,
             0,
             _maxBusinessLoanLTV);
-        return new BuyBusinessAction(player, business, callback);
+        if (profile.franchise)
+        {
+            return new JoinFranchiseAction(player, business, callback);
+        }
+        else
+        {
+            return new PurchaseStartupBusinessAction(player, business, callback);
+        }
     }
 
     public AbstractBuyInvestmentAction GetSmallInvestmentAction(

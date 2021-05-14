@@ -12,6 +12,8 @@
         public void EnterState()
         {
             GameManager.Instance.CreatePlayer();
+            GameManager.Instance.player.AddSkill(
+                SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.BUSINESS_OPERATIONS));
             GameManager.Instance.player.contacts.Add(
                 new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
             GameManager.Instance.player.contacts.Add(

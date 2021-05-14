@@ -131,17 +131,19 @@ namespace PlayerInfo
             mentalStates.Add(state);
         }
 
-        public bool HasSkill(SkillType skillType)
+        public SkillInfo GetSkillInfo(SkillType skillType)
         {
             foreach (SkillInfo skillInfo in skills)
             {
                 if (skillInfo.skillType == skillType)
                 {
-                    return true;
+                    return skillInfo;
                 }
             }
-            return false;
+            return null;
         }
+
+        public bool HasSkill(SkillType skillType) => GetSkillInfo(skillType) != null;
 
         public void AddSkill(SkillInfo skillInfo)
         {

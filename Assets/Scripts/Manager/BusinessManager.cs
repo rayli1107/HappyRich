@@ -22,6 +22,10 @@ public class BusinessManager : MonoBehaviour
     private float _defaultEquitySplit = 0.6f;
     [SerializeField]
     private int _maxEquityShares = 100;
+    [SerializeField]
+    private int _operationIncomeBonusStartup = 40;
+    [SerializeField]
+    private int _operationIncomeBonusFranchise = 30;
 #pragma warning restore 0649
 
     public static BusinessManager Instance { get; private set; }
@@ -40,10 +44,10 @@ public class BusinessManager : MonoBehaviour
     }
 
     private int calculateValueFactor(
-        System.Random random, int price, Vector2Int range, int increment)
+        System.Random random, int price, Vector2Int range, int increment, int bonus = 0)
     {
         return calculateValue(
-            random, price / 1000 * range.x, price / 1000 * range.y, increment);
+            random, price / 1000 * (range.x + bonus), price / 1000 * (range.y + bonus), increment);
     }
 
     private int calculatePrice(
@@ -77,10 +81,19 @@ public class BusinessManager : MonoBehaviour
             franchiseFee = Mathf.Min(franchiseFee, profile.priceIncrement);
         }
 
+        int minIncomeBonus = 0;
+        if (player.HasSkill(SkillType.BUSINESS_OPERATIONS))
+        {
+            minIncomeBonus = profile.franchise ?
+                _operationIncomeBonusFranchise :
+                _operationIncomeBonusStartup;
+        }
         int minIncome = calculateValueFactor(
-            random, price + franchiseFee, profile.minIncomeRange, profile.incomeIncrement);
+            random, price + franchiseFee, profile.minIncomeRange, profile.incomeIncrement, minIncomeBonus);
         int maxIncome = calculateValueFactor(
             random, price + franchiseFee, profile.maxIncomeRange, profile.incomeIncrement);
+        minIncome = Mathf.Min(minIncome, maxIncome);
+
         int actualIncome = calculateValue(
             random, minIncome, maxIncome, profile.incomeIncrement);
         string description = profile.descriptions[random.Next(profile.descriptions.Length)];

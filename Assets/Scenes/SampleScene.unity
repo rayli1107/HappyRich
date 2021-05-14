@@ -220,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skills:
   - {fileID: 11400000, guid: b67043cd54bc8b241a6e846cdfb28ef8, type: 2}
+  - {fileID: 11400000, guid: 70dc81f64cf4f6d47a871d1db0c033f8, type: 2}
   _initialCost: 20000
   _additionalCost: 10000
 --- !u!1 &456001304 stripped
@@ -678,6 +679,8 @@ MonoBehaviour:
   _maxPrivateLoanLTV: 90
   _defaultEquitySplit: 0.6
   _maxEquityShares: 100
+  _operationIncomeBonusStartup: 40
+  _operationIncomeBonusFranchise: 30
 --- !u!114 &1128526760
 MonoBehaviour:
   m_ObjectHideFlags: 0

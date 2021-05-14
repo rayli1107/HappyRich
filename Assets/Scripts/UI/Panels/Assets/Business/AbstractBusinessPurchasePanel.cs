@@ -12,7 +12,11 @@ namespace UI.Panels.Assets
     {
 #pragma warning disable 0649
         [SerializeField]
-        protected TextMeshProUGUI _textIncomeRange;
+        private TextMeshProUGUI _textIncomeRange;
+        [SerializeField]
+        private string _messageBusinessOperationSkill =
+            " Your expertise in {0} can potentially help the business " +
+            "generate more income.";
 #pragma warning restore 0649
 
         public override void Refresh()
@@ -27,9 +31,19 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
             if (_textMessage != null)
             {
-                _textMessage.text = string.Format(
+                string message = string.Format(
                     _messageTemplate,
                     local.GetBusinessDescription(asset.description));
+
+                SkillInfo skillInfo = player.GetSkillInfo(SkillType.BUSINESS_OPERATIONS);
+                if (skillInfo != null)
+                {
+                    message += string.Format(
+                        _messageBusinessOperationSkill,
+                        local.GetSkill(skillInfo));
+                }
+
+                _textMessage.text = message;
             }
 
             if (_securedLoanControlPanel != null)

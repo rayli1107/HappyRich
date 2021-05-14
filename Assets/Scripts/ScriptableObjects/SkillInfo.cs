@@ -5,6 +5,7 @@ namespace ScriptableObjects
     public enum SkillType
     {
         REAL_ESTATE_VALUATION,
+        BUSINESS_OPERATIONS
     }
 
     [CreateAssetMenu(fileName = "Skill Info", menuName = "ScriptableObjects/Skill Info")]

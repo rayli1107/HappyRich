@@ -267,13 +267,17 @@ namespace UI
             string message,
             int max,
             NumberInputCallback numberInputCallback,
-            Action cancelCallback)
+            Action cancelCallback,
+            Func<int, string> confirmMessageHandler,
+            Action<int, TransactionHandler> startTransactionHandler)
         {
             NumberInputPanel panel = Instantiate(_prefabNumberInputPanel, transform);
             panel.message = message;
             panel.max = max;
             panel.numberCallback = numberInputCallback;
             panel.cancelCallback = cancelCallback;
+            panel.confirmMessageHandler = confirmMessageHandler;
+            panel.startTransactionHandler = startTransactionHandler;
             panel.Refresh();
         }
 

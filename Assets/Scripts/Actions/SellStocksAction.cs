@@ -18,6 +18,21 @@ namespace Actions
             _stock = stock;
         }
 
+        private string confirmMessageHandler(int number)
+        {
+            Localization local = Localization.Instance;
+            int cost = number * _stock.value;
+            return string.Format(
+                "Sell {0} share{1} of {2} for {3}?",
+                number, number > 1 ? "s" : "", _stock.name,
+                local.GetCurrency(cost));
+        }
+
+        private void startTransactionHandler(int number, TransactionHandler handler)
+        {
+            TransactionManager.SellStock(_player, _stock, number, handler);
+        }
+
         public override void Start()
         {
             PurchasedStock purchasedStock;
@@ -37,43 +52,18 @@ namespace Actions
                 "How many shares of {0} do you want to sell?",
                 _stock.name);
             UI.UIManager.Instance.ShowNumberInputPanel(
-                message, max, onNumberInput, () => RunCallback(false));
+                message,
+                max,
+                onNumberInput,
+                () => RunCallback(false),
+                confirmMessageHandler,
+                startTransactionHandler);
         }
 
         private void onNumberInput(int number)
         {
-            int cost = number * _stock.value;
-            _numSold = number;
-
-            Localization local = Localization.Instance;
-            string message = string.Format(
-                "Sell {0} share{1} of {2} for {3}?",
-                number, number > 1 ? "s" : "", _stock.name,
-                local.GetCurrency(cost));
-            UI.UIManager.Instance.ShowSimpleMessageBox(
-                message, ButtonChoiceType.OK_CANCEL, messageBoxHandler);
-        }
-
-        private void messageBoxHandler(ButtonType button)
-        {
-            if (button == ButtonType.OK)
-            {
-                TransactionManager.SellStock(
-                    _player, _stock, _numSold, onTransactionFinish);
-            }
-            else
-            {
-                onTransactionFinish(false);
-            }
-        }
-
-        private void onTransactionFinish(bool success)
-        {
-            if (success)
-            {
-                UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            }
-            RunCallback(success);
+            UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            RunCallback(true);
         }
     }
 }

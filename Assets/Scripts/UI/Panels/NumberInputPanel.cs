@@ -22,6 +22,8 @@ namespace UI.Panels
         public int max = int.MaxValue;
         public NumberInputCallback numberCallback;
         public Action cancelCallback;
+        public Action<int, TransactionHandler> startTransactionHandler;
+        public Func<int, string> confirmMessageHandler;
 
         private int _number;
 
@@ -56,11 +58,54 @@ namespace UI.Panels
             _textNumber.text = _number.ToString();
         }
 
-
-        public void OnConfirm()
+        private void onFinish()
         {
             numberCallback?.Invoke(_number);
             Destroy();
+        }
+
+        private void transactionHandler(bool success)
+        {
+            if (success)
+            {
+                onFinish();
+            }
+        }
+
+        private void tryFinish()
+        {
+            if (startTransactionHandler != null)
+            {
+                startTransactionHandler(_number, (bool b) => transactionHandler(b));
+            }
+            else
+            {
+                onFinish();
+            }
+        }
+
+        private void handleConfirm(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.OK)
+            {
+                tryFinish();
+            }
+        }
+
+        public void OnConfirm()
+        {
+            string message = confirmMessageHandler?.Invoke(_number);
+            if (message == null || message.Length == 0)
+            {
+                tryFinish();
+            }
+            else
+            {
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message,
+                    ButtonChoiceType.OK_CANCEL,
+                    (ButtonType t) => handleConfirm(t));
+            }
         }
 
         public void OnCancel()

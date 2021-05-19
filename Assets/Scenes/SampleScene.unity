@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 1128526761}
   - component: {fileID: 1128526760}
   - component: {fileID: 1128526759}
+  - component: {fileID: 1128526764}
   m_Layer: 0
   m_Name: Investment Managers
   m_TagString: Untagged
@@ -673,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smallInvestments:
-  - {fileID: 11400000, guid: c4569814d1a2aa7469e708624d0e5748, type: 2}
+  - {fileID: 11400000, guid: 84e1207c2e20bff468daea763c8ffa73, type: 2}
   _largeInvestments: []
   _maxBusinessLoanLTV: 75
   _maxPrivateLoanLTV: 90
@@ -754,6 +755,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1128526764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c798324ff57af5419959cb7872807f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startupIdeas:
+  - search engines
+  - ride sharing
+  - game development
+  - cloud storage
+  - food delivery service
+  _lowRiskReturnProfile: {fileID: 11400000, guid: 4b21dd70d04ad074daed2e5d58f13ee1,
+    type: 2}
+  _mediumRiskReturnProfile: {fileID: 11400000, guid: 66ef003cc9b17594695f8c33260acb83,
+    type: 2}
+  _highRiskReturnProfile: {fileID: 11400000, guid: 6a1a0dbb8b6579f4da640f0f64d02412,
+    type: 2}
+  turnCount: 5
 --- !u!1001 &1277663898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1350,7 +1376,7 @@ MonoBehaviour:
     type: 3}
   _prefabStockTradePanel: {fileID: 946307099505382972, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
     type: 3}
-  _prefabNumberInputPanel: {fileID: 4878464304282494514, guid: 34aac3e9c8f1a444bae63522c6144c5e,
+  _prefabNumberInputPanel: {fileID: 8296196116867053652, guid: c759e9deb4a9ac84983c72ea69a643d6,
     type: 3}
   _prefabAdvancedRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: a8c3d35e773ad6245986a79943288397,
     type: 3}

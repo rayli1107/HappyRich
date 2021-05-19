@@ -40,7 +40,7 @@ namespace UI
         [SerializeField]
         private StockPanel _prefabStockTradePanel;
         [SerializeField]
-        private NumberInputPanel _prefabNumberInputPanel;
+        private SimpleNumberInputPanel _prefabNumberInputPanel;
         [SerializeField]
         private RentalRealEstatePurchasePanel _prefabAdvancedRentalRealEstatePurchasePanel;
         [SerializeField]
@@ -265,19 +265,22 @@ namespace UI
 
         public void ShowNumberInputPanel(
             string message,
-            int max,
-            NumberInputCallback numberInputCallback,
-            Action cancelCallback,
-            Func<int, string> confirmMessageHandler,
-            Action<int, TransactionHandler> startTransactionHandler)
+            int maxValue,
+            Action<ButtonType, int> numberInputCallback,
+            Func<ButtonType, int, string> confirmMessageHandler,
+            Action<TransactionHandler, int> startTransactionHandler,
+            ButtonChoiceType buttonChoice = ButtonChoiceType.OK_CANCEL)
         {
-            NumberInputPanel panel = Instantiate(_prefabNumberInputPanel, transform);
+            SimpleNumberInputPanel panel = Instantiate(_prefabNumberInputPanel, transform);
             panel.message = message;
-            panel.max = max;
-            panel.numberCallback = numberInputCallback;
-            panel.cancelCallback = cancelCallback;
+            panel.maxValue = maxValue;
+            panel.numberInputCallback = numberInputCallback;
             panel.confirmMessageHandler = confirmMessageHandler;
             panel.startTransactionHandler = startTransactionHandler;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.EnableButtons(buttonChoice);
+
             panel.Refresh();
         }
 

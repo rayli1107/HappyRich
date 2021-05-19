@@ -1,17 +1,18 @@
 ﻿namespace StateMachine
 {
-    public class PersonalEventState : IState
+    public class StockMarketEventState : IState
     {
         private StateMachine _stateMachine;
 
-        public PersonalEventState(StateMachine stateMachine)
+        public StockMarketEventState(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
         }
 
         public void EnterState()
         {
-            new Events.Personal.PersonalEvent(onEventDone).Run();
+            StockManager.Instance.OnTurnStart(GameManager.Instance.Random);
+            _stateMachine.ChangeState(_stateMachine.SellPropertyState);
         }
 
         public void ExitState()
@@ -20,11 +21,6 @@
 
         public void Update()
         {
-        }
-
-        private void onEventDone()
-        {
-            _stateMachine.ChangeState(_stateMachine.ResolveTimedInvestmentState);
         }
     }
 }

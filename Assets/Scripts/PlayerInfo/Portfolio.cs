@@ -21,6 +21,8 @@ namespace PlayerInfo
         public List<RentalProperty> rentalProperties { get; private set; }
         public List<DistressedProperty> distressedProperties { get; private set; }
         public List<BusinessEntity> businessEntities { get; private set; }
+        public List<AbstractTimedInvestment> timedInvestments { get; private set; }
+
         public List<PartialInvestment> properties {
             get
             {
@@ -61,6 +63,7 @@ namespace PlayerInfo
                 }
                 assets.AddRange(properties);
                 assets.AddRange(businesses);
+                assets.AddRange(timedInvestments);
                 return assets;
             }
         }
@@ -113,6 +116,7 @@ namespace PlayerInfo
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
             businessEntities = new List<BusinessEntity>();
+            timedInvestments = new List<AbstractTimedInvestment>();
         }
 
         public void AddPersonalLoan(int amount)

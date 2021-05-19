@@ -28,7 +28,7 @@
 
         public void Update()
         {
-            _stateMachine.ChangeState(_stateMachine.MarketEventState);
+            _stateMachine.ChangeState(_stateMachine.StockMarketEventState);
         }
     }
 }

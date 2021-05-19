@@ -10,6 +10,8 @@ using BusinessEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Business>;
 
 using Investment = System.Tuple<InvestmentPartner, int>;
+using UnityEngine;
+
 public delegate void TransactionHandler(bool success);
 
 public static class TransactionManager
@@ -262,5 +264,31 @@ public static class TransactionManager
         partialAsset.Refinance(refinancedAsset);
         player.portfolio.rentalProperties.Add(
             new RentalProperty(partialAsset, refinancedAsset));
+    }
+
+    private static void buyTimedInvestmentDebitHandler(
+        Player player,
+        AbstractTimedInvestment investment,
+        TransactionHandler handler,
+        bool success)
+    {
+        if (success)
+        {
+            Debug.Log("Added timed investment");
+            player.portfolio.timedInvestments.Add(investment);
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyTimedInvestment(
+        Player player,
+        AbstractTimedInvestment investment,
+        TransactionHandler handler)
+    {
+        int price = investment.originalPrice;
+        TryDebit(
+            player,
+            investment.originalPrice,
+            (bool b) => buyTimedInvestmentDebitHandler(player, investment, handler, b));
     }
 }

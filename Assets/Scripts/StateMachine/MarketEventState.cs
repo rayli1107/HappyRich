@@ -11,8 +11,7 @@
 
         public void EnterState()
         {
-            StockManager.Instance.OnTurnStart(GameManager.Instance.Random);
-            new Events.Market.MarketEvent(onEventDone).Run();
+            new Events.Market.MarketEvent(GameManager.Instance.player, onEventDone).Run();
         }
 
         public void ExitState()
@@ -25,7 +24,7 @@
 
         private void onEventDone()
         {
-            _stateMachine.ChangeState(_stateMachine.SellPropertyState);
+            _stateMachine.ChangeState(_stateMachine.StockMarketEventState);
         }
 
     }

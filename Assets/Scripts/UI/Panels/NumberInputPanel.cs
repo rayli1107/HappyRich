@@ -5,6 +5,12 @@ using UnityEngine;
 
 namespace UI.Panels
 {
+    public enum NumberValueType
+    {
+        kPlain,
+        kCurrency,
+    }
+
     public delegate void NumberInputCallback(int n);
 
     public class NumberInputPanel : ModalObject
@@ -13,24 +19,23 @@ namespace UI.Panels
         [SerializeField]
         private TextMeshProUGUI _textMessage;
         [SerializeField]
-        private TextMeshProUGUI _textMax;
-        [SerializeField]
         private TextMeshProUGUI _textNumber;
 #pragma warning restore 0649
 
         public string message;
-        public int max = int.MaxValue;
+        public int maxValue = int.MaxValue;
+        public int defaultValue = 0;
         public NumberInputCallback numberCallback;
         public Action cancelCallback;
         public Action<int, TransactionHandler> startTransactionHandler;
-        public Func<int, string> confirmMessageHandler;
+        public Func<bool, int, string> confirmMessageHandler;
+        public NumberValueType valueType = NumberValueType.kPlain;
 
         private int _number;
 
         public void Refresh()
         {
             _textMessage.text = message;
-            _textMax.text = max.ToString();
             OnClear();
         }
 
@@ -40,14 +45,32 @@ namespace UI.Panels
             Refresh();
         }
 
+        private void setNumberText(int number)
+        {
+            Localization local = Localization.Instance;
+            if (valueType == NumberValueType.kCurrency)
+            {
+                _textNumber.text = local.GetCurrency(number);
+            }
+            else
+            {
+                _textNumber.text = number.ToString();
+            }
+        }
+
+        public void OnNumberChanged()
+        {
+
+        }
+
         public void OnNumberInput(int n)
         {
             try
             {
-                _number = Mathf.Min(checked(_number * 10 + n), max);
-                _textNumber.text = _number.ToString();
+                _number = Mathf.Min(checked(_number * 10 + n), maxValue);
+                setNumberText(_number);
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
             }
         }
@@ -55,7 +78,7 @@ namespace UI.Panels
         public void OnClear()
         {
             _number = 0;
-            _textNumber.text = _number.ToString();
+            setNumberText(_number);
         }
 
         private void onFinish()
@@ -94,7 +117,7 @@ namespace UI.Panels
 
         public void OnConfirm()
         {
-            string message = confirmMessageHandler?.Invoke(_number);
+            string message = confirmMessageHandler?.Invoke(true, _number);
             if (message == null || message.Length == 0)
             {
                 tryFinish();
@@ -102,16 +125,36 @@ namespace UI.Panels
             else
             {
                 UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_CANCEL,
-                    (ButtonType t) => handleConfirm(t));
+                    message, ButtonChoiceType.OK_CANCEL, handleConfirm);
+            }
+        }
+
+        private void onCancel()
+        {
+            cancelCallback?.Invoke();
+            Destroy();
+        }
+
+        private void handleCancel(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.OK)
+            {
+                onCancel();
             }
         }
 
         public void OnCancel()
         {
-            cancelCallback?.Invoke();
-            Destroy();
+            string message = confirmMessageHandler?.Invoke(false, 0);
+            if (message == null || message.Length == 0)
+            {
+                onCancel();
+            }
+            else
+            {
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message, ButtonChoiceType.OK_CANCEL, handleCancel);
+            }
         }
     }
 }

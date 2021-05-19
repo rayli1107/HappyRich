@@ -18,17 +18,24 @@ namespace Actions
             _stock = stock;
         }
 
-        private string confirmMessageHandler(int number)
+        private string confirmMessageHandler(ButtonType buttonType, int number)
         {
-            Localization local = Localization.Instance;
-            int cost = number * _stock.value;
-            return string.Format(
-                "Sell {0} share{1} of {2} for {3}?",
-                number, number > 1 ? "s" : "", _stock.name,
-                local.GetCurrency(cost));
+            if (buttonType == ButtonType.OK)
+            {
+                Localization local = Localization.Instance;
+                int cost = number * _stock.value;
+                return string.Format(
+                    "Sell {0} share{1} of {2} for {3}?",
+                    number, number > 1 ? "s" : "", _stock.name,
+                    local.GetCurrency(cost));
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        private void startTransactionHandler(int number, TransactionHandler handler)
+        private void startTransactionHandler(TransactionHandler handler, int number)
         {
             TransactionManager.SellStock(_player, _stock, number, handler);
         }
@@ -49,21 +56,21 @@ namespace Actions
             }
 
             string message = string.Format(
-                "How many shares of {0} do you want to sell?",
-                _stock.name);
+                "How many shares of {0} do you want to sell?\nMax:{1}",
+                _stock.name,
+                max);
             UI.UIManager.Instance.ShowNumberInputPanel(
                 message,
                 max,
-                onNumberInput,
-                () => RunCallback(false),
+                messageBoxHandler,
                 confirmMessageHandler,
                 startTransactionHandler);
         }
 
-        private void onNumberInput(int number)
+        private void messageBoxHandler(ButtonType buttonType, int number)
         {
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            RunCallback(true);
+            RunCallback(buttonType == ButtonType.OK);
         }
     }
 }

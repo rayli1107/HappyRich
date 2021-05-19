@@ -6,7 +6,9 @@ namespace StateMachine
     {
         public GameInitState GameInitState { get; private set; }
         public PlayerInitState PlayerInitState { get; private set; }
+        public ResolveTimedInvestmentState ResolveTimedInvestmentState { get; private set; }
         public MarketEventState MarketEventState { get; private set; }
+        public StockMarketEventState StockMarketEventState { get; private set; }
         public SellPropertyState SellPropertyState { get; private set; }
         public RefinancePropertyState RefinancePropertyState { get; private set; }
         public PlayerActionState PlayerActionState { get; private set; }
@@ -21,7 +23,9 @@ namespace StateMachine
         {
             GameInitState = new GameInitState(this);
             PlayerInitState = new PlayerInitState(this);
+            ResolveTimedInvestmentState = new ResolveTimedInvestmentState(this);
             MarketEventState = new MarketEventState(this);
+            StockMarketEventState = new StockMarketEventState(this);
             SellPropertyState = new SellPropertyState(this);
             RefinancePropertyState = new RefinancePropertyState(this);
             PlayerActionState = new PlayerActionState(this);
@@ -44,7 +48,7 @@ namespace StateMachine
             {
                 _currentState.ExitState();
             }
-
+            Debug.LogFormat("State: {0}", newState.GetType().Name);
             _currentState = newState;
 
             if (_currentState != null)

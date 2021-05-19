@@ -1,5 +1,6 @@
 ﻿using Assets;
 using PlayerInfo;
+using UI.Panels.Templates;
 
 namespace Actions
 {
@@ -15,18 +16,25 @@ namespace Actions
             _stock = stock;
         }
 
-        private string confirmMessageHandler(int number)
+        private string confirmMessageHandler(ButtonType buttonType, int number)
         {
-            int cost = number * _stock.value;
+            if (buttonType == ButtonType.OK)
+            {
+                int cost = number * _stock.value;
 
-            Localization local = Localization.Instance;
-            return string.Format(
-                "Purchase {0} share{1} of {2} for {3}?",
-                number, number > 1 ? "s" : "", _stock.name,
-                local.GetCurrency(cost, true));
+                Localization local = Localization.Instance;
+                return string.Format(
+                    "Purchase {0} share{1} of {2} for {3}?",
+                    number, number > 1 ? "s" : "", _stock.name,
+                    local.GetCurrency(cost, true));
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        private void startTransactionHandler(int number, TransactionHandler handler)
+        private void startTransactionHandler(TransactionHandler handler, int number)
         {
             TransactionManager.BuyStock(_player, _stock, number, handler);
         }
@@ -35,21 +43,21 @@ namespace Actions
         {
             int max = _player.cash / _stock.value;
             string message = string.Format(
-                "How many shares of {0} do you want to buy?",
-                _stock.name);
+                "How many shares of {0} do you want to buy?\nMax: {1}",
+                _stock.name,
+                max);
             UI.UIManager.Instance.ShowNumberInputPanel(
                 message,
                 max,
-                onNumberInput,
-                () => RunCallback(false),
+                messageBoxHandler,
                 confirmMessageHandler,
                 startTransactionHandler);
         }
 
-        private void onNumberInput(int number)
+        private void messageBoxHandler(ButtonType buttonType, int number)
         {
             UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            RunCallback(true);
+            RunCallback(buttonType == ButtonType.OK);
         }
     }
 }

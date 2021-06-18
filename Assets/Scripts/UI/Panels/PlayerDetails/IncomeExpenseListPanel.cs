@@ -65,6 +65,18 @@ namespace UI.Panels.PlayerDetails
                     false);
             }
 
+            if (player.spouse != null && player.spouse.additionalIncome > 0)
+            {
+                activeIncome += player.spouse.additionalIncome;
+                index = AddItemValueAsCurrency(
+                    _panelActiveIncome.transform.parent,
+                    index,
+                    _panelActiveIncome.tabCount + 1,
+                    "Spouse",
+                    player.spouse.additionalIncome,
+                    false);
+            }
+
             if (_showTotalValues)
             {
                 _panelActiveIncome.setValueAsCurrency(activeIncome);
@@ -121,6 +133,18 @@ namespace UI.Panels.PlayerDetails
                 "Personal Expenses",
                 player.personalExpenses,
                 true);
+
+            if (player.spouse != null && player.spouse.additionalExpense > 0)
+            {
+                expenses += player.spouse.additionalExpense;
+                index = AddItemValueAsCurrency(
+                    _panelExpenses.transform.parent,
+                    index,
+                    _panelExpenses.tabCount + 1,
+                    "Spouse's Expenses",
+                    player.spouse.additionalExpense,
+                    true);
+            }
 
             // Child Expenses
             if (player.numChild > 0)

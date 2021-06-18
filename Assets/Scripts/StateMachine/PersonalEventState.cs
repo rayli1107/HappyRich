@@ -11,7 +11,8 @@
 
         public void EnterState()
         {
-            new Events.Personal.PersonalEvent(onEventDone).Run();
+            new Events.Personal.PersonalEvent(
+                GameManager.Instance.player, onEventDone).Run();
         }
 
         public void ExitState()

@@ -1,4 +1,6 @@
-﻿using StateMachine;
+﻿using Actions;
+using PlayerInfo;
+using StateMachine;
 using System;
 
 namespace Events.Personal
@@ -6,15 +8,22 @@ namespace Events.Personal
     public class PersonalEvent
     {
         private Action _callback;
+        private Player _player;
 
-        public PersonalEvent (Action eventDoneCallback)
+        public PersonalEvent (Player player, Action eventDoneCallback)
         {
+            _player = player;
             _callback = eventDoneCallback;
         }
 
         public void Run()
         {
-            _callback?.Invoke();
+            AbstractAction action = FamilyManager.Instance.GetPersonalEventAction(
+                _player, (_) => _callback.Invoke());
+            if (action != null)
+            {
+                action.Start();
+            }
 //            new JobLossEvent(_state).Run();
         }
     }

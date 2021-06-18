@@ -1,9 +1,24 @@
 ﻿using PlayerState;
 using ScriptableObjects;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace PlayerInfo
 {
+    public class Spouse
+    {
+        public int additionalIncome { get; private set; }
+        public int additionalExpense { get; private set; }
+        public int additionalHappiness { get; private set; }
+
+        public Spouse(int income, int expense, int happiness)
+        {
+            additionalIncome = income;
+            additionalExpense = expense;
+            additionalHappiness = happiness;
+        }
+    }
+
     public class Player
     {
         public List<Profession> jobs { get; private set; }
@@ -30,6 +45,10 @@ namespace PlayerInfo
         public int costPerChild => (_costPerChild * expenseModifier) / 100;
         public int numChild { get; private set; }
         public int age { get; private set; }
+
+        public Spouse spouse;
+
+        public int maxHappiness => 100;
 
         public int happiness
         {
@@ -60,7 +79,7 @@ namespace PlayerInfo
         public int defaultHappiness { get; private set; }
         public List<InvestmentPartner> contacts { get; private set; }
         public List<SkillInfo> skills { get; private set; }
-
+        public System.Tuple<int, int> divorcedPenalty;
         public Player(Profession profession, int defaultHappiness)
         {
             oldJobs = new List<Profession>();
@@ -74,14 +93,17 @@ namespace PlayerInfo
             numChild = 0;
             age = profession.startingAge;
             this.defaultHappiness = defaultHappiness;
+            divorcedPenalty = new System.Tuple<int, int>(0, 0);
 
             contacts = new List<InvestmentPartner>();
 
             passiveStates = new List<AbstractPlayerState>()
-        {
-            new OneJobState(),
-            new TwoJobState()
-        };
+            {
+                new OneJobState(),
+                new TwoJobState(),
+                new MarriageState(),
+                new DivorcedState(),
+            };
 
             mentalStates = new List<AbstractPlayerState>();
         }
@@ -90,6 +112,9 @@ namespace PlayerInfo
         {
             DistributeCashflow();
             UpdateContacts();
+            divorcedPenalty = new System.Tuple<int, int>(
+                Mathf.Max(divorcedPenalty.Item1 - 1, 0),
+                divorcedPenalty.Item2);
         }
 
         private void UpdateContacts()

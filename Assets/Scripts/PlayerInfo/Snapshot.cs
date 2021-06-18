@@ -12,7 +12,19 @@ namespace PlayerInfo
         public int passiveIncome { get; private set; }
         public int expenses { get; private set; }
         public int cash => player.cash;
-        public int happiness => player.happiness;
+        public int happiness
+        {
+            get
+            {
+                int result = player.happiness;
+                if (player.spouse != null)
+                {
+                    result += player.spouse.additionalHappiness;
+                }
+                return result;
+            }
+        }
+
         public int netWorth { get; private set; }
 
         public int cashflow => activeIncome + passiveIncome - expenses;
@@ -36,13 +48,22 @@ namespace PlayerInfo
             netWorth = player.cash;
 
             activeIncome = 0;
+            if (player.spouse != null)
+            {
+                activeIncome += player.spouse.additionalIncome;
+            }
             foreach (Profession job in player.jobs)
             {
                 activeIncome += job.salary;
             }
 
             passiveIncome = 0;
+
             expenses = player.personalExpenses;
+            if (player.spouse != null)
+            {
+                activeIncome += player.spouse.additionalExpense;
+            }
             expenses += player.numChild * player.costPerChild;
 
             foreach (AbstractAsset asset in player.portfolio.assets)

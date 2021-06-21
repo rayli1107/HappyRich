@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UI.Panels.Templates
@@ -31,6 +33,24 @@ namespace UI.Panels.Templates
         public StartTransactionHandler startTransactionHandler;
         public GetConfirmMessageCallback confirmMessageHandler;
 
+        public Action buttonDetailHandler
+        {
+            set
+            {
+                enableButton(_buttonDetails, value);
+            }
+        }
+
+
+        public Action buttonHelpHandler
+        {
+            set
+            {
+                enableButton(_buttonHelp, value);
+            }
+        }
+
+
 #pragma warning disable 0649
         [SerializeField]
         private GameObject _buttonOk;
@@ -38,7 +58,24 @@ namespace UI.Panels.Templates
         private GameObject _buttonCancel;
         [SerializeField]
         private GameObject _buttonBack;
+        [SerializeField]
+        private GameObject _buttonDetails;
+        [SerializeField]
+        private GameObject _buttonHelp;
 #pragma warning restore 0649
+
+        private void enableButton(GameObject gameObject, Action action)
+        {
+            gameObject.gameObject.SetActive(action != null);
+            if (action != null)
+            {
+                gameObject.GetComponentInChildren<Button>().onClick.AddListener(new UnityAction(action));
+            }
+            else
+            {
+                gameObject.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+            }
+        }
 
         private void transactionHandler(bool success, ButtonType buttonType)
         {

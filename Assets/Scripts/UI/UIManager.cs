@@ -186,13 +186,17 @@ namespace UI
         public SimpleTextMessageBox ShowSimpleMessageBox(
             string message,
             ButtonChoiceType buttonChoice,
-            MessageBoxHandler handler)
+            MessageBoxHandler handler,
+            Action detailHandler = null,
+            Action helpHandler = null)
         {
             SimpleTextMessageBox messageBox = Instantiate(
                 _prefabSimpleTextMessageBox, transform);
             messageBox.text.text = message;
             messageBox.messageBoxHandler = handler;
             messageBox.EnableButtons(buttonChoice);
+            messageBox.buttonDetailHandler = detailHandler;
+            messageBox.buttonHelpHandler = helpHandler;
             return messageBox;
         }
 

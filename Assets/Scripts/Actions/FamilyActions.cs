@@ -1,4 +1,5 @@
 ﻿using PlayerInfo;
+using System.Collections.Generic;
 using UI.Panels.Templates;
 
 namespace Actions
@@ -15,13 +16,30 @@ namespace Actions
             _spouse = spouse;
         }
 
+        private void showSpouseDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> text = new List<string>()
+            {
+                string.Format("Spouse's Income: {0}", local.GetCurrency(_spouse.additionalIncome)),
+                string.Format("Spouse's Expense: {0}", local.GetCurrency(_spouse.additionalExpense, true)),
+                string.Format("Additional Happiness: {0}", local.GetValueAsChange(_spouse.additionalHappiness))
+            };
+            SimpleTextMessageBox messageBox = UI.UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", text),
+                ButtonChoiceType.OK_ONLY,
+                null);
+            messageBox.text.enableWordWrapping = false;
+        }
+
         public override void Start()
         {
             _player.spouse = _spouse;
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "You met the love of your life at a party and decided to get married. Congratulations!",
                 ButtonChoiceType.OK_ONLY,
-                (_) => RunCallback(true));
+                (_) => RunCallback(true),
+                showSpouseDetails);
         }
     }
 

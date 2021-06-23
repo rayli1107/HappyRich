@@ -15,11 +15,16 @@ public class FamilyManager : MonoBehaviour
     private int _divorcePenaltyDuration = 3;
     [SerializeField]
     private SpouseProfile[] _spouses;
+    [SerializeField]
+    private float[] _newChildProbabilities;
+    [SerializeField]
+    private int _childHappiness = 10;
 #pragma warning restore 0649
 
     public static FamilyManager Instance { get; private set; }
 
     public int divorcePenaltyDuration => _divorcePenaltyDuration;
+    public int childHappiness => _childHappiness;
     private System.Random _random;
 
     private void Awake()
@@ -82,6 +87,14 @@ public class FamilyManager : MonoBehaviour
             {
                 return new DivorceAction(player, callback);
             }
+
+            if (player.numChild < _newChildProbabilities.Length &&
+                _random.NextDouble() < _newChildProbabilities[player.numChild])
+            {
+                bool isBoy = _random.Next(2) == 0;
+                return new NewChildAction(player, callback, isBoy);
+            }
+
             return null;
         }
     }

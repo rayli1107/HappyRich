@@ -43,6 +43,28 @@ namespace Actions
         }
     }
 
+    public class NewChildAction : AbstractAction
+    {
+        private Player _player;
+        private bool _isBoy;
+
+        public NewChildAction(Player player, ActionCallback actionCallback, bool isBoy)
+            : base(actionCallback)
+        {
+            _player = player;
+        }
+
+        public override void Start()
+        {
+            ++_player.numChild;
+            string gender = _isBoy ? "boy" : "girl";
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                string.Format("Congratulations! You and your spouse decided to have a baby. It's a {0}!", gender),
+                ButtonChoiceType.OK_ONLY,
+                (_) => RunCallback(true));
+        }
+    }
+
     public class DivorceAction : AbstractAction
     {
         private Player _player;

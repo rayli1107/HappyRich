@@ -43,7 +43,7 @@ namespace PlayerInfo
         }
         public int personalExpenses => (_personalExpenses * expenseModifier) / 100;
         public int costPerChild => (_costPerChild * expenseModifier) / 100;
-        public int numChild { get; private set; }
+        public int numChild;
         public int age { get; private set; }
 
         public Spouse spouse;
@@ -103,6 +103,7 @@ namespace PlayerInfo
                 new TwoJobState(),
                 new MarriageState(),
                 new DivorcedState(),
+                new ChildrenState(),
             };
 
             mentalStates = new List<AbstractPlayerState>();

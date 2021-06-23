@@ -24,6 +24,10 @@ namespace Events.Personal
             {
                 action.Start();
             }
+            else
+            {
+                _callback.Invoke();
+            }
 //            new JobLossEvent(_state).Run();
         }
     }

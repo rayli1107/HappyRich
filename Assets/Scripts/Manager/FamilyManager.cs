@@ -19,12 +19,18 @@ public class FamilyManager : MonoBehaviour
     private float[] _newChildProbabilities;
     [SerializeField]
     private int _childHappiness = 10;
+    [SerializeField]
+    private int _familyOrientedChildThreshold = 3;
+    [SerializeField]
+    private int _familyOrientedHappinessModifier = 10;
 #pragma warning restore 0649
 
     public static FamilyManager Instance { get; private set; }
 
     public int divorcePenaltyDuration => _divorcePenaltyDuration;
     public int childHappiness => _childHappiness;
+    public int familyOrientedChildThreshold => _familyOrientedChildThreshold;
+    public int familyOrientedHappinessModifier => _familyOrientedHappinessModifier;
     private System.Random _random;
 
     private void Awake()

@@ -450,17 +450,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ae51cd244d1fc4bb1a523c6b9599a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _marriageProbability: 1
-  _divorceProbabilityRange: {x: 0, y: 0}
+  _marriageProbability: 0.2
+  _divorceProbabilityRange: {x: 0, y: 0.3}
   _divorcePenaltyDuration: 3
   _spouses:
   - {fileID: 11400000, guid: e03721210d32e3b4f8789f816c09afb0, type: 2}
   - {fileID: 11400000, guid: 689e1c8ba78903e48a8ca20b7e972c8e, type: 2}
   - {fileID: 11400000, guid: ab9d8da587ce1eb43844ce737f68cd76, type: 2}
   _newChildProbabilities:
-  - 0.5
-  - 0.3
+  - 0.4
+  - 0.2
   - 0.1
+  _childHappiness: 10
+  _familyOrientedChildThreshold: 3
+  _familyOrientedHappinessModifier: 10
 --- !u!4 &851890455
 Transform:
   m_ObjectHideFlags: 0

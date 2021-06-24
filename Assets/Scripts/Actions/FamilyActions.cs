@@ -52,6 +52,7 @@ namespace Actions
             : base(actionCallback)
         {
             _player = player;
+            _isBoy = isBoy;
         }
 
         public override void Start()

@@ -56,4 +56,20 @@
         }
     }
 
+    public class FamilyOrientedState : AbstractPlayerState
+    {
+        public override string description => string.Format(
+            "You realize you're a family oreinted man, and your family means everything " +
+            "to you. Happiness +10 when you're married and have at least {0} children.",
+            FamilyManager.Instance.familyOrientedChildThreshold);
+
+        public override int happinessModifier =>
+            player.spouse != null &&
+            player.numChild >= FamilyManager.Instance.familyOrientedChildThreshold ?
+            FamilyManager.Instance.familyOrientedHappinessModifier : 0;
+
+        public FamilyOrientedState() : base("Family Oriented")
+        {
+        }
+    }
 }

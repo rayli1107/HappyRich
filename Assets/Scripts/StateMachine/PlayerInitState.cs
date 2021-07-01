@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             GameManager.Instance.CreatePlayer();
             GameManager.Instance.player.AddSkill(

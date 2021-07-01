@@ -9,8 +9,12 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                param.message,
+                UI.Panels.Templates.ButtonChoiceType.OK_ONLY,
+                (_) => _stateMachine.ChangeState(_stateMachine.GameExitState));
         }
 
         public void ExitState()

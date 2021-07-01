@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             new Events.Market.MarketEvent(GameManager.Instance.player, onEventDone).Run();
         }

@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             UI.UIManager.Instance.EnableActionButton(false);
         }

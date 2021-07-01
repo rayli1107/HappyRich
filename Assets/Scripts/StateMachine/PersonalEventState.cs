@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             new Events.Personal.PersonalEvent(
                 GameManager.Instance.player, onEventDone).Run();
@@ -25,7 +25,7 @@
 
         private void onEventDone()
         {
-            _stateMachine.ChangeState(_stateMachine.ResolveTimedInvestmentState);
+            _stateMachine.ChangeState(_stateMachine.YearEndEventState);
         }
     }
 }

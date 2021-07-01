@@ -3,7 +3,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int defaultHappiness = 50;
+#pragma warning disable 0649
+    [SerializeField]
+    private int _defaultHappiness = 50;
+    [SerializeField]
+    private int _requiredHappiness = 50;
+    [SerializeField]
+    private int _retirementAge = 60;
+#pragma warning restore 0649
+
+    public int defaultHappiness => _defaultHappiness;
+    public int requiredHappiness => _requiredHappiness;
+    public int retirementAge => _retirementAge;
 
     public static GameManager Instance { get; private set; }
     public Player player { get; private set; }
@@ -22,7 +33,7 @@ public class GameManager : MonoBehaviour
         Random = new System.Random(System.Guid.NewGuid().GetHashCode());
 
         StateMachine = new StateMachine.StateMachine();
-        StateMachine.Start();
+        StateMachine.Start(null);
     }
 
     public void CreatePlayer()

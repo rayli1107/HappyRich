@@ -41,7 +41,7 @@ namespace StateMachine
             _stateMachine.ChangeState(_stateMachine.RefinancePropertyState);
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             PlayerInfo.Player player = GameManager.Instance.player;
             PlayerInfo.Portfolio portfolio = player.portfolio;

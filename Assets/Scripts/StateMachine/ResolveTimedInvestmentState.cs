@@ -38,7 +38,7 @@ namespace StateMachine
                 (bool b) => onResolve(player, index, b));
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             resolveTimedInvestment(GameManager.Instance.player, 0);
         }

@@ -44,7 +44,7 @@ namespace StateMachine
                 false);
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             processDistressedProperty(0);
         }

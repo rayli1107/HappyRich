@@ -2,6 +2,11 @@
 
 namespace StateMachine
 {
+    public class StateMachineParameter
+    {
+        public string message;
+    }
+
     public class StateMachine
     {
         public GameInitState GameInitState { get; private set; }
@@ -16,6 +21,8 @@ namespace StateMachine
         public PersonalEventState PersonalEventState { get; private set; }
         public GameOverState GameOverState { get; private set; }
         public VictoryState VictoryState { get; private set; }
+        public YearEndEventState YearEndEventState { get; private set; }
+        public GameExitState GameExitState { get; private set; }
 
         private IState _currentState;
 
@@ -31,29 +38,31 @@ namespace StateMachine
             PlayerActionState = new PlayerActionState(this);
             PlayerPostActionState = new PlayerPostActionState(this);
             PersonalEventState = new PersonalEventState(this);
+            GameExitState = new GameExitState(this);
             GameOverState = new GameOverState(this);
             VictoryState = new VictoryState(this);
+            YearEndEventState = new YearEndEventState(this);
 
             _currentState = GameInitState;
         }
 
-        public void Start()
+        public void Start(StateMachineParameter param)
         {
-            _currentState.EnterState();
+            _currentState.EnterState(param);
         }
 
-        public void ChangeState(IState newState)
+        public void ChangeState(IState newState, StateMachineParameter param = null)
         {
             if (_currentState != null)
             {
                 _currentState.ExitState();
             }
-            Debug.LogFormat("State: {0}", newState.GetType().Name);
+//            Debug.LogFormat("State: {0}", newState.GetType().Name);
             _currentState = newState;
 
             if (_currentState != null)
             {
-                _currentState.EnterState();
+                _currentState.EnterState(param);
             }
         }
 

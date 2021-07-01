@@ -19,8 +19,11 @@ namespace Events.Market
 
         public void Run()
         {
-            RiskyInvestmentManager.Instance.GetInvestmentAction(
-                _player, (_) => _eventDoneCallback?.Invoke()).Start();
+            /*
+                        RiskyInvestmentManager.Instance.GetInvestmentAction(
+                            _player, (_) => _eventDoneCallback?.Invoke()).Start();
+            */
+            _eventDoneCallback?.Invoke();
         }
     }
 }

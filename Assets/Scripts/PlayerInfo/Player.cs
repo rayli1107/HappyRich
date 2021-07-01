@@ -44,7 +44,7 @@ namespace PlayerInfo
         public int personalExpenses => (_personalExpenses * expenseModifier) / 100;
         public int costPerChild => (_costPerChild * expenseModifier) / 100;
         public int numChild;
-        public int age { get; private set; }
+        public int age;
 
         public Spouse spouse;
 

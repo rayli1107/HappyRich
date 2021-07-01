@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
         }
 
@@ -33,6 +33,7 @@
                 BusinessManager.Instance.Initialize(GameManager.Instance.Random);
                 SelfImprovementManager.Instance.Initialize();
                 RiskyInvestmentManager.Instance.Initialize(GameManager.Instance.Random);
+                FamilyManager.Instance.Initialize(GameManager.Instance.Random);
                 FamilyManager.Instance.Initialize(GameManager.Instance.Random);
 
                 _stateMachine.ChangeState(_stateMachine.PlayerInitState);

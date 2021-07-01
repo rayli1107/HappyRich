@@ -9,7 +9,7 @@
             _stateMachine = stateMachine;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             StockManager.Instance.OnTurnStart(GameManager.Instance.Random);
             _stateMachine.ChangeState(_stateMachine.SellPropertyState);

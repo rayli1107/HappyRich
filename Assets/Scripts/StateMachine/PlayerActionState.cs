@@ -14,7 +14,7 @@ namespace StateMachine
             _firstTurn = true;
         }
 
-        public void EnterState()
+        public void EnterState(StateMachineParameter param)
         {
             Player player = GameManager.Instance.player;
             if (_firstTurn)
@@ -38,7 +38,6 @@ namespace StateMachine
 
         public void OnPlayerActionDone()
         {
-            Debug.Log("OnPlayerActionDone");
             _stateMachine.ChangeState(_stateMachine.PlayerPostActionState);
         }
 

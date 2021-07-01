@@ -2,7 +2,7 @@
 {
     public interface IState
     {
-        void EnterState();
+        void EnterState(StateMachineParameter param);
         void ExitState();
         void Update();
     }

@@ -22,17 +22,14 @@ namespace Assets
             int actualIncome,
             int loanLtv,
             int maxLoanLtv)
-            : base("", startupCost, 0, actualIncome)
+            : base(description, startupCost, 0, actualIncome)
         {
             this.description = description;
             this.startupCost = startupCost;
             this.franchiseFee = franchiseFee;
             this.minIncome = minIncome;
             this.maxIncome = maxIncome;
-            if (franchiseFee > 0)
-            {
-                label = description;
-            }
+            label = description;
 
             primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv);
         }

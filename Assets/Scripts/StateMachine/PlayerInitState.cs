@@ -1,4 +1,8 @@
-﻿namespace StateMachine
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace StateMachine
 {
     public class PlayerInitState : IState
     {
@@ -7,6 +11,11 @@
         public PlayerInitState(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
+        }
+
+        private void TestFn(int i)
+        {
+            Debug.LogFormat("TestFn {0}", i);
         }
 
         public void EnterState(StateMachineParameter param)
@@ -19,7 +28,7 @@
             GameManager.Instance.player.contacts.Add(
                 new InvestmentPartner("Bob", 200000, RiskTolerance.kLow, 10));
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
-
+            GameManager.Instance.player.portfolio.AddCash(1000000);
         }
 
         public void ExitState()

@@ -26,6 +26,7 @@ namespace UI.Panels
             {
                 _number = Mathf.Clamp(value, minValue, maxValue);
                 _textInput.text = _number.ToString();
+                _textInput.textComponent.alignment = TextAlignmentOptions.Left;
             }
         }
 

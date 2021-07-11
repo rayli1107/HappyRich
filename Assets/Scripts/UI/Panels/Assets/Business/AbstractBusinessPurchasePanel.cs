@@ -35,6 +35,7 @@ namespace UI.Panels.Assets
                     _messageTemplate,
                     local.GetBusinessDescription(asset.description));
 
+                /*
                 SkillInfo skillInfo = player.GetSkillInfo(SkillType.BUSINESS_OPERATIONS);
                 if (skillInfo != null)
                 {
@@ -42,7 +43,7 @@ namespace UI.Panels.Assets
                         _messageBusinessOperationSkill,
                         local.GetSkill(skillInfo));
                 }
-
+                */
                 _textMessage.text = message;
             }
 

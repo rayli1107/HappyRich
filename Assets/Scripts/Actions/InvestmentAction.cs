@@ -17,6 +17,7 @@ namespace Actions
         protected Player player { get; private set; }
         private AbstractInvestment _asset;
         protected PartialInvestment partialAsset { get; private set; }
+        public AbstractInvestment asset => _asset;
 
         public AbstractBuyInvestmentAction(
             Player player,

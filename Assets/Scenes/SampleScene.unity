@@ -152,7 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490246321fc21cb4eb0f8e78883b6a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultHappiness: 50
+  _defaultHappiness: 50
+  _requiredHappiness: 50
+  _retirementAge: 60
 --- !u!4 &204261753
 Transform:
   m_ObjectHideFlags: 0
@@ -1458,6 +1460,8 @@ MonoBehaviour:
   _prefabSimpleFranchiseJoinPanel: {fileID: 6776270187309231469, guid: aeae722e694657945a605652dc81558d,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
+    type: 3}
+  _prefabAvailableInvestmentsPanel: {fileID: 1431809723817457533, guid: 217577ce95458f54c9e4e133caa05219,
     type: 3}
   _prefabHappinessListPanel: {fileID: 1523913901218779723, guid: f0222205e8367154ab138d1e2a7fb96d,
     type: 3}

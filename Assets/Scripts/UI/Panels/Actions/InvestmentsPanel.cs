@@ -1,4 +1,6 @@
-﻿using PlayerInfo;
+﻿using Actions;
+using PlayerInfo;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace UI.Panels.Actions
@@ -7,29 +9,56 @@ namespace UI.Panels.Actions
     {
         public Player player;
 
-        private void InvesmtmentActionCallback(bool success)
+        private void InvesmtmentActionCallback(ButtonType buttonType)
         {
-            if (success)
-            {
-                UIManager.Instance.UpdatePlayerInfo(player);
-            }
+            UIManager.Instance.UpdatePlayerInfo(player);
             GameManager.Instance.StateMachine.OnPlayerActionDone();
+        }
+
+        private AbstractBuyInvestmentAction getSmallInvestmentAction(ActionCallback callback)
+        {
+            if (GameManager.Instance.Random.Next(2) == 0)
+            {
+                return RealEstateManager.Instance.GetSmallInvestmentAction(
+                    player, GameManager.Instance.Random, callback);
+            }
+            else
+            {
+                return BusinessManager.Instance.GetSmallInvestmentAction(
+                    player, GameManager.Instance.Random, callback);
+            }
+        }
+
+        private AbstractBuyInvestmentAction getLargeInvestmentAction(ActionCallback callback)
+        {
+            if (GameManager.Instance.Random.Next(2) == 0)
+            {
+                return RealEstateManager.Instance.GetLargeInvestmentAction(
+                    player, GameManager.Instance.Random, callback);
+            }
+            else
+            {
+                return BusinessManager.Instance.GetLargeInvestmentAction(
+                    player, GameManager.Instance.Random, callback);
+            }
         }
 
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-//            RealEstateManager.Instance.GetSmallInvestmentAction(
-//                player, GameManager.Instance.Random, InvesmtmentActionCallback).Start();
-            BusinessManager.Instance.GetSmallInvestmentAction(
-                player, GameManager.Instance.Random, InvesmtmentActionCallback).Start();
+            UIManager.Instance.ShowAvailableInvestmentsPanel(
+                getSmallInvestmentAction,
+                2,
+                InvesmtmentActionCallback);
         }
 
         public void OnLargeInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            RealEstateManager.Instance.GetLargeInvestmentAction(
-                player, GameManager.Instance.Random, InvesmtmentActionCallback).Start();
+            UIManager.Instance.ShowAvailableInvestmentsPanel(
+                getLargeInvestmentAction,
+                2,
+                InvesmtmentActionCallback);
         }
     }
 }

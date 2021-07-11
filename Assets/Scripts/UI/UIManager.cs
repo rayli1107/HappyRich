@@ -13,6 +13,7 @@ using UI.Panels.Actions;
 using PlayerState;
 using System;
 using ScriptableObjects;
+using Actions;
 
 namespace UI
 {
@@ -65,6 +66,8 @@ namespace UI
         private FranchiseJoinPanel _prefabSimpleFranchiseJoinPanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
+        [SerializeField]
+        private AvailableInvestmentsPanel _prefabAvailableInvestmentsPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
         [SerializeField]
@@ -477,6 +480,19 @@ namespace UI
             ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
         }
 
+        public void ShowAvailableInvestmentsPanel(
+            Func<ActionCallback, AbstractBuyInvestmentAction> getBuyInvestmentAction,
+            int availableInvestmentCount,
+            MessageBoxHandler messageBoxHandler)
+        {
+            AvailableInvestmentsPanel panel = Instantiate(
+                _prefabAvailableInvestmentsPanel, transform);
+            panel.player = GameManager.Instance.player;
+            panel.Initialize(getBuyInvestmentAction, availableInvestmentCount);
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+        }
 
         public void DestroyAllModal()
         {

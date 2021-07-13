@@ -23,6 +23,11 @@ namespace UI.Panels.Assets
         public Player player;
         private List<Button> buyActionButtons;
 
+        private void Awake()
+        {
+            GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
+        }
+
         private void buyCallback(int index, bool success)
         {
             Debug.LogFormat("buyCallback {0} {1}", index, success);
@@ -80,5 +85,18 @@ namespace UI.Panels.Assets
                 buyActionButtons.Add(button);
             }
         }
+
+        private string GetConfirmMessage(ButtonType buttonType)
+        {
+            foreach (Button button in buyActionButtons)
+            {
+                if (button.gameObject.activeInHierarchy)
+                {
+                    return "Pass on these investment opportunities?";
+                }
+            }
+            return "";
+        }
+
     }
 }

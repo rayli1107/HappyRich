@@ -60,12 +60,7 @@ namespace UI.Panels.Assets
                     local.GetBusinessDescription(asset.description),
                     local.GetCurrency(asset.totalCost, true));
             }
-            else
-            {
-                return string.Format(
-                    "Pass on joining the {0} franchise?",
-                    local.GetBusinessDescription(asset.description));
-            }
+            return "";
         }
     }
 }

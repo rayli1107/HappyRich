@@ -98,13 +98,7 @@ namespace UI.Panels.Assets
                     local.GetRealEstateDescription(asset.description),
                     local.GetCurrency(asset.totalCost, true));
             }
-            else
-            {
-                return string.Format(
-                    "Pass on buying the {0}?",
-                    local.GetRealEstateDescription(asset.description));
-
-            }
+            return "";
         }
     }
 }

@@ -38,13 +38,7 @@ namespace UI.Panels.Assets
                     local.GetBusinessDescription(asset.description),
                     local.GetCurrency(asset.totalCost, true));
             }
-            else
-            {
-                return string.Format(
-                    "Pass on starting a {0} business?",
-                    local.GetBusinessDescription(asset.description));
-            }
+            return "";
         }
-
     }
 }

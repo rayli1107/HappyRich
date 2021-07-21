@@ -48,7 +48,7 @@ namespace UI.Panels.Actions
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
                 getSmallInvestmentAction,
-                2,
+                InvestmentManager.Instance.getAvailableInvestments(GameManager.Instance.player),
                 InvesmtmentActionCallback);
         }
 
@@ -57,7 +57,7 @@ namespace UI.Panels.Actions
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
                 getLargeInvestmentAction,
-                2,
+                InvestmentManager.Instance.getAvailableInvestments(GameManager.Instance.player),
                 InvesmtmentActionCallback);
         }
     }

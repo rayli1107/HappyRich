@@ -713,6 +713,7 @@ GameObject:
   - component: {fileID: 1128526760}
   - component: {fileID: 1128526759}
   - component: {fileID: 1128526764}
+  - component: {fileID: 1128526765}
   m_Layer: 0
   m_Name: Investment Managers
   m_TagString: Untagged
@@ -839,6 +840,20 @@ MonoBehaviour:
   _highRiskReturnProfile: {fileID: 11400000, guid: 6a1a0dbb8b6579f4da640f0f64d02412,
     type: 2}
   turnCount: 5
+--- !u!114 &1128526765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23d0ad0bbf72ff4fa284cf60fe9dc13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultAvailableInvestments: 2
+  _hustledAvailableInvestments: 3
 --- !u!1001 &1277663898
 PrefabInstance:
   m_ObjectHideFlags: 0

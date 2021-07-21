@@ -25,6 +25,7 @@
                 StockManager.Instance != null &&
                 BusinessManager.Instance != null &&
                 SelfImprovementManager.Instance != null &&
+                InvestmentManager.Instance != null &&
                 RiskyInvestmentManager.Instance != null &&
                 FamilyManager.Instance != null)
             {
@@ -33,7 +34,6 @@
                 BusinessManager.Instance.Initialize(GameManager.Instance.Random);
                 SelfImprovementManager.Instance.Initialize();
                 RiskyInvestmentManager.Instance.Initialize(GameManager.Instance.Random);
-                FamilyManager.Instance.Initialize(GameManager.Instance.Random);
                 FamilyManager.Instance.Initialize(GameManager.Instance.Random);
 
                 _stateMachine.ChangeState(_stateMachine.PlayerInitState);

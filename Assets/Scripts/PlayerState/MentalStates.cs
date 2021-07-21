@@ -31,4 +31,18 @@
         {
         }
     }
+
+    public class Hustling : AbstractPlayerState
+    {
+        public override string description => string.Join(
+            "\n",
+            "You realized that in order to succeed, you'll need to work harder " +
+            "to find more opportunities.",
+            "",
+            "When you look for investments you are able to find one more than usual.");
+
+        public Hustling() : base("Hustling")
+        {
+        }
+    }
 }

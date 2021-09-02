@@ -208,6 +208,7 @@ MonoBehaviour:
   _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _colorStock: {r: 0, g: 0, b: 1, a: 1}
 --- !u!114 &204261758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,8 +781,14 @@ MonoBehaviour:
   _initialPriceMin: 20
   _initialPriceMax: 100
   _numGrowthStock: 5
+  _numCryptoCurrencies: 5
   _growthStockRangeMin: 0.8
   _growthStockRangeMax: 1.4
+  _cryptoSuccessProbability: 0.5
+  _cryptoInitialValue: 1
+  _cryptoTurnDelayRange: {x: 5, y: 8}
+  _cryptoInitialMultiplier: {x: 5, y: 10}
+  _cryptoGrowthMultiplier: {x: 0.7, y: 1.3}
 --- !u!114 &1128526762
 MonoBehaviour:
   m_ObjectHideFlags: 0

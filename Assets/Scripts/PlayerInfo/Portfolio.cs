@@ -18,6 +18,7 @@ namespace PlayerInfo
         public Car car { get; private set; }
         public int cash { get; private set; }
         public Dictionary<string, PurchasedStock> stocks { get; private set; }
+        public Dictionary<string, PurchasedStock> cryptos { get; private set; }
         public List<RentalProperty> rentalProperties { get; private set; }
         public List<DistressedProperty> distressedProperties { get; private set; }
         public List<BusinessEntity> businessEntities { get; private set; }
@@ -58,6 +59,10 @@ namespace PlayerInfo
                 List<AbstractAsset> assets = new List<AbstractAsset>();
                 assets.AddRange(otherAssets);
                 foreach (KeyValuePair<string, PurchasedStock> entry in stocks)
+                {
+                    assets.Add(entry.Value);
+                }
+                foreach (KeyValuePair<string, PurchasedStock> entry in cryptos)
                 {
                     assets.Add(entry.Value);
                 }
@@ -113,6 +118,7 @@ namespace PlayerInfo
 
             cash = profession.startingCash;
             stocks = new Dictionary<string, PurchasedStock>();
+            cryptos = new Dictionary<string, PurchasedStock>();
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
             businessEntities = new List<BusinessEntity>();
@@ -152,6 +158,21 @@ namespace PlayerInfo
             }
         }
 
+        public void AddCrypto(AbstractStock stock, int number)
+        {
+            PurchasedStock purchasedStock = null;
+            if (cryptos.TryGetValue(stock.name, out purchasedStock))
+            {
+                purchasedStock.AddCount(number);
+            }
+            else
+            {
+                purchasedStock = new PurchasedStock(stock);
+                purchasedStock.AddCount(number);
+                cryptos.Add(stock.name, purchasedStock);
+            }
+        }
+
         public bool TryRemoveStock(AbstractStock stock, int number)
         {
             PurchasedStock purchasedStock = null;
@@ -160,6 +181,24 @@ namespace PlayerInfo
                 if (purchasedStock.count == number)
                 {
                     stocks.Remove(stock.name);
+                    return true;
+                }
+                else if (purchasedStock.count > number)
+                {
+                    return purchasedStock.TryRemoveCount(number);
+                }
+            }
+            return false;
+        }
+
+        public bool TryRemoveCrypto(AbstractStock stock, int number)
+        {
+            PurchasedStock purchasedStock = null;
+            if (cryptos.TryGetValue(stock.name, out purchasedStock))
+            {
+                if (purchasedStock.count == number)
+                {
+                    cryptos.Remove(stock.name);
                     return true;
                 }
                 else if (purchasedStock.count > number)

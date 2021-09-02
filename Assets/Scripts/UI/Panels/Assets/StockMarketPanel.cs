@@ -2,6 +2,7 @@
 using PlayerInfo;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
@@ -9,22 +10,23 @@ namespace UI.Panels.Assets
     {
 #pragma warning disable 0649
         [SerializeField]
-        private StockPanel _prefabStockPanel;
-        [SerializeField]
-        private Transform _content;
+        private StockListPanel _prefabStockListPanel;
 #pragma warning restore 0649
 
         public Player player;
 
-        private void SetupStockPanel(List<AbstractStock> stocks)
+        private void AddStocks(Transform parentTransform, List<AbstractStock> stocks, string title)
         {
-            foreach (AbstractStock stock in stocks)
+            if (stocks.Count > 0)
             {
-                StockPanel childPanel = Instantiate(
-                    _prefabStockPanel, _content);
-                childPanel.player = player;
-                childPanel.stock = stock;
-                childPanel.Refresh();
+                StockListPanel stockListPanel = Instantiate(_prefabStockListPanel, parentTransform);
+                stockListPanel.player = player;
+                stockListPanel.stocks = stocks;
+                stockListPanel.title = title;
+                stockListPanel.gameObject.SetActive(true);
+                stockListPanel.Refresh();
+                stockListPanel.transform.SetSiblingIndex(
+                    stockListPanel.transform.GetSiblingIndex() - 1);
             }
         }
 
@@ -35,11 +37,11 @@ namespace UI.Panels.Assets
                 return;
             }
 
+            Transform parentTransform = GetComponentInChildren<VerticalLayoutGroup>().transform;
+
             StockManager stockManager = StockManager.Instance;
-            if (stockManager.growthStocks.Count > 0)
-            {
-                SetupStockPanel(stockManager.growthStocks);
-            }
+            AddStocks(parentTransform, stockManager.growthStocks, "Stocks");
+            AddStocks(parentTransform, stockManager.cryptoCurrencies, "Cryptocurrencies");
         }
 
         private void OnEnable()

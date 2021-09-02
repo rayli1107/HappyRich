@@ -1,4 +1,5 @@
-﻿using ScriptableObjects;
+﻿using Assets;
+using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class Localization : MonoBehaviour
     private Color _colorWarning = new Color(255, 160, 0);
     [SerializeField]
     private Color _colorSkill = Color.yellow;
+    [SerializeField]
+    private Color _colorStock = Color.blue;
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -86,6 +89,11 @@ public class Localization : MonoBehaviour
         {
             return ((float)amount / unit).ToString("C1") + prefix;
         }
+    }
+
+    public string GetStockName(AbstractStock stock)
+    {
+        return colorWrap(stock.name, _colorStock);
     }
 
     public string GetName(string name)

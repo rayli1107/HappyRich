@@ -1,6 +1,8 @@
-﻿using PlayerInfo;
+﻿using Actions;
+using PlayerInfo;
 using StateMachine;
 using System;
+using UnityEngine;
 
 namespace Events.Market
 {
@@ -19,10 +21,16 @@ namespace Events.Market
 
         public void Run()
         {
-            if (false)
+            if (true)
             {
-                RiskyInvestmentManager.Instance.GetInvestmentAction(
+                Debug.LogFormat("MarketEvent.Run");
+                NewCryptoAction action = new NewCryptoAction(
+                    _player, (_) => _eventDoneCallback?.Invoke());
+                action.Start();
+/*
+                    RiskyInvestmentManager.Instance.GetInvestmentAction(
                     _player, (_) => _eventDoneCallback?.Invoke()).Start();
+*/
 
             }
             else

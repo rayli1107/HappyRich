@@ -13,15 +13,30 @@ public class StockManager : MonoBehaviour
     [SerializeField]
     private int _numGrowthStock;
     [SerializeField]
+    private int _numCryptoCurrencies;
+    [SerializeField]
     private float _growthStockRangeMin = 0.9f;
     [SerializeField]
     private float _growthStockRangeMax = 1.2f;
+    [SerializeField]
+    private float _cryptoSuccessProbability = 0.5f;
+    [SerializeField]
+    private int _cryptoInitialValue = 1;
+    [SerializeField]
+    private Vector2Int _cryptoTurnDelayRange = new Vector2Int(5, 8);
+    [SerializeField]
+    private Vector2Int _cryptoInitialMultiplier = new Vector2Int(5, 10);
+    [SerializeField]
+    private Vector2 _cryptoGrowthMultiplier = new Vector2(0.7f, 1.3f);
+
 #pragma warning restore 0649
 
     public static StockManager Instance;
 
     private Dictionary<string, AbstractStock> _stocks;
     public List<AbstractStock> growthStocks { get; private set; }
+    public List<AbstractStock> cryptoCurrencies { get; private set; }
+    public int numCryptoCurrencies => _numCryptoCurrencies;
 
     private void Awake()
     {
@@ -51,6 +66,7 @@ public class StockManager : MonoBehaviour
     {
         _stocks = new Dictionary<string, AbstractStock>();
         growthStocks = new List<AbstractStock>();
+        cryptoCurrencies = new List<AbstractStock>();
 
         for (int i = 0; i < _numGrowthStock; ++i) {
             string name = generateStockName(random);
@@ -59,6 +75,25 @@ public class StockManager : MonoBehaviour
             growthStocks.Add(stock);
             _stocks.Add(name, stock);
         }
+    }
+
+    public Tuple<string, AbstractStock> CreateNewCryptoCurrency(System.Random random)
+    {
+        string name = generateStockName(random);
+        int delay = random.Next(_cryptoTurnDelayRange.y - _cryptoTurnDelayRange.x + 1) + _cryptoTurnDelayRange.x;
+        AbstractStock crypto;
+        if (random.NextDouble() < _cryptoSuccessProbability)
+        {
+            crypto = new SuccessfulCryptoCurrency(
+                name, _cryptoInitialValue, delay, _cryptoInitialMultiplier, _cryptoGrowthMultiplier);
+        }
+        else
+        {
+            crypto = new FailedCryptoCurrency(name, _cryptoInitialValue, delay);
+        }
+        cryptoCurrencies.Add(crypto);
+        _stocks.Add(name, crypto);
+        return new Tuple<string, AbstractStock>(name, crypto);
     }
 
     public void OnTurnStart(System.Random random)

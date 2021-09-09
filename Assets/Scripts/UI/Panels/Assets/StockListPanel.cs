@@ -25,7 +25,6 @@ namespace UI.Panels.Assets
         {
             foreach (AbstractStock stock in stocks)
             {
-                Debug.LogFormat("Setting up stock {0}", stock.name);
                 StockPanel childPanel = Instantiate(
                     _prefabStockPanel, _content);
                 childPanel.player = player;

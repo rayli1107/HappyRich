@@ -143,11 +143,12 @@ namespace Assets
             if (_first)
             {
                 value *= _initialRange.x + random.Next(_initialRange.y - _initialRange.x + 1);
+                _first = false;
             }
             else if (value > 0)
             {
                 double multiplier = _multiplierRange.x + random.NextDouble() * (_multiplierRange.y - _multiplierRange.x);
-                value = Mathf.FloorToInt(value * (float)multiplier);
+                value = Mathf.RoundToInt(value * (float)multiplier);
             }
         }
     }

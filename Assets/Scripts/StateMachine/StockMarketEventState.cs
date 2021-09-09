@@ -1,4 +1,7 @@
-﻿namespace StateMachine
+﻿using Assets;
+using System.Collections.Generic;
+
+namespace StateMachine
 {
     public class StockMarketEventState : IState
     {
@@ -12,7 +15,35 @@
         public void EnterState(StateMachineParameter param)
         {
             StockManager.Instance.OnTurnStart(GameManager.Instance.Random);
-            _stateMachine.ChangeState(_stateMachine.SellPropertyState);
+            checkCryptoDelisted(0);
+        }
+
+        private void checkCryptoDelisted(int index)
+        {
+            List<AbstractStock> cryptos = StockManager.Instance.cryptoCurrencies;
+            if (index >= cryptos.Count)
+            {
+                _stateMachine.ChangeState(_stateMachine.SellPropertyState);
+                return;
+            }
+
+            AbstractStock crypto = cryptos[index];
+            if (crypto.prevValue > 0 && crypto.value == 0)
+            {
+                cryptos.RemoveAt(index);
+                Localization local = Localization.Instance;
+                string message = string.Format(
+                    "The cryptocurrency {0} has been delisted from the market.",
+                    local.GetStockName(crypto));
+                UI.UIManager.Instance.ShowSimpleMessageBox(
+                    message,
+                    UI.Panels.Templates.ButtonChoiceType.OK_ONLY,
+                    (_) => checkCryptoDelisted(index));
+            }
+            else
+            {
+                checkCryptoDelisted(index + 1);
+            }
         }
 
         public void ExitState()

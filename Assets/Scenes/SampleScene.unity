@@ -780,8 +780,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialPriceMin: 20
   _initialPriceMax: 100
-  _numGrowthStock: 5
-  _numCryptoCurrencies: 5
+  _numGrowthStock: 4
+  _numCryptoCurrencies: 4
   _growthStockRangeMin: 0.8
   _growthStockRangeMax: 1.4
   _cryptoSuccessProbability: 0.5
@@ -789,6 +789,10 @@ MonoBehaviour:
   _cryptoTurnDelayRange: {x: 5, y: 8}
   _cryptoInitialMultiplier: {x: 5, y: 10}
   _cryptoGrowthMultiplier: {x: 0.7, y: 1.3}
+  _yieldStockYields:
+  - {x: 4, y: 4}
+  - {x: 3, y: 6}
+  - {x: 2, y: 8}
 --- !u!114 &1128526762
 MonoBehaviour:
   m_ObjectHideFlags: 0

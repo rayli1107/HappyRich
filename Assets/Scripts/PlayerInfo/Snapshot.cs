@@ -9,19 +9,24 @@ namespace PlayerInfo
         public Player player { get; private set; }
         public int age => player.age;
         public int activeIncome { get; private set; }
-        public int passiveIncome { get; private set; }
-        public int expenses { get; private set; }
+        public int expectedPassiveIncome { get; private set; }
+        public int actualPassiveIncome { get; private set; }
+        public int expectedExpenses { get; private set; }
+        public int actualExpenses { get; private set; }
         public int cash => player.cash;
         public int happiness => player.happiness;
 
         public int netWorth { get; private set; }
 
-        public int cashflow => activeIncome + passiveIncome - expenses;
+
+        public int expectedCashflow => activeIncome + expectedPassiveIncome - expectedExpenses;
+        public int actualCashflow => activeIncome + actualPassiveIncome - actualExpenses;
+
         public int availablePersonalLoanAmount
         {
             get
             {
-                int amount = cashflow / InterestRateManager.Instance.personalLoanRate * 100;
+                int amount = expectedCashflow / InterestRateManager.Instance.personalLoanRate * 100;
                 if (player.portfolio.personalLoan != null)
                 {
                     amount -= player.portfolio.personalLoan.amount;
@@ -47,26 +52,41 @@ namespace PlayerInfo
                 activeIncome += job.salary;
             }
 
-            passiveIncome = 0;
+            expectedPassiveIncome = 0;
+            actualPassiveIncome = 0;
 
-            expenses = player.personalExpenses;
+            int expenses = player.personalExpenses;
             if (player.spouse != null)
             {
                 expenses += player.spouse.additionalExpense;
             }
             expenses += player.numChild * player.costPerChild;
 
+            expectedExpenses = expenses;
+            actualExpenses = expenses;
+
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                int income = asset.income;
+                int income = asset.expectedIncome;
                 if (income > 0)
                 {
-                    passiveIncome += income;
+                    expectedPassiveIncome += income;
                 }
                 else
                 {
-                    expenses -= income;
+                    expectedExpenses -= income;
                 }
+
+                income = asset.income;
+                if (income > 0)
+                {
+                    actualPassiveIncome += income;
+                }
+                else
+                {
+                    actualExpenses -= income;
+                }
+
                 netWorth += asset.value;
                 netWorth -= asset.combinedLiability.amount;
             }
@@ -74,7 +94,8 @@ namespace PlayerInfo
             foreach (AbstractLiability liability in player.portfolio.liabilities)
             {
                 netWorth -= liability.amount;
-                expenses += liability.expense;
+                expectedExpenses += liability.expense;
+                actualExpenses += liability.expense;
             }
         }
     }

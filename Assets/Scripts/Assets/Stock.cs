@@ -10,6 +10,10 @@ namespace Assets
         public int count { get; private set; }
         public override int value { get { return count * stock.value; } }
 
+        public override int expectedIncome => Mathf.FloorToInt(
+            count * stock.value * stock.expectedYield / 100f);
+        public override int totalIncome => Mathf.FloorToInt(
+            count * stock.value * stock.currentYield / 100f);
 
         public PurchasedStock(AbstractStock stock) : base(stock.name, 0, 0)
         {
@@ -39,6 +43,10 @@ namespace Assets
         public string name { get; private set; }
         public int value { get; protected set; }
         public int prevValue { get; private set; }
+        public Vector2Int yieldRange { get; protected set; }
+        public int expectedYield => yieldRange.x;
+        public int currentYield;
+
         public float change
         {
             get
@@ -52,11 +60,14 @@ namespace Assets
             this.name = name;
             this.value = value;
             prevValue = value;
+            yieldRange = new Vector2Int(0, 0);
+            currentYield = 0;
         }
 
         public virtual void OnTurnStart(System.Random random)
         {
             prevValue = value;
+            currentYield = yieldRange.x + random.Next(yieldRange.y - yieldRange.x + 1);
         }
 
         public virtual string GetDescription()
@@ -64,7 +75,14 @@ namespace Assets
             List<string> messages = new List<string>();
             messages.Add(string.Format("Name: {0}", name));
             messages.Add(string.Format("Price: {0}", value));
-            messages.Add("Yield 0%");
+            if (yieldRange.y == yieldRange.x)
+            {
+                messages.Add(string.Format("Yield {0}%", yieldRange.x));
+            }
+            else
+            {
+                messages.Add(string.Format("Yield {0}% - {1}%", yieldRange.x, yieldRange.y));
+            }
             return string.Join("\n", messages);
         }
     }
@@ -84,6 +102,14 @@ namespace Assets
 
             Debug.LogFormat("{0} prev {1} cur {2} change {3}",
                 name, prevValue, value, change);
+        }
+    }
+
+    public class YieldStock : AbstractStock
+    {
+        public YieldStock(string name, int initialPrice, Vector2Int yieldRange) : base(name, initialPrice)
+        {
+            this.yieldRange = yieldRange;
         }
     }
 

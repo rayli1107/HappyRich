@@ -49,6 +49,18 @@ namespace UI.Panels.Assets
                 _textChange.text = local.GetPercent(change);
             }
 
+            if (_textYield != null)
+            {
+                if (stock.yieldRange.y == stock.yieldRange.x)
+                {
+                    _textYield.text = string.Format("{0}%", stock.yieldRange.x);
+                }
+                else
+                {
+                    _textYield.text = string.Format("{0}% - {1}%", stock.yieldRange.x, stock.yieldRange.y);
+                }
+            }
+
             int count = 0;
             int value = 0;
             PurchasedStock result;

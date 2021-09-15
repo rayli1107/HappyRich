@@ -17,14 +17,14 @@
             PlayerInfo.Snapshot snapshot = new PlayerInfo.Snapshot(player);
 
             if (player.happiness >= GameManager.Instance.requiredHappiness &&
-                snapshot.passiveIncome >= snapshot.expenses)
+                snapshot.expectedPassiveIncome >= snapshot.expectedExpenses)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.message = "You were able to achieve financial independence and a happy life before " +
                     "retirement age. Congratulations!";
                 _stateMachine.ChangeState(_stateMachine.VictoryState, newParam);
             }
-            else if (snapshot.cash <= 0 && snapshot.cashflow <= 0)
+            else if (snapshot.cash <= 0 && snapshot.expectedCashflow <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.message = "Unfortunately you are now financially broke. Game over.";

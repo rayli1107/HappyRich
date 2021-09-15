@@ -28,13 +28,15 @@ public class StockManager : MonoBehaviour
     private Vector2Int _cryptoInitialMultiplier = new Vector2Int(5, 10);
     [SerializeField]
     private Vector2 _cryptoGrowthMultiplier = new Vector2(0.7f, 1.3f);
-
+    [SerializeField]
+    private Vector2Int[] _yieldStockYields;
 #pragma warning restore 0649
 
     public static StockManager Instance;
 
     private Dictionary<string, AbstractStock> _stocks;
     public List<AbstractStock> growthStocks { get; private set; }
+    public List<AbstractStock> yieldStocks { get; private set; }
     public List<AbstractStock> cryptoCurrencies { get; private set; }
     public int numCryptoCurrencies => _numCryptoCurrencies;
 
@@ -66,6 +68,7 @@ public class StockManager : MonoBehaviour
     {
         _stocks = new Dictionary<string, AbstractStock>();
         growthStocks = new List<AbstractStock>();
+        yieldStocks = new List<AbstractStock>();
         cryptoCurrencies = new List<AbstractStock>();
 
         for (int i = 0; i < _numGrowthStock; ++i) {
@@ -73,6 +76,15 @@ public class StockManager : MonoBehaviour
             int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
             GrowthStock stock = new GrowthStock(name, value);
             growthStocks.Add(stock);
+            _stocks.Add(name, stock);
+        }
+
+        for (int i = 0; i < _yieldStockYields.Length; ++i)
+        {
+            string name = generateStockName(random);
+            int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
+            YieldStock stock = new YieldStock(name, value, _yieldStockYields[i]);
+            yieldStocks.Add(stock);
             _stocks.Add(name, stock);
         }
     }

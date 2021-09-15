@@ -135,7 +135,7 @@ namespace PlayerInfo
         private void DistributeCashflow()
         {
             Snapshot snapshot = new Snapshot(this);
-            portfolio.AddCash(snapshot.cashflow);
+            portfolio.AddCash(snapshot.actualCashflow);
         }
 
         public void AddJob(Profession job)

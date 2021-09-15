@@ -38,7 +38,7 @@ namespace UI.Panels
 
             if (_textFI)
             {
-                int fi = (100 * snapshot.passiveIncome) / snapshot.expenses;
+                int fi = (100 * snapshot.expectedPassiveIncome) / snapshot.expectedExpenses;
                 _textFI.text = string.Format("FI: {0}%", fi);
             }
 
@@ -51,7 +51,7 @@ namespace UI.Panels
             if (_textCashflow)
             {
                 _textCashflow.text = string.Format(
-                    "Cashflow:\n{0}", local.GetCurrency(snapshot.cashflow));
+                    "Cashflow:\n{0}", local.GetCurrency(snapshot.expectedCashflow));
             }
 
             if (_textNetworth)

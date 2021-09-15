@@ -17,6 +17,7 @@ namespace Assets
         public virtual int totalIncome { get; private set; }
         public virtual int value { get; private set; }
         public virtual int income => totalIncome - combinedLiability.expense;
+        public virtual int expectedIncome => income;
 
         public AbstractAsset(string name, int value, int totalIncome)
         {

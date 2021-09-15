@@ -94,7 +94,7 @@ namespace UI.Panels.PlayerDetails
 
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                int income = asset.income;
+                int income = asset.expectedIncome;
                 if (income > 0)
                 {
                     passiveIncome += income;
@@ -163,7 +163,7 @@ namespace UI.Panels.PlayerDetails
             // Assets with negative cashflow
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
-                int income = asset.income;
+                int income = asset.expectedIncome;
                 if (income < 0)
                 {
                     expenses -= income;
@@ -217,7 +217,7 @@ namespace UI.Panels.PlayerDetails
             AddExpenses();
 
             Snapshot snapshot = new Snapshot(player);
-            _panelTotalCashflow.setValueAsCurrency(snapshot.cashflow);
+            _panelTotalCashflow.setValueAsCurrency(snapshot.expectedCashflow);
         }
 
         private void OnEnable()

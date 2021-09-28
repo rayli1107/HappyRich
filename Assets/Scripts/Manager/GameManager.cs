@@ -1,4 +1,5 @@
 ﻿using PlayerInfo;
+using ScriptableObjects;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -36,11 +37,9 @@ public class GameManager : MonoBehaviour
         StateMachine.Start(null);
     }
 
-    public void CreatePlayer()
+    public void CreatePlayer(Profession profession)
     {
-        player = new Player(
-            JobManager.Instance.FindInitialProfession(Random),
-            defaultHappiness);
+        player = new Player(profession, defaultHappiness);
     }
 
     // Update is called once per frame

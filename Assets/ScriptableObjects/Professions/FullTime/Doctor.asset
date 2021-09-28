@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d769073e1204cd48a898ceadc223e09, type: 3}
-  m_Name: Engineer
+  m_Name: Doctor
   m_EditorClassIdentifier: 
   fullTime: 1
   searchable: 0
-  professionName: Engineer
-  salary: 80000
-  jobCost: 120000
-  personalExpenses: 50000
-  autoLoan: 30000
-  costPerChild: 15000
+  professionName: Doctor
+  salary: 150000
+  jobCost: 200000
+  personalExpenses: 100000
+  autoLoan: 50000
+  costPerChild: 20000
   startingCash: 10000
-  startingAge: 24
-  image: {fileID: 21300000, guid: da18576ad2707204ca71d03607ad1721, type: 3}
+  startingAge: 30
+  image: {fileID: 21300000, guid: 972eb5a066ea52a4f898c9f33484d429, type: 3}

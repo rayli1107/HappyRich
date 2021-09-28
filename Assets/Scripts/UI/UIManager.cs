@@ -75,6 +75,8 @@ namespace UI
         [SerializeField]
         private TraitsSkillsListPanel _prefabTraitsSkillsListPanel;
         [SerializeField]
+        private CharacterSelectionPanel _prefabCharacterSelectionPanel;
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
 #pragma warning restore 0649
 
@@ -492,6 +494,17 @@ namespace UI
 
             MessageBox messageBox = panel.GetComponent<MessageBox>();
             messageBox.messageBoxHandler = messageBoxHandler;
+        }
+
+        public void ShowCharacterSelectionPanel(
+            List<Profession> professions,
+            Action<Profession> callback)
+        {
+            CharacterSelectionPanel panel = Instantiate(_prefabCharacterSelectionPanel, transform);
+            panel.professions = professions;
+            panel.professionIndex = 0;
+            panel.selectionCallback = callback;
+            panel.gameObject.SetActive(true);
         }
 
         public void DestroyAllModal()

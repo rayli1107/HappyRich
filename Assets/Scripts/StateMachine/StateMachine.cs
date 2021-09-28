@@ -10,6 +10,7 @@ namespace StateMachine
     public class StateMachine
     {
         public GameInitState GameInitState { get; private set; }
+        public CharacterSelectionState CharacterSelectionState { get; private set; }
         public PlayerInitState PlayerInitState { get; private set; }
         public ResolveTimedInvestmentState ResolveTimedInvestmentState { get; private set; }
         public MarketEventState MarketEventState { get; private set; }
@@ -29,6 +30,7 @@ namespace StateMachine
         public StateMachine()
         {
             GameInitState = new GameInitState(this);
+            CharacterSelectionState = new CharacterSelectionState(this);
             PlayerInitState = new PlayerInitState(this);
             ResolveTimedInvestmentState = new ResolveTimedInvestmentState(this);
             MarketEventState = new MarketEventState(this);

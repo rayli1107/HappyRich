@@ -183,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _professions:
   - {fileID: 11400000, guid: 3c94c11276e8ff3408697d911312f561, type: 2}
+  - {fileID: 11400000, guid: bc34682c295f55842abe7f3dc9846bbd, type: 2}
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
   _applyOldJobSuccessChance: 0.5
@@ -1494,6 +1495,8 @@ MonoBehaviour:
   _prefabJobListPanel: {fileID: 6644454022926503088, guid: 26ed666471391854495e3ed23f28b1ce,
     type: 3}
   _prefabTraitsSkillsListPanel: {fileID: 5051386895941644146, guid: e8df78297be4a7146b2223cc3ed3adc2,
+    type: 3}
+  _prefabCharacterSelectionPanel: {fileID: 7917740513139014103, guid: 33b1a59ef7393314883a63b4e0f5287d,
     type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}

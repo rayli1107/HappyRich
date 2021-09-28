@@ -13,14 +13,9 @@ namespace StateMachine
             _stateMachine = stateMachine;
         }
 
-        private void TestFn(int i)
-        {
-            Debug.LogFormat("TestFn {0}", i);
-        }
-
         public void EnterState(StateMachineParameter param)
         {
-            GameManager.Instance.CreatePlayer();
+//            GameManager.Instance.CreatePlayer();
             GameManager.Instance.player.AddSkill(
                 SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.BUSINESS_OPERATIONS));
             GameManager.Instance.player.contacts.Add(

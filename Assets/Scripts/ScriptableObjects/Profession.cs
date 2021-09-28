@@ -15,5 +15,6 @@ namespace ScriptableObjects
         public int costPerChild;
         public int startingCash;
         public int startingAge;
+        public Sprite image;
     }
 }

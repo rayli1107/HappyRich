@@ -21,6 +21,13 @@ public class JobManager : MonoBehaviour
         Instance = this;
     }
 
+    public List<Profession> GetInitialProfessionList(System.Random random)
+    {
+        List<Profession> professions = new List<Profession>();
+        professions.AddRange(_professions);
+        return professions;
+    }
+
     public Profession FindInitialProfession(System.Random random)
     {
         return _professions[random.Next(_professions.Length)];

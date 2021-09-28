@@ -36,7 +36,7 @@
                 RiskyInvestmentManager.Instance.Initialize(GameManager.Instance.Random);
                 FamilyManager.Instance.Initialize(GameManager.Instance.Random);
 
-                _stateMachine.ChangeState(_stateMachine.PlayerInitState);
+                _stateMachine.ChangeState(_stateMachine.CharacterSelectionState);
             }
         }
     }

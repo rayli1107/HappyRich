@@ -20,6 +20,6 @@ MonoBehaviour:
   personalExpenses: 100000
   autoLoan: 50000
   costPerChild: 20000
-  startingCash: 10000
+  startingCash: 30000
   startingAge: 30
   image: {fileID: 21300000, guid: 972eb5a066ea52a4f898c9f33484d429, type: 3}

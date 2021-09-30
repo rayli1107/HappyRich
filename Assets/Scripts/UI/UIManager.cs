@@ -74,6 +74,11 @@ namespace UI
         private CharacterSelectionPanel _prefabCharacterSelectionPanel;
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
+
+        [SerializeField]
+        private Button _buttonEndTurnNotReady;
+        [SerializeField]
+        private Button _buttonEndTurnReady;
 #pragma warning restore 0649
 
         public static UIManager Instance { get; private set; }
@@ -500,9 +505,31 @@ namespace UI
             }
         }
 
-        public void OnEndTurnButton()
+        public void ShowEndTurnButton(bool ready)
         {
-            GameManager.Instance.StateMachine.OnPlayerTurnDone();
+            _buttonEndTurnReady.gameObject.SetActive(ready);
+            _buttonEndTurnNotReady.gameObject.SetActive(!ready);
+        }
+
+        private void onEndTurnConfirm(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.OK)
+            {
+                GameManager.Instance.StateMachine.OnPlayerTurnDone();
+            }
+        }
+
+        public void OnEndTurnButton(bool ready)
+        {
+            if (ready)
+            {
+                GameManager.Instance.StateMachine.OnPlayerTurnDone();
+            }
+            else
+            {
+                string message = "You haven't done anything this year yet. Are you sure you want to end your turn?";
+                ShowSimpleMessageBox(message, ButtonChoiceType.OK_CANCEL, onEndTurnConfirm);
+            }
         }
     }
 }

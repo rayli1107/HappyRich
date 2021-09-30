@@ -21,8 +21,6 @@ namespace UI
     {
 #pragma warning disable 0649
         [SerializeField]
-        private GameObject _actionButton;
-        [SerializeField]
         private ModalWindowManager _prefabModalWindowManager;
         [SerializeField]
         private PlayerStatusMenuPanel _prefabPlayerStatusManeuPanel;
@@ -34,8 +32,6 @@ namespace UI
         private SimpleTextMessageBox _prefabSimpleTextMessageBox;
         [SerializeField]
         private SimpleTextPrompt _prefabSimpleTextPrompt;
-        [SerializeField]
-        private ActionMenuPanel _prefabActionMenuPanel;
         [SerializeField]
         private StockMarketPanel _prefabStockMarketPanel;
         [SerializeField]
@@ -86,6 +82,7 @@ namespace UI
         private List<ModalObject> _modalObjects;
         private EventSystem _eventSystem;
         private PlayerSnapshotPanel _playerSnapshotPanel;
+        private ActionMenuPanel _actionMenuPanel;
 
         private void Awake()
         {
@@ -97,6 +94,7 @@ namespace UI
             {
                 panel.gameObject.SetActive(true);
             }
+            _actionMenuPanel = GetComponentInChildren<ActionMenuPanel>(true);
         }
 
         void Start()
@@ -161,7 +159,7 @@ namespace UI
 
         public void EnableActionButton(bool enable)
         {
-            _actionButton.GetComponent<Button>().interactable = enable;
+            _actionMenuPanel.SetEnable(enable);
         }
 
         public void UpdatePlayerInfo(Player player)
@@ -228,19 +226,6 @@ namespace UI
             PlayerStatusMenuPanel panel = Instantiate(_prefabPlayerStatusManeuPanel, transform);
             panel.player = GameManager.Instance.player;
             panel.gameObject.SetActive(true);
-        }
-
-
-        public void ShowActionMenuPanel()
-        {
-            ActionMenuPanel panel = Instantiate(_prefabActionMenuPanel, transform);
-            panel.player = GameManager.Instance.player;
-            /*
-            GameObject gameObj = Instantiate(_prefabActionMenuPanel);
-            ActionMenuPanel panel = gameObj.GetComponent<ActionMenuPanel>();
-            panel.player = GameManager.Instance.player;
-            ShowMessageBox(gameObj, null, ButtonChoiceType.BACK_ONLY);
-            */
         }
 
         public void ShowAssetLiabilityStatusPanel()

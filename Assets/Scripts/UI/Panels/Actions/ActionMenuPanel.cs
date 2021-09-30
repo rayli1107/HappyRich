@@ -1,5 +1,6 @@
 ﻿using PlayerInfo;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Actions
 {
@@ -14,28 +15,45 @@ namespace UI.Panels.Actions
         private NetworkingPanel _prefabNetworkingPanel;
         [SerializeField]
         private SelfImprovementPanel _prefabSelfImprovementPanel;
+        [SerializeField]
+        private float _alphaHitThreshold = 0.8f;
 #pragma warning restore 0649
 
-public Player player;
+        private void Awake()
+        {
+            foreach (Button button in GetComponentsInChildren<Button>())
+            {
+                button.GetComponent<Image>().alphaHitTestMinimumThreshold = _alphaHitThreshold;
+            }
+        }
 
         public void OnJobSearchButton()
         {
-            Instantiate(_prefabJobSearchPanel, UIManager.Instance.transform).player = player;
+            Instantiate(_prefabJobSearchPanel, UIManager.Instance.transform).player = GameManager.Instance.player;
         }
 
         public void OnInvestmentsButton()
         {
-            Instantiate(_prefabInvestmentsPanel, UIManager.Instance.transform).player = player;
+            Instantiate(_prefabInvestmentsPanel, UIManager.Instance.transform).player = GameManager.Instance.player;
         }
 
         public void OnNetworkingButton()
         {
-            Instantiate(_prefabNetworkingPanel, UIManager.Instance.transform).player = player;
+            Instantiate(_prefabNetworkingPanel, UIManager.Instance.transform).player = GameManager.Instance.player;
         }
 
         public void OnSelfImprovementButton()
         {
-            Instantiate(_prefabSelfImprovementPanel, UIManager.Instance.transform).player = player;
+            Instantiate(_prefabSelfImprovementPanel, UIManager.Instance.transform).player = GameManager.Instance.player;
+        }
+
+        public void SetEnable(bool enabled)
+        {
+            foreach (Button button in GetComponentsInChildren<Button>())
+            {
+                button.interactable = enabled;
+            }
         }
     }
 }
+

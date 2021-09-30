@@ -138,6 +138,18 @@ namespace PlayerInfo
             portfolio.AddCash(snapshot.actualCashflow);
         }
 
+        public Profession GetMainJob()
+        {
+            foreach (Profession job in jobs)
+            {
+                if (job.fullTime)
+                {
+                    return job;
+                }
+            }
+            return null;
+        }
+
         public void AddJob(Profession job)
         {
             jobs.Add(job);

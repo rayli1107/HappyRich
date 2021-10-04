@@ -1,10 +1,14 @@
 ﻿using Actions;
 using PlayerInfo;
+using System;
+using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
 
 namespace UI.Panels.Actions
 {
+    using GetInvestmentFn = Func<Action<int, bool>, List<AbstractBuyInvestmentAction>>;
+
     public class InvestmentsPanel : MonoBehaviour
     {
         public Player player;
@@ -15,40 +19,13 @@ namespace UI.Panels.Actions
             GameManager.Instance.StateMachine.OnPlayerActionDone();
         }
 
-        private AbstractBuyInvestmentAction getSmallInvestmentAction(ActionCallback callback)
-        {
-            if (GameManager.Instance.Random.Next(2) == 0)
-            {
-                return RealEstateManager.Instance.GetSmallInvestmentAction(
-                    player, GameManager.Instance.Random, callback);
-            }
-            else
-            {
-                return BusinessManager.Instance.GetSmallInvestmentAction(
-                    player, GameManager.Instance.Random, callback);
-            }
-        }
-
-        private AbstractBuyInvestmentAction getLargeInvestmentAction(ActionCallback callback)
-        {
-            if (GameManager.Instance.Random.Next(2) == 0)
-            {
-                return RealEstateManager.Instance.GetLargeInvestmentAction(
-                    player, GameManager.Instance.Random, callback);
-            }
-            else
-            {
-                return BusinessManager.Instance.GetLargeInvestmentAction(
-                    player, GameManager.Instance.Random, callback);
-            }
-        }
 
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
-                getSmallInvestmentAction,
-                InvestmentManager.Instance.getAvailableInvestments(GameManager.Instance.player),
+                (Action<int, bool> cb) => InvestmentManager.Instance.GetAvailableSmallInvestments(
+                    GameManager.Instance.player, GameManager.Instance.Random, cb),
                 InvesmtmentActionCallback);
         }
 
@@ -56,8 +33,8 @@ namespace UI.Panels.Actions
         {
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
-                getLargeInvestmentAction,
-                InvestmentManager.Instance.getAvailableInvestments(GameManager.Instance.player),
+                (Action<int, bool> cb) => InvestmentManager.Instance.GetAvailableLargeInvestments(
+                    GameManager.Instance.player, GameManager.Instance.Random, cb),
                 InvesmtmentActionCallback);
         }
     }

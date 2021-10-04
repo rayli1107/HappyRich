@@ -11,6 +11,8 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
+    using GetInvestmentFn = Func<Action<int, bool>, List<AbstractBuyInvestmentAction>>;
+
     public class AvailableInvestmentsPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -30,7 +32,6 @@ namespace UI.Panels.Assets
 
         private void buyCallback(int index, bool success)
         {
-            Debug.LogFormat("buyCallback {0} {1}", index, success);
             if (success && index < buyActionButtons.Count)
             {
                 buyActionButtons[index].gameObject.SetActive(false);
@@ -48,9 +49,7 @@ namespace UI.Panels.Assets
         }
 
 
-        public virtual void Initialize(
-            Func<ActionCallback, AbstractBuyInvestmentAction> getBuyInvestmentAction,
-            int availableInvestmentCount)
+        public virtual void Initialize(GetInvestmentFn getInvestmentFunction)
         {
             Localization local = Localization.Instance;
             _textAvailableCash.text = string.Format(
@@ -68,12 +67,10 @@ namespace UI.Panels.Assets
             }
 
             buyActionButtons = new List<Button>();
-            for (int i = 0; i < availableInvestmentCount; ++i)
+            List<AbstractBuyInvestmentAction> buyActions = getInvestmentFunction(buyCallback);
+            for (int i = 0; i < buyActions.Count; ++i)
             {
-                int j = i;
-                ActionCallback callback = (bool b) => buyCallback(j, b);
-                AbstractBuyInvestmentAction buyAction = getBuyInvestmentAction(callback);
-
+                AbstractBuyInvestmentAction buyAction = buyActions[i];
                 Button button = Instantiate(_prefabInvestmentButton, parentTransform);
                 button.GetComponentInChildren<TextMeshProUGUI>().text = string.Format(
                     "{0}\nCost: {1}",

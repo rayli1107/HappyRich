@@ -478,8 +478,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 515, y: 0}
+  m_SizeDelta: {x: 1030, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6160509174345026246
 CanvasRenderer:
@@ -587,8 +587,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 515, y: 0}
+  m_SizeDelta: {x: 1030, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1271057242315990018
 CanvasRenderer:
@@ -1140,10 +1140,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 25, y: 0}
+  m_SizeDelta: {x: -50, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3704186589834693724
 CanvasRenderer:
@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd9dc9e71afc0449a5e2a26d53d3ee7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buttonSelect: {fileID: 0}
+  _buttonSelect: {fileID: 394945893394299534}
   _textName: {fileID: 8718835826575973646}
   _textDuration: {fileID: 1956541563265098445}
   _textAvailableCash: {fileID: 4657191281861321917}
@@ -1251,8 +1251,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 515, y: 0}
+  m_SizeDelta: {x: 1030, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4027013375577580957
 CanvasRenderer:
@@ -2054,7 +2054,12 @@ PrefabInstance:
     - target: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_Name
-      value: Button Blue
+      value: Button Select
+      objectReference: {fileID: 0}
+    - target: {fileID: 141301403624911566, guid: 90076b73e2ce698429481b5d419a664a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
@@ -2169,6 +2174,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 366639443691032216}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &394945893394299534 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
+    type: 3}
+  m_PrefabInstance: {fileID: 366639443691032216}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351439381536078934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &576424501674907130 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 209786432434461538, guid: 90076b73e2ce698429481b5d419a664a,

@@ -80,8 +80,9 @@ namespace UI.Panels.PlayerDetails
             }
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             Refresh();
         }
 

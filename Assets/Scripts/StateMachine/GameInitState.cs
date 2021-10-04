@@ -25,6 +25,7 @@
                 StockManager.Instance != null &&
                 BusinessManager.Instance != null &&
                 SelfImprovementManager.Instance != null &&
+                SpecialistManager.Instance != null &&
                 InvestmentManager.Instance != null &&
                 RiskyInvestmentManager.Instance != null &&
                 FamilyManager.Instance != null)

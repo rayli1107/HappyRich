@@ -28,6 +28,8 @@ public class Localization : MonoBehaviour
     private Color _colorSkill = Color.yellow;
     [SerializeField]
     private Color _colorStock = Color.blue;
+    [SerializeField]
+    private Color _colorSpecialist = Color.green;
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -177,5 +179,10 @@ public class Localization : MonoBehaviour
     public string GetSkill(SkillInfo skill)
     {
         return colorWrap(skill.skillName, _colorSkill);
+    }
+
+    public string GetSpecialist(SpecialistInfo info)
+    {
+        return colorWrap(info.specialistName, _colorSpecialist);
     }
 }

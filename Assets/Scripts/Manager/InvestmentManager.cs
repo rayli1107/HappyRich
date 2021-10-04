@@ -3,8 +3,12 @@ using Assets;
 using PlayerInfo;
 using PlayerState;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+using GetInvestmentFn = System.Func<
+    PlayerInfo.Player, System.Random, Actions.ActionCallback, Actions.AbstractBuyInvestmentAction>;
 
 public class InvestmentManager : MonoBehaviour
 {
@@ -12,7 +16,7 @@ public class InvestmentManager : MonoBehaviour
     [SerializeField]
     private int _defaultAvailableInvestments = 2;
     [SerializeField]
-    private int _hustledAvailableInvestments = 3;
+    private int _hustledAvailableInvestments = 1;
 #pragma warning restore 0649
 
     public static InvestmentManager Instance;
@@ -22,15 +26,74 @@ public class InvestmentManager : MonoBehaviour
         Instance = this;
     }
 
-    public int getAvailableInvestments(Player player)
+    private GetInvestmentFn GetRandomInvestmentFn(System.Random random, GetInvestmentFn fn1, GetInvestmentFn fn2)
     {
+        return random.Next(2) == 0 ? fn1 : fn2;
+    }
+
+    private List<AbstractBuyInvestmentAction> getAvailableInvestments(
+        Player player,
+        System.Random random,
+        GetInvestmentFn getRealEstateFn,
+        GetInvestmentFn getBusinessFn,
+        Action<int, bool> callback)
+    {
+        int randomCount = _defaultAvailableInvestments;
+
         foreach (AbstractPlayerState state in player.states)
         {
             if (state is Hustling)
             {
-                return _hustledAvailableInvestments;
+                randomCount += _hustledAvailableInvestments;
+                break;
             }
         }
-        return _defaultAvailableInvestments;
+
+        List<AbstractBuyInvestmentAction> actions = new List<AbstractBuyInvestmentAction>();
+        for (int i = 0; i < randomCount; ++i)
+        {
+            int index = actions.Count;
+            ActionCallback cb = (bool b) => callback(index, b);
+            GetInvestmentFn fn = GetRandomInvestmentFn(random, getRealEstateFn, getBusinessFn);
+            actions.Add(fn(player, random, cb));
+        }
+
+        foreach (SpecialistInfo info in player.specialists)
+        {
+            int index = actions.Count;
+            ActionCallback cb = (bool b) => callback(index, b);
+            if (info.specialistType == SpecialistType.REAL_ESTATE_BROKER)
+            {
+                actions.Add(getRealEstateFn(player, random, cb));
+            }
+        }
+
+        return actions;
+    }
+
+    public List<AbstractBuyInvestmentAction> GetAvailableSmallInvestments(
+        Player player,
+        System.Random random,
+        Action<int, bool> callback)
+    {
+        return getAvailableInvestments(
+            player,
+            random,
+            RealEstateManager.Instance.GetSmallInvestmentAction,
+            BusinessManager.Instance.GetSmallInvestmentAction,
+            callback);
+    }
+
+    public List<AbstractBuyInvestmentAction> GetAvailableLargeInvestments(
+        Player player,
+        System.Random random,
+        Action<int, bool> callback)
+    {
+        return getAvailableInvestments(
+            player,
+            random,
+            RealEstateManager.Instance.GetLargeInvestmentAction,
+            BusinessManager.Instance.GetLargeInvestmentAction,
+            callback);
     }
 }

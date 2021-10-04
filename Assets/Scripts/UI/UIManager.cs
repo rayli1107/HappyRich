@@ -473,14 +473,13 @@ namespace UI
         }
 
         public void ShowAvailableInvestmentsPanel(
-            Func<ActionCallback, AbstractBuyInvestmentAction> getBuyInvestmentAction,
-            int availableInvestmentCount,
+            Func<Action<int, bool>, List<AbstractBuyInvestmentAction>> getBuyInvestmentAction,
             MessageBoxHandler messageBoxHandler)
         {
             AvailableInvestmentsPanel panel = Instantiate(
                 _prefabAvailableInvestmentsPanel, transform);
             panel.player = GameManager.Instance.player;
-            panel.Initialize(getBuyInvestmentAction, availableInvestmentCount);
+            panel.Initialize(getBuyInvestmentAction);
 
             MessageBox messageBox = panel.GetComponent<MessageBox>();
             messageBox.messageBoxHandler = messageBoxHandler;

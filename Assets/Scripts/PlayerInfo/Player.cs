@@ -79,6 +79,7 @@ namespace PlayerInfo
         public int defaultHappiness { get; private set; }
         public List<InvestmentPartner> contacts { get; private set; }
         public List<SkillInfo> skills { get; private set; }
+        public List<SpecialistInfo> specialists { get; private set; }
         public System.Tuple<int, int> divorcedPenalty;
         public Player(Profession profession, int defaultHappiness)
         {
@@ -87,6 +88,7 @@ namespace PlayerInfo
             jobs.Add(profession);
             portfolio = new Portfolio(profession);
             skills = new List<SkillInfo>();
+            specialists = new List<SpecialistInfo>();
 
             _personalExpenses = profession.personalExpenses;
             _costPerChild = profession.costPerChild;
@@ -190,6 +192,29 @@ namespace PlayerInfo
                 skills.Add(skillInfo);
             }
         }
+
+        public SpecialistInfo GetSpecialistInfo(SpecialistType specialistType)
+        {
+            foreach (SpecialistInfo specialistInfo in specialists)
+            {
+                if (specialistInfo.specialistType == specialistType)
+                {
+                    return specialistInfo;
+                }
+            }
+            return null;
+        }
+
+        public bool HasSpecialist(SpecialistType specialistType) => GetSpecialistInfo(specialistType) != null;
+
+        public void AddSpecialist(SpecialistInfo specialistInfo)
+        {
+            if (!HasSpecialist(specialistInfo.specialistType))
+            {
+                specialists.Add(specialistInfo);
+            }
+        }
+
 
         public List<InvestmentPartner> GetDebtPartners()
         {

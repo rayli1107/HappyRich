@@ -877,6 +877,7 @@ MonoBehaviour:
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _colorStock: {r: 0, g: 0, b: 1, a: 1}
+  _colorSpecialist: {r: 0, g: 0.7529412, b: 1, a: 1}
 --- !u!114 &204261758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4532,6 +4533,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1536294798}
   - component: {fileID: 1536294797}
+  - component: {fileID: 1536294799}
   m_Layer: 0
   m_Name: Networking
   m_TagString: Untagged
@@ -4622,6 +4624,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1536294799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536294796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48919642e8a7cd84c8be216f70407817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _specialists:
+  - {fileID: 11400000, guid: 4a47e3e386dd59c4d917e98aa6d1ecc7, type: 2}
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

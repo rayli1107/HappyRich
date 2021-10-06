@@ -3474,6 +3474,7 @@ MonoBehaviour:
   _cryptoTurnDelayRange: {x: 5, y: 8}
   _cryptoInitialMultiplier: {x: 5, y: 10}
   _cryptoGrowthMultiplier: {x: 0.7, y: 1.3}
+  _newCryptoChance: 0.3
   _yieldStockYields:
   - {x: 4, y: 4}
   - {x: 3, y: 6}
@@ -3535,7 +3536,8 @@ MonoBehaviour:
     type: 2}
   _highRiskReturnProfile: {fileID: 11400000, guid: 6a1a0dbb8b6579f4da640f0f64d02412,
     type: 2}
-  turnCount: 5
+  _turnCount: 5
+  _newRiskyInvestmentChance: 0.15
 --- !u!114 &1128526765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4610,6 +4612,7 @@ MonoBehaviour:
   - Vivian
   - Katherine
   _defaultDuration: 10
+  _marketEventNewInvestorChance: 0.2
 --- !u!4 &1536294798
 Transform:
   m_ObjectHideFlags: 0
@@ -4638,6 +4641,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _specialists:
   - {fileID: 11400000, guid: 4a47e3e386dd59c4d917e98aa6d1ecc7, type: 2}
+  - {fileID: 11400000, guid: 4b894ac91e5055745aa655330b13809b, type: 2}
+  - {fileID: 11400000, guid: be37b0484ded9494e9cd4159cef80f01, type: 2}
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,57 +1,51 @@
 ﻿using PlayerInfo;
+using System;
 using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class FindNewInvestors : AbstractAction
+    public static class FindNewInvestors
     {
-        private Player _player;
-
-        public FindNewInvestors(Player player) : base(null)
+        public static void FindInvestorNone(Action callback)
         {
-            _player = player;
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                "You made a few friends but none of them were interested in investing.",
+                ButtonChoiceType.OK_ONLY,
+                (_) => callback?.Invoke());
         }
 
-        public override void Start()
+        private static void actionDone(Player player, Action callback)
         {
-            InvestmentPartner partner = InvestmentPartnerManager.Instance.GetPartner(
-                GameManager.Instance.Random);
-            if (partner == null)
-            {
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    "You made a few friends but none of them were interested in investing.",
-                    ButtonChoiceType.OK_ONLY,
-                    null);
-            }
-            else
-            {
-                _player.contacts.Add(partner);
-                UI.UIManager.Instance.UpdatePlayerInfo(_player);
-                GameManager.Instance.StateMachine.OnPlayerActionDone();
-                RunCallback(true);
-                string description = null;
-                switch (partner.riskTolerance)
-                {
-                    case RiskTolerance.kHigh:
-                        description = "prefers investing as equity partners.";
-                        break;
-                    case RiskTolerance.kMedium:
-                        description = "is open to both equity and debt partnership.";
-                        break;
-                    case RiskTolerance.kLow:
-                    default:
-                        description = "prefers investing using debt.";
-                        break;
-                }
+            UI.UIManager.Instance.UpdatePlayerInfo(player);
+            callback?.Invoke();
+        }
 
-                string message = string.Format(
-                    "You met {0}, a follow investor, who has {1} of available cash, and {2}",
-                    Localization.Instance.GetName(partner.name),
-                    Localization.Instance.GetCurrency(partner.cash),
-                    description);
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    message, ButtonChoiceType.OK_ONLY, null);
+        public static void FindInvestor(
+            Player player, InvestmentPartner partner, Action callback)
+        {
+            player.contacts.Add(partner);
+            string description = null;
+            switch (partner.riskTolerance)
+            {
+                case RiskTolerance.kHigh:
+                    description = "prefers investing as equity partners.";
+                    break;
+                case RiskTolerance.kMedium:
+                    description = "is open to both equity and debt partnership.";
+                    break;
+                case RiskTolerance.kLow:
+                default:
+                    description = "prefers investing using debt.";
+                    break;
             }
+
+            string message = string.Format(
+                "You met {0}, a follow investor, who has {1} of available cash and {2}",
+                Localization.Instance.GetName(partner.name),
+                Localization.Instance.GetCurrency(partner.cash),
+                description);
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_ONLY, (_) => actionDone(player, callback));
         }
     }
 }

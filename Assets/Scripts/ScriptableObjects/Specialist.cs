@@ -4,7 +4,9 @@ namespace ScriptableObjects
 {
     public enum SpecialistType
     {
-        REAL_ESTATE_BROKER
+        REAL_ESTATE_BROKER,
+        ENTREPRENEUR,
+        VENTURE_CAPITALIST
     }
 
     [CreateAssetMenu(fileName = "Specialist", menuName = "ScriptableObjects/Specialist")]

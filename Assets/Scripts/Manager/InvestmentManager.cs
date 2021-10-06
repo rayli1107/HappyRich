@@ -66,6 +66,10 @@ public class InvestmentManager : MonoBehaviour
             {
                 actions.Add(getRealEstateFn(player, random, cb));
             }
+            else if (info.specialistType == SpecialistType.ENTREPRENEUR)
+            {
+                actions.Add(getBusinessFn(player, random, cb));
+            }
         }
 
         return actions;

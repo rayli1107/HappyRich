@@ -14,27 +14,9 @@ namespace Actions
         kHigh
     }
 
-    public class StartupInvestmentAction : AbstractAction
+    public static class StartupInvestmentAction
     {
-        private Player _player;
-        private string _startupIdea;
-        private int _turnsLeft;
-        private StartupExitAction _exitAction;
-
-        public StartupInvestmentAction(
-            Player player,
-            ActionCallback callback,
-            string startupIdea,
-            int turnsLeft,
-            StartupExitAction exitAction) : base(callback)
-        {
-            _player = player;
-            _startupIdea = startupIdea;
-            _turnsLeft = turnsLeft;
-            _exitAction = exitAction;
-        }
-
-        private string confirmMessageHandler(ButtonType buttonType, int number)
+        private static string confirmMessageHandler(ButtonType buttonType, int number)
         {
             if (buttonType == ButtonType.OK)
             {
@@ -49,34 +31,48 @@ namespace Actions
             }
         }
 
-        private void startTransactionHandler(TransactionHandler handler, int number)
+        private static void startTransactionHandler(
+            Player player,
+            TransactionHandler handler,
+            StartupExitAction exitAction,
+            int turnsLeft,
+            int number)
         {
-            StartupInvestment investment = new StartupInvestment(
-                number, _turnsLeft, _exitAction);
-            TransactionManager.BuyTimedInvestment(_player, investment, handler);
+            StartupInvestment investment = new StartupInvestment(number, turnsLeft, exitAction);
+            TransactionManager.BuyTimedInvestment(player, investment, handler);
         }
 
-        public override void Start()
+        public static void Start(
+            Player player,
+            string startupIdea,
+            int turnsLeft,
+            StartupExitAction exitAction,
+            Action callback)
         {
             Localization local = Localization.Instance;
-            int maxValue = _player.portfolio.cash;
+            int maxValue = player.portfolio.cash;
             string message = string.Format(
                 "A friend of yours decided to launch a startup focusing on {0}, and asked " +
                 "if you're interested in investing in his company.\nAvailable Funds: {1}",
-                _startupIdea,
+                startupIdea,
                 local.GetCurrency(maxValue));
             UIManager.Instance.ShowNumberInputPanel(
                 message,
                 maxValue,
-                messageBoxHandler,
+                (ButtonType button, int n) => messageBoxHandler(player, button, n, callback),
                 confirmMessageHandler,
-                startTransactionHandler);
+                (TransactionHandler handler, int n) =>
+                    startTransactionHandler(player, handler, exitAction, turnsLeft, n));
         }
 
-        private void messageBoxHandler(ButtonType buttonType, int number)
+        private static void messageBoxHandler(
+            Player player,
+            ButtonType buttonType,
+            int number,
+            Action callback)
         {
-            UI.UIManager.Instance.UpdatePlayerInfo(_player);
-            RunCallback(buttonType == ButtonType.OK);
+            UI.UIManager.Instance.UpdatePlayerInfo(player);
+            callback?.Invoke();
         }
     }
 }

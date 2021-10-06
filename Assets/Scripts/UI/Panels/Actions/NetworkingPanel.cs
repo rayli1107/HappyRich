@@ -1,5 +1,6 @@
 ﻿using Actions;
 using PlayerInfo;
+using System;
 using UnityEngine;
 
 namespace UI.Panels.Actions
@@ -8,10 +9,17 @@ namespace UI.Panels.Actions
     {
         public Player player;
 
+        private void onNewInvestorDone()
+        {
+            GameManager.Instance.StateMachine.OnPlayerActionDone();
+        }
+
         public void OnNewInvestorsButton()
         {
             UIManager.Instance.DestroyAllModal();
-            new FindNewInvestors(player).Start();
+            Action<Action> action = InvestmentPartnerManager.Instance.GetAction(
+                GameManager.Instance.player, GameManager.Instance.Random);
+            action?.Invoke(() => GameManager.Instance.StateMachine.OnPlayerActionDone());
         }
 
         public void OnMaintainRelationshipButton()

@@ -1,6 +1,8 @@
-﻿using Assets;
+﻿using Actions;
+using Assets;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Templates;
 using UnityEngine;
 
 public class StockManager : MonoBehaviour
@@ -28,6 +30,8 @@ public class StockManager : MonoBehaviour
     private Vector2Int _cryptoInitialMultiplier = new Vector2Int(5, 10);
     [SerializeField]
     private Vector2 _cryptoGrowthMultiplier = new Vector2(0.7f, 1.3f);
+    [SerializeField]
+    private float _newCryptoChance = 0.3f;
     [SerializeField]
     private Vector2Int[] _yieldStockYields;
 #pragma warning restore 0649
@@ -124,5 +128,26 @@ public class StockManager : MonoBehaviour
     public float getGrowthStockGrowth(System.Random random)
     {
         return generateFromRange(random, _growthStockRangeMin, _growthStockRangeMax);
+    }
+
+    private void getMarketEventNewCrypto(System.Random random, Action callback)
+    {
+        System.Tuple<string, AbstractStock> crypto = CreateNewCryptoCurrency(random);
+        string message = string.Format(
+            "A new cryptocurrency {0} has just been launched!",
+            Localization.Instance.GetStockName(crypto.Item2));
+        UI.UIManager.Instance.ShowSimpleMessageBox(
+            message, ButtonChoiceType.OK_ONLY, (_) => callback?.Invoke());
+    }
+
+    public List<Action<Action>> GetMarketEventActions(System.Random random)
+    {
+        List<Action<Action>> actions = new List<Action<Action>>();
+        if (cryptoCurrencies.Count < numCryptoCurrencies &&
+            random.NextDouble() < _newCryptoChance)
+        {
+            actions.Add((Action cb) => getMarketEventNewCrypto(random, cb));
+        }
+        return actions;
     }
 }

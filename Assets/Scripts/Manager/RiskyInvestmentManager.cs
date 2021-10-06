@@ -2,6 +2,8 @@
 using Assets;
 using PlayerInfo;
 using ScriptableObjects;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RiskyInvestmentManager : MonoBehaviour
@@ -16,7 +18,9 @@ public class RiskyInvestmentManager : MonoBehaviour
     [SerializeField]
     private StartupExitReturnProfile _highRiskReturnProfile;
     [SerializeField]
-    private int turnCount = 5;
+    private int _turnCount = 5;
+    [SerializeField]
+    private float _newRiskyInvestmentChance = 0.15f;
 #pragma warning restore 0649
 
     public static RiskyInvestmentManager Instance { get; private set; }
@@ -58,26 +62,29 @@ public class RiskyInvestmentManager : MonoBehaviour
         return new StartupExitBankruptAction();
     }
 
-    public AbstractAction GetInvestmentAction(
-        Player player,
-        ActionCallback callback)
+    public List<Action<Action>> GetMarketEventActions(Player player, System.Random random)
     {
-        string idea = _startupIdeas[_random.Next(_startupIdeas.Length)];
-        StartupExitAction exitAction;
-        switch (_random.Next(3))
+        List<Action<Action>> actions = new List<Action<Action>>();
+        if (random.NextDouble() < _newRiskyInvestmentChance)
         {
-            case 0:
-                exitAction = getExitAction(player, _lowRiskReturnProfile);
-                break;
-            case 1:
-                exitAction = getExitAction(player, _mediumRiskReturnProfile);
-                break;
-            default:
-                exitAction = getExitAction(player, _highRiskReturnProfile);
-                break;
-        }
+            string idea = _startupIdeas[_random.Next(_startupIdeas.Length)];
+            StartupExitAction exitAction;
+            switch (_random.Next(3))
+            {
+                case 0:
+                    exitAction = getExitAction(player, _lowRiskReturnProfile);
+                    break;
+                case 1:
+                    exitAction = getExitAction(player, _mediumRiskReturnProfile);
+                    break;
+                default:
+                    exitAction = getExitAction(player, _highRiskReturnProfile);
+                    break;
+            }
 
-        return new StartupInvestmentAction(
-            player, callback, idea, turnCount, exitAction);
+            actions.Add(
+                (Action cb) => StartupInvestmentAction.Start(player, idea, _turnCount, exitAction, cb));
+        }
+        return actions;
     }
 }

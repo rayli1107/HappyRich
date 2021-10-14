@@ -59,6 +59,7 @@ namespace UI.Panels.Assets
                 _privateLoanControlPanel.checkRaiseEquityCallback = checkRaiseEquity;
                 _privateLoanControlPanel.onRaiseEquityCallback = OnRaiseEquityButton;
                 _privateLoanControlPanel.onCancelCallback = OnCancelDebtButton;
+                _privateLoanControlPanel.checkEnableCancelCallback = checkEnableCancelForPrivateLoanPanel;
             }
 
             if (_equityControlPanel != null)
@@ -85,6 +86,11 @@ namespace UI.Panels.Assets
         private bool checkRaiseEquity()
         {
             return partialAsset.maxShares > 0;
+        }
+
+        private bool checkEnableCancelForPrivateLoanPanel()
+        {
+            return asset.primaryLoan != null;
         }
 
         protected virtual void AdjustNumbers()
@@ -147,47 +153,56 @@ namespace UI.Panels.Assets
 
         protected void EnableSecuredLoanPanel(bool enable)
         {
-            if (enable)
+            if (_securedLoanControlPanel != null)
             {
-                _securedLoanControlPanel.player = player;
-                _securedLoanControlPanel.asset = asset;
-                _securedLoanControlPanel.gameObject.SetActive(true);
-                _securedLoanControlPanel.Refresh();
-            }
-            else
-            {
-                _securedLoanControlPanel.gameObject.SetActive(false);
+                if (enable)
+                {
+                    _securedLoanControlPanel.player = player;
+                    _securedLoanControlPanel.asset = asset;
+                    _securedLoanControlPanel.gameObject.SetActive(true);
+                    _securedLoanControlPanel.Refresh();
+                }
+                else
+                {
+                    _securedLoanControlPanel.gameObject.SetActive(false);
+                }
             }
         }
 
         protected void EnablePrivateLoanPanel(bool enable)
         {
-            if (enable)
+            if (_privateLoanControlPanel != null)
             {
-                _privateLoanControlPanel.player = player;
-                _privateLoanControlPanel.asset = asset;
-                _privateLoanControlPanel.gameObject.SetActive(true);
-                _privateLoanControlPanel.Refresh();
-            }
-            else
-            {
-                _privateLoanControlPanel.gameObject.SetActive(false);
+                if (enable)
+                {
+                    _privateLoanControlPanel.player = player;
+                    _privateLoanControlPanel.asset = asset;
+                    _privateLoanControlPanel.gameObject.SetActive(true);
+                    _privateLoanControlPanel.Refresh();
+                }
+                else
+                {
+                    _privateLoanControlPanel.gameObject.SetActive(false);
+                }
             }
         }
 
         protected void EnableEquityPanel(bool enable)
         {
-            if (enable)
+            if (_equityControlPanel != null)
             {
-                _equityControlPanel.player = player;
-                _equityControlPanel.asset = asset;
-                _equityControlPanel.partialAsset = partialAsset;
-                _equityControlPanel.gameObject.SetActive(true);
-                _equityControlPanel.Refresh();
-            }
-            else
-            {
-                _equityControlPanel.gameObject.SetActive(false);
+                if (enable)
+                {
+                    _equityControlPanel.player = player;
+                    _equityControlPanel.asset = asset;
+                    _equityControlPanel.partialAsset = partialAsset;
+                    _equityControlPanel.gameObject.SetActive(true);
+                    _equityControlPanel.Refresh();
+                }
+                else
+                {
+                    _equityControlPanel.gameObject.SetActive(false);
+                }
             }
         }
 

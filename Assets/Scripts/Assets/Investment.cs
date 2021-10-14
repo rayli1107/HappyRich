@@ -19,20 +19,43 @@ namespace Assets
         public AbstractSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
 
+        public List<AbstractSecuredLoan> securedLoans
+        {
+            get
+            {
+                List<AbstractSecuredLoan> loans = new List<AbstractSecuredLoan>();
+                if (primaryLoan != null)
+                {
+                    loans.Add(primaryLoan);
+                }
+                if (privateLoan != null)
+                {
+                    loans.Add(privateLoan);
+                }
+                return loans;
+            }
+        }
+
         public override List<AbstractLiability> liabilities
         {
             get
             {
                 List<AbstractLiability> ret = base.liabilities;
-                if (primaryLoan != null)
-                {
-                    ret.Add(primaryLoan);
-                }
-                if (privateLoan != null)
-                {
-                    ret.Add(privateLoan);
-                }
+                ret.AddRange(securedLoans);
                 return ret;
+            }
+        }
+
+        public int delayedInterest
+        {
+            get
+            {
+                int interest = 0;
+                foreach (AbstractSecuredLoan loan in securedLoans)
+                {
+                    interest += loan.delayedExpense;
+                }
+                return interest;
             }
         }
 

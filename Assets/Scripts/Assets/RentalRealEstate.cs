@@ -15,7 +15,7 @@ namespace Assets
             int unitCount)
             : base(template, purchasePrice, marketValue, annualIncome, unitCount)
         {
-            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv);
+            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv, false);
         }
     }
     

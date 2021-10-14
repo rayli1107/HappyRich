@@ -31,7 +31,7 @@ namespace Assets
             this.maxIncome = maxIncome;
             label = description;
 
-            primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv);
+            primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
         }
 
         public void SetName(string name)

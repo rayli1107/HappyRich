@@ -39,16 +39,6 @@ namespace UI.Panels.Assets
                 return;
             }
 
-            if (_privateLoanControlPanel != null)
-            {
-                EnablePrivateLoanPanel(true);
-            }
-
-            if (_equityControlPanel != null)
-            {
-                EnableEquityPanel(partialAsset.investorShares > 0);
-            }
-
             Localization local = Localization.Instance;
             if (_textRehabPrice != null)
             {
@@ -63,8 +53,7 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
             if (_textInterestFee != null)
             {
-                _textInterestFee.text = local.GetCurrency(
-                    asset.privateLoan == null ? 0 : asset.privateLoan.delayedExpense, true);
+                _textInterestFee.text = local.GetCurrency(asset.delayedInterest, true);
             }
 /*
             Debug.LogFormat("Original Price {0}", distressedAsset.originalPrice);

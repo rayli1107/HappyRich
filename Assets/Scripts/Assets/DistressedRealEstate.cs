@@ -8,7 +8,7 @@ namespace Assets
         public int rehabPrice { get; private set; }
 
         public override int value =>
-            originalPrice + rehabPrice + (privateLoan == null ? 0 : privateLoan.delayedExpense);
+            originalPrice + rehabPrice + delayedInterest;
         public override int totalCost => value;
         public override int loanValue => originalPrice;
 
@@ -23,15 +23,23 @@ namespace Assets
             int appraisalPrice,
             int annualIncome,
             int unitCount,
-            int maxLtv)
+            int maxMortgageLtv,
+            int maxPrivateLoanLtv)
             : base(template, purchasePrice, 0, 0, unitCount)
         {
             this.rehabPrice = rehabPrice;
             this.appraisalPrice = appraisalPrice;
             actualIncome = annualIncome;
-
-            int rate = InterestRateManager.Instance.distressedLoanRate;
-            AddPrivateLoan(debtPartners, maxLtv, rate, true);
+            
+            if (maxMortgageLtv > 0)
+            {
+                primaryLoan = new Mortgage(this, maxMortgageLtv, maxMortgageLtv, true);
+            }
+            else
+            {
+                int rate = InterestRateManager.Instance.distressedLoanRate;
+                AddPrivateLoan(debtPartners, maxPrivateLoanLtv, rate, true);
+            }
 
             label = string.Format("Distressed {0}", label);
             description = string.Format("Distressed {0}", description);

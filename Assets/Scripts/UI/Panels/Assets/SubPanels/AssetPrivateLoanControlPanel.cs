@@ -21,8 +21,6 @@ namespace UI.Panels.Assets
         private Button _buttonRaiseEquity;
         [SerializeField]
         private Button _buttonCancel;
-        [SerializeField]
-        private bool _disableCancel = false;
 #pragma warning restore 0649
 
         public Player player;
@@ -30,6 +28,7 @@ namespace UI.Panels.Assets
 
         public Action adjustNumberCallback;
         public Func<bool> checkRaiseEquityCallback;
+        public Func<bool> checkEnableCancelCallback;
         public UnityAction onRaiseEquityCallback;
         public UnityAction onCancelCallback;
 
@@ -49,9 +48,10 @@ namespace UI.Panels.Assets
                 _textRate.text = string.Format("{0}%", asset.privateLoan.interestRate);
             }
 
-            if (!_disableCancel && _buttonCancel != null)
+            if (_buttonCancel != null)
             {
-                _buttonCancel.gameObject.SetActive(minValue == 0);
+                //                _buttonCancel.gameObject.SetActive(minValue == 0);
+                _buttonCancel.gameObject.SetActive(checkEnableCancelCallback());
             }
 
             if (_buttonRaiseEquity != null)

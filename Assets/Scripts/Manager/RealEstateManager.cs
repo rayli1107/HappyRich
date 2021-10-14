@@ -50,6 +50,10 @@ public class RealEstateManager : MonoBehaviour
     private Vector2 _distressedRehabPriceRange = new Vector2(0.1f, 0.3f);
     [SerializeField]
     private float _sellChance = 1f;
+    [SerializeField]
+    private int _loanAgentRentalMortgageLTV = 80;
+    [SerializeField]
+    private int _loanAgentDistressedMortgageLTV = 20;
 #pragma warning restore 0649
 
     public static RealEstateManager Instance { get; private set; }
@@ -113,6 +117,31 @@ public class RealEstateManager : MonoBehaviour
             random, template.basePrice, varianceRange, template.priceIncrement);
     }
 
+    private int getRentalMortgageLTV(Player player)
+    {
+        foreach (SpecialistInfo info in player.specialists)
+        {
+            if (info.specialistType == SpecialistType.LOAN_AGENT)
+            {
+                return _loanAgentRentalMortgageLTV;
+            }
+        }
+        return _maxMortgageLTV;
+    }
+
+    private int getDistressedMortgageLTV(Player player)
+    {
+        foreach (SpecialistInfo info in player.specialists)
+        {
+            if (info.specialistType == SpecialistType.LOAN_AGENT)
+            {
+                return _loanAgentDistressedMortgageLTV;
+            }
+        }
+        return 0;
+    }
+
+
     private AbstractBuyInvestmentAction GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
@@ -139,6 +168,7 @@ public class RealEstateManager : MonoBehaviour
             rehabPrice *= unitCount;
         }
 
+        int maxMortgageLtv = getDistressedMortgageLTV(player);
         DistressedRealEstate asset = new DistressedRealEstate(
             template,
             player.GetDebtPartners(),
@@ -147,6 +177,7 @@ public class RealEstateManager : MonoBehaviour
             appraisalPrice,
             annualIncome,
             unitCount,
+            maxMortgageLtv,
             _maxDistressedLoanLTV);
         return new BuyDistressedRealEstateAction(player, asset, callback);
     }
@@ -173,8 +204,9 @@ public class RealEstateManager : MonoBehaviour
             annualIncome *= unitCount;
         }
 
+        int ltv = getRentalMortgageLTV(player);
         RentalRealEstate asset = new RentalRealEstate(
-            template, price, price, annualIncome, _maxMortgageLTV, _maxMortgageLTV, unitCount);
+            template, price, price, annualIncome, ltv, ltv, unitCount);
         return new BuyRentalRealEstateAction(player, asset, callback);
     }
 
@@ -185,8 +217,7 @@ public class RealEstateManager : MonoBehaviour
         ActionCallback callback)
     {
         RealEstateTemplate template = templates[random.Next(templates.Count)];
-        bool rental = false;
-        if (rental)
+        if (random.Next(2) == 0)
         {
             return GetRentalRealEstateAction(player, template, random, callback);
         }
@@ -211,10 +242,11 @@ public class RealEstateManager : MonoBehaviour
     public RefinancedRealEstate RefinanceDistressedProperty(
         Player player, DistressedRealEstate oldAsset)
     {
+        int ltv = getRentalMortgageLTV(player);
         RefinancedRealEstate newAsset = new RefinancedRealEstate(
             oldAsset,
             player.GetDebtPartners(),
-            _maxMortgageLTV,
+            ltv,
             _maxPrivateLoanLTV);
         return newAsset;
     }

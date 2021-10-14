@@ -3451,6 +3451,8 @@ MonoBehaviour:
   _distressedPurchasePriceRange: {x: 0.5, y: 0.7}
   _distressedRehabPriceRange: {x: 0.1, y: 0.3}
   _sellChance: 1
+  _loanAgentRentalMortgageLTV: 80
+  _loanAgentDistressedMortgageLTV: 20
 --- !u!114 &1128526761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3552,6 +3554,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultAvailableInvestments: 2
   _hustledAvailableInvestments: 3
+  _additionalInvestmentRealEstateBroker: 5
+  _additionalInvestmentEntrepreneaur: 1
 --- !u!1 &1169222138
 GameObject:
   m_ObjectHideFlags: 0
@@ -4643,6 +4647,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a47e3e386dd59c4d917e98aa6d1ecc7, type: 2}
   - {fileID: 11400000, guid: 4b894ac91e5055745aa655330b13809b, type: 2}
   - {fileID: 11400000, guid: be37b0484ded9494e9cd4159cef80f01, type: 2}
+  - {fileID: 11400000, guid: 15aa178e943fbb347a9c00a8640d816f, type: 2}
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,34 +17,6 @@ namespace UI.Panels.Assets
             GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
         }
 
-        public override void Refresh()
-        {
-            base.Refresh();
-
-            if (player == null || asset == null)
-            {
-                return;
-            }
-
-            if (_securedLoanControlPanel != null)
-            {
-                EnableSecuredLoanPanel(true);
-            }
-
-            bool enableEquityPanel = partialAsset.investorShares > 0;
-            bool enableDebtPanel = asset.privateLoan != null;
-
-            if (_equityControlPanel != null)
-            {
-                EnableEquityPanel(enableEquityPanel);
-            }
-
-            if (_privateLoanControlPanel != null && !enableEquityPanel)
-            {
-                EnablePrivateLoanPanel(enableDebtPanel);
-            }
-        }
-
         public void OnSwitchViewButton(bool advanced)
         {
             MessageBox messageBox = GetComponent<MessageBox>();

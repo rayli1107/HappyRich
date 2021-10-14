@@ -35,6 +35,11 @@ namespace Assets
             }
         }
 
+        private bool _delayed;
+
+        public override int expense => _delayed ? 0 : base.expense;
+        public int delayedExpense => _delayed ? base.expense : 0;
+
         protected int getUnitCount(int loanAmount)
         {
             int unitValue = asset.loanUnitValue;
@@ -46,7 +51,8 @@ namespace Assets
             string label,
             int defaultltv,
             int maxltv,
-            int interestRate) :
+            int interestRate,
+            bool delayed) :
             base(label, 0, interestRate)
         {
             this.asset = asset;
@@ -56,6 +62,7 @@ namespace Assets
             this.defaultltv = defaultltv;
             _ltv = 0;
             ltv = defaultltv;
+            _delayed = delayed;
         }
 
         protected virtual void AddLoan(int delta)
@@ -85,24 +92,26 @@ namespace Assets
 
     public class Mortgage : AbstractSecuredLoan
     {
-        public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv)
+        public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
                    string.Format("Mortgage - {0}", asset.label),
                    defaultltv,
                    maxltv,
-                   InterestRateManager.Instance.realEstateLoanRate)
+                   InterestRateManager.Instance.realEstateLoanRate,
+                   delayed)
         {
         }
     }
 
     public class BusinessLoan : AbstractSecuredLoan
     {
-        public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv)
+        public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
                    string.Format("Business Loan - {0}", asset.label),
                    defaultltv,
                    maxltv,
-                   InterestRateManager.Instance.businessLoanRate)
+                   InterestRateManager.Instance.businessLoanRate,
+                   delayed)
         {
         }
     }
@@ -110,10 +119,6 @@ namespace Assets
     public class PrivateLoan : AbstractSecuredLoan
     {
         private List<Investment> _investments;
-        private bool _delayed;
-
-        public override int expense => _delayed ? 0 : base.expense;
-        public int delayedExpense => _delayed ? base.expense : 0;
 
         public List<InvestmentPartner> privateLenders
         {
@@ -141,7 +146,8 @@ namespace Assets
                  string.Format("Private Loan - %s", asset.label),
                  0,
                  maxltv,
-                 interestRate)
+                 interestRate,
+                 delayed)
         {
             _investments = new List<Investment>();
             int availableCash = 0;
@@ -156,7 +162,6 @@ namespace Assets
 
             this.maxltv = Mathf.Min(
                 this.maxltv, availableCash / asset.loanUnitValue);
-            _delayed = delayed;
         }
 
         protected override void AddLoan(int delta)

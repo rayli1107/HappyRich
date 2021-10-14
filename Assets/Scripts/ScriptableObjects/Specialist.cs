@@ -6,7 +6,8 @@ namespace ScriptableObjects
     {
         REAL_ESTATE_BROKER,
         ENTREPRENEUR,
-        VENTURE_CAPITALIST
+        VENTURE_CAPITALIST,
+        LOAN_AGENT
     }
 
     [CreateAssetMenu(fileName = "Specialist", menuName = "ScriptableObjects/Specialist")]

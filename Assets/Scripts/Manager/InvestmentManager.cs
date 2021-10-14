@@ -17,6 +17,10 @@ public class InvestmentManager : MonoBehaviour
     private int _defaultAvailableInvestments = 2;
     [SerializeField]
     private int _hustledAvailableInvestments = 1;
+    [SerializeField]
+    private int _additionalInvestmentRealEstateBroker = 1;
+    [SerializeField]
+    private int _additionalInvestmentEntrepreneaur = 1;
 #pragma warning restore 0649
 
     public static InvestmentManager Instance;
@@ -64,11 +68,17 @@ public class InvestmentManager : MonoBehaviour
             ActionCallback cb = (bool b) => callback(index, b);
             if (info.specialistType == SpecialistType.REAL_ESTATE_BROKER)
             {
-                actions.Add(getRealEstateFn(player, random, cb));
+                for (int i = 0; i < _additionalInvestmentRealEstateBroker; ++i)
+                {
+                    actions.Add(getRealEstateFn(player, random, cb));
+                }
             }
             else if (info.specialistType == SpecialistType.ENTREPRENEUR)
             {
-                actions.Add(getBusinessFn(player, random, cb));
+                for (int i = 0; i < _additionalInvestmentEntrepreneaur; ++i)
+                {
+                    actions.Add(getBusinessFn(player, random, cb));
+                }
             }
         }
 

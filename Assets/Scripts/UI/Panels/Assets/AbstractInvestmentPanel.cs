@@ -42,6 +42,7 @@ namespace UI.Panels.Assets
 
         protected string _messageTemplate { get; private set; }
 
+
         protected virtual void Awake()
         {
             if (_securedLoanControlPanel != null)
@@ -211,8 +212,7 @@ namespace UI.Panels.Assets
             asset.AddPrivateLoan(
                 player.GetDebtPartners(),
                 RealEstateManager.Instance.maxPrivateLoanLTV,
-                InterestRateManager.Instance.defaultPrivateLoanRate,
-                false);
+                InterestRateManager.Instance.defaultPrivateLoanRate);
             EnablePrivateLoanPanel(true);
         }
 

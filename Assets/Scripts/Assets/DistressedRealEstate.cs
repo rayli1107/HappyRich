@@ -25,7 +25,7 @@ namespace Assets
             int unitCount,
             int maxMortgageLtv,
             int maxPrivateLoanLtv)
-            : base(template, purchasePrice, 0, 0, unitCount)
+            : base(template, purchasePrice, 0, 0, unitCount, true)
         {
             this.rehabPrice = rehabPrice;
             this.appraisalPrice = appraisalPrice;
@@ -38,7 +38,7 @@ namespace Assets
             else
             {
                 int rate = InterestRateManager.Instance.distressedLoanRate;
-                AddPrivateLoan(debtPartners, maxPrivateLoanLtv, rate, true);
+                AddPrivateLoan(debtPartners, maxPrivateLoanLtv, rate);
             }
 
             label = string.Format("Distressed {0}", label);

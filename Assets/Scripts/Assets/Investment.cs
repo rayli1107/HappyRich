@@ -18,6 +18,7 @@ namespace Assets
 
         public AbstractSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
+        private bool _isDebtInterestDelayed;
 
         public List<AbstractSecuredLoan> securedLoans
         {
@@ -53,6 +54,7 @@ namespace Assets
                 int interest = 0;
                 foreach (AbstractSecuredLoan loan in securedLoans)
                 {
+                    Debug.LogFormat("Loan delayed interest {0}", loan.delayedExpense);
                     interest += loan.delayedExpense;
                 }
                 return interest;
@@ -63,21 +65,22 @@ namespace Assets
             string name,
             int originalPrice,
             int marketValue,
-            int annualIncome)
+            int annualIncome,
+            bool isDebtInterestDelayed)
             : base(name, marketValue, annualIncome)
         {
             this.originalPrice = originalPrice;
+            _isDebtInterestDelayed = isDebtInterestDelayed;
         }
 
         public void AddPrivateLoan(
             List<InvestmentPartner> partners,
             int maxltv,
-            int rate,
-            bool delayed)
+            int rate)
         {
             if (privateLoan == null)
             {
-                privateLoan = new PrivateLoan(this, partners, maxltv, rate, delayed);
+                privateLoan = new PrivateLoan(this, partners, maxltv, rate, _isDebtInterestDelayed);
             }
         }
 

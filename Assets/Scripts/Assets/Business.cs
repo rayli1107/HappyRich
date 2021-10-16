@@ -22,7 +22,7 @@ namespace Assets
             int actualIncome,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, 0, actualIncome)
+            : base(description, startupCost, 0, actualIncome, false)
         {
             this.description = description;
             this.startupCost = startupCost;

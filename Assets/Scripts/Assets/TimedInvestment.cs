@@ -16,7 +16,7 @@ namespace Assets
             int marketValue,
             int annualIncome,
             int turnsLeft)
-            : base(name, originalPrice, marketValue, annualIncome)
+            : base(name, originalPrice, marketValue, annualIncome, false)
         {
             this.turnsLeft = turnsLeft;
         }

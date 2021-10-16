@@ -13,7 +13,7 @@ namespace Assets
             int mortgageLtv,
             int maxMortgageLtv,
             int unitCount)
-            : base(template, purchasePrice, marketValue, annualIncome, unitCount)
+            : base(template, purchasePrice, marketValue, annualIncome, unitCount, false)
         {
             primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv, false);
         }
@@ -71,8 +71,7 @@ namespace Assets
                 AddPrivateLoan(
                     debtPartners,
                     RealEstateManager.Instance.maxPrivateLoanLTV,
-                    InterestRateManager.Instance.defaultPrivateLoanRate,
-                    false);
+                    InterestRateManager.Instance.defaultPrivateLoanRate);
                 privateLoan.setMinimumLoanAmount(remainingLoanAmount);
                 /*
                 int rate = InterestRateManager.Instance.defaultPrivateLoanRate;

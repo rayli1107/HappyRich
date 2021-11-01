@@ -17,9 +17,13 @@ public class StockManager : MonoBehaviour
     [SerializeField]
     private int _numCryptoCurrencies;
     [SerializeField]
-    private float _growthStockRangeMin = 0.9f;
+    private Vector2 _growthStockGrowth = new Vector2(0.9f, 1.2f);
     [SerializeField]
-    private float _growthStockRangeMax = 1.2f;
+    private Vector2 _growthStockVariance = new Vector2(0.8f, 1.2f);
+    [SerializeField]
+    private int _growthStockMinPeriod = 3;
+    [SerializeField]
+    private float _growthStockUpdateChance = 0.5f;
     [SerializeField]
     private float _cryptoSuccessProbability = 0.5f;
     [SerializeField]
@@ -34,15 +38,20 @@ public class StockManager : MonoBehaviour
     private float _newCryptoChance = 0.3f;
     [SerializeField]
     private Vector2Int[] _yieldStockYields;
+    [SerializeField]
+    private float _tipThreshold = 0.15f;
 #pragma warning restore 0649
 
     public static StockManager Instance;
 
     private Dictionary<string, AbstractStock> _stocks;
-    public List<AbstractStock> growthStocks { get; private set; }
-    public List<AbstractStock> yieldStocks { get; private set; }
-    public List<AbstractStock> cryptoCurrencies { get; private set; }
+    public List<GrowthStock> growthStocks { get; private set; }
+    public List<YieldStock> yieldStocks { get; private set; }
+    public List<AbstractCryptoCurrency> cryptoCurrencies { get; private set; }
     public int numCryptoCurrencies => _numCryptoCurrencies;
+    public int growthStockMinPeriod => _growthStockMinPeriod;
+    public float growthStockUpdateChance => _growthStockUpdateChance;
+    public float tipThreshold => _tipThreshold;
 
     private void Awake()
     {
@@ -71,9 +80,9 @@ public class StockManager : MonoBehaviour
     public void Initialize(System.Random random)
     {
         _stocks = new Dictionary<string, AbstractStock>();
-        growthStocks = new List<AbstractStock>();
-        yieldStocks = new List<AbstractStock>();
-        cryptoCurrencies = new List<AbstractStock>();
+        growthStocks = new List<GrowthStock>();
+        yieldStocks = new List<YieldStock>();
+        cryptoCurrencies = new List<AbstractCryptoCurrency>();
 
         for (int i = 0; i < _numGrowthStock; ++i) {
             string name = generateStockName(random);
@@ -97,7 +106,7 @@ public class StockManager : MonoBehaviour
     {
         string name = generateStockName(random);
         int delay = random.Next(_cryptoTurnDelayRange.y - _cryptoTurnDelayRange.x + 1) + _cryptoTurnDelayRange.x;
-        AbstractStock crypto;
+        AbstractCryptoCurrency crypto;
         if (random.NextDouble() < _cryptoSuccessProbability)
         {
             crypto = new SuccessfulCryptoCurrency(
@@ -125,9 +134,20 @@ public class StockManager : MonoBehaviour
         return min + (float)random.NextDouble() * (max - min);
     }
 
+    private float generateFromRange(System.Random random, Vector2 range)
+    {
+        return generateFromRange(random, range.x, range.y);
+    }
+
+
     public float getGrowthStockGrowth(System.Random random)
     {
-        return generateFromRange(random, _growthStockRangeMin, _growthStockRangeMax);
+        return generateFromRange(random, _growthStockGrowth);
+    }
+
+    public float getGrowthStockVariance(System.Random random)
+    {
+        return generateFromRange(random, _growthStockVariance);
     }
 
     private void getMarketEventNewCrypto(System.Random random, Action callback)

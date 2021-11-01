@@ -3469,8 +3469,10 @@ MonoBehaviour:
   _initialPriceMax: 100
   _numGrowthStock: 4
   _numCryptoCurrencies: 4
-  _growthStockRangeMin: 0.8
-  _growthStockRangeMax: 1.4
+  _growthStockGrowth: {x: 0.9, y: 1.2}
+  _growthStockVariance: {x: 0.8, y: 1.2}
+  _growthStockMinPeriod: 3
+  _growthStockUpdateChance: 0.5
   _cryptoSuccessProbability: 0.5
   _cryptoInitialValue: 1
   _cryptoTurnDelayRange: {x: 5, y: 8}
@@ -3481,6 +3483,7 @@ MonoBehaviour:
   - {x: 4, y: 4}
   - {x: 3, y: 6}
   - {x: 2, y: 8}
+  _tipThreshold: 0.1
 --- !u!114 &1128526762
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using Assets;
+using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,40 @@ namespace Actions
                 message, ButtonChoiceType.OK_ONLY, onMessageDone);
         }
 
+        private List<GrowthStock> getStockTipList()
+        {
+            List<GrowthStock> stocks = new List<GrowthStock>();
+
+            foreach (GrowthStock stock in StockManager.Instance.growthStocks)
+            {
+                if (Math.Abs(stock.variance) > StockManager.Instance.tipThreshold)
+                {
+                    stocks.Add(stock);
+                }
+            }
+            return stocks;
+        }
+
+        private void showStockTip(GrowthStock stock)
+        {
+            Localization local = Localization.Instance;
+            string message;
+            if (stock.variance > 0)
+            {
+                message = string.Format(
+                    "Once of your investors gave you a tip that the stock {0} is overvalued.",
+                    local.GetStockName(stock));
+            }
+            else
+            {
+                message = string.Format(
+                    "Once of your investors gave you a tip that the stock {0} is undervalued.",
+                    local.GetStockName(stock));
+            }
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_ONLY, onMessageDone);
+        }
+
         public override void Start()
         {
             foreach (InvestmentPartner partner in _player.contacts)
@@ -59,11 +94,22 @@ namespace Actions
             if (SpecialistManager.Instance.HasNewSpecialistsAvailable(_player))
             {
                 actions.Add(addSpecialist);
+                actions.Add(addSpecialist);
             }
+
+            List<GrowthStock> stockTips = getStockTipList();
+            if (stockTips.Count > 0)
+            {
+                GrowthStock stock = stockTips[GameManager.Instance.Random.Next(stockTips.Count)];
+                actions.Add(() => showStockTip(stock));
+            }
+
             if (actions.Count == 0)
             {
                 actions.Add(noOp);
             }
+
+
 
             int index = GameManager.Instance.Random.Next(actions.Count);
             actions[index].Invoke();

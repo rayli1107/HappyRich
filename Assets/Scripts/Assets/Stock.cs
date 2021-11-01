@@ -46,12 +46,12 @@ namespace Assets
         public Vector2Int yieldRange { get; protected set; }
         public int expectedYield => yieldRange.x;
         public int currentYield;
-
+        private int _turnCount;
         public float change
         {
             get
             {
-                return (value - prevValue) / (float)prevValue;
+                return _turnCount >= 2 ? (value - prevValue) / (float)prevValue : 0f;
             }
         }
 
@@ -62,10 +62,12 @@ namespace Assets
             prevValue = value;
             yieldRange = new Vector2Int(0, 0);
             currentYield = 0;
+            _turnCount = 0;
         }
 
         public virtual void OnTurnStart(System.Random random)
         {
+            ++_turnCount;
             prevValue = value;
             currentYield = yieldRange.x + random.Next(yieldRange.y - yieldRange.x + 1);
         }
@@ -87,21 +89,35 @@ namespace Assets
         }
     }
 
-    public class GrowthStock : AbstractStock { 
+    public class GrowthStock : AbstractStock {
+        private int _currentPeriodTurn;
+        private float _basePrice;
+        public float variance => (value - _basePrice) / _basePrice;
+
+
         public GrowthStock(string name, int initialPrice) : base(name, initialPrice)
         {
-
+            _currentPeriodTurn = 0;
+            _basePrice = initialPrice;
         }
 
         public override void OnTurnStart(System.Random random)
         {
             base.OnTurnStart(random);
-            value = Convert.ToInt32(
-                value * StockManager.Instance.getGrowthStockGrowth(random));
+            ++_currentPeriodTurn;
+            if (_currentPeriodTurn > StockManager.Instance.growthStockMinPeriod &&
+                random.NextDouble() < StockManager.Instance.growthStockUpdateChance)
+            {
+                _basePrice = _basePrice * StockManager.Instance.getGrowthStockGrowth(random);
+                _currentPeriodTurn = 0;
+            }
+
+            float newBase = (value + _basePrice) / 2;
+            value = Mathf.RoundToInt(newBase * StockManager.Instance.getGrowthStockVariance(random));
             value = Math.Max(value, 1);
 
-            Debug.LogFormat("{0} prev {1} cur {2} change {3}",
-                name, prevValue, value, change);
+            Debug.LogFormat("{0} prev {1} cur {2} change {3} variance {4}",
+                name, prevValue, value, change, variance);
         }
     }
 

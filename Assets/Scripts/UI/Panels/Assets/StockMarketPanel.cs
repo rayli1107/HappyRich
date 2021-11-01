@@ -40,9 +40,9 @@ namespace UI.Panels.Assets
             Transform parentTransform = GetComponentInChildren<VerticalLayoutGroup>().transform;
 
             StockManager stockManager = StockManager.Instance;
-            AddStocks(parentTransform, stockManager.growthStocks, "Growth Stocks");
-            AddStocks(parentTransform, stockManager.yieldStocks, "Dividend Stocks");
-            AddStocks(parentTransform, stockManager.cryptoCurrencies, "Cryptocurrencies");
+            AddStocks(parentTransform, stockManager.growthStocks.ConvertAll(x => (AbstractStock)x), "Growth Stocks");
+            AddStocks(parentTransform, stockManager.yieldStocks.ConvertAll(x => (AbstractStock)x), "Dividend Stocks");
+            AddStocks(parentTransform, stockManager.cryptoCurrencies.ConvertAll(x => (AbstractStock)x), "Cryptocurrencies");
         }
 
         private void OnEnable()

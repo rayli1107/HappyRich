@@ -20,7 +20,7 @@ namespace StateMachine
 
         private void checkCryptoDelisted(int index)
         {
-            List<AbstractStock> cryptos = StockManager.Instance.cryptoCurrencies;
+            List<AbstractCryptoCurrency> cryptos = StockManager.Instance.cryptoCurrencies;
             if (index >= cryptos.Count)
             {
                 _stateMachine.ChangeState(_stateMachine.SellPropertyState);

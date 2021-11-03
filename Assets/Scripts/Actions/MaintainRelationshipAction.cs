@@ -69,15 +69,24 @@ namespace Actions
             if (stock.variance > 0)
             {
                 message = string.Format(
-                    "Once of your investors gave you a tip that the stock {0} is overvalued.",
+                    "One of your investors gave you a tip that the stock {0} is overvalued.",
                     local.GetStockName(stock));
             }
             else
             {
                 message = string.Format(
-                    "Once of your investors gave you a tip that the stock {0} is undervalued.",
+                    "One of your investors gave you a tip that the stock {0} is undervalued.",
                     local.GetStockName(stock));
             }
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                message, ButtonChoiceType.OK_ONLY, onMessageDone);
+        }
+
+        private void showCryptocurrencyTip(AbstractCryptoCurrency crypto)
+        {
+            string message = string.Format(
+                "According to one of your investors, the cryptocurrency {0} will be the next big hit.",
+                Localization.Instance.GetStockName(crypto));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message, ButtonChoiceType.OK_ONLY, onMessageDone);
         }
@@ -90,7 +99,7 @@ namespace Actions
             }
 
             List<Action> actions = new List<Action>();
-
+/*
             if (SpecialistManager.Instance.HasNewSpecialistsAvailable(_player))
             {
                 actions.Add(addSpecialist);
@@ -102,6 +111,13 @@ namespace Actions
             {
                 GrowthStock stock = stockTips[GameManager.Instance.Random.Next(stockTips.Count)];
                 actions.Add(() => showStockTip(stock));
+            }
+*/
+            List<AbstractCryptoCurrency> cryptos = StockManager.Instance.cryptoCurrencies.FindAll(x => !x.tookOff);
+            if (cryptos.Count > 0)
+            {
+                AbstractCryptoCurrency crypto = cryptos[GameManager.Instance.Random.Next(cryptos.Count)];
+                actions.Add(() => showCryptocurrencyTip(crypto));
             }
 
             if (actions.Count == 0)

@@ -35,7 +35,6 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
-            Debug.LogFormat("Stocks count {0}", stocks != null ? stocks.Count : 0);
             if (player != null && stocks != null && stocks.Count > 0)
             {
                 SetupStockPanel(stocks);

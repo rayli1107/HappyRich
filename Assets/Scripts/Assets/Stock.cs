@@ -134,6 +134,8 @@ namespace Assets
         private int _turnDelay;
         private int _turn;
 
+        public bool tookOff => _turn >= _turnDelay;
+
         public AbstractCryptoCurrency(string name, int initialPrice, int turnDelay) : base(name, initialPrice)
         {
             _turn = 0;
@@ -146,7 +148,7 @@ namespace Assets
         {
             base.OnTurnStart(random);
             ++_turn;
-            if (_turn >= _turnDelay)
+            if (tookOff)
             {
                 OnTurnStartDelayed(random);
             }

@@ -1,6 +1,8 @@
 ﻿using Actions;
 using PlayerInfo;
+using PlayerState;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,33 +77,31 @@ public class FamilyManager : MonoBehaviour
         return _divorceProbabilityRange.x + delta;
     }
 
-    public AbstractAction GetPersonalEventAction(Player player, ActionCallback callback)
+    public List<Action<Action>> GetEvents(Player player)
     {
+        List<Action<Action>> events = new List<Action<Action>>();
         if (player.spouse == null)
         {
             if (_random.NextDouble() < _marriageProbability) {
                 SpouseProfile profile = _spouses[_random.Next(_spouses.Length)];
                 Spouse spouse = generateSpouseFromProfile(profile);
-                return new MarriageAction(player, spouse, callback);
+                events.Add(MarriageAction.GetEvent(player, spouse));
             }
-            return null;
         }
         else
         {
             float divorceProbability = getDivorceProbability(player);
-            if (_random.NextDouble() < divorceProbability)
+            if (!player.states.Exists(s => s is DivorcedPenaltyState) &&
+                _random.NextDouble() < divorceProbability)
             {
-                return new DivorceAction(player, callback);
-            }
-
-            if (player.numChild < _newChildProbabilities.Length &&
+                events.Add(DivorceAction.GetEvent(player));
+            } else if (player.numChild < _newChildProbabilities.Length &&
                 _random.NextDouble() < _newChildProbabilities[player.numChild])
             {
                 bool isBoy = _random.Next(2) == 0;
-                return new NewChildAction(player, callback, isBoy);
+                events.Add(NewChildAction.GetEvent(player, isBoy));
             }
-
-            return null;
         }
+        return events;
     }
 }

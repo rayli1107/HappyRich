@@ -1,5 +1,6 @@
 ﻿using PlayerInfo;
 using PlayerState;
+using System;
 
 namespace Actions
 {
@@ -12,17 +13,30 @@ namespace Actions
             _player = player;
         }
 
-        public override void Start()
+        private void addPlayerState(AbstractPlayerState state)
         {
-            AbstractPlayerState state = SelfImprovementManager.Instance.GetSelfReflectionState(
-                GameManager.Instance.Random);
-
-            _player.AddMentalState(state);
-
-            UI.UIManager.Instance.ShowPlayerStateInfo(state, null);
-            UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            if (state != null)
+            {
+                _player.AddMentalState(state);
+                UI.UIManager.Instance.ShowPlayerStateInfo(state, null);
+                UI.UIManager.Instance.UpdatePlayerInfo(_player);
+            }
             GameManager.Instance.StateMachine.OnPlayerActionDone();
             RunCallback(true);
+        }
+
+        public override void Start()
+        {
+            Action<Player, Action<AbstractPlayerState>> addAction = SelfImprovementManager.Instance.GetSelfReflectionState(
+                GameManager.Instance.Random);
+            if (addAction != null)
+            {
+                addAction?.Invoke(_player, addPlayerState);
+            }
+            else
+            {
+                addPlayerState(null);
+            }
         }
     }
 }

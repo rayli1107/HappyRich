@@ -1,4 +1,6 @@
-﻿namespace PlayerState
+﻿using PlayerInfo;
+
+namespace PlayerState
 {
     public class Frugality : AbstractPlayerState
     {
@@ -10,7 +12,7 @@
 
         public override int expenseModifier => -20;
 
-        public Frugality() : base("Frugality")
+        public Frugality(Player player) : base(player, "Frugality")
         {
         }
     }
@@ -27,7 +29,7 @@
         public override int expenseModifier => -10;
         public override int happinessModifier => 10;
 
-        public Minimalism() : base("Minimalism")
+        public Minimalism(Player player) : base(player, "Minimalism")
         {
         }
     }
@@ -41,8 +43,23 @@
             "",
             "When you look for investments you are able to find one more than usual.");
 
-        public Hustling() : base("Hustling")
+        public Hustling(Player player) : base(player, "Hustling")
         {
         }
     }
+
+    public class Tranquil : AbstractPlayerState
+    {
+        public override string description => string.Join(
+            "\n",
+            "You realized that tragedy and loss is just a part of life. You will no " +
+            "longer be devastated when a tragedy occurs.",
+            "",
+            "Happiness -5 instead of -20 during a tragedy state.");
+
+        public Tranquil(Player player) : base(player, "Tranquil")
+        {
+        }
+    }
+
 }

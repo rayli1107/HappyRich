@@ -1,29 +1,26 @@
 ﻿using PlayerInfo;
+using PlayerState;
+using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 
 namespace Actions
 {
-    public class MarriageAction : AbstractAction
+    public static class MarriageAction
     {
-        private Player _player;
-        private Spouse _spouse;
-
-        public MarriageAction(Player player, Spouse spouse, ActionCallback actionCallback)
-            : base(actionCallback)
+        public static Action<Action> GetEvent(Player player, Spouse spouse)
         {
-            _player = player;
-            _spouse = spouse;
+            return (Action cb) => run(player, spouse, cb);
         }
 
-        private void showSpouseDetails()
+        private static void showSpouseDetails(Spouse spouse)
         {
             Localization local = Localization.Instance;
             List<string> text = new List<string>()
             {
-                string.Format("Spouse's Income: {0}", local.GetCurrency(_spouse.additionalIncome)),
-                string.Format("Spouse's Expense: {0}", local.GetCurrency(_spouse.additionalExpense, true)),
-                string.Format("Additional Happiness: {0}", local.GetValueAsChange(_spouse.additionalHappiness))
+                string.Format("Spouse's Income: {0}", local.GetCurrency(spouse.additionalIncome)),
+                string.Format("Spouse's Expense: {0}", local.GetCurrency(spouse.additionalExpense, true)),
+                string.Format("Additional Happiness: {0}", local.GetValueAsChange(spouse.additionalHappiness))
             };
             SimpleTextMessageBox messageBox = UI.UIManager.Instance.ShowSimpleMessageBox(
                 string.Join("\n", text),
@@ -32,61 +29,56 @@ namespace Actions
             messageBox.text.enableWordWrapping = false;
         }
 
-        public override void Start()
+        private static void run(Player player, Spouse spouse, Action callback)
         {
-            _player.spouse = _spouse;
+            player.RemoveMentalState(player.states.Find(s => s is DivorcedPenaltyState));
+            player.spouse = spouse;
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "You met the love of your life at a party and decided to get married. Congratulations!",
                 ButtonChoiceType.OK_ONLY,
-                (_) => RunCallback(true),
-                showSpouseDetails);
+                (_) => callback?.Invoke(),
+                () => showSpouseDetails(spouse));
         }
     }
 
-    public class NewChildAction : AbstractAction
+    public static class NewChildAction
     {
-        private Player _player;
-        private bool _isBoy;
-
-        public NewChildAction(Player player, ActionCallback actionCallback, bool isBoy)
-            : base(actionCallback)
+        public static Action<Action> GetEvent(Player player, bool isBoy)
         {
-            _player = player;
-            _isBoy = isBoy;
+            return (Action cb) => run(player, isBoy, cb);
         }
 
-        public override void Start()
+        private static void run(Player player, bool isBoy, Action callback)
         {
-            ++_player.numChild;
-            string gender = _isBoy ? "boy" : "girl";
+            ++player.numChild;
+            string gender = isBoy ? "boy" : "girl";
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 string.Format("Congratulations! You and your spouse decided to have a baby. It's a {0}!", gender),
                 ButtonChoiceType.OK_ONLY,
-                (_) => RunCallback(true));
+                (_) => callback?.Invoke());
         }
     }
 
-    public class DivorceAction : AbstractAction
+    public static class DivorceAction
     {
-        private Player _player;
-
-        public DivorceAction(Player player, ActionCallback actionCallback)
-            : base(actionCallback)
+        public static Action<Action> GetEvent(Player player)
         {
-            _player = player;
+            return (Action cb) => run(player, cb);
         }
 
-        public override void Start()
+        private static void run(Player player, Action callback)
         {
-            _player.divorcedPenalty = new System.Tuple<int, int>(
-                FamilyManager.Instance.divorcePenaltyDuration,
-                -1 * _player.spouse.additionalHappiness);
-            _player.spouse = null;
+            player.AddMentalState(
+                new DivorcedPenaltyState(
+                    player,
+                    FamilyManager.Instance.divorcePenaltyDuration,
+                    player.spouse.additionalHappiness));
+            player.spouse = null;
 
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "Unfortunately you and your spouse decided to split due to irreconcilable differences.",
                 ButtonChoiceType.OK_ONLY,
-                (_) => RunCallback(true));
+                (_) => callback?.Invoke());
         }
     }
 }

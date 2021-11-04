@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Actions;
+using System;
 using System.Collections.Generic;
 
 namespace StateMachine
@@ -12,19 +13,6 @@ namespace StateMachine
             _stateMachine = stateMachine;
         }
 
-        private static void runActions(List<Action<Action>> actions, int index, Action callback)
-        {
-            if (index >= actions.Count)
-            {
-                callback?.Invoke();
-                return;
-            }
-
-            Action cb = () => runActions(actions, index + 1, callback);
-            actions[index]?.Invoke(cb);
-        }
-
-
         public void EnterState(StateMachineParameter param)
         {
             List<Action<Action>> actions = new List<Action<Action>>();
@@ -35,7 +23,8 @@ namespace StateMachine
             actions.AddRange(
                 InvestmentPartnerManager.Instance.GetMarketEventActions(
                     GameManager.Instance.player, GameManager.Instance.Random));
-            runActions(actions, 0, () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));
+            CompositeActions.GetAndAction(actions)?.Invoke(
+                () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));
         }
 
         public void ExitState()

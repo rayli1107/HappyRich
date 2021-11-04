@@ -1,4 +1,6 @@
-﻿namespace PlayerState
+﻿using PlayerInfo;
+
+namespace PlayerState
 {
     public class OneJobState : AbstractPlayerState
     {
@@ -8,7 +10,7 @@
             "",
             "Happiness -10");
 
-        public OneJobState() : base("Stressed")
+        public OneJobState(Player player) : base(player, "Stressed")
         {
         }
 
@@ -23,7 +25,7 @@
             "",
             "Happiness -20");
 
-        public TwoJobState() : base("Overstressed")
+        public TwoJobState(Player player) : base(player, "Overstressed")
         {
         }
 

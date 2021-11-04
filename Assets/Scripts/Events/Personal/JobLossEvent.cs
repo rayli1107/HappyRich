@@ -6,16 +6,16 @@ using UI.Panels.Templates;
 
 namespace Events.Personal
 {
-    public class JobLossEvent
+    public static class JobLossEvent
     {
-        private Action _callback;
-
-        public JobLossEvent(Action eventDoneCallback)
+        public static List<Action<Action>> GetEvents(Player player)
         {
-            _callback = eventDoneCallback;
+            List<Action<Action>> events = new List<Action<Action>>();
+            events.Add((Action cb) => Run(player, cb));
+            return events;
         }
 
-        private Profession findJob(Player player)
+        private static Profession findJob(Player player)
         {
             foreach (Profession job in player.jobs)
             {
@@ -31,13 +31,12 @@ namespace Events.Personal
             return null;
         }
 
-        public void Run()
+        private static void Run(Player player, Action callback)
         {
-            Player player = GameManager.Instance.player;
             Profession job = findJob(player);
             if (job == null)
             {
-                _callback?.Invoke();
+                callback?.Invoke();
                 return;
             }
 
@@ -46,13 +45,14 @@ namespace Events.Personal
             messages.Add("Personal Event:");
             messages.Add(string.Format("You lost your job as a {0}.", job.professionName));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages), ButtonChoiceType.NONE, messageBoxHandler);
+                string.Join("\n", messages), ButtonChoiceType.NONE,
+                (ButtonType b) => messageBoxHandler(b, callback));
         }
 
-        private void messageBoxHandler(ButtonType button)
+        private static void messageBoxHandler(ButtonType button, Action callback)
         {
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
-            _callback?.Invoke();
+            callback?.Invoke();
         }
     }
 }

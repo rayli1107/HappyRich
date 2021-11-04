@@ -95,17 +95,16 @@ namespace PlayerInfo
             numChild = 0;
             age = profession.startingAge;
             this.defaultHappiness = defaultHappiness;
-            divorcedPenalty = new System.Tuple<int, int>(0, 0);
+//            divorcedPenalty = new System.Tuple<int, int>(0, 0);
 
             contacts = new List<InvestmentPartner>();
 
             passiveStates = new List<AbstractPlayerState>()
             {
-                new OneJobState(),
-                new TwoJobState(),
-                new MarriageState(),
-                new DivorcedState(),
-                new ChildrenState(),
+                new OneJobState(this),
+                new TwoJobState(this),
+                new MarriageState(this),
+                new ChildrenState(this),
             };
 
             mentalStates = new List<AbstractPlayerState>();
@@ -169,6 +168,11 @@ namespace PlayerInfo
         public void AddMentalState(AbstractPlayerState state)
         {
             mentalStates.Add(state);
+        }
+
+        public void RemoveMentalState(AbstractPlayerState state)
+        {
+            mentalStates.Remove(state);
         }
 
         public SkillInfo GetSkillInfo(SkillType skillType)

@@ -873,10 +873,10 @@ MonoBehaviour:
   _colorBusiness: {r: 1, g: 0.8, b: 0, a: 1}
   _colorName: {r: 1, g: 0.62352943, b: 0, a: 1}
   _colorFranchise: {r: 0, g: 0, b: 1, a: 1}
-  _colorPlayerState: {r: 0.7529412, g: 0.3764706, b: 0.7529412, a: 1}
+  _colorPlayerState: {r: 1, g: 0.7529412, b: 1, a: 1}
   _colorWarning: {r: 255, g: 160, b: 0, a: 1}
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  _colorStock: {r: 0, g: 0, b: 1, a: 1}
+  _colorStock: {r: 0, g: 0.7529412, b: 1, a: 1}
   _colorSpecialist: {r: 0, g: 0.7529412, b: 1, a: 1}
 --- !u!114 &204261758
 MonoBehaviour:
@@ -1733,6 +1733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultTragedyPenalty: 20
   _tranquilTragedyPenalty: 5
+  _tragedyDuration: 3
 --- !u!4 &628575512
 Transform:
   m_ObjectHideFlags: 0
@@ -2264,8 +2265,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ae51cd244d1fc4bb1a523c6b9599a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _marriageProbability: 1
-  _divorceProbabilityRange: {x: 1, y: 1}
+  _marriageProbability: 0.75
+  _divorceProbabilityRange: {x: 0.2, y: 1}
   _divorcePenaltyDuration: 3
   _spouses:
   - {fileID: 11400000, guid: e03721210d32e3b4f8789f816c09afb0, type: 2}

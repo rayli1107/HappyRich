@@ -14,7 +14,7 @@ public class FamilyManager : MonoBehaviour
     [SerializeField]
     private Vector2 _divorceProbabilityRange = new Vector2(0f, 0.4f);
     [SerializeField]
-    private int _divorcePenaltyDuration = 3;
+    private int _divorcePenaltyDuration = 2;
     [SerializeField]
     private SpouseProfile[] _spouses;
     [SerializeField]

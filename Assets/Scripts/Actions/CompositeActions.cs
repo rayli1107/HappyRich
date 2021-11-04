@@ -23,11 +23,17 @@ namespace Actions
 
         private static void runRandomAction(List<Action<Action>> actions, System.Random random, Action callback)
         {
-            if (actions.Count > 0)
+            bool called = false;
+            if (actions != null && actions.Count > 0)
             {
-                actions[random.Next(actions.Count)]?.Invoke(callback);
+                Action<Action> action = actions[random.Next(actions.Count)];
+                if (action != null)
+                {
+                    action.Invoke(callback);
+                    called = true;
+                }
             }
-            else
+            if (!called)
             {
                 callback?.Invoke();
             }

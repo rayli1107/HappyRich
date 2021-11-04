@@ -2,7 +2,7 @@
 
 namespace PlayerState
 {
-    public class Frugality : AbstractPlayerState
+    public class Frugality : SelfReflectionState
     {
         public override string description => string.Join(
             "\n",
@@ -17,7 +17,7 @@ namespace PlayerState
         }
     }
 
-    public class Minimalism : AbstractPlayerState
+    public class Minimalism : SelfReflectionState
     {
         public override string description => string.Join(
             "\n",
@@ -34,7 +34,7 @@ namespace PlayerState
         }
     }
 
-    public class Hustling : AbstractPlayerState
+    public class Hustling : SelfReflectionState
     {
         public override string description => string.Join(
             "\n",
@@ -48,7 +48,7 @@ namespace PlayerState
         }
     }
 
-    public class Tranquil : AbstractPlayerState
+    public class Tranquil : SelfReflectionState
     {
         public override string description => string.Join(
             "\n",

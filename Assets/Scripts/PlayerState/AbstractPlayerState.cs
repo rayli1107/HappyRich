@@ -21,4 +21,12 @@ namespace PlayerState
 
         }
     }
+
+    public class SelfReflectionState : AbstractPlayerState
+    {
+        public SelfReflectionState(Player player, string name) : base(player, name)
+        {
+
+        }
+    }
 }

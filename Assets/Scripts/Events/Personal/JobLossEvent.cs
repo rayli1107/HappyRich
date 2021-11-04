@@ -8,14 +8,12 @@ namespace Events.Personal
 {
     public static class JobLossEvent
     {
-        public static List<Action<Action>> GetEvents(Player player)
+        public static Action<Action> GetEvent(Player player, System.Random random)
         {
-            List<Action<Action>> events = new List<Action<Action>>();
-            events.Add((Action cb) => Run(player, cb));
-            return events;
+            return cb => Run(player, random, cb);
         }
 
-        private static Profession findJob(Player player)
+        private static Profession findJob(Player player, System.Random random)
         {
             foreach (Profession job in player.jobs)
             {
@@ -26,14 +24,14 @@ namespace Events.Personal
             }
             if (player.jobs.Count > 0)
             {
-                return player.jobs[GameManager.Instance.Random.Next(player.jobs.Count)];
+                return player.jobs[random.Next(player.jobs.Count)];
             }
             return null;
         }
 
-        private static void Run(Player player, Action callback)
+        private static void Run(Player player, System.Random random, Action callback)
         {
-            Profession job = findJob(player);
+            Profession job = findJob(player, random);
             if (job == null)
             {
                 callback?.Invoke();

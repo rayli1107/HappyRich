@@ -47,7 +47,7 @@ namespace UI.Panels.PlayerDetails
             // Traits
             Transform parentTransform = _panelTraits.transform.parent;
             int index = _panelTraits.transform.GetSiblingIndex() + 1;
-            foreach (AbstractPlayerState trait in player.mentalStates)
+            foreach (AbstractPlayerState trait in player.mentalStates.FindAll(s => s is SelfReflectionState))
             {
                 Action action = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
                 AddItem(parentTransform, index, local.GetPlayerState(trait), action);

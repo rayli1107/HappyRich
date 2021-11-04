@@ -80,7 +80,7 @@ namespace PlayerInfo
         public List<InvestmentPartner> contacts { get; private set; }
         public List<SkillInfo> skills { get; private set; }
         public List<SpecialistInfo> specialists { get; private set; }
-        public System.Tuple<int, int> divorcedPenalty;
+
         public Player(Profession profession, int defaultHappiness)
         {
             oldJobs = new List<Profession>();
@@ -95,7 +95,6 @@ namespace PlayerInfo
             numChild = 0;
             age = profession.startingAge;
             this.defaultHappiness = defaultHappiness;
-//            divorcedPenalty = new System.Tuple<int, int>(0, 0);
 
             contacts = new List<InvestmentPartner>();
 
@@ -114,9 +113,10 @@ namespace PlayerInfo
         {
             DistributeCashflow();
             UpdateContacts();
-            divorcedPenalty = new System.Tuple<int, int>(
-                Mathf.Max(divorcedPenalty.Item1 - 1, 0),
-                divorcedPenalty.Item2);
+            foreach (AbstractPlayerState state in states)
+            {
+                state.OnPlayerTurnStart();
+            }
         }
 
         private void UpdateContacts()

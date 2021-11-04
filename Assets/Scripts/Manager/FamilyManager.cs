@@ -91,8 +91,7 @@ public class FamilyManager : MonoBehaviour
         else
         {
             float divorceProbability = getDivorceProbability(player);
-            if (!player.states.Exists(s => s is DivorcedPenaltyState) &&
-                _random.NextDouble() < divorceProbability)
+            if (_random.NextDouble() < divorceProbability)
             {
                 events.Add(DivorceAction.GetEvent(player));
             } else if (player.numChild < _newChildProbabilities.Length &&

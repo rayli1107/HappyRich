@@ -1731,6 +1731,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e25d8a27ab16a4eb35fccde9ae396d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultTragedyPenalty: 20
+  _tranquilTragedyPenalty: 5
 --- !u!4 &628575512
 Transform:
   m_ObjectHideFlags: 0
@@ -2262,8 +2264,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ae51cd244d1fc4bb1a523c6b9599a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _marriageProbability: 0.5
-  _divorceProbabilityRange: {x: 0, y: 0.3}
+  _marriageProbability: 1
+  _divorceProbabilityRange: {x: 1, y: 1}
   _divorcePenaltyDuration: 3
   _spouses:
   - {fileID: 11400000, guid: e03721210d32e3b4f8789f816c09afb0, type: 2}

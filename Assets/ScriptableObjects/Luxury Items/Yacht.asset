@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72f5fee3e32f64045a79e54889ced435, type: 3}
-  m_Name: Sailboat
+  m_Name: Yacht
   m_EditorClassIdentifier: 
-  itemName: Sailboat
+  itemName: Yacht
   itemPriceRange: {x: 50000, y: 150000}
   itemIncrement: 10000

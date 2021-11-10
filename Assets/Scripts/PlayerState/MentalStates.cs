@@ -62,4 +62,48 @@ namespace PlayerState
         }
     }
 
+    public class Extrovert : SelfReflectionState
+    {
+        public override string description => string.Join(
+            "\n",
+            "You realized that surrounding yourself with better people is part of " +
+            "what makes you successful.",
+            "",
+            string.Format("Happiness +{0} when you have {1} or more contacts.",
+                SelfImprovementManager.Instance.extrovertHappinessModifier,
+                SelfImprovementManager.Instance.extrovertThreshold));
+
+        public override int happinessModifier
+        {
+            get
+            {
+                if (player.contacts.Count + player.specialists.Count >=
+                    SelfImprovementManager.Instance.extrovertThreshold)
+                {
+                    return SelfImprovementManager.Instance.extrovertHappinessModifier;
+                }
+                return 0;
+            }
+        }
+            
+        public Extrovert(Player player) : base(player, "Extrovert")
+        {
+        }
+    }
+
+    public class Extravagant : SelfReflectionState
+    {
+        public override string description => string.Join(
+            "\n",
+            "You realized that you enjoy an extravagant lifestyle.",
+            "",
+            string.Format(
+                "Additional Happiness +{0} when you buy luxury items.",
+                LuxuryManager.Instance.happinessDelta));
+        public Extravagant(Player player) : base(player, "Extravagant")
+        {
+
+        }
+    }
+
 }

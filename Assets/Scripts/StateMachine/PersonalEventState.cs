@@ -19,8 +19,17 @@ namespace StateMachine
         private Action<Action> getGoodEvent(Player player, System.Random random)
         {
             List<Action<Action>> events = new List<Action<Action>>();
-            return CompositeActions.GetRandomAction(events, random);
+            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
         }
+
+        private Action<Action> getNeutralEvent(Player player, System.Random random)
+        {
+            List<Action<Action>> events = new List<Action<Action>>();
+            events.AddRange(LuxuryManager.Instance.GetEvents(player, random));
+            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+        }
+
+
         private Action<Action> getBadEvent(Player player, System.Random random)
         {
             List<Action<Action>> events = new List<Action<Action>>();
@@ -29,7 +38,13 @@ namespace StateMachine
             {
                 events.Add(TragedyEvents.GetEvent(player, random));
             }
-            return CompositeActions.GetRandomAction(events, random);
+            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+        }
+
+        private Action<Action> getFamilyEvent(Player player, System.Random random)
+        {
+            List<Action<Action>> events = FamilyManager.Instance.GetEvents(player);
+            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
         }
 
         public void EnterState(StateMachineParameter param)
@@ -38,14 +53,12 @@ namespace StateMachine
             System.Random random = GameManager.Instance.Random;
 
             List<Action<Action>> allEvents = new List<Action<Action>>();
-
             allEvents.Add(getBadEvent(player, random));
-            List<Action<Action>> familyEvents = FamilyManager.Instance.GetEvents(player);
-            if (familyEvents.Count > 0)
-            {
-                allEvents.Add(CompositeActions.GetRandomAction(familyEvents, random));
-            }
+            allEvents.Add(getGoodEvent(player, random));
+            allEvents.Add(getNeutralEvent(player, random));
+            allEvents.Add(getFamilyEvent(player, random));
 
+            allEvents = allEvents.FindAll(e => e != null);
             CompositeActions.GetRandomAction(allEvents, random)?.Invoke(
                 () => _stateMachine.ChangeState(_stateMachine.YearEndEventState));
         }

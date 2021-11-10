@@ -64,16 +64,16 @@ namespace UI.Panels.Templates
         private GameObject _buttonHelp;
 #pragma warning restore 0649
 
-        private void enableButton(GameObject gameObject, Action action)
+        private void enableButton(GameObject button, Action action)
         {
-            gameObject.gameObject.SetActive(action != null);
+            button.gameObject.SetActive(action != null);
             if (action != null)
             {
-                gameObject.GetComponentInChildren<Button>().onClick.AddListener(new UnityAction(action));
+                button.GetComponentInChildren<Button>().onClick.AddListener(new UnityAction(action));
             }
             else
             {
-                gameObject.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+                button.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             }
         }
 

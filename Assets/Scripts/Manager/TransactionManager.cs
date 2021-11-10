@@ -11,6 +11,7 @@ using BusinessEntity = System.Tuple<
 
 using Investment = System.Tuple<InvestmentPartner, int>;
 using UnityEngine;
+using PlayerState;
 
 public delegate void TransactionHandler(bool success);
 
@@ -138,6 +139,30 @@ public static class TransactionManager
             partialasset.fundsNeeded,
             (bool b) => buyBusinessHandler(
                 player, partialasset, asset, handler, b));
+    }
+
+    private static void buyLuxuryItemHandler(
+        Player player,
+        LuxuryItem item,
+        TransactionHandler handler,
+        bool success)
+    {
+        if (success)
+        {
+            player.portfolio.luxuryItems.Add(item);
+            player.AddMentalState(
+                new LuxuryHappinessState(
+                    player, LuxuryManager.Instance.luxuryHappinessDuration));
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyLuxuryItem(
+        Player player,
+        LuxuryItem item,
+        TransactionHandler handler)
+    {
+        TryDebit(player, item.value, b => buyLuxuryItemHandler(player, item, handler, b));
     }
 
 

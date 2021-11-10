@@ -13,11 +13,17 @@ public class SelfImprovementManager : MonoBehaviour
     private int _tranquilTragedyPenalty = 5;
     [SerializeField]
     private int _tragedyDuration = 2;
+    [SerializeField]
+    private int _extrovertThreshold = 10;
+    [SerializeField]
+    private int _extrovertHappinessModifier = 10;
 #pragma warning restore 0649
 
     public static SelfImprovementManager Instance { get; private set; }
     private List<Action<Player, Action<AbstractPlayerState>>> _selfReflectionStates;
     public int tragedyDuration => _tragedyDuration;
+    public int extrovertThreshold => _extrovertThreshold;
+    public int extrovertHappinessModifier => _extrovertHappinessModifier;
 
     private void Awake()
     {
@@ -38,6 +44,8 @@ public class SelfImprovementManager : MonoBehaviour
         _selfReflectionStates.Add((p, cb) => cb(new Minimalism(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Hustling(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Tranquil(p)));
+        _selfReflectionStates.Add((p, cb) => cb(new Extrovert(p)));
+        _selfReflectionStates.Add((p, cb) => cb(new Extravagant(p)));
     }
 
     public Action<Player, Action<AbstractPlayerState>> GetSelfReflectionState(System.Random random)

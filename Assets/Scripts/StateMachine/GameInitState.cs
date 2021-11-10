@@ -28,7 +28,8 @@
                 SpecialistManager.Instance != null &&
                 InvestmentManager.Instance != null &&
                 RiskyInvestmentManager.Instance != null &&
-                FamilyManager.Instance != null)
+                FamilyManager.Instance != null &&
+                LuxuryManager.Instance != null)
             {
                 RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
                 StockManager.Instance.Initialize(GameManager.Instance.Random);

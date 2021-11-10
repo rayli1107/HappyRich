@@ -23,6 +23,7 @@ namespace PlayerInfo
         public List<DistressedProperty> distressedProperties { get; private set; }
         public List<BusinessEntity> businessEntities { get; private set; }
         public List<AbstractTimedInvestment> timedInvestments { get; private set; }
+        public List<LuxuryItem> luxuryItems { get; private set; }
 
         public List<PartialInvestment> properties {
             get
@@ -78,6 +79,7 @@ namespace PlayerInfo
             get
             {
                 List<AbstractAsset> otherAssets = new List<AbstractAsset>();
+                otherAssets.AddRange(luxuryItems);
                 if (car != null)
                 {
                     otherAssets.Add(car);
@@ -123,6 +125,7 @@ namespace PlayerInfo
             distressedProperties = new List<DistressedProperty>();
             businessEntities = new List<BusinessEntity>();
             timedInvestments = new List<AbstractTimedInvestment>();
+            luxuryItems = new List<LuxuryItem>();
         }
 
         public void AddPersonalLoan(int amount)

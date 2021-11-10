@@ -878,6 +878,7 @@ MonoBehaviour:
   _colorSkill: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _colorStock: {r: 0, g: 0.7529412, b: 1, a: 1}
   _colorSpecialist: {r: 0, g: 0.7529412, b: 1, a: 1}
+  _colorLuxury: {r: 255, g: 215, b: 0, a: 1}
 --- !u!114 &204261758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1734,6 +1735,8 @@ MonoBehaviour:
   _defaultTragedyPenalty: 20
   _tranquilTragedyPenalty: 5
   _tragedyDuration: 3
+  _extrovertThreshold: 10
+  _extrovertHappinessModifier: 10
 --- !u!4 &628575512
 Transform:
   m_ObjectHideFlags: 0
@@ -3388,6 +3391,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113068084}
   m_CullTransparentMesh: 0
+--- !u!1 &1115969777
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115969779}
+  - component: {fileID: 1115969778}
+  m_Layer: 0
+  m_Name: Luxury Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1115969778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115969777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64e77a85885906499bc79e24561ddd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _luxuryItems:
+  - {fileID: 11400000, guid: c63586809aa2f8d4e985c551e11342f8, type: 2}
+  - {fileID: 11400000, guid: 0cfbdec28022a3b4e96983808b8615f3, type: 2}
+  _defaultLuxuryHappinessModifier: 10
+  _extravagantLuxuryHappinessModifier: 20
+  _luxuryHappinessDuration: 2
+--- !u!4 &1115969779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115969777}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1128526758
 GameObject:
   m_ObjectHideFlags: 0

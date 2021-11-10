@@ -2,17 +2,13 @@
 
 namespace PlayerState
 {
-    public class AbstractTimedPenaltyState : AbstractPlayerState
+    public class TimedPlayerState : AbstractPlayerState
     {
-        private int _penalty;
         private int _turn;
 
-        public override int happinessModifier => -1 * _penalty;
-
-        public AbstractTimedPenaltyState(Player player, int turn, int penalty, string message) : base(player, message)
+        public TimedPlayerState(Player player, int turn, string message) : base(player, message)
         {
             _turn = turn;
-            _penalty = penalty;
         }
 
         public override void OnPlayerTurnStart()
@@ -25,18 +21,20 @@ namespace PlayerState
         }
     }
 
-    public class DivorcedPenaltyState : AbstractTimedPenaltyState
+    public class DivorcedPenaltyState : TimedPlayerState
     {
+        private int _penalty;
         public override string description =>
             "You're still sad from your recent divorce.";
-
+        public override int happinessModifier => -1 * _penalty;
         public DivorcedPenaltyState(Player player, int turn, int penalty)
-            : base(player, turn, penalty, "Recently Divorced")
+            : base(player, turn, "Recently Divorced")
         {
+            _penalty = penalty;
         }
     }
 
-    public class TragedyPenaltyState : AbstractTimedPenaltyState
+    public class TragedyPenaltyState : TimedPlayerState
     {
         public override string description =>
             "You're still devastated from the recent tragedy.";
@@ -44,9 +42,19 @@ namespace PlayerState
         public override int happinessModifier =>
             -1 * SelfImprovementManager.Instance.GetTragedyPenalty(player);
 
-        public TragedyPenaltyState(Player player, int turn)
-            : base(player, turn, 0, "Recent tragedy")
+        public TragedyPenaltyState(Player player, int turn) : base(player, turn, "Recent tragedy")
         {
+        }
+    }
+
+    public class LuxuryHappinessState : TimedPlayerState
+    {
+        public override string description =>
+            "Buying luxurious items brings you (temporary) happiness.";
+        public override int happinessModifier => LuxuryManager.Instance.GetLuxuryHappinessModifier(player);
+        public LuxuryHappinessState(Player player, int turn) : base(player, turn, "Luxury Item")
+        {
+
         }
     }
 }

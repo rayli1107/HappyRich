@@ -30,6 +30,8 @@ public class Localization : MonoBehaviour
     private Color _colorStock = Color.blue;
     [SerializeField]
     private Color _colorSpecialist = Color.green;
+    [SerializeField]
+    private Color _colorLuxury = new Color(255, 215, 0);
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
@@ -79,6 +81,16 @@ public class Localization : MonoBehaviour
     public string GetJobName(Profession job)
     {
         return colorWrap(job.professionName, _colorJob);
+    }
+
+    public string GetLuxuryItem(LuxuryItemProfile item)
+    {
+        return GetLuxuryItem(item.itemName);
+    }
+
+    public string GetLuxuryItem(string name)
+    {
+        return colorWrap(name, _colorLuxury);
     }
 
     private string GetCurrencyFactor(int amount, int unit, string prefix)

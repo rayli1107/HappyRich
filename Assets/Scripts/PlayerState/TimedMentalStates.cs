@@ -1,4 +1,5 @@
 ﻿using PlayerInfo;
+using UnityEngine;
 
 namespace PlayerState
 {
@@ -14,6 +15,7 @@ namespace PlayerState
         public override void OnPlayerTurnStart()
         {
             --_turn;
+            Debug.LogFormat("OnPlayerTurnStart {0}", _turn);
             if (_turn < 0)
             {
                 player.RemoveMentalState(this);
@@ -53,6 +55,17 @@ namespace PlayerState
             "Buying luxurious items brings you (temporary) happiness.";
         public override int happinessModifier => LuxuryManager.Instance.GetLuxuryHappinessModifier(player);
         public LuxuryHappinessState(Player player, int turn) : base(player, turn, "Luxury Item")
+        {
+
+        }
+    }
+
+    public class FamilyVacationHappinessState : TimedPlayerState
+    {
+        public override string description => "Spending time with your family makes you happy.";
+        public override int happinessModifier => FamilyManager.Instance.familyVacationHappinessModifier.x;
+        public FamilyVacationHappinessState(Player player) : base(
+            player, FamilyManager.Instance.familyVacationHappinessModifier.y, "Family Vacation")
         {
 
         }

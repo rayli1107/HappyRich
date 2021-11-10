@@ -10,7 +10,13 @@ namespace Events.Personal
     {
         public static Action<Action> GetEvent(Player player, System.Random random)
         {
-            return cb => Run(player, random, cb);
+            Profession job = findJob(player, random);
+            if (job == null)
+            {
+                return null;
+            }
+
+            return cb => Run(player, job, cb);
         }
 
         private static Profession findJob(Player player, System.Random random)
@@ -29,15 +35,8 @@ namespace Events.Personal
             return null;
         }
 
-        private static void Run(Player player, System.Random random, Action callback)
+        private static void Run(Player player, Profession job, Action callback)
         {
-            Profession job = findJob(player, random);
-            if (job == null)
-            {
-                callback?.Invoke();
-                return;
-            }
-
             player.LoseJob(job);
             List<string> messages = new List<string>();
             messages.Add("Personal Event:");

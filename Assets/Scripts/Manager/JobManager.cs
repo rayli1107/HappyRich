@@ -11,6 +11,10 @@ public class JobManager : MonoBehaviour
     private Profession[] _partTimeJobs;
     [SerializeField]
     private float _applyOldJobSuccessChance = 0.5f;
+    [SerializeField]
+    private Vector2 _jobBonusMultiplier = new Vector2(0.1f, 0.4f);
+    [SerializeField]
+    private float _jobBonusIncrement = 0.1f;
 #pragma warning restore 0649
 
     public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
@@ -47,5 +51,13 @@ public class JobManager : MonoBehaviour
             }
         }
         return jobs[random.Next(jobs.Count)];
+    }
+
+    public int GetJobBonus(Profession job, System.Random random)
+    {
+        int increment = Mathf.FloorToInt(job.salary * _jobBonusIncrement);
+        int low = Mathf.FloorToInt(job.salary * _jobBonusMultiplier.x) / increment;
+        int high = Mathf.FloorToInt(job.salary * _jobBonusMultiplier.y) / increment;
+        return random.Next(low, high + 1) * increment;
     }
 }

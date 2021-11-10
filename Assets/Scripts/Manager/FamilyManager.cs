@@ -25,6 +25,8 @@ public class FamilyManager : MonoBehaviour
     private int _familyOrientedChildThreshold = 3;
     [SerializeField]
     private int _familyOrientedHappinessModifier = 10;
+    [SerializeField]
+    private Vector2Int _familyVacationHappinessModifier = new Vector2Int(10, 2);
 #pragma warning restore 0649
 
     public static FamilyManager Instance { get; private set; }
@@ -33,6 +35,7 @@ public class FamilyManager : MonoBehaviour
     public int childHappiness => _childHappiness;
     public int familyOrientedChildThreshold => _familyOrientedChildThreshold;
     public int familyOrientedHappinessModifier => _familyOrientedHappinessModifier;
+    public Vector2Int familyVacationHappinessModifier => _familyVacationHappinessModifier;
     private System.Random _random;
 
     private void Awake()

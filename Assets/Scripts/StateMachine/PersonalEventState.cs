@@ -16,17 +16,25 @@ namespace StateMachine
             _stateMachine = stateMachine;
         }
 
+        private Action<Action> getRandomEvent(List<Action<Action>> events, System.Random random)
+        {
+            events = events.FindAll(e => e != null);
+            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+        }
+
         private Action<Action> getGoodEvent(Player player, System.Random random)
         {
             List<Action<Action>> events = new List<Action<Action>>();
-            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+//            events.Add(JobBonusEvent.GetEvent(player, random));
+            events.Add(FamilyVacationEvent.GetEvent(player));
+            return getRandomEvent(events, random);
         }
 
         private Action<Action> getNeutralEvent(Player player, System.Random random)
         {
             List<Action<Action>> events = new List<Action<Action>>();
             events.AddRange(LuxuryManager.Instance.GetEvents(player, random));
-            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+            return getRandomEvent(events, random);
         }
 
 
@@ -38,13 +46,13 @@ namespace StateMachine
             {
                 events.Add(TragedyEvents.GetEvent(player, random));
             }
-            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+            return getRandomEvent(events, random);
         }
 
         private Action<Action> getFamilyEvent(Player player, System.Random random)
         {
             List<Action<Action>> events = FamilyManager.Instance.GetEvents(player);
-            return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
+            return getRandomEvent(events, random);
         }
 
         public void EnterState(StateMachineParameter param)
@@ -53,9 +61,9 @@ namespace StateMachine
             System.Random random = GameManager.Instance.Random;
 
             List<Action<Action>> allEvents = new List<Action<Action>>();
-            allEvents.Add(getBadEvent(player, random));
+            //allEvents.Add(getBadEvent(player, random));
             allEvents.Add(getGoodEvent(player, random));
-            allEvents.Add(getNeutralEvent(player, random));
+            //allEvents.Add(getNeutralEvent(player, random));
             allEvents.Add(getFamilyEvent(player, random));
 
             allEvents = allEvents.FindAll(e => e != null);

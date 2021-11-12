@@ -7,6 +7,36 @@ using UI.Panels.Templates;
 
 namespace Events.Personal
 {
+    public static class LotteryWinningEvent
+    {
+        public static Action<Action> GetEvent(Player player, int winning)
+        {
+            return cb => run(player, winning, cb);
+        }
+
+        private static void run(Player player, int winning, Action callback)
+        {
+
+            List<string> messages = new List<string>();
+            messages.Add("Personal Event:");
+            messages.Add(
+                string.Format(
+                    "You played the lottery and won {0}!",
+                    Localization.Instance.GetCurrency(winning)));
+            UI.UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", messages),
+                ButtonChoiceType.OK_ONLY,
+                _ => messageBoxHandler(player, winning, callback));
+        }
+
+        private static void messageBoxHandler(Player player, int winning, Action callback)
+        {
+            player.portfolio.AddCash(winning);
+            UI.UIManager.Instance.UpdatePlayerInfo(player);
+            callback?.Invoke();
+        }
+    }
+
     public static class FamilyVacationEvent
     {
         public static Action<Action> GetEvent(Player player)

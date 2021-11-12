@@ -854,6 +854,8 @@ MonoBehaviour:
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
   _applyOldJobSuccessChance: 0.5
+  _jobBonusMultiplier: {x: 0.1, y: 0.4}
+  _jobBonusIncrement: 0.1
 --- !u!114 &204261756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2282,6 +2284,7 @@ MonoBehaviour:
   _childHappiness: 10
   _familyOrientedChildThreshold: 3
   _familyOrientedHappinessModifier: 10
+  _familyVacationHappinessModifier: {x: 10, y: 2}
 --- !u!4 &851890455
 Transform:
   m_ObjectHideFlags: 0
@@ -4711,6 +4714,50 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b894ac91e5055745aa655330b13809b, type: 2}
   - {fileID: 11400000, guid: be37b0484ded9494e9cd4159cef80f01, type: 2}
   - {fileID: 11400000, guid: 15aa178e943fbb347a9c00a8640d816f, type: 2}
+--- !u!1 &1628399424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1628399426}
+  - component: {fileID: 1628399425}
+  m_Layer: 0
+  m_Name: Personal Event Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1628399425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628399424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11dacf73c4a1b245be22c7beae265f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lotteryWinning: {x: 10000, y: 50000, z: 10000}
+--- !u!4 &1628399426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628399424}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

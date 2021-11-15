@@ -12,6 +12,11 @@ namespace Events.Personal
     {
         public static Action<Action> GetEvent(Player player, System.Random random)
         {
+            if (player.states.Exists(s => s is TragedyPenaltyState))
+            {
+                return null;
+            }
+
             List<Action<Action>> events = new List<Action<Action>>();
             events.Add((Action cb) => runFamilyTragedyEvent(player, cb));
             if (player.spouse != null)

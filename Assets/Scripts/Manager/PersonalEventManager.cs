@@ -10,7 +10,9 @@ public class PersonalEventManager : MonoBehaviour
 {
 #pragma warning disable 0649
     [SerializeField]
-    private Vector3Int _lotteryWinning = new Vector3Int(10000, 50000, 10000);
+    private Vector3Int _lotteryWinning = new Vector3Int(1, 5, 10000);
+    [SerializeField]
+    private Vector3Int _carAccidentLoss = new Vector3Int(1, 5, 10);
 #pragma warning restore 0649
 
     public static PersonalEventManager Instance { get; private set; }
@@ -20,11 +22,14 @@ public class PersonalEventManager : MonoBehaviour
         Instance = this;
     }
 
-    private int getLotteryWinning(System.Random random)
+    public int GetLotteryWinning(System.Random random)
     {
-        int x = _lotteryWinning.x / _lotteryWinning.z;
-        int y = _lotteryWinning.y / _lotteryWinning.z;
-        return random.Next(x, y + 1) * _lotteryWinning.z;
+        return random.Next(_lotteryWinning.x, _lotteryWinning.y + 1) * _lotteryWinning.z;
+    }
+
+    public float GetCarAccidentLoss(System.Random random)
+    {
+        return random.Next(_carAccidentLoss.x, _carAccidentLoss.y + 1) / (float)_carAccidentLoss.z;
     }
 
     private Action<Action> getRandomEvent(List<Action<Action>> events, System.Random random)
@@ -38,7 +43,7 @@ public class PersonalEventManager : MonoBehaviour
         List<Action<Action>> events = new List<Action<Action>>();
         events.Add(JobBonusEvent.GetEvent(player, random));
         events.Add(FamilyVacationEvent.GetEvent(player));
-        events.Add(LotteryWinningEvent.GetEvent(player, getLotteryWinning(random)));
+        events.Add(LotteryWinningEvent.GetEvent(player, random));
         return getRandomEvent(events, random);
     }
 
@@ -53,11 +58,9 @@ public class PersonalEventManager : MonoBehaviour
     private Action<Action> getBadEvent(Player player, System.Random random)
     {
         List<Action<Action>> events = new List<Action<Action>>();
-        events.Add(JobLossEvent.GetEvent(player, random));
-        if (!player.states.Exists(s => s is TragedyPenaltyState))
-        {
-            events.Add(TragedyEvents.GetEvent(player, random));
-        }
+//        events.Add(JobLossEvent.GetEvent(player, random));
+//        events.Add(TragedyEvents.GetEvent(player, random));
+        events.Add(CarAccidentEvent.GetEvent(player, random));
         return getRandomEvent(events, random);
     }
 
@@ -75,9 +78,9 @@ public class PersonalEventManager : MonoBehaviour
 
         List<Action<Action>> allEvents = new List<Action<Action>>();
         allEvents.Add(getBadEvent(player, random));
-        allEvents.Add(getGoodEvent(player, random));
-        allEvents.Add(getNeutralEvent(player, random));
-        allEvents.Add(getFamilyEvent(player, random));
+//        allEvents.Add(getGoodEvent(player, random));
+//        allEvents.Add(getNeutralEvent(player, random));
+//        allEvents.Add(getFamilyEvent(player, random));
 
         allEvents = allEvents.FindAll(e => e != null);
         return CompositeActions.GetRandomAction(allEvents, random);

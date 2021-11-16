@@ -17,6 +17,8 @@ namespace PlayerInfo
         public PersonalLoan personalLoan { get; private set; }
         public Car car { get; private set; }
         public int cash { get; private set; }
+        public bool hasHealthInsurance;
+
         public Dictionary<string, PurchasedStock> stocks { get; private set; }
         public Dictionary<string, PurchasedStock> cryptos { get; private set; }
         public List<RentalProperty> rentalProperties { get; private set; }
@@ -126,6 +128,7 @@ namespace PlayerInfo
             businessEntities = new List<BusinessEntity>();
             timedInvestments = new List<AbstractTimedInvestment>();
             luxuryItems = new List<LuxuryItem>();
+            hasHealthInsurance = false;
         }
 
         public void AddPersonalLoan(int amount)

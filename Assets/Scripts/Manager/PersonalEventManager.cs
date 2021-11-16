@@ -13,9 +13,12 @@ public class PersonalEventManager : MonoBehaviour
     private Vector3Int _lotteryWinning = new Vector3Int(1, 5, 10000);
     [SerializeField]
     private Vector3Int _carAccidentLoss = new Vector3Int(1, 5, 10);
+    [SerializeField]
+    private int _healthInsuranceCost = 5000;
 #pragma warning restore 0649
 
     public static PersonalEventManager Instance { get; private set; }
+    public int healthInsuranceCost => _healthInsuranceCost;
 
     private void Awake()
     {

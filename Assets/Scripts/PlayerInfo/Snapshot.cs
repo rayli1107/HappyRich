@@ -61,6 +61,7 @@ namespace PlayerInfo
                 expenses += player.spouse.additionalExpense;
             }
             expenses += player.numChild * player.costPerChild;
+            expenses += player.portfolio.hasHealthInsurance ? PersonalEventManager.Instance.healthInsuranceCost : 0;
 
             expectedExpenses = expenses;
             actualExpenses = expenses;

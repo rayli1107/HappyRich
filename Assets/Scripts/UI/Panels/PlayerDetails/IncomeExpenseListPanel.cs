@@ -160,6 +160,19 @@ namespace UI.Panels.PlayerDetails
                     true);
             }
 
+            if (player.portfolio.hasHealthInsurance)
+            {
+                expenses += PersonalEventManager.Instance.healthInsuranceCost;
+                index = AddItemValueAsCurrency(
+                    _panelExpenses.transform.parent,
+                    index,
+                    _panelExpenses.tabCount + 1,
+                    "Health Insurance",
+                    PersonalEventManager.Instance.healthInsuranceCost,
+                    true);
+
+            }
+
             // Assets with negative cashflow
             foreach (AbstractAsset asset in player.portfolio.assets)
             {

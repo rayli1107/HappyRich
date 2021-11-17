@@ -10,7 +10,7 @@ namespace Actions
     {
         public static Action<Action> GetEvent(Player player, Spouse spouse)
         {
-            return (Action cb) => run(player, spouse, cb);
+            return cb => run(player, spouse, cb);
         }
 
         private static void showSpouseDetails(Spouse spouse)

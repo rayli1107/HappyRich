@@ -12,42 +12,12 @@ using BusinessEntity = System.Tuple<
 using Investment = System.Tuple<InvestmentPartner, int>;
 using UnityEngine;
 using PlayerState;
+using Actions;
 
 public delegate void TransactionHandler(bool success);
 
 public static class TransactionManager
 {
-    private static void TryDebit(Player player, int amount, TransactionHandler handler)
-    {
-        if (player.cash >= amount)
-        {
-            player.portfolio.AddCash(-1 * amount);
-            handler?.Invoke(true);
-        }
-        else
-        {
-            int loanAmount = amount - player.cash;
-            int maxLoanAmount = new Snapshot(player).availablePersonalLoanAmount;
-            if (loanAmount <= maxLoanAmount)
-            {
-                new Actions.TakePersonalLoan(player, amount, handler).Start();
-            }
-            else
-            {
-                Localization local = Localization.Instance;
-                string message = string.Format(
-                    "You'd need to take out a personal loan of {0} but the maximum amount " +
-                    "you can borrow is {1}",
-                    local.GetCurrency(loanAmount),
-                    local.GetCurrency(maxLoanAmount));
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    UI.Panels.Templates.ButtonChoiceType.OK_ONLY,
-                    (_) => handler?.Invoke(false));
-            }
-        }
-    }
-
     private static void buyRentalTransactionHandler(
         Player player,
         PartialInvestment partialAsset,
@@ -72,7 +42,7 @@ public static class TransactionManager
         RentalRealEstate rentalAsset,
         TransactionHandler handler)
     {
-        TryDebit(
+        TryDebit.Run(
             player,
             partialasset.fundsNeeded,
             (bool b) => buyRentalTransactionHandler(
@@ -103,7 +73,7 @@ public static class TransactionManager
         DistressedRealEstate distressedAsset,
         TransactionHandler handler)
     {
-        TryDebit(
+        TryDebit.Run(
             player,
             partialAsset.fundsNeeded,
             (bool b) => buyDistressedTransactionHandler(
@@ -134,7 +104,7 @@ public static class TransactionManager
         Business asset,
         TransactionHandler handler)
     {
-        TryDebit(
+        TryDebit.Run(
             player,
             partialasset.fundsNeeded,
             (bool b) => buyBusinessHandler(
@@ -162,7 +132,7 @@ public static class TransactionManager
         LuxuryItem item,
         TransactionHandler handler)
     {
-        TryDebit(player, item.value, b => buyLuxuryItemHandler(player, item, handler, b));
+        TryDebit.Run(player, item.value, b => buyLuxuryItemHandler(player, item, handler, b));
     }
 
 
@@ -179,7 +149,7 @@ public static class TransactionManager
     public static void ApplyJob(
         Player player, Profession job, TransactionHandler handler)
     {
-        TryDebit(
+        TryDebit.Run(
             player,
             job.jobCost,
             (bool b) => applyJobTransactionHandler(player, job, handler, b));
@@ -194,7 +164,7 @@ public static class TransactionManager
         bool success = false;
         int cost = amount * stock.value;
 
-        if (player.cash >= amount)
+        if (player.cash >= cost)
         {
             player.portfolio.AddCash(-1 * cost);
             player.portfolio.AddStock(stock, amount);
@@ -236,7 +206,7 @@ public static class TransactionManager
         int cost,
         TransactionHandler handler)
     {
-        TryDebit(
+        TryDebit.Run(
             player,
             cost,
             (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
@@ -311,7 +281,7 @@ public static class TransactionManager
         TransactionHandler handler)
     {
         int price = investment.originalPrice;
-        TryDebit(
+        TryDebit.Run(
             player,
             investment.originalPrice,
             (bool b) => buyTimedInvestmentDebitHandler(player, investment, handler, b));

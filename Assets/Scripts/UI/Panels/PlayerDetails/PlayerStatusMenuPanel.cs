@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using Actions;
+using PlayerInfo;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +44,21 @@ namespace UI.Panels.PlayerDetails
         public void ShowTraitsSkillListPanel()
         {
             UIManager.Instance.ShowTraitsSkillsListPanel();
+        }
+
+        public void OnBuyInsurance()
+        {
+            BuyHealthInsuranceAction.Run(player, Refresh);
+        }
+
+        public void OnCancelInsurance()
+        {
+            CancelHealthInsurance.Run(player, Refresh);
+        }
+
+        private void OnEnable()
+        {
+            Refresh();
         }
 
         public void Refresh()

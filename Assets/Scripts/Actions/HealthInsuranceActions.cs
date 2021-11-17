@@ -10,9 +10,10 @@ namespace Actions
     {
         public static void Run(Player player, Action callback)
         {
+            Localization local = Localization.Instance;
             string message = string.Format(
                 "Do you want to purchase health insurance for {0} a year?",
-                PersonalEventManager.Instance.healthInsuranceCost);
+                local.GetCurrency(PersonalEventManager.Instance.healthInsuranceCost, true));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_CANCEL,

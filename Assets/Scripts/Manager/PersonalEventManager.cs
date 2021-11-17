@@ -15,10 +15,15 @@ public class PersonalEventManager : MonoBehaviour
     private Vector3Int _carAccidentLoss = new Vector3Int(1, 5, 10);
     [SerializeField]
     private int _healthInsuranceCost = 5000;
+    [SerializeField]
+    private Vector3Int _personalAccidentLoss = new Vector3Int(5, 15, 10000);
+    [SerializeField]
+    private int _insuranceOutOfPocket = 5000;
 #pragma warning restore 0649
 
     public static PersonalEventManager Instance { get; private set; }
     public int healthInsuranceCost => _healthInsuranceCost;
+    public int insuranceOutOfPocket => _insuranceOutOfPocket;
 
     private void Awake()
     {
@@ -30,12 +35,18 @@ public class PersonalEventManager : MonoBehaviour
         return random.Next(_lotteryWinning.x, _lotteryWinning.y + 1) * _lotteryWinning.z;
     }
 
+    public int GetPersonalAccidentLoss(System.Random random)
+    {
+        return random.Next(_personalAccidentLoss.x, _personalAccidentLoss.y + 1) * _personalAccidentLoss.z;
+    }
+
     public float GetCarAccidentLoss(System.Random random)
     {
         return random.Next(_carAccidentLoss.x, _carAccidentLoss.y + 1) / (float)_carAccidentLoss.z;
     }
 
-    private Action<Action> getRandomEvent(List<Action<Action>> events, System.Random random)
+    private Action<Action> getRandomEvent(
+        List<Action<Action>> events, System.Random random)
     {
         events = events.FindAll(e => e != null);
         return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
@@ -61,9 +72,10 @@ public class PersonalEventManager : MonoBehaviour
     private Action<Action> getBadEvent(Player player, System.Random random)
     {
         List<Action<Action>> events = new List<Action<Action>>();
-//        events.Add(JobLossEvent.GetEvent(player, random));
-//        events.Add(TragedyEvents.GetEvent(player, random));
+        events.Add(JobLossEvent.GetEvent(player, random));
+        events.Add(TragedyEvents.GetEvent(player, random));
         events.Add(CarAccidentEvent.GetEvent(player, random));
+        events.Add(PersonalAccidentEvent.GetEvent(player, random));
         return getRandomEvent(events, random);
     }
 
@@ -81,10 +93,9 @@ public class PersonalEventManager : MonoBehaviour
 
         List<Action<Action>> allEvents = new List<Action<Action>>();
         allEvents.Add(getBadEvent(player, random));
-//        allEvents.Add(getGoodEvent(player, random));
-//        allEvents.Add(getNeutralEvent(player, random));
-//        allEvents.Add(getFamilyEvent(player, random));
-
+        allEvents.Add(getGoodEvent(player, random));
+        allEvents.Add(getNeutralEvent(player, random));
+        allEvents.Add(getFamilyEvent(player, random));
         allEvents = allEvents.FindAll(e => e != null);
         return CompositeActions.GetRandomAction(allEvents, random);
     }

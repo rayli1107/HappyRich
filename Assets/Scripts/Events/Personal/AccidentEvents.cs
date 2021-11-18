@@ -32,7 +32,7 @@ namespace Events.Personal
             messages.Add("Personal Event:");
             messages.Add(
                 string.Format(
-                    "You got into an accident and had to pay {0} for surgery. " +
+                    "You injured yourself and had to pay {0} for surgery. " +
                     "Fortunately since you have insurance, you only need to pay {1} " +
                     "out of pocket.",
                     Localization.Instance.GetCurrency(original, true),
@@ -52,7 +52,7 @@ namespace Events.Personal
             messages.Add("Personal Event:");
             messages.Add(
                 string.Format(
-                    "You got into an accident and had to pay {0} for surgery. " +
+                    "You injured yourself and had to pay {0} for surgery. " +
                     "Unfortunately since you don't have insurance you had to pay " +
                     "the full amount.",
                     Localization.Instance.GetCurrency(loss, true)));

@@ -19,6 +19,8 @@ public class PersonalEventManager : MonoBehaviour
     private Vector3Int _personalAccidentLoss = new Vector3Int(5, 15, 10000);
     [SerializeField]
     private int _insuranceOutOfPocket = 5000;
+    [SerializeField]
+    private int _oldAgeThreshold = 50;
 #pragma warning restore 0649
 
     public static PersonalEventManager Instance { get; private set; }
@@ -68,7 +70,6 @@ public class PersonalEventManager : MonoBehaviour
         return getRandomEvent(events, random);
     }
 
-
     private Action<Action> getBadEvent(Player player, System.Random random)
     {
         List<Action<Action>> events = new List<Action<Action>>();
@@ -85,6 +86,13 @@ public class PersonalEventManager : MonoBehaviour
         return getRandomEvent(events, random);
     }
 
+    private Action<Action> getOldAgeEvent(Player player, System.Random random)
+    {
+        List<Action<Action>> events = new List<Action<Action>>();
+        events.Add(PersonalAccidentEvent.GetEvent(player, random));
+        return getRandomEvent(events, random);
+    }
+
 
     public Action<Action> GetPersonalEvent()
     {
@@ -96,6 +104,11 @@ public class PersonalEventManager : MonoBehaviour
         allEvents.Add(getGoodEvent(player, random));
         allEvents.Add(getNeutralEvent(player, random));
         allEvents.Add(getFamilyEvent(player, random));
+        if (player.age >= _oldAgeThreshold)
+        {
+            allEvents.Add(getOldAgeEvent(player, random));
+        }
+
         allEvents = allEvents.FindAll(e => e != null);
         return CompositeActions.GetRandomAction(allEvents, random);
     }

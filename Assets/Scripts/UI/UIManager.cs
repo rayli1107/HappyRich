@@ -73,6 +73,8 @@ namespace UI
         [SerializeField]
         private CharacterSelectionPanel _prefabCharacterSelectionPanel;
         [SerializeField]
+        private TimedModalObject _prefabTimedTransitionScreen;
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
 
         [SerializeField]
@@ -418,6 +420,18 @@ namespace UI
             messageBox.startTransactionHandler = startTransactionHandler;
 
             panel.Refresh();
+        }
+
+        public void ShowTimedTransitionScreen(
+            string message,
+            Color color,
+            Action callback)
+        {
+            TimedModalObject screen = Instantiate(
+                _prefabTimedTransitionScreen, transform);
+            screen.text = message;
+            screen.color = color;
+            screen.callback = callback;
         }
 
         public void ShowContactListPanel(

@@ -56,7 +56,9 @@ namespace StateMachine
 
         public void Update()
         {
-            _stateMachine.ChangeState(_stateMachine.StockMarketEventState);
+            StateMachineParameter param = new StateMachineParameter();
+            param.newYearEnterMarketEventState = false;
+            _stateMachine.ChangeState(_stateMachine.YearStartState, param);
         }
     }
 }

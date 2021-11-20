@@ -53,7 +53,9 @@ namespace StateMachine
 
         private void onEventDone()
         {
-            _stateMachine.ChangeState(_stateMachine.MarketEventState);
+            StateMachineParameter param = new StateMachineParameter();
+            param.newYearEnterMarketEventState = true;
+            _stateMachine.ChangeState(_stateMachine.YearStartState, param);
         }
 
     }

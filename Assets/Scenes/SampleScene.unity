@@ -4744,6 +4744,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lotteryWinning: {x: 10000, y: 50000, z: 10000}
+  _carAccidentLoss: {x: 1, y: 5, z: 10}
+  _healthInsuranceCost: 5000
+  _personalAccidentLoss: {x: 5, y: 15, z: 10000}
+  _insuranceOutOfPocket: 5000
+  _oldAgeThreshold: 50
 --- !u!4 &1628399426
 Transform:
   m_ObjectHideFlags: 0
@@ -5333,6 +5338,8 @@ MonoBehaviour:
   _prefabTraitsSkillsListPanel: {fileID: 5051386895941644146, guid: e8df78297be4a7146b2223cc3ed3adc2,
     type: 3}
   _prefabCharacterSelectionPanel: {fileID: 7917740513139014103, guid: 33b1a59ef7393314883a63b4e0f5287d,
+    type: 3}
+  _prefabTimedTransitionScreen: {fileID: 3058492120616019882, guid: 51d722c350ef0b44fabebb2ec454efeb,
     type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}

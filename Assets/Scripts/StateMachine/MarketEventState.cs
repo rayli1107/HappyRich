@@ -1,6 +1,7 @@
 ﻿using Actions;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace StateMachine
 {
@@ -14,6 +15,12 @@ namespace StateMachine
         }
 
         public void EnterState(StateMachineParameter param)
+        {
+            UI.UIManager.Instance.ShowTimedTransitionScreen(
+                "Market Event", Color.yellow, runMarketEvent);
+        }
+
+        private void runMarketEvent()
         {
             List<Action<Action>> actions = new List<Action<Action>>();
             actions.AddRange(StockManager.Instance.GetMarketEventActions(GameManager.Instance.Random));

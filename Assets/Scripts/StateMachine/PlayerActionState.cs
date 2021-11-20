@@ -16,6 +16,12 @@ namespace StateMachine
 
         public void EnterState(StateMachineParameter param)
         {
+            UI.UIManager.Instance.ShowTimedTransitionScreen(
+                "Player's Turn", Color.green, onPlayerStart);
+        }
+
+        private void onPlayerStart()
+        {
             Player player = GameManager.Instance.player;
             if (_firstTurn)
             {

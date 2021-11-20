@@ -5,6 +5,7 @@ namespace StateMachine
     public class StateMachineParameter
     {
         public string message;
+        public bool newYearEnterMarketEventState = true;
     }
 
     public class StateMachine
@@ -23,6 +24,7 @@ namespace StateMachine
         public GameOverState GameOverState { get; private set; }
         public VictoryState VictoryState { get; private set; }
         public YearEndEventState YearEndEventState { get; private set; }
+        public YearStartState YearStartState { get; private set; }
         public GameExitState GameExitState { get; private set; }
 
         private IState _currentState;
@@ -44,6 +46,7 @@ namespace StateMachine
             GameOverState = new GameOverState(this);
             VictoryState = new VictoryState(this);
             YearEndEventState = new YearEndEventState(this);
+            YearStartState = new YearStartState(this);
 
             _currentState = GameInitState;
         }

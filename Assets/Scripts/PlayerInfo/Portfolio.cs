@@ -55,12 +55,11 @@ namespace PlayerInfo
             }
         }
 
-        public List<AbstractAsset> assets
+        public List<AbstractAsset> liquidAssets
         {
             get
             {
                 List<AbstractAsset> assets = new List<AbstractAsset>();
-                assets.AddRange(otherAssets);
                 foreach (KeyValuePair<string, PurchasedStock> entry in stocks)
                 {
                     assets.Add(entry.Value);
@@ -69,6 +68,17 @@ namespace PlayerInfo
                 {
                     assets.Add(entry.Value);
                 }
+                return assets;
+            }
+        }
+
+        public List<AbstractAsset> assets
+        {
+            get
+            {
+                List<AbstractAsset> assets = new List<AbstractAsset>();
+                assets.AddRange(otherAssets);
+                assets.AddRange(liquidAssets);
                 assets.AddRange(properties);
                 assets.AddRange(businesses);
                 assets.AddRange(timedInvestments);

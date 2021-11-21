@@ -47,7 +47,7 @@ namespace StateMachine
 
 
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
-            GameManager.Instance.player.portfolio.AddCash(1000000);
+//            GameManager.Instance.player.portfolio.AddCash(1000000);
         }
 
         public void ExitState()

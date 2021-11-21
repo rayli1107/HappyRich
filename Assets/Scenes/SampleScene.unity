@@ -3620,7 +3620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultAvailableInvestments: 2
   _hustledAvailableInvestments: 3
-  _additionalInvestmentRealEstateBroker: 5
+  _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1
 --- !u!1 &1169222138
 GameObject:
@@ -5340,6 +5340,8 @@ MonoBehaviour:
   _prefabCharacterSelectionPanel: {fileID: 7917740513139014103, guid: 33b1a59ef7393314883a63b4e0f5287d,
     type: 3}
   _prefabTimedTransitionScreen: {fileID: 3058492120616019882, guid: 51d722c350ef0b44fabebb2ec454efeb,
+    type: 3}
+  _prefabRaisePersonalFundsMessageBox: {fileID: 2406053273671097298, guid: 644a0a6b71aff4a41acad7f64515b405,
     type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
     type: 3}

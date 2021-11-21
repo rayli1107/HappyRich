@@ -75,6 +75,8 @@ namespace UI
         [SerializeField]
         private TimedModalObject _prefabTimedTransitionScreen;
         [SerializeField]
+        private RaisePersonalFundsMessageBox _prefabRaisePersonalFundsMessageBox;
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
 
         [SerializeField]
@@ -252,8 +254,14 @@ namespace UI
 
         public void ShowStockMarketPanel()
         {
+            ShowStockMarketPanel(null);
+        }
+
+        public void ShowStockMarketPanel(MessageBoxHandler handler)
+        {
             StockMarketPanel panel = Instantiate(_prefabStockMarketPanel, transform);
             panel.player = GameManager.Instance.player;
+            panel.GetComponent<MessageBox>().messageBoxHandler = handler;
             panel.Refresh();
         }
 
@@ -509,6 +517,19 @@ namespace UI
             panel.professionIndex = 0;
             panel.selectionCallback = callback;
             panel.gameObject.SetActive(true);
+        }
+
+        public void ShowRaisePersonalFundsMessageBox(
+            Player player,
+            int amount,
+            Action<bool> callback)
+        {
+            RaisePersonalFundsMessageBox messageBox = Instantiate(
+                _prefabRaisePersonalFundsMessageBox, transform);
+            messageBox.player = player;
+            messageBox.amount = amount;
+            messageBox.callback = callback;
+            messageBox.Refresh();
         }
 
         public void DestroyAllModal()

@@ -8,57 +8,31 @@ namespace Actions
 {
     public static class TryDebit
     {
-        private static void messageBoxHandler(
-            ButtonType button,
-            Player player, 
+        private static void raiseHandler(
+            Player player,
             int amount,
-            Action<bool> handler)
+            bool success,
+            Action<bool> callback)
         {
-            bool success = false;
-            if (button == ButtonType.OK)
+            if (success)
             {
-                int loanAmount = amount - player.cash;
-                player.portfolio.AddCash(-1 * player.cash);
-                player.portfolio.AddPersonalLoan(loanAmount);
-                success = true;
+                Debug.Assert(player.portfolio.cash >= amount);
+                player.portfolio.AddCash(-1 * amount);
             }
-            handler?.Invoke(success);
+            callback?.Invoke(success);
         }
 
-        public static void Run(Player player, int amount, Action<bool> handler)
+        public static void Run(Player player, int amount, Action<bool> callback)
         {
             int loanAmount = Mathf.Max(amount - player.cash, 0);
-            int maxLoanAmount = new Snapshot(player).availablePersonalLoanAmount;
-            Localization local = Localization.Instance;
             if (loanAmount == 0)
             {
-                player.portfolio.AddCash(-1 * amount);
-                handler?.Invoke(true);
-            }
-            else if (loanAmount <= maxLoanAmount)
-            {
-                int interst = loanAmount * InterestRateManager.Instance.personalLoanRate / 100;
-                List<string> message = new List<string>();
-                message.Add(string.Format("Take out a personal loan of {0}?",
-                    local.GetCurrency(loanAmount, true)));
-                message.Add(string.Format("You will need to pay an additional annual interest of {0}",
-                    local.GetCurrency(interst, true)));
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    string.Join("\n", message),
-                    ButtonChoiceType.OK_CANCEL,
-                    b => messageBoxHandler(b, player, amount, handler));
+                raiseHandler(player, amount, true, callback);
             }
             else
             {
-                string message = string.Format(
-                    "You'd need to take out a personal loan of {0} but the maximum amount " +
-                    "you can borrow is {1}",
-                    local.GetCurrency(loanAmount),
-                    local.GetCurrency(maxLoanAmount));
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_ONLY,
-                    (_) => handler?.Invoke(false));
+                UI.UIManager.Instance.ShowRaisePersonalFundsMessageBox(
+                    player, amount, b => raiseHandler(player, amount, b, callback));
             }
         }
     }

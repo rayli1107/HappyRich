@@ -19,10 +19,11 @@ namespace StateMachine
             UI.UIManager.Instance.ShowTimedTransitionScreen(
                 "Market Event", Color.yellow, runMarketEvent);
         }
-
         private void runMarketEvent()
         {
-            List<Action<Action>> actions = new List<Action<Action>>();
+            MarketEventManager.Instance.GetMarketEvent()?.Invoke(
+                () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));
+/*            List<Action<Action>> actions = new List<Action<Action>>();
             actions.AddRange(StockManager.Instance.GetMarketEventActions(GameManager.Instance.Random));
             actions.AddRange(
                 RiskyInvestmentManager.Instance.GetMarketEventActions(
@@ -31,7 +32,7 @@ namespace StateMachine
                 InvestmentPartnerManager.Instance.GetMarketEventActions(
                     GameManager.Instance.player, GameManager.Instance.Random));
             CompositeActions.GetAndAction(actions)?.Invoke(
-                () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));
+                () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));*/
         }
 
         public void ExitState()

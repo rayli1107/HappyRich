@@ -67,7 +67,10 @@ namespace UI.Panels
             if (_imageProfession != null)
             {
                 _imageProfession.enabled = job != null;
-                _imageProfession.sprite = job.image;
+                if (job != null)
+                {
+                    _imageProfession.sprite = job.image;
+                }
             }
 
             if (_textProfession != null)

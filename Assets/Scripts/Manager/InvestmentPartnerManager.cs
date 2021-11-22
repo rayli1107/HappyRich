@@ -98,7 +98,7 @@ public class InvestmentPartnerManager : MonoBehaviour
     }
 
 
-    public List<Action<Action>> GetMarketEventActions(Player player, System.Random random)
+    public Action<Action> GetMarketEvent(Player player, System.Random random)
     {
         List<Action<Action>> actions = new List<Action<Action>>();
 
@@ -107,18 +107,11 @@ public class InvestmentPartnerManager : MonoBehaviour
         {
             if (info.specialistType == SpecialistType.VENTURE_CAPITALIST)
             {
-                has_vc = true;
-                break;
+                InvestmentPartner partner = GetPartner(random);
+                return cb => FindNewInvestors.FindInvestor(player, partner, cb);
             }
         }
-
-        if (has_vc && random.NextDouble() < _marketEventNewInvestorChance)
-        {
-            InvestmentPartner partner = GetPartner(random);
-            actions.Add(
-                (Action cb) => FindNewInvestors.FindInvestor(player, partner, cb));
-        }
-        return actions;
+        return null;
     }
 
     public Action<Action> GetAction(Player player, System.Random random)

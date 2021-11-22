@@ -17,14 +17,11 @@ namespace Events.Personal
         private static void run(Player player, System.Random random, Action callback)
         {
             int winning = PersonalEventManager.Instance.GetLotteryWinning(random);
-            List<string> messages = new List<string>();
-            messages.Add("Personal Event:");
-            messages.Add(
-                string.Format(
-                    "You played the lottery and won {0}!",
-                    Localization.Instance.GetCurrency(winning)));
+            string message = string.Format(
+                "You played the lottery and won {0}!",
+                Localization.Instance.GetCurrency(winning));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages),
+                message,
                 ButtonChoiceType.OK_ONLY,
                 _ => messageBoxHandler(player, winning, callback));
         }

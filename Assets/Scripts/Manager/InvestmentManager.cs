@@ -1,5 +1,6 @@
 ﻿using Actions;
 using Assets;
+using Events.Market;
 using PlayerInfo;
 using PlayerState;
 using ScriptableObjects;
@@ -21,6 +22,8 @@ public class InvestmentManager : MonoBehaviour
     private int _additionalInvestmentRealEstateBroker = 1;
     [SerializeField]
     private int _additionalInvestmentEntrepreneaur = 1;
+    [SerializeField]
+    private float _incomeMultiplierModifier = 0.05f;
 #pragma warning restore 0649
 
     public static InvestmentManager Instance;
@@ -109,5 +112,15 @@ public class InvestmentManager : MonoBehaviour
             RealEstateManager.Instance.GetLargeInvestmentAction,
             BusinessManager.Instance.GetLargeInvestmentAction,
             callback);
+    }
+
+    public Action<Action> GetMarketEvent(Player player, System.Random random)
+    {
+        List<Action<Action>> events = new List<Action<Action>>();
+        events.Add(RentalBoomEvent.GetEvent(player, _incomeMultiplierModifier));
+        events.Add(RentalCrashEvent.GetEvent(player, _incomeMultiplierModifier));
+        events.Add(MarketBoomEvent.GetEvent(player, _incomeMultiplierModifier));
+        events.Add(MarketCrashEvent.GetEvent(player, _incomeMultiplierModifier));
+        return CompositeActions.GetRandomAction(events, random);
     }
 }

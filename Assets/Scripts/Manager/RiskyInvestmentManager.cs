@@ -62,29 +62,23 @@ public class RiskyInvestmentManager : MonoBehaviour
         return new StartupExitBankruptAction();
     }
 
-    public List<Action<Action>> GetMarketEventActions(Player player, System.Random random)
+    public Action<Action> GetMarketEvent(Player player, System.Random random)
     {
-        List<Action<Action>> actions = new List<Action<Action>>();
-        if (random.NextDouble() < _newRiskyInvestmentChance)
+        string idea = _startupIdeas[_random.Next(_startupIdeas.Length)];
+        StartupExitAction exitAction;
+        switch (_random.Next(3))
         {
-            string idea = _startupIdeas[_random.Next(_startupIdeas.Length)];
-            StartupExitAction exitAction;
-            switch (_random.Next(3))
-            {
-                case 0:
-                    exitAction = getExitAction(player, _lowRiskReturnProfile);
-                    break;
-                case 1:
-                    exitAction = getExitAction(player, _mediumRiskReturnProfile);
-                    break;
-                default:
-                    exitAction = getExitAction(player, _highRiskReturnProfile);
-                    break;
-            }
-
-            actions.Add(
-                (Action cb) => StartupInvestmentAction.Start(player, idea, _turnCount, exitAction, cb));
+            case 0:
+                exitAction = getExitAction(player, _lowRiskReturnProfile);
+                break;
+            case 1:
+                exitAction = getExitAction(player, _mediumRiskReturnProfile);
+                break;
+            default:
+                exitAction = getExitAction(player, _highRiskReturnProfile);
+                break;
         }
-        return actions;
+
+        return cb => StartupInvestmentAction.Start(player, idea, _turnCount, exitAction, cb);
     }
 }

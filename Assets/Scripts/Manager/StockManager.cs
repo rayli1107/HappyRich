@@ -160,14 +160,13 @@ public class StockManager : MonoBehaviour
             message, ButtonChoiceType.OK_ONLY, (_) => callback?.Invoke());
     }
 
-    public List<Action<Action>> GetMarketEventActions(System.Random random)
+    public Action<Action> GetMarketEvent(System.Random random)
     {
         List<Action<Action>> actions = new List<Action<Action>>();
-        if (cryptoCurrencies.Count < numCryptoCurrencies &&
-            random.NextDouble() < _newCryptoChance)
+        if (cryptoCurrencies.Count < numCryptoCurrencies)
         {
-            actions.Add((Action cb) => getMarketEventNewCrypto(random, cb));
+            return cb => getMarketEventNewCrypto(random, cb);
         }
-        return actions;
+        return null;
     }
 }

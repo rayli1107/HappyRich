@@ -34,15 +34,12 @@ namespace Events.Personal
         private static void run(Player player, Profession job, System.Random random, Action callback)
         {
             int bonus = JobManager.Instance.GetJobBonus(job, random);
-            List<string> messages = new List<string>();
-            messages.Add("Personal Event:");
-            messages.Add(
-                string.Format(
-                    "Your boss decided to give you an year end bonus of {0} " +
-                    "because of your exemplary performance at work.",
-                    Localization.Instance.GetCurrency(bonus)));
+            string message = string.Format(
+                "Your boss decided to give you an year end bonus of {0} " +
+                "because of your exemplary performance at work.",
+                Localization.Instance.GetCurrency(bonus));
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages),
+                message,
                 ButtonChoiceType.OK_ONLY,
                 _ => messageBoxHandler(player, bonus, callback));
         }

@@ -3622,6 +3622,7 @@ MonoBehaviour:
   _hustledAvailableInvestments: 3
   _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1
+  _incomeMultiplierModifier: 0.05
 --- !u!1 &1169222138
 GameObject:
   m_ObjectHideFlags: 0
@@ -4724,8 +4725,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1628399426}
   - component: {fileID: 1628399425}
+  - component: {fileID: 1628399427}
   m_Layer: 0
-  m_Name: Personal Event Manager
+  m_Name: Annual Event Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4743,7 +4745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11dacf73c4a1b245be22c7beae265f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lotteryWinning: {x: 10000, y: 50000, z: 10000}
+  _lotteryWinning: {x: 1, y: 10, z: 10000}
   _carAccidentLoss: {x: 1, y: 5, z: 10}
   _healthInsuranceCost: 5000
   _personalAccidentLoss: {x: 5, y: 15, z: 10000}
@@ -4763,6 +4765,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1628399427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628399424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e43a140989e80e45bbae711bb21ddc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

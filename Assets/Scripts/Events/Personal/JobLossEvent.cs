@@ -38,11 +38,11 @@ namespace Events.Personal
         private static void Run(Player player, Profession job, Action callback)
         {
             player.LoseJob(job);
-            List<string> messages = new List<string>();
-            messages.Add("Personal Event:");
-            messages.Add(string.Format("You lost your job as a {0}.", job.professionName));
+            string message = string.Format(
+                "You lost your job as a {0}.", job.professionName);
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages), ButtonChoiceType.NONE,
+                message,
+                ButtonChoiceType.OK_ONLY,
                 (ButtonType b) => messageBoxHandler(b, callback));
         }
 

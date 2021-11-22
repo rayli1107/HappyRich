@@ -16,6 +16,10 @@ namespace Assets
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
 
+        private int _baseIncome;
+        public float multiplier;
+        public override int totalIncome => Mathf.FloorToInt(_baseIncome * multiplier);
+
         public AbstractSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
         private bool _isDebtInterestDelayed;
@@ -54,7 +58,7 @@ namespace Assets
                 int interest = 0;
                 foreach (AbstractSecuredLoan loan in securedLoans)
                 {
-                    Debug.LogFormat("Loan delayed interest {0}", loan.delayedExpense);
+//                    Debug.LogFormat("Loan delayed interest {0}", loan.delayedExpense);
                     interest += loan.delayedExpense;
                 }
                 return interest;
@@ -67,8 +71,10 @@ namespace Assets
             int marketValue,
             int annualIncome,
             bool isDebtInterestDelayed)
-            : base(name, marketValue, annualIncome)
+            : base(name, marketValue, 0)
         {
+            _baseIncome = annualIncome;
+            multiplier = 1;
             this.originalPrice = originalPrice;
             _isDebtInterestDelayed = isDebtInterestDelayed;
         }

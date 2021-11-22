@@ -22,11 +22,8 @@ namespace Events.Personal
 
         private static void run(Player player, Action callback)
         {
-            List<string> messages = new List<string>();
-            messages.Add("Personal Event:");
-            messages.Add("You decided to take a vacation and spend some time with your family");
             UI.UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", messages),
+                "You decided to take a vacation and spend some time with your family",
                 ButtonChoiceType.OK_ONLY,
                 _ => messageBoxHandler(player, callback));
         }

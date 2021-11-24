@@ -4,6 +4,7 @@ using PlayerInfo;
 using PlayerState;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Templates;
 using UnityEngine;
 
 public class MarketEventManager : MonoBehaviour
@@ -25,6 +26,14 @@ public class MarketEventManager : MonoBehaviour
         return events.Count == 0 ? null : CompositeActions.GetRandomAction(events, random);
     }
 
+    private void noOpEvent(Action callback)
+    {
+        UI.UIManager.Instance.ShowSimpleMessageBox(
+            "Nothing special happened in the market this year.",
+            ButtonChoiceType.OK_ONLY,
+            _ => callback?.Invoke());
+    }
+
     public Action<Action> GetMarketEvent()
     {
         Player player = GameManager.Instance.player;        
@@ -35,8 +44,8 @@ public class MarketEventManager : MonoBehaviour
         allEvents.Add(StockManager.Instance.GetMarketEvent(random));
         allEvents.Add(RiskyInvestmentManager.Instance.GetMarketEvent(player, random));
         allEvents.Add(InvestmentPartnerManager.Instance.GetMarketEvent(player, random));
-
+        allEvents.Add(RealEstateManager.Instance.GetMarketEvent(player, random));
         Action <Action> marketEvent = getRandomEvent(allEvents, random);
-        return marketEvent;
+        return marketEvent == null ? cb => noOpEvent(cb) : marketEvent;
     }
 }

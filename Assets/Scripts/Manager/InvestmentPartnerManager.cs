@@ -51,8 +51,6 @@ public class InvestmentPartnerManager : MonoBehaviour
     private string[] _names;
     [SerializeField]
     private int _defaultDuration = 10;
-    [SerializeField]
-    private float _marketEventNewInvestorChance = 0.2f;
 #pragma warning restore 0649
 
     public static InvestmentPartnerManager Instance { get; private set; }
@@ -102,7 +100,6 @@ public class InvestmentPartnerManager : MonoBehaviour
     {
         List<Action<Action>> actions = new List<Action<Action>>();
 
-        bool has_vc = false;
         foreach (SpecialistInfo info in player.specialists)
         {
             if (info.specialistType == SpecialistType.VENTURE_CAPITALIST)

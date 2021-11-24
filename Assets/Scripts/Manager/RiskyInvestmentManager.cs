@@ -19,8 +19,6 @@ public class RiskyInvestmentManager : MonoBehaviour
     private StartupExitReturnProfile _highRiskReturnProfile;
     [SerializeField]
     private int _turnCount = 5;
-    [SerializeField]
-    private float _newRiskyInvestmentChance = 0.15f;
 #pragma warning restore 0649
 
     public static RiskyInvestmentManager Instance { get; private set; }

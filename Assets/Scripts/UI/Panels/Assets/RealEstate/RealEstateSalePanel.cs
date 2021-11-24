@@ -14,13 +14,18 @@ namespace UI.Panels.Assets
         [SerializeField]
         protected TextMeshProUGUI _textMessage;
         [SerializeField]
+        protected TextMeshProUGUI _textEstimatedValue;
+        [SerializeField]
         protected TextMeshProUGUI _textOfferPrice;
+        [SerializeField]
+        protected TextMeshProUGUI _textTotalIncome;
         [SerializeField]
         protected TextMeshProUGUI _textCurrentLoanAmount;
         [SerializeField]
-        protected TextMeshProUGUI _textTotalGainOnSale;
+        protected TextMeshProUGUI _textTotalReturnOnSale;
         [SerializeField]
-        protected TextMeshProUGUI _textOwnershipInterest;
+        protected TextMeshProUGUI _textOriginalPurchasePrice;
+
 #pragma warning restore 0649
 
         public Player player;
@@ -51,6 +56,14 @@ namespace UI.Panels.Assets
                     local.GetCurrency(finalOffer));
             }
 
+            if (_textEstimatedValue != null)
+            {
+                _textEstimatedValue.text =
+                    player.HasSkill(SkillType.REAL_ESTATE_VALUATION) ?
+                    local.GetCurrencyPlain(asset.template.basePrice) :
+                    "???";
+            }
+
             if (_textOfferPrice != null)
             {
                 _textOfferPrice.text = local.GetCurrency(finalOffer);
@@ -62,9 +75,19 @@ namespace UI.Panels.Assets
                 _textCurrentLoanAmount.text = local.GetCurrency(loanAmount, true);
             }
 
-            if (_textTotalGainOnSale != null)
+            if (_textTotalReturnOnSale != null)
             {
-                _textTotalGainOnSale.text = local.GetCurrency(finalOffer - loanAmount);
+                _textTotalReturnOnSale.text = local.GetCurrency(finalOffer - loanAmount);
+            }
+
+            if (_textTotalIncome != null)
+            {
+                _textTotalIncome.text = local.GetCurrency(asset.totalIncome);
+            }
+
+            if (_textOriginalPurchasePrice != null)
+            {
+                _textOriginalPurchasePrice.text = local.GetCurrency(asset.totalCost);
             }
         }
 

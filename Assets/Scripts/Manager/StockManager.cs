@@ -35,8 +35,6 @@ public class StockManager : MonoBehaviour
     [SerializeField]
     private Vector2 _cryptoGrowthMultiplier = new Vector2(0.7f, 1.3f);
     [SerializeField]
-    private float _newCryptoChance = 0.3f;
-    [SerializeField]
     private Vector2Int[] _yieldStockYields;
     [SerializeField]
     private float _tipThreshold = 0.15f;

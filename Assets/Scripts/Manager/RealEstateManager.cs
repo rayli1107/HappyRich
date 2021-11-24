@@ -1,7 +1,9 @@
 ﻿using Actions;
 using Assets;
+using Events.Market;
 using PlayerInfo;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -333,5 +335,18 @@ public class RealEstateManager : MonoBehaviour
         Debug.Log(string.Join("\n", messages));
         returnedCapitalList[0] = new Investment(null, totalReturnedCapital);
         return returnedCapitalList;
+    }
+
+    public Action<Action> GetMarketEvent(Player player, System.Random random)
+    {
+        if (player.portfolio.rentalProperties.Count == 0)
+        {
+            return null;
+        }
+
+        int index = random.Next(player.portfolio.rentalProperties.Count);
+        RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
+        int offer = calculateOfferPrice(asset.template, random);
+        return SellRealEstateEvent.GetEvent(player, index, offer);
     }
 }

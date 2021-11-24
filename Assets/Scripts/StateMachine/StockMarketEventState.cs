@@ -23,7 +23,7 @@ namespace StateMachine
             List<AbstractCryptoCurrency> cryptos = StockManager.Instance.cryptoCurrencies;
             if (index >= cryptos.Count)
             {
-                _stateMachine.ChangeState(_stateMachine.SellPropertyState);
+                _stateMachine.ChangeState(_stateMachine.RefinancePropertyState);
                 return;
             }
 

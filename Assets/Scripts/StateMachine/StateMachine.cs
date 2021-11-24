@@ -16,7 +16,6 @@ namespace StateMachine
         public ResolveTimedInvestmentState ResolveTimedInvestmentState { get; private set; }
         public MarketEventState MarketEventState { get; private set; }
         public StockMarketEventState StockMarketEventState { get; private set; }
-        public SellPropertyState SellPropertyState { get; private set; }
         public RefinancePropertyState RefinancePropertyState { get; private set; }
         public PlayerActionState PlayerActionState { get; private set; }
         public PlayerPostActionState PlayerPostActionState { get; private set; }
@@ -37,7 +36,6 @@ namespace StateMachine
             ResolveTimedInvestmentState = new ResolveTimedInvestmentState(this);
             MarketEventState = new MarketEventState(this);
             StockMarketEventState = new StockMarketEventState(this);
-            SellPropertyState = new SellPropertyState(this);
             RefinancePropertyState = new RefinancePropertyState(this);
             PlayerActionState = new PlayerActionState(this);
             PlayerPostActionState = new PlayerPostActionState(this);

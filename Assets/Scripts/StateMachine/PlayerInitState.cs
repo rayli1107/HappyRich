@@ -18,6 +18,8 @@ namespace StateMachine
 //            GameManager.Instance.CreatePlayer();
             GameManager.Instance.player.AddSkill(
                 SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.BUSINESS_OPERATIONS));
+            GameManager.Instance.player.AddSkill(
+                SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.REAL_ESTATE_VALUATION));
             GameManager.Instance.player.contacts.Add(
                 new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
             GameManager.Instance.player.contacts.Add(

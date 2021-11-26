@@ -72,6 +72,18 @@ namespace PlayerInfo
             }
         }
 
+
+        public List<AbstractAsset> safeAssets
+        {
+            get
+            {
+                List<AbstractAsset> assets = new List<AbstractAsset>();
+                assets.AddRange(properties);
+                assets.AddRange(businesses);
+                return assets;
+            }
+        }
+
         public List<AbstractAsset> assets
         {
             get

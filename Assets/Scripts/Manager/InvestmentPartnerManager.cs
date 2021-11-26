@@ -1,4 +1,5 @@
 ﻿using Actions;
+using Assets;
 using PlayerInfo;
 using ScriptableObjects;
 using System;
@@ -19,7 +20,6 @@ public class InvestmentPartner
     public int duration { get; private set; }
     private int _initialDuration;
     public RiskTolerance riskTolerance { get; private set; }
-
 
     public InvestmentPartner(
         string name, int cash, RiskTolerance riskTolerance, int duration)
@@ -51,6 +51,16 @@ public class InvestmentPartnerManager : MonoBehaviour
     private string[] _names;
     [SerializeField]
     private int _defaultDuration = 10;
+    [SerializeField]
+    private int _increment = 50000;
+    [SerializeField]
+    private Vector2 _partnerCashRange = new Vector2(0.5f, 1.5f);
+    [SerializeField]
+    private int _defaultPartnerCount = 2;
+    [SerializeField]
+    private int _publicSpeakingPartnerCount = 2;
+    [SerializeField]
+    private int _vcPartnerCount = 1;
 #pragma warning restore 0649
 
     public static InvestmentPartnerManager Instance { get; private set; }
@@ -75,8 +85,45 @@ public class InvestmentPartnerManager : MonoBehaviour
         return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
     }
 
-    private InvestmentPartner GetPartner(System.Random random)
+    private InvestmentPartner getPartner(int lo, int hi, System.Random random)
     {
+        int cash = Mathf.Max(1, random.Next(lo, hi + 1)) * _increment;
+        string name = _names[random.Next(_names.Length)];
+        RiskTolerance riskTolerance =
+            random.Next(2) == 0 ? RiskTolerance.kLow : RiskTolerance.kHigh;
+        return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
+    }
+
+    private List<InvestmentPartner> getPartners(
+        Player player, System.Random random, int count = 0)
+    {
+        int value = 0;
+        foreach (AbstractAsset asset in player.portfolio.safeAssets)
+        {
+            value += asset.value - asset.combinedLiability.amount;
+        }
+        value = Mathf.Max(value, new Snapshot(player).netWorth);
+        value = Mathf.Max(value, _increment);
+        int lo = Mathf.FloorToInt(value * _partnerCashRange.x) / _increment;
+        int hi = Mathf.FloorToInt(value * _partnerCashRange.y) / _increment;
+
+        if (count <= 0)
+        {
+            count = _defaultPartnerCount;
+            if (player.HasSkill(SkillType.PUBLIC_SPEAKING))
+            {
+                count += _publicSpeakingPartnerCount;
+            }
+        }
+
+        List<InvestmentPartner> partners = new List<InvestmentPartner>();
+        for (int i = 0; i < count; ++i)
+        {
+            partners.Add(getPartner(lo, hi, random));
+        }
+        return partners;
+
+        /*
         int totalWeight = 0;
         foreach (InvestmentPartnerProfile profile in _profiles)
         {
@@ -92,9 +139,20 @@ public class InvestmentPartnerManager : MonoBehaviour
                 return GetPartnerFromProfile(profile, random);
             }
         }
-        return GetPartnerFromProfile(_profiles[0], random);
+        return GetPartnerFromProfile(_profiles[0], random);*/
     }
 
+    private Action<Action> getActionFromPartnerList(
+        Player player,
+        List<InvestmentPartner> partners)
+    {
+        List<Action<Action>> actions = new List<Action<Action>>();
+        foreach (InvestmentPartner partner in partners)
+        {
+            actions.Add(cb => FindNewInvestors.FindInvestor(player, partner, cb));
+        }
+        return CompositeActions.GetAndAction(actions);
+    }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)
     {
@@ -104,8 +162,9 @@ public class InvestmentPartnerManager : MonoBehaviour
         {
             if (info.specialistType == SpecialistType.VENTURE_CAPITALIST)
             {
-                InvestmentPartner partner = GetPartner(random);
-                return cb => FindNewInvestors.FindInvestor(player, partner, cb);
+                List<InvestmentPartner> partners = getPartners(
+                    player, random, _vcPartnerCount);
+                return getActionFromPartnerList(player, partners);
             }
         }
         return null;
@@ -113,7 +172,7 @@ public class InvestmentPartnerManager : MonoBehaviour
 
     public Action<Action> GetAction(Player player, System.Random random)
     {
-        InvestmentPartner partner = GetPartner(random);
-        return (Action cb) => FindNewInvestors.FindInvestor(player, partner, cb);
+        List<InvestmentPartner> partners = getPartners(player, random);
+        return getActionFromPartnerList(player, partners);
     }
 }

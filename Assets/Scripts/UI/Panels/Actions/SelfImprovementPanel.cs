@@ -8,16 +8,22 @@ namespace UI.Panels.Actions
     {
         public Player player;
 
+        private void handler(bool actionDone)
+        {
+            if (actionDone)
+            {
+                UIManager.Instance.DestroyAllModal();
+            }
+        }
+
         public void OnSelfReflectionButton()
         {
-            UIManager.Instance.DestroyAllModal();
-            new SelfReflectionAction(player).Start();
+            SelfReflectionAction.Run(player, GameManager.Instance.Random, handler);
         }
 
         public void OnTrainingButton()
         {
-            UIManager.Instance.DestroyAllModal();
-            new TrainingAction(player).Start();
+            TrainingAction.Run(player, GameManager.Instance.Random, handler);
         }
     }
 }

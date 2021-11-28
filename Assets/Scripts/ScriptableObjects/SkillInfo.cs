@@ -8,6 +8,7 @@ namespace ScriptableObjects
         BUSINESS_OPERATIONS,
         PUBLIC_SPEAKING,
         STOCK_EVALUATION,
+        ASSET_MANAGEMENT,
     }
 
     [CreateAssetMenu(fileName = "Skill Info", menuName = "ScriptableObjects/Skill Info")]

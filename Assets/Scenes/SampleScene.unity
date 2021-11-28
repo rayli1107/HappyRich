@@ -1722,6 +1722,10 @@ MonoBehaviour:
   _tragedyDuration: 3
   _extrovertThreshold: 10
   _extrovertHappinessModifier: 10
+  _meditatedHappinessModifier: 10
+  _meditatedDuration: 3
+  _enlightenedThreshold: 5
+  _enlightenedHappinessModifier: 30
 --- !u!4 &628575512
 Transform:
   m_ObjectHideFlags: 0
@@ -1749,8 +1753,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skills:
-  - {fileID: 11400000, guid: 980e1dd7c6acaf543bbd086ca1461f6e, type: 2}
+  - {fileID: 11400000, guid: 0f57f12c9fb3c0e409807bcb81187783, type: 2}
   - {fileID: 11400000, guid: 70dc81f64cf4f6d47a871d1db0c033f8, type: 2}
+  - {fileID: 11400000, guid: 980e1dd7c6acaf543bbd086ca1461f6e, type: 2}
   - {fileID: 11400000, guid: b67043cd54bc8b241a6e846cdfb28ef8, type: 2}
   - {fileID: 11400000, guid: 408003eb2648ba542bc828a51df908b2, type: 2}
   _initialCost: 20000
@@ -3623,6 +3628,8 @@ MonoBehaviour:
   _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1
   _incomeMultiplierModifier: 0.05
+  _investmentHappinessThreshold: 5
+  _investmentHappinessModifier: -10
 --- !u!1 &1169222138
 GameObject:
   m_ObjectHideFlags: 0

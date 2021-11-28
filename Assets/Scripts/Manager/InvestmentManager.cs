@@ -24,9 +24,15 @@ public class InvestmentManager : MonoBehaviour
     private int _additionalInvestmentEntrepreneaur = 1;
     [SerializeField]
     private float _incomeMultiplierModifier = 0.05f;
+    [SerializeField]
+    private int _investmentHappinessThreshold = 5;
+    [SerializeField]
+    private int _investmentHappinessModifier = -10;
 #pragma warning restore 0649
 
     public static InvestmentManager Instance;
+    public int investmentHappinessThreshold => _investmentHappinessThreshold;
+    public int investmentHappinessModifier => _investmentHappinessModifier;
 
     private void Awake()
     {

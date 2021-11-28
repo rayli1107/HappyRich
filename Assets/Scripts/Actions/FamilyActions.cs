@@ -31,7 +31,7 @@ namespace Actions
 
         private static void run(Player player, Spouse spouse, Action callback)
         {
-            player.RemoveMentalState(player.states.Find(s => s is DivorcedPenaltyState));
+            player.RemoveMentalState<DivorcedPenaltyState>();
             player.spouse = spouse;
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "You met the love of your life at a party and decided to get married. Congratulations!",

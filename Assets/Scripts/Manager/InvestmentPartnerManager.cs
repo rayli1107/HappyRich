@@ -98,7 +98,7 @@ public class InvestmentPartnerManager : MonoBehaviour
         Player player, System.Random random, int count = 0)
     {
         int value = 0;
-        foreach (AbstractAsset asset in player.portfolio.safeAssets)
+        foreach (AbstractAsset asset in player.portfolio.managedAssets)
         {
             value += asset.value - asset.combinedLiability.amount;
         }

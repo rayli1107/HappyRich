@@ -1,4 +1,5 @@
 ﻿using PlayerInfo;
+using ScriptableObjects;
 
 namespace PlayerState
 {
@@ -106,4 +107,34 @@ namespace PlayerState
         }
     }
 
+    public class AssetManagementStress : AbstractPlayerState
+    {
+        public override string description => string.Format(
+            "Stress from managing {0} or more investments.",
+            InvestmentManager.Instance.investmentHappinessThreshold);
+
+        public override int happinessModifier =>
+            !player.HasSkill(SkillType.ASSET_MANAGEMENT) &&
+            player.portfolio.managedAssets.Count >=
+            InvestmentManager.Instance.investmentHappinessThreshold ?
+            InvestmentManager.Instance.investmentHappinessModifier : 0;
+
+        public AssetManagementStress(Player player)
+            : base(player, "Asset Management Stress")
+        {
+        }
+    }
+
+    public class Enlightenment : AbstractPlayerState
+    {
+        public override string description =>
+            "You've become one with the universe.";
+
+        public override int happinessModifier =>
+            SelfImprovementManager.Instance.enlightenedHappinessModifier;
+
+        public Enlightenment(Player player) : base(player, "Enlightenment")
+        {
+        }
+    }
 }

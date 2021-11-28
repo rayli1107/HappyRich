@@ -15,7 +15,6 @@ namespace PlayerState
         public override void OnPlayerTurnStart()
         {
             --_turn;
-            Debug.LogFormat("OnPlayerTurnStart {0}", _turn);
             if (_turn < 0)
             {
                 player.RemoveMentalState(this);
@@ -68,6 +67,20 @@ namespace PlayerState
             player, FamilyManager.Instance.familyVacationHappinessModifier.y, "Family Vacation")
         {
 
+        }
+    }
+
+    public class MedidatedState : TimedPlayerState
+    {
+        public override string description =>
+            "Meditation brings wisdom; lack of meditation leaves ignorance. " +
+            "Know well what leads you forward and what holds you back, and " +
+            "choose the path that leads to wisdom.";
+        public override int happinessModifier =>
+            SelfImprovementManager.Instance.meditatedHappinessModifier;
+        public MedidatedState(Player player) : base(
+            player, SelfImprovementManager.Instance.meditatedDuration, "Meditated")
+        {
         }
     }
 }

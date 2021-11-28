@@ -7,17 +7,8 @@ namespace PlayerState
         public override string description =>
             "You're happily married to the love of your life.";
 
-        public override int happinessModifier
-        {
-            get
-            {
-                if (player.spouse != null)
-                {
-                    return player.spouse.additionalHappiness;
-                }
-                return 0;
-            }
-        }
+        public override int happinessModifier =>
+            player.spouse != null ? player.spouse.additionalHappiness : 0;
 
         public MarriageState(Player player) : base(player, "Married")
         {

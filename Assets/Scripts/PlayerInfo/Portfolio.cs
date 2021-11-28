@@ -73,7 +73,7 @@ namespace PlayerInfo
         }
 
 
-        public List<AbstractAsset> safeAssets
+        public List<AbstractAsset> managedAssets
         {
             get
             {

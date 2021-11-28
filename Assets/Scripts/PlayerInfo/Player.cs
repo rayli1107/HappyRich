@@ -45,7 +45,7 @@ namespace PlayerInfo
         public int costPerChild => (_costPerChild * expenseModifier) / 100;
         public int numChild;
         public int age;
-
+        public int meditatedCount = 0;
         public Spouse spouse;
 
         public int maxHappiness => 100;
@@ -95,6 +95,7 @@ namespace PlayerInfo
             numChild = 0;
             age = profession.startingAge;
             this.defaultHappiness = defaultHappiness;
+            meditatedCount = 0;
 
             contacts = new List<InvestmentPartner>();
 
@@ -104,6 +105,7 @@ namespace PlayerInfo
                 new TwoJobState(this),
                 new MarriageState(this),
                 new ChildrenState(this),
+                new AssetManagementStress(this),
             };
 
             mentalStates = new List<AbstractPlayerState>();
@@ -167,12 +169,18 @@ namespace PlayerInfo
 
         public void AddMentalState(AbstractPlayerState state)
         {
+            mentalStates.RemoveAll(s => s.GetType() == state.GetType());
             mentalStates.Add(state);
         }
 
         public void RemoveMentalState(AbstractPlayerState state)
         {
             mentalStates.Remove(state);
+        }
+
+        public void RemoveMentalState<T>()
+        {
+            mentalStates.RemoveAll(s => s.GetType() == typeof(T));
         }
 
         public SkillInfo GetSkillInfo(SkillType skillType)

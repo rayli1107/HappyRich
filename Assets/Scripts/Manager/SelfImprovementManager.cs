@@ -17,6 +17,15 @@ public class SelfImprovementManager : MonoBehaviour
     private int _extrovertThreshold = 10;
     [SerializeField]
     private int _extrovertHappinessModifier = 10;
+    [SerializeField]
+    private int _meditatedHappinessModifier = 10;
+    [SerializeField]
+    private int _meditatedDuration = 3;
+    [SerializeField]
+    private int _enlightenedThreshold = 5;
+    [SerializeField]
+    private int _enlightenedHappinessModifier = 30;
+
 #pragma warning restore 0649
 
     public static SelfImprovementManager Instance { get; private set; }
@@ -24,6 +33,10 @@ public class SelfImprovementManager : MonoBehaviour
     public int tragedyDuration => _tragedyDuration;
     public int extrovertThreshold => _extrovertThreshold;
     public int extrovertHappinessModifier => _extrovertHappinessModifier;
+    public int meditatedHappinessModifier => _meditatedHappinessModifier;
+    public int meditatedDuration => _meditatedDuration;
+    public int enlightenedThreshold => _enlightenedThreshold;
+    public int enlightenedHappinessModifier => _enlightenedHappinessModifier;
 
     private void Awake()
     {
@@ -35,17 +48,18 @@ public class SelfImprovementManager : MonoBehaviour
         return player.states.Exists(s => s is Tranquil) ? _tranquilTragedyPenalty : _defaultTragedyPenalty;
     }
 
-
     public void Initialize()
     {
         _selfReflectionStates = new List<Action<Player, Action<AbstractPlayerState>>>();
         _selfReflectionStates.Add((p, cb) => cb(new FamilyOrientedState(p)));
+/*
         _selfReflectionStates.Add((p, cb) => cb(new Frugality(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Minimalism(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Hustling(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Tranquil(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Extrovert(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Extravagant(p)));
+        */
     }
 
     public Action<Player, Action<AbstractPlayerState>> GetSelfReflectionState(System.Random random)

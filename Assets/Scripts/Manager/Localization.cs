@@ -57,10 +57,14 @@ public class Localization : MonoBehaviour
         return colorWrap(description, _colorRealEstate);
     }
 
+    public string GetPlayerState(string label)
+    {
+        return colorWrap(label, _colorPlayerState);
+    }
 
     public string GetPlayerState(PlayerState.AbstractPlayerState state)
     {
-        return colorWrap(state.name, _colorPlayerState);
+        return GetPlayerState(state.name);
     }
 
     public string GetRealEstateLabel(RealEstateProfile profile)

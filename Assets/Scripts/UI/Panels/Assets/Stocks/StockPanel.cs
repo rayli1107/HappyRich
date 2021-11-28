@@ -17,8 +17,6 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textChange;
         [SerializeField]
-        private TextMeshProUGUI _textYield;
-        [SerializeField]
         private TextMeshProUGUI _textShares;
         [SerializeField]
         private TextMeshProUGUI _textTotalValue;
@@ -49,18 +47,6 @@ namespace UI.Panels.Assets
                 _textChange.text = local.GetPercent(change);
             }
 
-            if (_textYield != null)
-            {
-                if (stock.yieldRange.y == stock.yieldRange.x)
-                {
-                    _textYield.text = string.Format("{0}%", stock.yieldRange.x);
-                }
-                else
-                {
-                    _textYield.text = string.Format("{0}% - {1}%", stock.yieldRange.x, stock.yieldRange.y);
-                }
-            }
-
             int count = 0;
             int value = 0;
             PurchasedStock result;
@@ -84,7 +70,6 @@ namespace UI.Panels.Assets
             {
                 _buttonSell.gameObject.SetActive(count > 0);
             }
-
         }
 
         private void OnEnable()

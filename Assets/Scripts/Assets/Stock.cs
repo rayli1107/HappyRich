@@ -43,9 +43,6 @@ namespace Assets
         public string name { get; private set; }
         public int value { get; protected set; }
         public int prevValue { get; private set; }
-        public Vector2Int yieldRange { get; protected set; }
-        public int expectedYield => yieldRange.x;
-        public int currentYield;
         private int _turnCount;
         public float change
         {
@@ -55,13 +52,14 @@ namespace Assets
             }
         }
 
+        public virtual int expectedYield => 0;
+        public virtual int currentYield => 0;
+
         public AbstractStock(string name, int value)
         {
             this.name = name;
             this.value = value;
             prevValue = value;
-            yieldRange = new Vector2Int(0, 0);
-            currentYield = 0;
             _turnCount = 0;
         }
 
@@ -69,9 +67,8 @@ namespace Assets
         {
             ++_turnCount;
             prevValue = value;
-            currentYield = yieldRange.x + random.Next(yieldRange.y - yieldRange.x + 1);
         }
-
+        /*
         public virtual string GetDescription()
         {
             List<string> messages = new List<string>();
@@ -87,18 +84,19 @@ namespace Assets
             }
             return string.Join("\n", messages);
         }
+        */
     }
 
     public class GrowthStock : AbstractStock {
         private int _currentPeriodTurn;
-        private float _basePrice;
-        public float variance => (value - _basePrice) / _basePrice;
+        public float basePrice { get; private set; }
+        public float variance => (value - basePrice) / basePrice;
 
 
         public GrowthStock(string name, int initialPrice) : base(name, initialPrice)
         {
             _currentPeriodTurn = 0;
-            _basePrice = initialPrice;
+            basePrice = initialPrice;
         }
 
         public override void OnTurnStart(System.Random random)
@@ -108,11 +106,11 @@ namespace Assets
             if (_currentPeriodTurn > StockManager.Instance.growthStockMinPeriod &&
                 random.NextDouble() < StockManager.Instance.growthStockUpdateChance)
             {
-                _basePrice = _basePrice * StockManager.Instance.getGrowthStockGrowth(random);
+                basePrice = basePrice * StockManager.Instance.getGrowthStockGrowth(random);
                 _currentPeriodTurn = 0;
             }
 
-            float newBase = (value + _basePrice) / 2;
+            float newBase = (value + basePrice) / 2;
             value = Mathf.RoundToInt(newBase * StockManager.Instance.getGrowthStockVariance(random));
             value = Math.Max(value, 1);
 
@@ -123,10 +121,24 @@ namespace Assets
 
     public class YieldStock : AbstractStock
     {
-        public YieldStock(string name, int initialPrice, Vector2Int yieldRange) : base(name, initialPrice)
+        public Vector2Int yieldRange { get; private set; }
+        public override int expectedYield => yieldRange.x;
+        public override int currentYield => _currentYield;
+        private int _currentYield;
+
+        public YieldStock(string name, int initialPrice, Vector2Int yieldRange)
+            : base(name, initialPrice)
         {
             this.yieldRange = yieldRange;
+            _currentYield = 0;
         }
+
+        public override void OnTurnStart(System.Random random)
+        {
+            base.OnTurnStart(random);
+            _currentYield = random.Next(yieldRange.x, yieldRange.y + 1);
+        }
+
     }
 
     public abstract class AbstractCryptoCurrency : AbstractStock

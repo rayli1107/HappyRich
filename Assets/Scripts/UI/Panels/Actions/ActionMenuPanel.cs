@@ -34,7 +34,10 @@ namespace UI.Panels.Actions
 
         public void OnInvestmentsButton()
         {
-            Instantiate(_prefabInvestmentsPanel, UIManager.Instance.transform).player = GameManager.Instance.player;
+            InvestmentsPanel panel = Instantiate(
+                _prefabInvestmentsPanel, UIManager.Instance.transform);
+            panel.player = GameManager.Instance.player;
+            panel.Refresh();
         }
 
         public void OnNetworkingButton()

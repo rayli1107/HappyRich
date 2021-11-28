@@ -1752,6 +1752,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 980e1dd7c6acaf543bbd086ca1461f6e, type: 2}
   - {fileID: 11400000, guid: 70dc81f64cf4f6d47a871d1db0c033f8, type: 2}
   - {fileID: 11400000, guid: b67043cd54bc8b241a6e846cdfb28ef8, type: 2}
+  - {fileID: 11400000, guid: 408003eb2648ba542bc828a51df908b2, type: 2}
   _initialCost: 20000
   _additionalCost: 10000
 --- !u!1 &630578660
@@ -5316,7 +5317,7 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleTextPrompt: {fileID: 9019924363112762818, guid: 3b12655bb02dfd34486387755fe68b27,
     type: 3}
-  _prefabStockMarketPanel: {fileID: 8913108381888134533, guid: e4cf50c6c3980ef44bcc368e3a7aeefd,
+  _prefabStockMarketPanel: {fileID: 756440662557103384, guid: be841ab8d8cab894a9f40e5848f14632,
     type: 3}
   _prefabStockTradePanel: {fileID: 946307099505382972, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
     type: 3}

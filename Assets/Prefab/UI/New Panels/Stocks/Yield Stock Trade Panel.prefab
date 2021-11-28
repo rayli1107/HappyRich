@@ -365,9 +365,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 180
+  m_MinWidth: 270
   m_MinHeight: -1
-  m_PreferredWidth: 180
+  m_PreferredWidth: 270
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 46.9
+  m_fontSize: 48
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -541,9 +541,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 120
+  m_MinWidth: 160
   m_MinHeight: -1
-  m_PreferredWidth: 120
+  m_PreferredWidth: 160
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
@@ -960,7 +960,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 41.65
+  m_fontSize: 36.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1059,10 +1059,23 @@ MonoBehaviour:
   _textName: {fileID: 3680469937727623120}
   _textValue: {fileID: 7191485848982912916}
   _textChange: {fileID: 8693824631577279745}
-  _textYield: {fileID: 4585981813360248646}
   _textShares: {fileID: 8263772313512702158}
   _textTotalValue: {fileID: 1162950218708703348}
   _buttonSell: {fileID: 1842883644931417596}
+--- !u!114 &5277625631823845635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951385223633618713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0edb209266f903048a42773679bcea0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textYield: {fileID: 4585981813360248646}
+  _prefabYieldStockComponent: {fileID: 0}
 --- !u!114 &5218374849678793154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1214,7 +1227,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 41.65
+  m_fontSize: 36.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1612,9 +1625,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 180
+  m_MinWidth: 270
   m_MinHeight: -1
-  m_PreferredWidth: 180
+  m_PreferredWidth: 270
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
@@ -1964,9 +1977,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 180
+  m_MinWidth: 270
   m_MinHeight: -1
-  m_PreferredWidth: 180
+  m_PreferredWidth: 270
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
@@ -2587,7 +2600,7 @@ PrefabInstance:
     - target: {fileID: 4707468395760701111, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_Name
-      value: Stock Trade Panel
+      value: Yield Stock Trade Panel
       objectReference: {fileID: 0}
     - target: {fileID: 4762227267540676159, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -2737,15 +2750,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5361037568229652298, guid: b5d29931ca13f7449831e611c76f2c4e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b5d29931ca13f7449831e611c76f2c4e, type: 3}
---- !u!224 &6727561396176696491 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5505569461577255342}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &951385223633618713 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4707468395760701111, guid: b5d29931ca13f7449831e611c76f2c4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5505569461577255342}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4662910327146873335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 923882777225070681, guid: b5d29931ca13f7449831e611c76f2c4e,
     type: 3}
   m_PrefabInstance: {fileID: 5505569461577255342}
   m_PrefabAsset: {fileID: 0}
@@ -2761,9 +2774,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4662910327146873335 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 923882777225070681, guid: b5d29931ca13f7449831e611c76f2c4e,
+--- !u!224 &6727561396176696491 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
     type: 3}
   m_PrefabInstance: {fileID: 5505569461577255342}
   m_PrefabAsset: {fileID: 0}

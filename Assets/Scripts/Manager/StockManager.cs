@@ -50,6 +50,7 @@ public class StockManager : MonoBehaviour
     public int growthStockMinPeriod => _growthStockMinPeriod;
     public float growthStockUpdateChance => _growthStockUpdateChance;
     public float tipThreshold => _tipThreshold;
+    public bool stockEvaluated { get; private set; }
 
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class StockManager : MonoBehaviour
         growthStocks = new List<GrowthStock>();
         yieldStocks = new List<YieldStock>();
         cryptoCurrencies = new List<AbstractCryptoCurrency>();
+        stockEvaluated = false;
 
         for (int i = 0; i < _numGrowthStock; ++i) {
             string name = generateStockName(random);
@@ -98,6 +100,11 @@ public class StockManager : MonoBehaviour
             yieldStocks.Add(stock);
             _stocks.Add(name, stock);
         }
+    }
+
+    public void EvaluateStocks()
+    {
+        stockEvaluated = true;
     }
 
     public Tuple<string, AbstractStock> CreateNewCryptoCurrency(System.Random random)
@@ -121,6 +128,7 @@ public class StockManager : MonoBehaviour
 
     public void OnTurnStart(System.Random random)
     {
+        stockEvaluated = false;
         foreach (KeyValuePair<string, AbstractStock> entry in _stocks)
         {
             entry.Value.OnTurnStart(random);

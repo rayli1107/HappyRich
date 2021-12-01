@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UI.Panels.Assets
 {
-    public class StartupBusinessPurchasePanel : AbstractBusinessPurchasePanel
+    public class SmallBusinessPurchasePanel : AbstractBusinessPurchasePanel
     {
         protected override void Awake()
         {
@@ -20,7 +20,7 @@ namespace UI.Panels.Assets
         {
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
-            UIManager.Instance.ShowStartupBusinessPurchasePanel(
+            UIManager.Instance.ShowSmallBusinessPurchasePanel(
                 (Business)asset,
                 partialAsset,
                 messageBox.messageBoxHandler,

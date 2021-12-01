@@ -13,8 +13,6 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textRehabPrice;
         [SerializeField]
-        private TextMeshProUGUI _textInterestFee;
-        [SerializeField]
         private RectTransform _equitySummaryPanel;
 #pragma warning restore 0649
 
@@ -51,10 +49,6 @@ namespace UI.Panels.Assets
             base.AdjustNumbers();
 
             Localization local = Localization.Instance;
-            if (_textInterestFee != null)
-            {
-                _textInterestFee.text = local.GetCurrency(asset.delayedInterest, true);
-            }
 /*
             Debug.LogFormat("Original Price {0}", distressedAsset.originalPrice);
             Debug.LogFormat("Rehab Price {0}", distressedAsset.rehabPrice);

@@ -53,13 +53,17 @@ namespace UI
         [SerializeField]
         private RealEstateSalePanel _prefabSimpleRealEstateSalePanel;
         [SerializeField]
-        private StartupBusinessPurchasePanel _prefabAdvancedStartupBusinessPurchasePanel;
+        private SmallBusinessPurchasePanel _prefabAdvancedSmallBusinessPurchasePanel;
         [SerializeField]
-        private StartupBusinessPurchasePanel _prefabSimpleStartupBusinessPurchasePanel;
+        private SmallBusinessPurchasePanel _prefabSimpleSmallBusinessPurchasePanel;
         [SerializeField]
         private FranchiseJoinPanel _prefabAdvancedFranchiseJoinPanel;
         [SerializeField]
         private FranchiseJoinPanel _prefabSimpleFranchiseJoinPanel;
+        [SerializeField]
+        private StartupPurchasePanel _prefabAdvancedStartupPurchasePanel;
+        [SerializeField]
+        private StartupPurchasePanel _prefabSimpleStartupPurchasePanel;
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
@@ -382,17 +386,41 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowStartupBusinessPurchasePanel(
+        public void ShowSmallBusinessPurchasePanel(
             Assets.Business asset,
             Assets.PartialInvestment partialAsset,
             MessageBoxHandler messageBoxHandler,
             StartTransactionHandler startTransactionHandler,
             bool advanced)
         {
-            StartupBusinessPurchasePanel panel = Instantiate(
+            SmallBusinessPurchasePanel panel = Instantiate(
                 advanced ?
-                _prefabAdvancedStartupBusinessPurchasePanel :
-                _prefabSimpleStartupBusinessPurchasePanel,
+                _prefabAdvancedSmallBusinessPurchasePanel :
+                _prefabSimpleSmallBusinessPurchasePanel,
+                transform);
+
+            panel.player = GameManager.Instance.player;
+            panel.asset = asset;
+            panel.partialAsset = partialAsset;
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+            messageBox.startTransactionHandler = startTransactionHandler;
+
+            panel.Refresh();
+        }
+
+        public void ShowStartupPurchasePanel(
+            Assets.Startup asset,
+            Assets.PartialInvestment partialAsset,
+            MessageBoxHandler messageBoxHandler,
+            StartTransactionHandler startTransactionHandler,
+            bool advanced)
+        {
+            StartupPurchasePanel panel = Instantiate(
+                advanced ?
+                _prefabAdvancedStartupPurchasePanel :
+                _prefabSimpleStartupPurchasePanel,
                 transform);
 
             panel.player = GameManager.Instance.player;
@@ -496,13 +524,13 @@ namespace UI
         }
 
         public void ShowAvailableInvestmentsPanel(
-            Func<Action<int, bool>, List<AbstractBuyInvestmentAction>> getBuyInvestmentAction,
+            List<BuyInvestmentContext> buyActions,
             MessageBoxHandler messageBoxHandler)
         {
             AvailableInvestmentsPanel panel = Instantiate(
                 _prefabAvailableInvestmentsPanel, transform);
             panel.player = GameManager.Instance.player;
-            panel.Initialize(getBuyInvestmentAction);
+            panel.Initialize(buyActions);
 
             MessageBox messageBox = panel.GetComponent<MessageBox>();
             messageBox.messageBoxHandler = messageBoxHandler;

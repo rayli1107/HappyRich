@@ -10,8 +10,6 @@ namespace Assets
         public override int value =>
             originalPrice + rehabPrice + delayedInterest;
         public override int totalCost => value;
-        public override int loanValue => originalPrice;
-
         public int appraisalPrice { get; private set; }
         public int actualIncome { get; private set; }
 

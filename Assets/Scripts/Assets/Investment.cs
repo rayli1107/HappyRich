@@ -7,8 +7,8 @@ namespace Assets
     public class AbstractInvestment : AbstractAsset
     {
         public int originalPrice { get; protected set; }
-        public virtual int totalCost => originalPrice;
-        public virtual int loanValue => value;
+        public virtual int totalCost => originalPrice + delayedInterest;
+        public virtual int loanValue => originalPrice;
         public virtual int loanUnitValue => loanValue / 100;
         public string label { get; protected set; }
         public string description { get; protected set; }

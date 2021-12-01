@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Actions
 {
-    using GetInvestmentFn = Func<Action<int, bool>, List<AbstractBuyInvestmentAction>>;
-
     public class InvestmentsPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -26,13 +24,12 @@ namespace UI.Panels.Actions
             GameManager.Instance.StateMachine.OnPlayerActionDone();
         }
 
-
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
-                (Action<int, bool> cb) => InvestmentManager.Instance.GetAvailableSmallInvestments(
-                    GameManager.Instance.player, GameManager.Instance.Random, cb),
+                InvestmentManager.Instance.GetAvailableSmallInvestments(
+                    player, GameManager.Instance.Random),
                 _ => InvesmtmentActionCallback());
         }
 
@@ -40,8 +37,8 @@ namespace UI.Panels.Actions
         {
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableInvestmentsPanel(
-                (Action<int, bool> cb) => InvestmentManager.Instance.GetAvailableLargeInvestments(
-                    GameManager.Instance.player, GameManager.Instance.Random, cb),
+                InvestmentManager.Instance.GetAvailableLargeInvestments(
+                    player, GameManager.Instance.Random),
                 _ => InvesmtmentActionCallback());
         }
 

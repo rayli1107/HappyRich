@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &6603589940166142532
+--- !u!114 &7056715924498345552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4838658624021388604}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56993d99c13580e4298af8299fc2ee0d, type: 3}
+  m_Script: {fileID: 11500000, guid: ba18c19dda4372f4081434709c53c977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _securedLoanControlPanel: {fileID: 1420733110542554787}
@@ -19,9 +19,9 @@ MonoBehaviour:
   _textPurchasePrice: {fileID: 8732439789641882633}
   _textDownPayment: {fileID: 2679322408225507319}
   _textAnnualIncome: {fileID: 0}
+  _textInterestFee: {fileID: 2405479652773172705}
   _textTotalLTV: {fileID: 8003281593243997634}
   _textOwnershipInterest: {fileID: 6746537587671702506}
-  _textIncomeRange: {fileID: 2405479652773172705}
 --- !u!114 &178617159131974099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,8 +204,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You came across an opportunity to start a new {0} business. Do you want
-    to proceed with the investment?
+  m_text: You're considering forming a startup company focusing on {0}. Do you want
+    to proceed with the startup?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -274,10 +274,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 7252498357197491488}
-    characterCount: 103
+    characterCount: 102
     spriteCount: 0
-    spaceCount: 18
-    wordCount: 19
+    spaceCount: 16
+    wordCount: 17
     linkCount: 0
     lineCount: 4
     pageCount: 1
@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 2405479652773172705}
   - component: {fileID: 7908322359158738283}
   m_Layer: 5
-  m_Name: Text - Annual Income Range
+  m_Name: Text - Interest Fee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1814,7 +1814,7 @@ GameObject:
   - component: {fileID: 5380328564639420165}
   - component: {fileID: 5706439889292977989}
   m_Layer: 5
-  m_Name: Panel - Annual Income Range
+  m_Name: Panel - Interest Fee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2737,7 +2737,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Annual Income Range:'
+  m_text: Interest Fee
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2806,10 +2806,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 6108878605974167286}
-    characterCount: 20
+    characterCount: 12
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -3229,22 +3229,22 @@ PrefabInstance:
     - target: {fileID: 9183984961543161470, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_text
-      value: Start New Business
+      value: Startup
       objectReference: {fileID: 0}
     - target: {fileID: 9183984961543161470, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 18
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9183984961543161470, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9183984961543161470, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5361037568229652298, guid: b5d29931ca13f7449831e611c76f2c4e, type: 3}
@@ -3483,7 +3483,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 3324757398708487891, guid: 2d12243de24ccea4090f6b271d126fdb,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -4150,7 +4150,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6603589940166142532}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -4340,7 +4340,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6603589940166142532}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -4720,7 +4720,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 3324757398708487891, guid: bb89a6d80ad700f41934310c8508563b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -5345,7 +5345,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 7276038630556348130, guid: bb89a6d80ad700f41934310c8508563b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -5466,17 +5466,22 @@ PrefabInstance:
     - target: {fileID: 967500960271037320, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 967500960271037320, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6603589940166142532}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 967500960271037320, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnRaiseDebtButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 967500960271037320, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1320149085478735848, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
@@ -6011,17 +6016,22 @@ PrefabInstance:
     - target: {fileID: 7276038630556348130, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7276038630556348130, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6603589940166142532}
+      objectReference: {fileID: 7056715924498345552}
     - target: {fileID: 7276038630556348130, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnRaiseEquityButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 7276038630556348130, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8134010398768730439, guid: ea5b68ded83b9804dbf4e46e649c7f6a,
         type: 3}

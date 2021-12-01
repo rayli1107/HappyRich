@@ -3498,6 +3498,26 @@ MonoBehaviour:
   _maxEquityShares: 100
   _operationIncomeBonusStartup: 40
   _operationIncomeBonusFranchise: 30
+  _maxStartupLoanLTV: 20
+  _loanAgentStartupLoanLTV: 50
+  _startupIdeas:
+  - search engine
+  - ride sharing
+  - game development
+  - cloud storage
+  - digital marketing
+  - food delivery service
+  - social networking
+  - blockchains
+  - personal health
+  - e-commerce
+  - professional networking
+  - artificial solution
+  - financial services
+  - digital security
+  - next big thing
+  _startupPriceRange: {x: 2, y: 10, z: 500000}
+  _startupDuration: {x: 4, y: 7}
 --- !u!114 &1128526760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5344,13 +5364,17 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleRealEstateSalePanel: {fileID: 2977606715860159181, guid: 8b6a5d7fd31bc9644a87c134ba87690b,
     type: 3}
-  _prefabAdvancedStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: e5d10030208fecc4e949e546cac8e12a,
+  _prefabAdvancedSmallBusinessPurchasePanel: {fileID: 6603589940166142532, guid: e5d10030208fecc4e949e546cac8e12a,
     type: 3}
-  _prefabSimpleStartupBusinessPurchasePanel: {fileID: 6603589940166142532, guid: 0854a6f72ffc14f4785633bf5f2f19d7,
+  _prefabSimpleSmallBusinessPurchasePanel: {fileID: 6603589940166142532, guid: 0854a6f72ffc14f4785633bf5f2f19d7,
     type: 3}
   _prefabAdvancedFranchiseJoinPanel: {fileID: 6776270187309231469, guid: 40ade565a5e71d54a9f15e8ee6bfb478,
     type: 3}
   _prefabSimpleFranchiseJoinPanel: {fileID: 6776270187309231469, guid: aeae722e694657945a605652dc81558d,
+    type: 3}
+  _prefabAdvancedStartupPurchasePanel: {fileID: 7056715924498345552, guid: 196a30b80b1a99f45bd19fa652455e63,
+    type: 3}
+  _prefabSimpleStartupPurchasePanel: {fileID: 7056715924498345552, guid: cd8fd607e72b59044bdb01442c0f6221,
     type: 3}
   _prefabContactListPanel: {fileID: 6709450615132103814, guid: 432886d288a2af44ba4b17bd398c0269,
     type: 3}

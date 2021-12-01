@@ -22,6 +22,8 @@ MonoBehaviour:
   _textTotalLTV: {fileID: 0}
   _textOwnershipInterest: {fileID: 0}
   _textIncomeRange: {fileID: 2405479652773172705}
+  _messageBusinessOperationSkill: ' Your expertise in {0} can potentially help the
+    business generate more income.'
   _textFranchiseFee: {fileID: 5194140020522187291}
 --- !u!114 &178617159131974099
 MonoBehaviour:
@@ -2256,7 +2258,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 390
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -2406,7 +2408,7 @@ PrefabInstance:
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 585
       objectReference: {fileID: 0}
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -2446,7 +2448,7 @@ PrefabInstance:
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 195
       objectReference: {fileID: 0}
     - target: {fileID: 3642341126246420184, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

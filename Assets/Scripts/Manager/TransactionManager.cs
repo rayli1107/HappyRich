@@ -8,6 +8,8 @@ using RentalProperty = System.Tuple<
     Assets.PartialInvestment, Assets.RentalRealEstate>;
 using BusinessEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Business>;
+using StartupEntity = System.Tuple<
+    Assets.PartialInvestment, Assets.Startup>;
 
 using Investment = System.Tuple<InvestmentPartner, int>;
 using UnityEngine;
@@ -108,6 +110,37 @@ public static class TransactionManager
             player,
             partialasset.fundsNeeded,
             (bool b) => buyBusinessHandler(
+                player, partialasset, asset, handler, b));
+    }
+
+    private static void buyStartupHandler(
+        Player player,
+        PartialInvestment partialAsset,
+        Startup asset,
+        TransactionHandler handler,
+        bool success)
+    {
+        if (success &&
+            player != null &&
+            partialAsset != null &&
+            asset != null)
+        {
+            player.portfolio.startupEntities.Add(
+                new StartupEntity(partialAsset, asset));
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void BuyStartup(
+        Player player,
+        PartialInvestment partialasset,
+        Startup asset,
+        TransactionHandler handler)
+    {
+        TryDebit.Run(
+            player,
+            partialasset.fundsNeeded,
+            (bool b) => buyStartupHandler(
                 player, partialasset, asset, handler, b));
     }
 

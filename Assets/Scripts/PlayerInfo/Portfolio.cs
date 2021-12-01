@@ -8,7 +8,8 @@ using RentalProperty = System.Tuple<
     Assets.PartialInvestment, Assets.RentalRealEstate>;
 using BusinessEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Business>;
-
+using StartupEntity = System.Tuple<
+    Assets.PartialInvestment, Assets.Startup>;
 namespace PlayerInfo
 {
     public class Portfolio
@@ -24,6 +25,7 @@ namespace PlayerInfo
         public List<RentalProperty> rentalProperties { get; private set; }
         public List<DistressedProperty> distressedProperties { get; private set; }
         public List<BusinessEntity> businessEntities { get; private set; }
+        public List<StartupEntity> startupEntities { get; private set; }
         public List<AbstractTimedInvestment> timedInvestments { get; private set; }
         public List<LuxuryItem> luxuryItems { get; private set; }
 
@@ -48,6 +50,10 @@ namespace PlayerInfo
             {
                 List<PartialInvestment> businesses = new List<PartialInvestment>();
                 foreach (BusinessEntity entity in businessEntities)
+                {
+                    businesses.Add(entity.Item1);
+                }
+                foreach (StartupEntity entity in startupEntities)
                 {
                     businesses.Add(entity.Item1);
                 }
@@ -148,6 +154,7 @@ namespace PlayerInfo
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
             businessEntities = new List<BusinessEntity>();
+            startupEntities = new List<StartupEntity>();
             timedInvestments = new List<AbstractTimedInvestment>();
             luxuryItems = new List<LuxuryItem>();
             hasHealthInsurance = false;

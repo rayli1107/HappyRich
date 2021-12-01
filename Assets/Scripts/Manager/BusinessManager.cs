@@ -2,6 +2,7 @@
 using Assets;
 using PlayerInfo;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,16 @@ public class BusinessManager : MonoBehaviour
     private int _operationIncomeBonusStartup = 40;
     [SerializeField]
     private int _operationIncomeBonusFranchise = 30;
+    [SerializeField]
+    private int _maxStartupLoanLTV = 20;
+    [SerializeField]
+    private int _loanAgentStartupLoanLTV = 50;
+    [SerializeField]
+    private string[] _startupIdeas;
+    [SerializeField]
+    private Vector3Int _startupPriceRange = new Vector3Int(2, 10, 500000);
+    [SerializeField]
+    private Vector2Int _startupDuration = new Vector2Int(4, 7);
 #pragma warning restore 0649
 
     public static BusinessManager Instance { get; private set; }
@@ -64,12 +75,16 @@ public class BusinessManager : MonoBehaviour
         return random.Next(n1, n2 + 1) * increment;
     }
 
-    private AbstractBuyInvestmentAction GetInvestmentAction(
+    private BuyInvestmentContext GetBusinessInvestmentAction(
         Player player,
         BusinessProfile[] templates,
-        System.Random random,
-        ActionCallback callback)
+        System.Random random)
     {
+        if (templates == null || templates.Length == 0)
+        {
+            return new BuyInvestmentContext(null, null);
+        }
+
         BusinessProfile profile = templates[random.Next(templates.Length)];
         int price = calculatePrice(
             random, profile.priceRange, profile.priceIncrement);
@@ -109,23 +124,41 @@ public class BusinessManager : MonoBehaviour
             _maxBusinessLoanLTV);
         if (profile.franchise)
         {
-            return new JoinFranchiseAction(player, business, callback);
+            return new BuyInvestmentContext(
+                business, JoinFranchiseAction.GetBuyAction(player, business));
         }
         else
         {
-            return new PurchaseStartupBusinessAction(player, business, callback);
+            return new BuyInvestmentContext(
+                business, PurchaseSmallBusinessAction.GetBuyAction(player, business));
         }
     }
 
-    public AbstractBuyInvestmentAction GetSmallInvestmentAction(
-        Player player, System.Random random, ActionCallback callback)
+    public BuyInvestmentContext GetSmallInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _smallInvestments, random, callback);
+        return GetBusinessInvestmentAction(player, _smallInvestments, random);
     }
 
-    public AbstractBuyInvestmentAction GetLargeInvestmentAction(
-        Player player, System.Random random, ActionCallback callback)
+    private BuyInvestmentContext GetStartupInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _largeInvestments, random, callback);
+        string idea = _startupIdeas[random.Next(_startupIdeas.Length)];
+        string label = string.Format("Startup: {0}", idea);
+        int cost = random.Next(
+            _startupPriceRange.x, _startupPriceRange.y + 1) * _startupPriceRange.z;
+        int duration = random.Next(_startupDuration.x, _startupDuration.y + 1);
+        int ltv = player.specialists.Exists(
+            s => s.specialistType == SpecialistType.LOAN_AGENT) ?
+            _loanAgentStartupLoanLTV : _maxStartupLoanLTV;
+        Startup startup = new Startup(idea, label, cost, duration, ltv, ltv);
+        return new BuyInvestmentContext(
+            startup, PurchaseStartupAction.GetBuyAction(player, startup));
+    }
+
+    public BuyInvestmentContext GetLargeInvestmentAction(
+        Player player, System.Random random)
+    {
+        return GetStartupInvestmentAction(player, random);
     }
 }

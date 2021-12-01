@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Investment = System.Tuple<InvestmentPartner, int>;
-
 public class RealEstateTemplate
 {
     public RealEstateProfile profile { get; private set; }
@@ -143,12 +142,10 @@ public class RealEstateManager : MonoBehaviour
         return 0;
     }
 
-
-    private AbstractBuyInvestmentAction GetDistressedRealEstateAction(
+    private BuyInvestmentContext GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
-        System.Random random,
-        ActionCallback callback)
+        System.Random random)
     {
         int appraisalPrice = calculateOfferPrice(template, random);
 
@@ -181,14 +178,14 @@ public class RealEstateManager : MonoBehaviour
             unitCount,
             maxMortgageLtv,
             _maxDistressedLoanLTV);
-        return new BuyDistressedRealEstateAction(player, asset, callback);
+        return new BuyInvestmentContext(
+            asset, BuyDistressedRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private AbstractBuyInvestmentAction GetRentalRealEstateAction(
+    private BuyInvestmentContext GetRentalRealEstateAction(
         Player player,
         RealEstateTemplate template,
-        System.Random random,
-        ActionCallback callback)
+        System.Random random)
     {
         Vector2 variance = new Vector2(
             1 - template.priceVariance, 1 + template.priceVariance);
@@ -209,36 +206,36 @@ public class RealEstateManager : MonoBehaviour
         int ltv = getRentalMortgageLTV(player);
         RentalRealEstate asset = new RentalRealEstate(
             template, price, price, annualIncome, ltv, ltv, unitCount);
-        return new BuyRentalRealEstateAction(player, asset, callback);
+        return new BuyInvestmentContext(
+            asset, BuyRentalRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private AbstractBuyInvestmentAction GetInvestmentAction(
+    private BuyInvestmentContext GetInvestmentAction(
         Player player,
         List<RealEstateTemplate> templates,
-        System.Random random,
-        ActionCallback callback)
+        System.Random random)
     {
         RealEstateTemplate template = templates[random.Next(templates.Count)];
         if (random.Next(2) == 0)
         {
-            return GetRentalRealEstateAction(player, template, random, callback);
+            return GetRentalRealEstateAction(player, template, random);
         }
         else
         {
-            return GetDistressedRealEstateAction(player, template, random, callback);
+            return GetDistressedRealEstateAction(player, template, random);
         }
     }
 
-    public AbstractBuyInvestmentAction GetSmallInvestmentAction(
-        Player player, System.Random random, ActionCallback callback)
+    public BuyInvestmentContext GetSmallInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _smallInvestments, random, callback);
+        return GetInvestmentAction(player, _smallInvestments, random);
     }
 
-    public AbstractBuyInvestmentAction GetLargeInvestmentAction(
-        Player player, System.Random random, ActionCallback callback)
+    public BuyInvestmentContext GetLargeInvestmentAction(
+        Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _largeInvestments, random, callback);
+        return GetInvestmentAction(player, _largeInvestments, random);
     }
 
     public RefinancedRealEstate RefinanceDistressedProperty(

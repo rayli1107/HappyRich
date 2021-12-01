@@ -49,7 +49,7 @@ namespace StateMachine
                                 ScriptableObjects.SpecialistType.LOAN_AGENT));
                                 */
 
-            GameManager.Instance.player.portfolio.AddCash(1000000);
+            GameManager.Instance.player.portfolio.AddCash(5000000);
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
         }
 

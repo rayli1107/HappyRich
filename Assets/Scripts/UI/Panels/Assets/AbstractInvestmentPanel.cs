@@ -27,6 +27,8 @@ namespace UI.Panels.Assets
         [SerializeField]
         protected TextMeshProUGUI _textAnnualIncome;
         [SerializeField]
+        private TextMeshProUGUI _textInterestFee;
+        [SerializeField]
         protected TextMeshProUGUI _textTotalLTV;
         [SerializeField]
         protected TextMeshProUGUI _textOwnershipInterest;
@@ -104,6 +106,11 @@ namespace UI.Panels.Assets
             if (_textDownPayment != null)
             {
                 _textDownPayment.text = local.GetCurrency(partialAsset.fundsNeeded, true);
+            }
+
+            if (_textInterestFee != null)
+            {
+                _textInterestFee.text = local.GetCurrency(asset.delayedInterest, true);
             }
 
             if (_textAnnualIncome != null)

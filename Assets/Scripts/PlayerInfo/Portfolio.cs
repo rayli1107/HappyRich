@@ -243,5 +243,13 @@ namespace PlayerInfo
             }
             return false;
         }
+
+        public List<StartupEntity> RemoveExitedStartups()
+        {
+            List<StartupEntity> exitedStartups = startupEntities.FindAll(
+                e => e.Item2.exited);
+            startupEntities = startupEntities.FindAll(e => !e.Item2.exited);
+            return exitedStartups;
+        }
     }
 }

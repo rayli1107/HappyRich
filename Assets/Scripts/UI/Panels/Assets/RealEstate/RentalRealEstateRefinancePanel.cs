@@ -69,11 +69,8 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
             if (_textReturnedCapital != null)
             {
-/*                Debug.LogFormat("Returned Capital {0}",
-                    refinancedAsset.returnedCapital);
-                    */
                 List<Investment> returnedCapitalList =
-                    RealEstateManager.Instance.CalculateReturnedCapitalForRefinance(
+                    InvestmentManager.Instance.CalculateReturnedCapitalForRefinance(
                         refinancedAsset, partialAsset);
                 _textReturnedCapital.text = local.GetCurrency(
                     returnedCapitalList[0].Item2);

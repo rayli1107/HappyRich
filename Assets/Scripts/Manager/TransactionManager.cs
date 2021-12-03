@@ -15,6 +15,7 @@ using Investment = System.Tuple<InvestmentPartner, int>;
 using UnityEngine;
 using PlayerState;
 using Actions;
+using System;
 
 public delegate void TransactionHandler(bool success);
 
@@ -245,12 +246,14 @@ public static class TransactionManager
             (bool b) => learnSkillTransactionHandler(player, skill, handler, b));
     }
 
-    public static void SellProperty(Player player, int index, int price)
+    public static void SellInvestment(
+        Player player,
+        PartialInvestment partialAsset,
+        AbstractInvestment asset,
+        int price)
     {
-        PartialInvestment partialAsset = player.portfolio.rentalProperties[index].Item1;
-        RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
         List<Investment> returnedCapitalList =
-            RealEstateManager.Instance.CalculateReturnedCapitalForSale(
+            InvestmentManager.Instance.CalculateReturnedCapitalForSale(
                 asset, partialAsset, price);
         foreach (Investment returnedCapital in returnedCapitalList)
         {
@@ -265,6 +268,15 @@ public static class TransactionManager
                 partner.cash += amount;
             }
         }
+    }
+
+    public static void SellProperty(Player player, int index, int price)
+    {
+        sellInvestment(
+            player,
+            player.portfolio.rentalProperties[index].Item1,
+            player.portfolio.rentalProperties[index].Item2,
+            price);
         player.portfolio.rentalProperties.RemoveAt(index);
     }
 
@@ -274,7 +286,7 @@ public static class TransactionManager
         RefinancedRealEstate refinancedAsset)
     {
         List<Investment> returnedCapitalList =
-            RealEstateManager.Instance.CalculateReturnedCapitalForRefinance(
+            InvestmentManager.Instance.CalculateReturnedCapitalForRefinance(
                 refinancedAsset, partialAsset);
         foreach (Investment returnedCapital in returnedCapitalList)
         {

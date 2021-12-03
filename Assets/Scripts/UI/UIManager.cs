@@ -136,21 +136,6 @@ namespace UI
 
         void Update()
         {
-            /*
-                        int count = _modalObjects.Count;
-                        if (count > 0)
-                        {
-                            _modalObjects[count - 1].ActivePanelUpdate();
-                        }
-                        if (Input.GetMouseButtonDown(0) && _modalObjects.Count > 0)
-                        {
-                            ModalObject modalObject = _modalObjects[_modalObjects.Count - 1];
-                            if (!DetectHit(Input.mousePosition, modalObject.gameObject))
-                            {
-                                modalObject.OnClickOutsideBoundary();
-                            }
-                        }
-                        */
         }
 
         private bool DetectHit(Vector2 position, GameObject obj)

@@ -3470,6 +3470,7 @@ GameObject:
   - component: {fileID: 1128526759}
   - component: {fileID: 1128526764}
   - component: {fileID: 1128526765}
+  - component: {fileID: 1128526766}
   m_Layer: 0
   m_Name: Investment Managers
   m_TagString: Untagged
@@ -3491,33 +3492,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _smallInvestments:
   - {fileID: 11400000, guid: 84e1207c2e20bff468daea763c8ffa73, type: 2}
-  _largeInvestments: []
   _maxBusinessLoanLTV: 75
   _maxPrivateLoanLTV: 90
   _defaultEquitySplit: 0.6
   _maxEquityShares: 100
   _operationIncomeBonusStartup: 40
   _operationIncomeBonusFranchise: 30
-  _maxStartupLoanLTV: 20
-  _loanAgentStartupLoanLTV: 50
-  _startupIdeas:
-  - search engine
-  - ride sharing
-  - game development
-  - cloud storage
-  - digital marketing
-  - food delivery service
-  - social networking
-  - blockchains
-  - personal health
-  - e-commerce
-  - professional networking
-  - artificial solution
-  - financial services
-  - digital security
-  - next big thing
-  _startupPriceRange: {x: 2, y: 10, z: 500000}
-  _startupDuration: {x: 4, y: 7}
 --- !u!114 &1128526760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3650,6 +3630,43 @@ MonoBehaviour:
   _incomeMultiplierModifier: 0.05
   _investmentHappinessThreshold: 5
   _investmentHappinessModifier: -10
+--- !u!114 &1128526766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128526758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ecf743f5d598334c9d0b8cae0a2b749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxStartupLoanLTV: 20
+  _loanAgentStartupLoanLTV: 50
+  _startupIdeas:
+  - search engine
+  - game development
+  - online streaming
+  - digital marketing
+  - professional networking
+  - social networking
+  - ride sharing
+  - sale analytics
+  - digital security
+  - food delivery
+  - personal health
+  - customer relationship
+  - financial services
+  - artificial intelligence
+  - video conferencing
+  - blockchains
+  - e-commerce
+  - cloud computing
+  - self driving cars
+  - next big thing
+  _startupPriceRange: {x: 2, y: 10, z: 500000}
+  _startupDuration: {x: 4, y: 7}
 --- !u!1 &1169222138
 GameObject:
   m_ObjectHideFlags: 0

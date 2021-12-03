@@ -12,6 +12,7 @@ using GetInvestmentFn = System.Func<
     PlayerInfo.Player,
     System.Random,
     BuyInvestmentContext>;
+using Investment = System.Tuple<InvestmentPartner, int>;
 
 public struct BuyInvestmentContext
 {
@@ -122,7 +123,7 @@ public class InvestmentManager : MonoBehaviour
             player,
             random,
             RealEstateManager.Instance.GetLargeInvestmentAction,
-            BusinessManager.Instance.GetLargeInvestmentAction);
+            StartupManager.Instance.GetStartupInvestmentAction);
     }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)
@@ -133,5 +134,72 @@ public class InvestmentManager : MonoBehaviour
         events.Add(MarketBoomEvent.GetEvent(player, _incomeMultiplierModifier));
         events.Add(MarketCrashEvent.GetEvent(player, _incomeMultiplierModifier));
         return CompositeActions.GetRandomAction(events, random);
+    }
+
+    private List<Investment> calculateReturnedCapital(
+        PartialInvestment partialAsset,
+        int originalTotalCost,
+        int oldCapitalAmount,
+        int newCapitalAmount)
+    {
+        int totalReturnedCapital = newCapitalAmount - oldCapitalAmount;
+        int capital1 = Mathf.Max(
+            Mathf.Min(newCapitalAmount, originalTotalCost) - oldCapitalAmount, 0);
+        int capital2 = totalReturnedCapital - capital1;
+
+        List<string> messages = new List<string>()
+        {
+            "calculateReturnedCapital()",
+            string.Format("originalTotalCost: {0}", originalTotalCost),
+            string.Format("oldCapitalAmount: {0}", oldCapitalAmount),
+            string.Format("newCapitalAmount: {0}", newCapitalAmount),
+        };
+
+        List<Investment> returnedCapitalList = new List<Investment>();
+        returnedCapitalList.Add(null);
+        foreach (Investment investment in partialAsset.investments)
+        {
+            float investorCapitalEquity = investment.Item2 / (float)partialAsset.maxShares;
+            float investorEquity = investment.Item2 * partialAsset.equityPerShare;
+            int investorCapital1 = Mathf.FloorToInt(capital1 * investorCapitalEquity);
+            int investorCapital2 = Mathf.FloorToInt(capital2 * investorEquity);
+            int investorCapital = investorCapital1 + investorCapital2;
+            returnedCapitalList.Add(new Investment(investment.Item1, investorCapital));
+            totalReturnedCapital -= investorCapital;
+            messages.Add(string.Format(
+                "Investor {0} equity {1} {2} returned capital {3} {4}",
+                investment.Item1.name,
+                investorCapitalEquity,
+                investorEquity,
+                investorCapital1,
+                investorCapital2));
+        }
+        messages.Add(string.Format("Owner returned capital: {0}", totalReturnedCapital));
+        Debug.Log(string.Join("\n", messages));
+        returnedCapitalList[0] = new Investment(null, totalReturnedCapital);
+        return returnedCapitalList;
+    }
+
+    public List<Investment> CalculateReturnedCapitalForRefinance(
+        RefinancedRealEstate asset,
+        PartialInvestment partialAsset)
+    {
+        return calculateReturnedCapital(
+            partialAsset,
+            asset.originalTotalCost,
+            asset.originalLoanAmount,
+            asset.combinedLiability.amount);
+    }
+
+    public List<Investment> CalculateReturnedCapitalForSale(
+        AbstractInvestment asset,
+        PartialInvestment partialAsset,
+        int price)
+    {
+        return calculateReturnedCapital(
+            partialAsset,
+            asset.totalCost,
+            asset.combinedLiability.amount,
+            price);
     }
 }

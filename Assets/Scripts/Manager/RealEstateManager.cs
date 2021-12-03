@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Investment = System.Tuple<InvestmentPartner, int>;
 public class RealEstateTemplate
 {
     public RealEstateProfile profile { get; private set; }
@@ -248,90 +247,6 @@ public class RealEstateManager : MonoBehaviour
             ltv,
             _maxPrivateLoanLTV);
         return newAsset;
-    }
-
-    public List<Investment> CalculateReturnedCapitalForRefinance(
-        RefinancedRealEstate asset,
-        PartialInvestment partialAsset)
-    {
-        return calculateReturnedCapital(
-            partialAsset,
-            asset.originalTotalCost,
-            asset.originalLoanAmount,
-            asset.combinedLiability.amount);
-    }
-
-    public List<Investment> CalculateReturnedCapitalForSale(
-        RentalRealEstate asset,
-        PartialInvestment partialAsset,
-        int price)
-    {
-        return calculateReturnedCapital(
-            partialAsset,
-            asset.totalCost,
-            asset.combinedLiability.amount,
-            price);
-    }
-
-    private List<Investment> calculateReturnedCapital(
-        PartialInvestment partialAsset,
-        int originalTotalCost,
-        int oldCapitalAmount,
-        int newCapitalAmount)
-    {
-        int totalReturnedCapital = newCapitalAmount - oldCapitalAmount;
-        int capital1 = Mathf.Max(
-            Mathf.Min(newCapitalAmount, originalTotalCost) - oldCapitalAmount, 0);
-        int capital2 = totalReturnedCapital - capital1;
-
-        List<string> messages = new List<string>()
-        {
-            "calculateReturnedCapital()",
-            string.Format("originalTotalCost: {0}", originalTotalCost),
-            string.Format("oldCapitalAmount: {0}", oldCapitalAmount),
-            string.Format("newCapitalAmount: {0}", newCapitalAmount),
-        };
-/*
-        Debug.LogFormat("Returned capital {0}", returnedCapital);
-        Debug.LogFormat("Downpayment {0}", asset.distressedAsset.downPayment);
-        Debug.LogFormat("Capital stack {0} {1}", capital1, capital2);
-        */
-        List<Investment> returnedCapitalList = new List<Investment>();
-        returnedCapitalList.Add(null);
-        foreach (Investment investment in partialAsset.investments)
-        {
-            float investorCapitalEquity = investment.Item2 / (float)partialAsset.maxShares;
-            float investorEquity = investment.Item2 * partialAsset.equityPerShare;
-/*
-            Debug.LogFormat("Investor {0} equity {1} {2}",
-                investment.Item1.name,
-                investorCapitalEquity,
-                investorEquity);
-                */
-            int investorCapital1 = Mathf.FloorToInt(capital1 * investorCapitalEquity);
-            int investorCapital2 = Mathf.FloorToInt(capital2 * investorEquity);
-            int investorCapital = investorCapital1 + investorCapital2;
-            returnedCapitalList.Add(new Investment(investment.Item1, investorCapital));
-            /*
-             *Debug.LogFormat(
-                            "Investor {0} returned capital {1} {2}",
-                            investment.Item1.name,
-                            investorCapital1,
-                            investorCapital2);
-                            */
-            totalReturnedCapital -= investorCapital;
-            messages.Add(string.Format(
-                "Investor {0} equity {1} {2} returned capital {3} {4}",
-                investment.Item1.name,
-                investorCapitalEquity,
-                investorEquity,
-                investorCapital1,
-                investorCapital2));
-        }
-        messages.Add(string.Format("Owner returned capital: {0}", totalReturnedCapital));
-        Debug.Log(string.Join("\n", messages));
-        returnedCapitalList[0] = new Investment(null, totalReturnedCapital);
-        return returnedCapitalList;
     }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)

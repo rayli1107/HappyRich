@@ -19,6 +19,10 @@ public class InterestRateManager : MonoBehaviour
     private int _personalLoanRate = 15;
     [SerializeField]
     private int _defaultPrivateLoanRate = 6;
+    [SerializeField]
+    private int _startupBusinessLoanRate = 10;
+    [SerializeField]
+    private int _startupPrivateLoanRate = 20;
 #pragma warning restore 0649
 
     public int studentLoanRate => _studentLoanRate;
@@ -28,6 +32,8 @@ public class InterestRateManager : MonoBehaviour
     public int defaultPrivateLoanRate => _defaultPrivateLoanRate;
     public int distressedLoanRate => _distressedLoanRate;
     public int businessLoanRate => _businessLoanRate;
+    public int startupBusinessLoanRate => _startupBusinessLoanRate;
+    public int startupPrivateLoanRate => _startupPrivateLoanRate;
 
     public static InterestRateManager Instance { get; private set; }
     private void Awake()

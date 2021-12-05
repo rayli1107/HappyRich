@@ -12,6 +12,9 @@ namespace Assets
         public override int totalCost => value;
         public int appraisalPrice { get; private set; }
         public int actualIncome { get; private set; }
+        protected override bool _isDebtInterestDelayed => true;
+        protected override int _privateLoanRate =>
+            InterestRateManager.Instance.distressedLoanRate;
 
         public DistressedRealEstate(
             RealEstateTemplate template,
@@ -23,7 +26,7 @@ namespace Assets
             int unitCount,
             int maxMortgageLtv,
             int maxPrivateLoanLtv)
-            : base(template, purchasePrice, 0, 0, unitCount, true)
+            : base(template, purchasePrice, 0, 0, unitCount)
         {
             this.rehabPrice = rehabPrice;
             this.appraisalPrice = appraisalPrice;
@@ -35,8 +38,7 @@ namespace Assets
             }
             else
             {
-                int rate = InterestRateManager.Instance.distressedLoanRate;
-                AddPrivateLoan(debtPartners, maxPrivateLoanLtv, rate);
+                AddPrivateLoan(debtPartners, maxPrivateLoanLtv);
             }
 
             label = string.Format("Distressed {0}", label);

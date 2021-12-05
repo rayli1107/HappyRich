@@ -194,11 +194,12 @@ public class InvestmentManager : MonoBehaviour
     public List<Investment> CalculateReturnedCapitalForSale(
         AbstractInvestment asset,
         PartialInvestment partialAsset,
-        int price)
+        int price,
+        bool returnCapital)
     {
         return calculateReturnedCapital(
             partialAsset,
-            asset.totalCost,
+            returnCapital ? asset.totalCost : asset.combinedLiability.amount,
             asset.combinedLiability.amount,
             price);
     }

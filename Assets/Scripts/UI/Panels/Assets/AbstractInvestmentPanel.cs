@@ -38,10 +38,6 @@ namespace UI.Panels.Assets
         public AbstractInvestment asset;
         public PartialInvestment partialAsset;
 
-        protected virtual int _privateLoanRate =>
-            InterestRateManager.Instance.defaultPrivateLoanRate;
-        protected virtual bool _privateLoanDelayed => false;
-
         protected string _messageTemplate { get; private set; }
 
 
@@ -218,8 +214,7 @@ namespace UI.Panels.Assets
         {
             asset.AddPrivateLoan(
                 player.GetDebtPartners(),
-                RealEstateManager.Instance.maxPrivateLoanLTV,
-                InterestRateManager.Instance.defaultPrivateLoanRate);
+                RealEstateManager.Instance.maxPrivateLoanLTV);
             EnablePrivateLoanPanel(true);
         }
 

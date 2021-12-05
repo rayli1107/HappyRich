@@ -41,7 +41,7 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
-            if (player == null || asset == null)
+            if (player == null || asset == null || asset.primaryLoan == null)
             {
                 return;
             }

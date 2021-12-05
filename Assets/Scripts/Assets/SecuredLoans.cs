@@ -7,7 +7,39 @@ namespace Assets
 {
     public class AbstractSecuredLoan : AbstractLiability
     {
+        private bool _delayed;
+        public override int expense => _delayed ? 0 : base.expense;
+        public int delayedExpense => _delayed ? base.expense : 0;
+
         public AbstractInvestment asset { get; private set; }
+
+        public AbstractSecuredLoan(
+            AbstractInvestment asset,
+            string label,
+            int amount,
+            int interestRate,
+            bool delayed) : base(label, amount, interestRate)
+        {
+            this.asset = asset;
+            _delayed = delayed;
+        }
+    }
+
+    public class RestructuredBusinessLoan : AbstractSecuredLoan
+    {
+        public RestructuredBusinessLoan(Startup startup)
+            : base(startup,
+                   string.Format("Business Loan - {0}", startup.label),
+                   startup.combinedLiability.amount + startup.accruedDelayedInterest,
+                   InterestRateManager.Instance.businessLoanRate,
+                   false)
+        {
+            startup.ClearPrivateLoan();
+        }
+    }
+
+    public class AdjustableSecuredLoan : AbstractSecuredLoan
+    {
         public int maxltv { get; protected set; }
         public int minltv { get; protected set; }
 
@@ -35,34 +67,27 @@ namespace Assets
             }
         }
 
-        private bool _delayed;
-
-        public override int expense => _delayed ? 0 : base.expense;
-        public int delayedExpense => _delayed ? base.expense : 0;
-
         protected int getUnitCount(int loanAmount)
         {
             int unitValue = asset.loanUnitValue;
             return (loanAmount + unitValue - 1) / unitValue;
         }
 
-        public AbstractSecuredLoan(
+        public AdjustableSecuredLoan(
             AbstractInvestment asset,
             string label,
             int defaultltv,
             int maxltv,
             int interestRate,
             bool delayed) :
-            base(label, 0, interestRate)
+            base(asset, label, 0, interestRate, delayed)
         {
-            this.asset = asset;
             this.maxltv = getUnitCount(
                 maxltv * asset.loanUnitValue - asset.combinedLiability.amount);
             minltv = 0;
             this.defaultltv = defaultltv;
             _ltv = 0;
             ltv = defaultltv;
-            _delayed = delayed;
         }
 
         protected virtual void AddLoan(int delta)
@@ -90,7 +115,7 @@ namespace Assets
         }
     }
 
-    public class Mortgage : AbstractSecuredLoan
+    public class Mortgage : AdjustableSecuredLoan
     {
         public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
@@ -103,7 +128,7 @@ namespace Assets
         }
     }
 
-    public class BusinessLoan : AbstractSecuredLoan
+    public class BusinessLoan : AdjustableSecuredLoan
     {
         public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
@@ -116,7 +141,20 @@ namespace Assets
         }
     }
 
-    public class PrivateLoan : AbstractSecuredLoan
+    public class StartupLoan : AdjustableSecuredLoan
+    {
+        public StartupLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
+            : base(asset,
+                   string.Format("Startup Loan - {0}", asset.label),
+                   defaultltv,
+                   maxltv,
+                   InterestRateManager.Instance.startupBusinessLoanRate,
+                   delayed)
+        {
+        }
+    }
+
+    public class PrivateLoan : AdjustableSecuredLoan
     {
         private List<Investment> _investments;
 

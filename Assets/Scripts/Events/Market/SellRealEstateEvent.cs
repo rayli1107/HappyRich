@@ -7,10 +7,6 @@ using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
 
-using RentalProperty = System.Tuple<
-    Assets.PartialInvestment, Assets.RentalRealEstate>;
-using BusinessEntity = System.Tuple<
-    Assets.PartialInvestment, Assets.Business>;
 using Assets;
 
 namespace Events.Market
@@ -36,7 +32,7 @@ namespace Events.Market
 
             if (buttonType == ButtonType.OK)
             {
-                TransactionManager.SellProperty(player, index, finalOffer);
+                TransactionManager.SellRentalProperty(player, index, finalOffer);
                 message = string.Format(
                     "You've successfully sold the {0} property for {1}. Congratulations!",
                     local.GetRealEstateDescription(asset.description),

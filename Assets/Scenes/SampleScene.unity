@@ -3572,6 +3572,8 @@ MonoBehaviour:
   _distressedLoanRate: 10
   _personalLoanRate: 15
   _defaultPrivateLoanRate: 6
+  _startupBusinessLoanRate: 10
+  _startupPrivateLoanRate: 20
 --- !u!4 &1128526763
 Transform:
   m_ObjectHideFlags: 0
@@ -3623,7 +3625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23d0ad0bbf72ff4fa284cf60fe9dc13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultAvailableInvestments: 2
+  _defaultAvailableInvestments: 10
   _hustledAvailableInvestments: 3
   _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1
@@ -3666,7 +3668,13 @@ MonoBehaviour:
   - self driving cars
   - next big thing
   _startupPriceRange: {x: 2, y: 10, z: 500000}
-  _startupDuration: {x: 4, y: 7}
+  _startupDuration: {x: 1, y: 1}
+  _startupFailedWeight: 0
+  _startupAcquiredWeight: 0
+  _startupPublicWeight: 1
+  _startupAcquiredValueMultiplier: {x: 3, y: 5}
+  _startupPublicValueMultiplier: {x: 5, y: 10}
+  _startupPublicIncomeMultiplier: {x: 3, y: 6}
 --- !u!1 &1169222138
 GameObject:
   m_ObjectHideFlags: 0

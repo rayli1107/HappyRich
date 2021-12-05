@@ -44,12 +44,15 @@ namespace UI.Panels.Assets
                 }
             }
 
+            if (_securedLoanControlPanel != null)
+            {
+                EnableSecuredLoanPanel(true);
+            }
+
             bool enableEquityPanel = partialAsset.investorShares > 0;
             bool enableDebtPanel = !enableEquityPanel && asset.privateLoan != null;
-            bool enableSecuredLoanPanel = !enableEquityPanel && !enableDebtPanel;
             EnableEquityPanel(enableEquityPanel);
             EnablePrivateLoanPanel(enableDebtPanel);
-            EnableSecuredLoanPanel(enableSecuredLoanPanel);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Assets
     public class AbstractInvestment : AbstractAsset
     {
         public int originalPrice { get; protected set; }
-        public virtual int totalCost => originalPrice + delayedInterest;
+        public virtual int totalCost => originalPrice;
         public virtual int loanValue => originalPrice;
         public virtual int loanUnitValue => loanValue / 100;
         public string label { get; protected set; }
@@ -20,11 +20,14 @@ namespace Assets
         public float multiplier;
         public override int totalIncome => Mathf.FloorToInt(_baseIncome * multiplier);
 
-        public AbstractSecuredLoan primaryLoan { get; protected set; }
+        public AdjustableSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
-        private bool _isDebtInterestDelayed;
 
-        public List<AbstractSecuredLoan> securedLoans
+        protected virtual bool _isDebtInterestDelayed => false;
+        protected virtual int _privateLoanRate =>
+            InterestRateManager.Instance.defaultPrivateLoanRate;
+
+        public virtual List<AbstractSecuredLoan> securedLoans
         {
             get
             {
@@ -58,7 +61,6 @@ namespace Assets
                 int interest = 0;
                 foreach (AbstractSecuredLoan loan in securedLoans)
                 {
-//                    Debug.LogFormat("Loan delayed interest {0}", loan.delayedExpense);
                     interest += loan.delayedExpense;
                 }
                 return interest;
@@ -69,24 +71,22 @@ namespace Assets
             string name,
             int originalPrice,
             int marketValue,
-            int annualIncome,
-            bool isDebtInterestDelayed)
+            int annualIncome)
             : base(name, marketValue, 0)
         {
             _baseIncome = annualIncome;
             multiplier = 1;
             this.originalPrice = originalPrice;
-            _isDebtInterestDelayed = isDebtInterestDelayed;
+            label = name;
         }
 
         public void AddPrivateLoan(
-            List<InvestmentPartner> partners,
-            int maxltv,
-            int rate)
+            List<InvestmentPartner> partners, int maxltv)
         {
             if (privateLoan == null)
             {
-                privateLoan = new PrivateLoan(this, partners, maxltv, rate, _isDebtInterestDelayed);
+                privateLoan = new PrivateLoan(
+                    this, partners, maxltv, _privateLoanRate, _isDebtInterestDelayed);
             }
         }
 

@@ -10,6 +10,17 @@ namespace UI.Panels.Assets
 {
     public class SmallBusinessPurchasePanel : AbstractBusinessPurchasePanel
     {
+        private SmallBusiness _smallBusiness;
+        public SmallBusiness business
+        {
+            get => _smallBusiness;
+            set
+            {
+                _smallBusiness = value;
+                _business = value;
+            }
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -21,7 +32,7 @@ namespace UI.Panels.Assets
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
             UIManager.Instance.ShowSmallBusinessPurchasePanel(
-                (Business)asset,
+                business,
                 partialAsset,
                 messageBox.messageBoxHandler,
                 messageBox.startTransactionHandler,

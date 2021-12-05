@@ -11,6 +11,11 @@ namespace Assets
         public bool exited => _turn >= _duration;
         public override int value => totalCost;
 
+        protected override bool _isDebtInterestDelayed => true;
+        protected override int _privateLoanRate =>
+            InterestRateManager.Instance.startupPrivateLoanRate;
+        public int accruedDelayedInterest => _turn * delayedInterest;
+
         public Startup(
             string description,
             string label,
@@ -18,7 +23,7 @@ namespace Assets
             int duration,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, 0, 0, true)
+            : base(description, startupCost, 0, 0)
         {
             this.description = description;
             this.label = label;
@@ -26,13 +31,19 @@ namespace Assets
             _turn = 0;
             if (maxLoanLtv > 0)
             {
-                primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, true);
+                primaryLoan = new StartupLoan(
+                    this, loanLtv, maxLoanLtv, _isDebtInterestDelayed);
             }
         }
 
         public void SetName(string name)
         {
             label = name;
+        }
+
+        public void OnTurnStart()
+        {
+            ++_turn;
         }
     }
 }

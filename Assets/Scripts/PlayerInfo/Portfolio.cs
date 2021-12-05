@@ -7,7 +7,7 @@ using DistressedProperty = System.Tuple<
 using RentalProperty = System.Tuple<
     Assets.PartialInvestment, Assets.RentalRealEstate>;
 using BusinessEntity = System.Tuple<
-    Assets.PartialInvestment, Assets.Business>;
+    Assets.PartialInvestment, Assets.AbstractBusiness>;
 using StartupEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Startup>;
 namespace PlayerInfo

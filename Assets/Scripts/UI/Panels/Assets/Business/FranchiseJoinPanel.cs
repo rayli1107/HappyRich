@@ -15,6 +15,17 @@ namespace UI.Panels.Assets
         protected TextMeshProUGUI _textFranchiseFee;
 #pragma warning restore 0649
 
+        private Franchise _franchise;
+        public Franchise franchise
+        {
+            get => _franchise;
+            set
+            {
+                _franchise = value;
+                _business = value;
+            }
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -33,8 +44,7 @@ namespace UI.Panels.Assets
             Localization local = Localization.Instance;
             if (_textFranchiseFee != null)
             {
-                _textFranchiseFee.text = local.GetCurrency(
-                    ((Business)asset).franchiseFee, true);
+                _textFranchiseFee.text = local.GetCurrency(franchise.franchiseFee, true);
             }
         }
 
@@ -43,7 +53,7 @@ namespace UI.Panels.Assets
             MessageBox messageBox = GetComponent<MessageBox>();
             messageBox.Destroy();
             UIManager.Instance.ShowFranchiseJoinPanel(
-                (Business)asset,
+                franchise,
                 partialAsset,
                 messageBox.messageBoxHandler,
                 messageBox.startTransactionHandler,

@@ -18,10 +18,6 @@ namespace UI.Panels.Assets
 
         public DistressedRealEstate distressedAsset;
 
-        protected override int _privateLoanRate =>
-            InterestRateManager.Instance.distressedLoanRate;
-        protected override bool _privateLoanDelayed => true;
-
         protected override void Awake()
         {
             base.Awake();

@@ -372,7 +372,7 @@ namespace UI
         }
 
         public void ShowSmallBusinessPurchasePanel(
-            Assets.Business asset,
+            Assets.SmallBusiness asset,
             Assets.PartialInvestment partialAsset,
             MessageBoxHandler messageBoxHandler,
             StartTransactionHandler startTransactionHandler,
@@ -386,6 +386,7 @@ namespace UI
 
             panel.player = GameManager.Instance.player;
             panel.asset = asset;
+            panel.business = asset;
             panel.partialAsset = partialAsset;
 
             MessageBox messageBox = panel.GetComponent<MessageBox>();
@@ -420,7 +421,7 @@ namespace UI
         }
 
         public void ShowFranchiseJoinPanel(
-            Assets.Business asset,
+            Assets.Franchise asset,
             Assets.PartialInvestment partialAsset,
             MessageBoxHandler messageBoxHandler,
             StartTransactionHandler startTransactionHandler,
@@ -433,6 +434,7 @@ namespace UI
                 transform);
 
             panel.player = GameManager.Instance.player;
+            panel.franchise = asset;
             panel.asset = asset;
             panel.partialAsset = partialAsset;
 

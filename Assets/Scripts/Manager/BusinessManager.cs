@@ -101,22 +101,30 @@ public class BusinessManager : MonoBehaviour
             random, minIncome, maxIncome, profile.incomeIncrement);
         string description = profile.descriptions[random.Next(profile.descriptions.Length)];
         Debug.LogFormat("Min income {0} max income {1} actual {2}", minIncome, maxIncome, actualIncome);
-        Business business = new Business(
-            description,
-            price,
-            franchiseFee,
-            minIncome,
-            maxIncome,
-            actualIncome,
-            0,
-            _maxBusinessLoanLTV);
         if (profile.franchise)
         {
+            Franchise franchise = new Franchise(
+                description,
+                price,
+                franchiseFee,
+                minIncome,
+                maxIncome,
+                actualIncome,
+                0,
+                _maxBusinessLoanLTV);
             return new BuyInvestmentContext(
-                business, JoinFranchiseAction.GetBuyAction(player, business));
+                franchise, JoinFranchiseAction.GetBuyAction(player, franchise));
         }
         else
         {
+            SmallBusiness business = new SmallBusiness(
+                description,
+                price,
+                minIncome,
+                maxIncome,
+                actualIncome,
+                0,
+                _maxBusinessLoanLTV);
             return new BuyInvestmentContext(
                 business, PurchaseSmallBusinessAction.GetBuyAction(player, business));
         }

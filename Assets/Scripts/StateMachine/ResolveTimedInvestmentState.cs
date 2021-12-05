@@ -1,5 +1,8 @@
 ﻿using PlayerInfo;
 
+using StartupEntity = System.Tuple<
+    Assets.PartialInvestment, Assets.Startup>;
+
 namespace StateMachine
 {
     public class ResolveTimedInvestmentState : IState
@@ -11,7 +14,7 @@ namespace StateMachine
             _stateMachine = stateMachine;
         }
 
-        private void onResolve(Player player, int index, bool resolved)
+/*        private void onResolve(Player player, int index, bool resolved)
         {
             if (resolved)
             {
@@ -37,10 +40,17 @@ namespace StateMachine
                 player,
                 (bool b) => onResolve(player, index, b));
         }
-
+        */
         public void EnterState(StateMachineParameter param)
         {
-            resolveTimedInvestment(GameManager.Instance.player, 0);
+            Player player = GameManager.Instance.player;
+            foreach (StartupEntity entity in player.portfolio.startupEntities)
+            {
+                entity.Item2.OnTurnStart();
+            }
+            StartupManager.Instance.GetResolveStartupAction(
+                player, GameManager.Instance.Random).Invoke(onEventDone);
+//            resolveTimedInvestment(GameManager.Instance.player, 0);
         }
 
         public void ExitState()
@@ -51,8 +61,10 @@ namespace StateMachine
         {
         }
 
-        private void onEventDone()
+        private void onEventDone() 
         {
+            UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
+
             StateMachineParameter param = new StateMachineParameter();
             param.newYearEnterMarketEventState = true;
             _stateMachine.ChangeState(_stateMachine.YearStartState, param);

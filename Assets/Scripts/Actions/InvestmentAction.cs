@@ -92,7 +92,7 @@ namespace Actions
     public static class PurchaseSmallBusinessAction
     {
         private static void nameInputCallback(
-            Business business,
+            SmallBusiness business,
             TransactionHandler handler,
             string name)
         {
@@ -117,7 +117,7 @@ namespace Actions
         }
 
         private static void startNameInput(
-            Business business,
+            SmallBusiness business,
             TransactionHandler handler,
             bool transactionSuccess)
         {
@@ -141,7 +141,7 @@ namespace Actions
 
         public static Action<Action<bool>> GetBuyAction(
             Player player,
-            Business business)
+            SmallBusiness business)
         {
             Action<TransactionHandler, PartialInvestment> startTransaction =
                 (handler, partialAsset) => TransactionManager.BuyBusiness(
@@ -166,7 +166,7 @@ namespace Actions
     public static class JoinFranchiseAction
     {
         private static void transactionHandler(
-            Business business,
+            Franchise business,
             TransactionHandler handler,
             bool transactionSuccess)
         {
@@ -188,7 +188,7 @@ namespace Actions
 
         public static Action<Action<bool>> GetBuyAction(
             Player player,
-            Business business)
+            Franchise business)
         {
             Action<TransactionHandler, PartialInvestment> startTransaction =
                 (handler, partialAsset) => TransactionManager.BuyBusiness(

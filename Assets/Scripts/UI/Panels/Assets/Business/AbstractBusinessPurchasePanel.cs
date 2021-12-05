@@ -19,6 +19,8 @@ namespace UI.Panels.Assets
             "generate more income.";
 #pragma warning restore 0649
 
+        protected AbstractBusiness _business;
+
         public override void Refresh()
         {
             base.Refresh();
@@ -83,15 +85,13 @@ namespace UI.Panels.Assets
 
             if (_textIncomeRange != null)
             {
-                Business business = (Business)asset;
-                int minIncome = calculateIncome(business.minIncome);
-                int maxIncome = calculateIncome(business.maxIncome);
+                int minIncome = calculateIncome(_business.minIncome);
+                int maxIncome = calculateIncome(_business.maxIncome);
                 _textIncomeRange.text = string.Format(
                     "{0} - {1}",
                     local.GetCurrency(minIncome),
                     local.GetCurrency(maxIncome));
             }
         }
-
     }
 }

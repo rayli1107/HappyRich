@@ -7,7 +7,7 @@ using DistressedProperty = System.Tuple<
 using RentalProperty = System.Tuple<
     Assets.PartialInvestment, Assets.RentalRealEstate>;
 using BusinessEntity = System.Tuple<
-    Assets.PartialInvestment, Assets.Business>;
+    Assets.PartialInvestment, Assets.AbstractBusiness>;
 using StartupEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Startup>;
 
@@ -86,7 +86,7 @@ public static class TransactionManager
     private static void buyBusinessHandler(
         Player player,
         PartialInvestment partialAsset,
-        Business asset,
+        AbstractBusiness asset,
         TransactionHandler handler,
         bool success)
     {
@@ -104,7 +104,7 @@ public static class TransactionManager
     public static void BuyBusiness(
         Player player,
         PartialInvestment partialasset,
-        Business asset,
+        AbstractBusiness asset,
         TransactionHandler handler)
     {
         TryDebit.Run(
@@ -250,11 +250,12 @@ public static class TransactionManager
         Player player,
         PartialInvestment partialAsset,
         AbstractInvestment asset,
-        int price)
+        int price,
+        bool returnCapital)
     {
         List<Investment> returnedCapitalList =
             InvestmentManager.Instance.CalculateReturnedCapitalForSale(
-                asset, partialAsset, price);
+                asset, partialAsset, price, returnCapital);
         foreach (Investment returnedCapital in returnedCapitalList)
         {
             InvestmentPartner partner = returnedCapital.Item1;
@@ -270,13 +271,14 @@ public static class TransactionManager
         }
     }
 
-    public static void SellProperty(Player player, int index, int price)
+    public static void SellRentalProperty(Player player, int index, int price)
     {
-        sellInvestment(
+        SellInvestment(
             player,
             player.portfolio.rentalProperties[index].Item1,
             player.portfolio.rentalProperties[index].Item2,
-            price);
+            price,
+            true);
         player.portfolio.rentalProperties.RemoveAt(index);
     }
 

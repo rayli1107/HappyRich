@@ -32,6 +32,11 @@ public class StartupManager : MonoBehaviour
     private int _startupPublicWeight = 1;
     [SerializeField]
     private Vector2Int _startupAcquiredValueMultiplier = new Vector2Int(3, 5);
+    [SerializeField]
+    private Vector2Int _startupPublicValueMultiplier = new Vector2Int(5, 10);
+    [SerializeField]
+    private Vector2Int _startupPublicIncomeMultiplier = new Vector2Int(3, 6);
+
 #pragma warning restore 0649
 
     public static StartupManager Instance { get; private set; }
@@ -60,41 +65,6 @@ public class StartupManager : MonoBehaviour
             startup, PurchaseStartupAction.GetBuyAction(player, startup));
     }
 
-    private void resolveStartupAsPublic(
-        Player player,
-        System.Random random,
-        StartupEntity entity,
-        Action callback)
-    {
-
-    }
-
-    private void resolveStartupAsAcquired(
-        Player player,
-        System.Random random,
-        StartupEntity entity,
-        Action callback)
-    {
-        int multiplier = random.Next(
-            _startupAcquiredValueMultiplier.x,
-            _startupAcquiredValueMultiplier.y + 1);
-        int price = multiplier * entity.Item2.originalPrice;
-        TransactionManager.SellInvestment(
-            player, entity.Item1, entity.Item2, price);
-        callback?.Invoke();
-    }
-
-    private void resolveStartupAsFailed(
-        StartupEntity entity,
-        Action callback)
-    {
-        string message = string.Format(
-            "Unfortunately your startup {0} ran out of funds and went bankrupt.",
-            Localization.Instance.GetBusinessDescription(entity.Item2.label));
-        UI.UIManager.Instance.ShowSimpleMessageBox(
-            message, ButtonChoiceType.OK_ONLY, _ => callback?.Invoke());
-    }
-
     private void resolveStartup(
         Player player,
         System.Random random,
@@ -107,18 +77,30 @@ public class StartupManager : MonoBehaviour
             _startupFailedWeight);
         if (value < _startupPublicWeight)
         {
-            resolveStartupAsPublic(player, random, entity, callback);
+            int multiplier = random.Next(
+                _startupPublicValueMultiplier.x,
+                _startupPublicValueMultiplier.y + 1);
+            int newValue = multiplier * entity.Item2.originalPrice;
+            multiplier = random.Next(
+                _startupPublicIncomeMultiplier.x,
+                _startupPublicIncomeMultiplier.y + 1);
+            int income = newValue * multiplier / 100;
+            StartupPublicAction.Run(player, entity, newValue, income, callback);
             return;
         }
 
         value -= _startupPublicWeight;
         if (value < _startupAcquiredWeight)
         {
-            resolveStartupAsAcquired(player, random, entity, callback);
+            int multiplier = random.Next(
+                _startupAcquiredValueMultiplier.x,
+                _startupAcquiredValueMultiplier.y + 1);
+            int price = multiplier * entity.Item2.originalPrice;
+            StartupAcquiredAction.Run(player, entity, price, callback);
             return;
         }
 
-        resolveStartupAsFailed(entity, callback);
+        StartupBankruptAction.Run(entity, callback);
     }
 
     public Action<Action> GetResolveStartupAction(Player player, System.Random random)
@@ -131,5 +113,4 @@ public class StartupManager : MonoBehaviour
         }
         return CompositeActions.GetAndAction(exitActions);
     }
-
 }

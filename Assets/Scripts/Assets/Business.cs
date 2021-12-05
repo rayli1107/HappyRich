@@ -4,16 +4,53 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class Business : AbstractInvestment
+    public class AbstractBusiness : AbstractInvestment
     {
-        public int startupCost { get; private set; }
-        public int franchiseFee { get; private set; }
-        public override int value => startupCost + franchiseFee;
-        public override int totalCost => value;
         public int minIncome { get; private set; }
         public int maxIncome { get; private set; }
 
-        public Business(
+        public AbstractBusiness(
+            string description,
+            int originalCost,
+            int minIncome,
+            int maxIncome,
+            int actualIncome)
+            : base(description, originalCost, originalCost, actualIncome)
+        {
+            this.description = description;
+            this.minIncome = minIncome;
+            this.maxIncome = maxIncome;
+        }
+
+        public void SetName(string name)
+        {
+            label = name;
+        }
+    }
+
+    public class SmallBusiness : AbstractBusiness
+    {
+        public SmallBusiness(
+            string description,
+            int startupCost,
+            int minIncome,
+            int maxIncome,
+            int actualIncome,
+            int loanLtv,
+            int maxLoanLtv)
+            : base(description, startupCost, minIncome, maxIncome, actualIncome)
+        {
+            primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
+        }
+    }
+
+    public class Franchise : AbstractBusiness
+    {
+        public int franchiseFee { get; private set; }
+        public override int value => originalPrice + franchiseFee;
+        public override int totalCost => value;
+
+        public Franchise(
             string description,
             int startupCost,
             int franchiseFee,
@@ -22,21 +59,48 @@ namespace Assets
             int actualIncome,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, 0, actualIncome, false)
+            : base(description, startupCost, minIncome, maxIncome, actualIncome)
         {
-            this.description = description;
-            this.startupCost = startupCost;
             this.franchiseFee = franchiseFee;
-            this.minIncome = minIncome;
-            this.maxIncome = maxIncome;
-            label = description;
-
             primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
         }
+    }
 
-        public void SetName(string name)
+
+    public class PublicCompany : AbstractBusiness
+    {
+        public Startup startup { get; private set; }
+        public int originalLoanAmount { get; private set; }
+        public int originalInterest { get; private set; }
+        public override int loanValue => value;
+
+        private RestructuredBusinessLoan _restructuredLoan;
+
+        public override List<AbstractSecuredLoan> securedLoans
         {
-            label = name;
+            get
+            {
+                List<AbstractSecuredLoan> loans = base.securedLoans;
+                if (_restructuredLoan != null)
+                {
+                    loans.Add(_restructuredLoan);
+                }
+                return loans;
+            }
+        }
+
+        public PublicCompany(
+            Startup startup,
+            int value,
+            int income)
+            : base(startup.description, value, income, income, income)
+        {
+            this.startup = startup;
+            SetName(startup.label);
+            originalLoanAmount = startup.combinedLiability.amount;
+            originalInterest = startup.accruedDelayedInterest;
+            _restructuredLoan = new RestructuredBusinessLoan(startup);
         }
     }
+
 }

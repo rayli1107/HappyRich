@@ -14,9 +14,8 @@ namespace Assets
             int originalPrice,
             int marketValue,
             int annualIncome,
-            int unitCount,
-            bool isDebtInterestDelayed)
-            : base("", originalPrice, marketValue, annualIncome, isDebtInterestDelayed)
+            int unitCount)
+            : base("", originalPrice, marketValue, annualIncome)
         {
             label = unitCount > 1 ?
                 string.Format(template.label, unitCount) :

@@ -13,9 +13,9 @@ namespace Assets
             int mortgageLtv,
             int maxMortgageLtv,
             int unitCount)
-            : base(template, purchasePrice, marketValue, annualIncome, unitCount, false)
+            : base(template, purchasePrice, marketValue, annualIncome, unitCount)
         {
-            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv, false);
+            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv, false); ;
         }
     }
     
@@ -28,22 +28,6 @@ namespace Assets
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
 
-        /*
-        public RealEstatePrivateLoan mandatoryPrivateLoan { get; private set; }
-
-        public override List<AbstractLiability> liabilities
-        {
-            get
-            {
-                List<AbstractLiability> ret = base.liabilities;
-                if (mandatoryPrivateLoan != null)
-                {
-                    ret.Add(mandatoryPrivateLoan);
-                }
-                return ret;
-            }
-        }
-        */
         public RefinancedRealEstate(
             DistressedRealEstate distressedAsset,
             List<InvestmentPartner> debtPartners,
@@ -68,17 +52,8 @@ namespace Assets
             int remainingLoanAmount = Mathf.Max(originalLoanAmount - primaryLoan.amount, 0);
             if (remainingLoanAmount > 0)
             {
-                AddPrivateLoan(
-                    debtPartners,
-                    RealEstateManager.Instance.maxPrivateLoanLTV,
-                    InterestRateManager.Instance.defaultPrivateLoanRate);
+                AddPrivateLoan(debtPartners, maxPrivateLoanLtv);
                 privateLoan.setMinimumLoanAmount(remainingLoanAmount);
-                /*
-                int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
-                mandatoryPrivateLoan = new RealEstatePrivateLoan(
-                    this, debtPartners, maxPrivateLoanLtv, rate, false);
-                mandatoryPrivateLoan.setMinimumLoanAmount(remainingLoanAmount);
-                */
             }
 
             Debug.LogFormat(

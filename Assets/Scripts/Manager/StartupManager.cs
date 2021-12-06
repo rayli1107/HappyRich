@@ -4,10 +4,8 @@ using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
-using UI.Panels.Templates;
 using UnityEngine;
 
-using Investment = System.Tuple<InvestmentPartner, int>;
 using StartupEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Startup>;
 
@@ -25,11 +23,11 @@ public class StartupManager : MonoBehaviour
     [SerializeField]
     private Vector2Int _startupDuration = new Vector2Int(4, 7);
     [SerializeField]
-    private int _startupFailedWeight = 14;
+    private Vector2Int _startupFailedWeight = new Vector2Int(14, 6);
     [SerializeField]
-    private int _startupAcquiredWeight = 5;
+    private Vector2Int _startupAcquiredWeight = new Vector2Int(5, 3);
     [SerializeField]
-    private int _startupPublicWeight = 1;
+    private Vector2Int _startupPublicWeight = new Vector2Int(1, 1);
     [SerializeField]
     private Vector2Int _startupAcquiredValueMultiplier = new Vector2Int(3, 5);
     [SerializeField]
@@ -65,17 +63,22 @@ public class StartupManager : MonoBehaviour
             startup, PurchaseStartupAction.GetBuyAction(player, startup));
     }
 
+    private int getExitWeight(Player player, Vector2Int values)
+    {
+        return player.HasSkill(SkillType.LEADERSHIP) ? values.y : values.x;
+    }
+
     private void resolveStartup(
         Player player,
         System.Random random,
         StartupEntity entity,
         Action callback)
     {
-        int value = random.Next(
-            _startupPublicWeight +
-            _startupAcquiredWeight +
-            _startupFailedWeight);
-        if (value < _startupPublicWeight)
+        int weightPublic = getExitWeight(player, _startupPublicWeight);
+        int weightAcquired = getExitWeight(player, _startupAcquiredWeight);
+        int weightFailed = getExitWeight(player, _startupFailedWeight);
+        int value = random.Next(weightPublic + weightAcquired + weightFailed);
+        if (value < weightPublic)
         {
             int multiplier = random.Next(
                 _startupPublicValueMultiplier.x,
@@ -89,8 +92,8 @@ public class StartupManager : MonoBehaviour
             return;
         }
 
-        value -= _startupPublicWeight;
-        if (value < _startupAcquiredWeight)
+        value -= weightPublic;
+        if (value < weightAcquired)
         {
             int multiplier = random.Next(
                 _startupAcquiredValueMultiplier.x,

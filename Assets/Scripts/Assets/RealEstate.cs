@@ -6,6 +6,7 @@ namespace Assets
 {
     public class AbstractRealEstate : AbstractInvestment
     {
+        public override bool returnCapital => true;
         public RealEstateTemplate template { get; private set; }
         public int unitCount { get; private set; }
 

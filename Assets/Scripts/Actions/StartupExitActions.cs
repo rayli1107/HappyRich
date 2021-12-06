@@ -66,8 +66,7 @@ namespace Actions
             PublicCompany company,
             Action callback)
         {
-            player.portfolio.businessEntities.Add(
-                new BusinessEntity(entity.Item1, company));
+            TransactionManager.ListPublicCompany(player, entity.Item1, company);
             callback?.Invoke();
         }
 

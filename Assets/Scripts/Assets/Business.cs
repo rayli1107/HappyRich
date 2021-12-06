@@ -6,6 +6,7 @@ namespace Assets
 {
     public class AbstractBusiness : AbstractInvestment
     {
+        public override bool returnCapital => false;
         public int minIncome { get; private set; }
         public int maxIncome { get; private set; }
 

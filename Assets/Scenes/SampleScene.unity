@@ -1758,6 +1758,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 980e1dd7c6acaf543bbd086ca1461f6e, type: 2}
   - {fileID: 11400000, guid: b67043cd54bc8b241a6e846cdfb28ef8, type: 2}
   - {fileID: 11400000, guid: 408003eb2648ba542bc828a51df908b2, type: 2}
+  - {fileID: 11400000, guid: f2fb470b31a492344905e4d45fdc2f86, type: 2}
   _initialCost: 20000
   _additionalCost: 10000
 --- !u!1 &630578660
@@ -3668,10 +3669,10 @@ MonoBehaviour:
   - self driving cars
   - next big thing
   _startupPriceRange: {x: 2, y: 10, z: 500000}
-  _startupDuration: {x: 1, y: 1}
-  _startupFailedWeight: 0
-  _startupAcquiredWeight: 0
-  _startupPublicWeight: 1
+  _startupDuration: {x: 4, y: 7}
+  _startupFailedWeight: {x: 14, y: 6}
+  _startupAcquiredWeight: {x: 5, y: 3}
+  _startupPublicWeight: {x: 1, y: 1}
   _startupAcquiredValueMultiplier: {x: 3, y: 5}
   _startupPublicValueMultiplier: {x: 5, y: 10}
   _startupPublicIncomeMultiplier: {x: 3, y: 6}

@@ -26,7 +26,7 @@ namespace Assets
         protected virtual bool _isDebtInterestDelayed => false;
         protected virtual int _privateLoanRate =>
             InterestRateManager.Instance.defaultPrivateLoanRate;
-
+        public virtual bool returnCapital => true;
         public virtual List<AbstractSecuredLoan> securedLoans
         {
             get

@@ -308,6 +308,16 @@ public static class TransactionManager
             new RentalProperty(partialAsset, refinancedAsset));
     }
 
+    public static void ListPublicCompany(
+        Player player,
+        PartialInvestment partialAsset,
+        PublicCompany company)
+    {
+        partialAsset.Restructure(company);
+        player.portfolio.businessEntities.Add(
+            new BusinessEntity(partialAsset, company));
+    }
+
     private static void buyTimedInvestmentDebitHandler(
         Player player,
         AbstractTimedInvestment investment,

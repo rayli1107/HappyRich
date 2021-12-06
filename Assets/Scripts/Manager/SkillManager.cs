@@ -46,11 +46,6 @@ public class SkillManager : MonoBehaviour
         {
             if (!player.HasSkill(skillInfo.skillType))
             {
-                if (skillInfo.skillType == SkillType.ASSET_MANAGEMENT)
-                {
-                    return skillInfo;
-                }
-
                 newSkills.Add(skillInfo);
             }
         }

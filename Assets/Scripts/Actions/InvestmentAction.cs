@@ -6,14 +6,6 @@ using UI.Panels.Templates;
 
 namespace Actions
 {
-    /*
-     *public enum InvestmentState
-        {
-            kStart,
-            kPurchasing,
-            kCancelling
-        }
-        */
     public static class BuyInvestmentUtiliy
     {
         public static void messageBoxHandler(

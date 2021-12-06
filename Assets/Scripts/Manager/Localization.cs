@@ -41,7 +41,7 @@ public class Localization : MonoBehaviour
         Instance = this;
     }
 
-    private string colorWrap(string s, Color color)
+    public string colorWrap(string s, Color color)
     {
         return string.Format(
             "<color=#{0}>{1}</color>", ColorUtility.ToHtmlStringRGBA(color), s);

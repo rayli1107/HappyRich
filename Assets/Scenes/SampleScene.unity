@@ -821,6 +821,7 @@ MonoBehaviour:
   _defaultHappiness: 50
   _requiredHappiness: 50
   _retirementAge: 60
+  _tutorialMode: 1
 --- !u!4 &204261753
 Transform:
   m_ObjectHideFlags: 0
@@ -868,7 +869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colorPositive: {r: 0, g: 1, b: 0, a: 1}
-  _colorNegative: {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
+  _colorNegative: {r: 1, g: 0.45882353, b: 0.45882353, a: 1}
   _colorJob: {r: 0, g: 1, b: 1, a: 1}
   _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _colorBusiness: {r: 1, g: 0.8, b: 0, a: 1}

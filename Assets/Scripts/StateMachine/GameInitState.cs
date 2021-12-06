@@ -1,4 +1,8 @@
-﻿namespace StateMachine
+﻿using Actions;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace StateMachine
 {
     public class GameInitState : IState
     {
@@ -21,16 +25,24 @@
         {
             if (UI.UIManager.Instance != null &&
                 UI.UIManager.Instance.ready &&
-                RealEstateManager.Instance != null &&
-                StockManager.Instance != null &&
                 BusinessManager.Instance != null &&
-                SelfImprovementManager.Instance != null &&
-                SpecialistManager.Instance != null &&
-                InvestmentManager.Instance != null &&
-                RiskyInvestmentManager.Instance != null &&
                 FamilyManager.Instance != null &&
+                GameManager.Instance != null &&
+                InterestRateManager.Instance != null &
+                InvestmentManager.Instance != null &&
+                InvestmentPartnerManager.Instance != null &&
+                JobManager.Instance != null &&
+                Localization.Instance != null &&
                 LuxuryManager.Instance != null &&
-                PersonalEventManager.Instance != null)
+                MarketEventManager.Instance != null &&
+                PersonalEventManager.Instance != null &&
+                RealEstateManager.Instance != null &&
+                RiskyInvestmentManager.Instance != null &&
+                SelfImprovementManager.Instance != null &&
+                SkillManager.Instance != null &&
+                SpecialistManager.Instance != null &&
+                StartupManager.Instance != null &&
+                StockManager.Instance != null)
             {
                 RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
                 StockManager.Instance.Initialize(GameManager.Instance.Random);

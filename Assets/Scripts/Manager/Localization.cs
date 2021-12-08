@@ -1,11 +1,14 @@
 ﻿using Assets;
 using ScriptableObjects;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class Localization : MonoBehaviour
 {
 #pragma warning disable 0649
+    [SerializeField]
+    private string _locale = "en-US";
     [SerializeField]
     private Color _colorPositive = Color.green;
     [SerializeField]
@@ -35,10 +38,12 @@ public class Localization : MonoBehaviour
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
-
+    private CultureInfo _cultureInfo;
     private void Awake()
     {
         Instance = this;
+        Debug.LogFormat("Current culture: {0}", CultureInfo.CurrentCulture.Name);
+        _cultureInfo = new CultureInfo(_locale);
     }
 
     public string colorWrap(string s, Color color)
@@ -101,11 +106,11 @@ public class Localization : MonoBehaviour
     {
         if (amount % unit == 0)
         {
-            return (amount / unit).ToString("C0") + prefix;
+            return (amount / unit).ToString("C0", _cultureInfo) + prefix;
         }
         else
         {
-            return ((float)amount / unit).ToString("C1") + prefix;
+            return ((float)amount / unit).ToString("C1", _cultureInfo) + prefix;
         }
     }
 
@@ -133,7 +138,7 @@ public class Localization : MonoBehaviour
         }
         else
         {
-            return amount.ToString("C0");
+            return amount.ToString("C0", _cultureInfo);
         }
     }
 
@@ -166,9 +171,9 @@ public class Localization : MonoBehaviour
     {
         if (pct >= 0 && showPositive)
         {
-            return "+" + pct.ToString("#0%");
+            return "+" + pct.ToString("#0%", _cultureInfo);
         }
-        return pct.ToString("#0%");
+        return pct.ToString("#0%", _cultureInfo);
     }
 
     public string GetPercent(float pct, bool showPositive=true)

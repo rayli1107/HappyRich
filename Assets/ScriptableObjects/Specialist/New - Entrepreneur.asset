@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Entrepreneur
-  m_EditorClassIdentifier: Assembly-CSharp:ScriptableObjects:SpecialistInfo
+  m_Script: {fileID: 11500000, guid: 28d4d76c023f6d742a1b7c64a516cd80, type: 3}
+  m_Name: New - Entrepreneur
+  m_EditorClassIdentifier: 
   specialistType: 1
   specialistName: Entrepreneur
   specialistDescription: helps come up with one more business idea when you look for

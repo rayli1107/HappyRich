@@ -3,6 +3,27 @@ using System.Collections.Generic;
 
 namespace Actions
 {
+    public class RunOnceAction
+    {
+        private bool _run;
+        private Action _action;
+
+        public RunOnceAction(Action action)
+        {
+            _action = action;
+            _run = false;
+        }
+
+        public void Run()
+        {
+            if (!_run)
+            {
+                _run = true;
+                _action?.Invoke();
+            }
+        }
+    }
+
     public static class CompositeActions
     {
         private static void runAndActions(List<Action<Action>> actions, int index, Action callback)

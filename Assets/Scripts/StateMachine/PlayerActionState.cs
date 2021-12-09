@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using Actions;
+using PlayerInfo;
 using UnityEngine;
 
 namespace StateMachine
@@ -7,11 +8,14 @@ namespace StateMachine
     {
         private StateMachine _stateMachine;
         private bool _firstTurn;
+        private RunOnceAction _tutorialAction;
 
         public PlayerActionState(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
             _firstTurn = true;
+            _tutorialAction = new RunOnceAction(
+                () => TutorialManager.Instance.GetGameActionMessageAction()?.Invoke(null));
         }
 
         public void EnterState(StateMachineParameter param)
@@ -32,6 +36,7 @@ namespace StateMachine
                 player.OnPlayerTurnStart();
             }
             UI.UIManager.Instance.UpdatePlayerInfo(player);
+            _tutorialAction.Run();
         }
 
         public void ExitState()

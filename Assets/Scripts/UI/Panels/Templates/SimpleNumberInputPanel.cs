@@ -14,6 +14,8 @@ namespace UI.Panels
         private TMP_InputField _textInput;
 #pragma warning restore 0649
 
+        public TextMeshProUGUI text => _textMessage;
+        public TMP_InputField input => _textInput;
         public int maxValue = int.MaxValue;
         public int minValue = 0;
         public int defaultValue = 0;

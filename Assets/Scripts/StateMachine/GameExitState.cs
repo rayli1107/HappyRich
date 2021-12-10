@@ -11,6 +11,7 @@
 
         public void EnterState(StateMachineParameter param)
         {
+            System.Environment.Exit(1);
         }
 
         public void ExitState()

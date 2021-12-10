@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets
 {
     public class AbstractLiability
     {
-        public virtual string name { get; private set; }
+        public virtual bool payable => false;
+        public virtual string shortName { get; private set; }
+        public virtual string longName => shortName;
         public virtual int amount { get; protected set; }
         public int interestRate { get; private set; }
         public virtual int expense => amount * interestRate / 100;
@@ -12,7 +15,7 @@ namespace Assets
         public AbstractLiability(
             string name, int amount, int interestRate)
         {
-            this.name = name;
+            shortName = name;
             this.amount = amount;
             this.interestRate = interestRate;
         }
@@ -28,18 +31,68 @@ namespace Assets
         {
             this.amount += amount;
         }
+
+        public virtual List<string> GetPartialDetails()
+        {
+            Localization local = Localization.Instance;
+            if (amount == 0)
+            {
+                return new List<string>();
+            }
+
+            return new List<string>()
+            {
+                string.Format(
+                    "{0} Amount: {1}",
+                    shortName,
+                    local.GetCurrency(amount, true)),
+                string.Format(
+                    "{0} Interest Rate: {1}",
+                    shortName,
+                    local.colorWrap(string.Format("{0}%", interestRate), local.colorNegative)),
+                string.Format(
+                    "{0} Annual Payment: {1}",
+                    shortName,
+                    local.GetCurrency(expense, true))
+            };
+        }
+
+        public virtual List<string> GetDetails()
+        {
+            Localization local = Localization.Instance;
+            if (amount == 0)
+            {
+                return new List<string>();
+            }
+
+            return new List<string>()
+            {
+                local.GetLiability(this),
+                string.Format(
+                    "Amount: {0}",
+                    local.GetCurrency(amount, true)),
+                string.Format(
+                    "Interest Rate: {0}",
+                    local.colorWrap(string.Format("{0}%", interestRate), local.colorNegative)),
+                string.Format(
+                    "Annual Payment: {0}",
+                    local.GetCurrency(expense, true))
+            };
+        }
     }
 
     public class AutoLoan : AbstractLiability
     {
+        public override bool payable => true;
         public AutoLoan(int amount) :
-            base ("Auto Loan", amount, InterestRateManager.Instance.autoLoanRate)
+            base("Auto Loan", amount, InterestRateManager.Instance.autoLoanRate)
         {            
         }
     }
 
     public class StudentLoan : AbstractLiability
     {
+        public override bool payable => true;
         public StudentLoan(int amount) :
             base("Student Loan", amount, InterestRateManager.Instance.studentLoanRate)
         {
@@ -48,6 +101,7 @@ namespace Assets
 
     public class PersonalLoan : AbstractLiability
     {
+        public override bool payable => true;
         public PersonalLoan(int amount) :
             base("Personal Loan", amount, InterestRateManager.Instance.personalLoanRate)
         {
@@ -57,7 +111,8 @@ namespace Assets
     public class CombinedLiability : AbstractLiability
     {
         public AbstractAsset asset { get; private set; }
-        public override string name => string.Format("Liability - {0}", asset.name);
+        public override string longName => string.Format(
+            "{0} - {1}", shortName, asset.name);
         public override int amount
         {
             get
@@ -84,17 +139,28 @@ namespace Assets
             }
         }
 
-        public CombinedLiability(AbstractAsset asset) : base("", 0, 0)
+        public CombinedLiability(AbstractAsset asset) : base("Loans", 0, 0)
         {
             this.asset = asset;
         }
-    }
 
-    public class PartialLiability : AbstractLiability
-    {
-        public PartialLiability(AbstractLiability liability, float equity) :
-            base(liability.name, Mathf.FloorToInt(liability.amount * equity), liability.interestRate)
+        public override List<string> GetPartialDetails()
         {
+            Localization local = Localization.Instance;
+            if (amount == 0)
+            {
+                return new List<string>();
+            }
+
+            return new List<string>()
+            {
+                string.Format(
+                    "Total Loan Amount: {0}",
+                    local.GetCurrency(amount, true)),
+                string.Format(
+                    "Total Loan Payment: {0}",
+                    local.GetCurrency(expense, true))
+            };
         }
     }
 }

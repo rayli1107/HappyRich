@@ -42,7 +42,7 @@ public class MarketEventManager : MonoBehaviour
         List<Action<Action>> allEvents = new List<Action<Action>>();
         allEvents.Add(InvestmentManager.Instance.GetMarketEvent(player, random));
         allEvents.Add(StockManager.Instance.GetMarketEvent(random));
-        allEvents.Add(RiskyInvestmentManager.Instance.GetMarketEvent(player, random));
+//        allEvents.Add(RiskyInvestmentManager.Instance.GetMarketEvent(player, random));
         allEvents.Add(InvestmentPartnerManager.Instance.GetMarketEvent(player, random));
         allEvents.Add(RealEstateManager.Instance.GetMarketEvent(player, random));
         Action <Action> marketEvent = getRandomEvent(allEvents, random);

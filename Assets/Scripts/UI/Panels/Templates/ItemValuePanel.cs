@@ -20,8 +20,31 @@ namespace UI.Panels.Templates
         private float tabWidth = 40;
 #pragma warning restore 0649
 
-        public Action clickAction = null;
+        public Action clickAction
+        {
+            set
+            {
+                _button.enabled = value != null;
+                if (value == null)
+                {
+                    _button.onClick.RemoveAllListeners();
+                }
+                else
+                {
+                    _button.onClick.AddListener(new UnityAction(value));
+                }
+            }
+        }
+
         public int tabCount { get; private set; }
+
+        private Button _button;
+
+        private void Awake()
+        {
+            _button = GetComponentInChildren<Button>(true);
+            clickAction = null;
+        }
 
         public void setTabCount(int i)
         {
@@ -62,16 +85,6 @@ namespace UI.Panels.Templates
         private void OnEnable()
         {
             tabCount = 0;
-        }
-
-        public void EnableClick(bool enable)
-        {
-            _label.GetComponent<Button>().enabled = enable;
-        }
-
-        public void OnClick()
-        {
-            clickAction?.Invoke();
         }
     }
 }

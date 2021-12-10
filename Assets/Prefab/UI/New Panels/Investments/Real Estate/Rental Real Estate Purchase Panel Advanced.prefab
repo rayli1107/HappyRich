@@ -195,6 +195,7 @@ MonoBehaviour:
   _textPurchasePrice: {fileID: 8732439789641882633}
   _textDownPayment: {fileID: 2679322408225507319}
   _textAnnualIncome: {fileID: 2405479652773172705}
+  _textInterestFee: {fileID: 0}
   _textTotalLTV: {fileID: 8003281593243997634}
   _textOwnershipInterest: {fileID: 6746537587671702506}
   _textEstimatedValue: {fileID: 817461529019974085}

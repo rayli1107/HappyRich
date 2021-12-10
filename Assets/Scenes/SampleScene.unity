@@ -3591,7 +3591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23d0ad0bbf72ff4fa284cf60fe9dc13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultAvailableInvestments: 10
+  _defaultAvailableInvestments: 2
   _hustledAvailableInvestments: 3
   _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1
@@ -6258,11 +6258,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteAsset: {fileID: 11400000, guid: f6ae3aa5f0a31d7408aa2383f0b08fdd, type: 2}
-  _iconIndexAge: 0
-  _iconIndexCash: 1
-  _iconIndexCashflow: 2
-  _iconIndexFire: 3
-  _iconIndexHappiness: 4
 --- !u!4 &1969456347
 Transform:
   m_ObjectHideFlags: 0

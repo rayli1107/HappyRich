@@ -13,10 +13,6 @@ namespace UI.Panels.Assets
 #pragma warning disable 0649
         [SerializeField]
         private TextMeshProUGUI _textIncomeRange;
-        [SerializeField]
-        private string _messageBusinessOperationSkill =
-            " Your expertise in {0} can potentially help the business " +
-            "generate more income.";
 #pragma warning restore 0649
 
         protected AbstractBusiness _business;

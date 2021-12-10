@@ -1,8 +1,13 @@
-﻿using Assets;
+﻿using Actions;
+using Assets;
 using PlayerInfo;
+using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
+
+using AssetContext = System.Tuple<
+    Assets.AbstractAsset, Assets.AbstractLiability>;
 
 namespace UI.Panels.PlayerDetails
 {
@@ -27,13 +32,38 @@ namespace UI.Panels.PlayerDetails
         {
         }
 
+        private void showAssetLiabilityDetails(
+            AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
+        {
+            List<string> details =
+                asset == null ? loan.GetDetails() : asset.GetDetails();
+            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", details), ButtonChoiceType.OK_ONLY, null);
+            panel.text.fontSizeMax = fontSizeMax;
+        }
+
+        private Action getClickAction(
+            AbstractAsset asset, AbstractLiability loan)
+        {
+            if (loan != null && loan.payable && loan.amount > 0)
+            {
+                return () => LoanPayoffActions.PayAssetLoanPrincipal(
+                    player, asset, loan, reloadWindow);
+            }
+            else
+            {
+                return () => showAssetLiabilityDetails(asset, loan);
+            }
+        }
+
         private int AddItemValueAsCurrency(
             Transform parentTranform,
             int index,
             int tab,
             string label,
             int value,
-            bool flip)
+            bool flip,
+            Action clickAction = null)
         {
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
             panel.setLabel(label);
@@ -47,6 +77,7 @@ namespace UI.Panels.PlayerDetails
             }
             panel.setTabCount(tab);
             panel.transform.SetSiblingIndex(index);
+            panel.clickAction = clickAction;
             return index + 1;
         }
 
@@ -57,8 +88,11 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            List<AbstractLiability> liabilities = new List<AbstractLiability>();
-            liabilities.AddRange(player.portfolio.liabilities);
+            List<AssetContext> liabilities = new List<AssetContext>();
+            foreach (AbstractLiability liability in player.portfolio.liabilities)
+            {
+                liabilities.Add(new AssetContext(null, liability));
+            }
 
             int totalAssets = 0;
             int totalBusiness = 0;
@@ -117,7 +151,8 @@ namespace UI.Panels.PlayerDetails
                     totalRealEstate += asset.value;
                     if (asset.combinedLiability.amount > 0)
                     {
-                        liabilities.Add(asset.combinedLiability);
+                        liabilities.Add(
+                            new AssetContext(asset, asset.combinedLiability));
                     }
                 }
 
@@ -137,7 +172,8 @@ namespace UI.Panels.PlayerDetails
                         _panelAssets.tabCount + 2,
                         asset.name,
                         asset.value,
-                        false);
+                        false,
+                        getClickAction(asset, asset.combinedLiability));
                 }
             }
             totalAssets += totalRealEstate;
@@ -158,7 +194,8 @@ namespace UI.Panels.PlayerDetails
                     totalBusiness += asset.value;
                     if (asset.combinedLiability.amount > 0)
                     {
-                        liabilities.Add(asset.combinedLiability);
+                        liabilities.Add(
+                            new AssetContext(asset, asset.combinedLiability));
                     }
 
                     currentIndex = AddItemValueAsCurrency(
@@ -167,7 +204,8 @@ namespace UI.Panels.PlayerDetails
                         _panelAssets.tabCount + 2,
                         asset.name,
                         asset.value,
-                        false);
+                        false,
+                        getClickAction(asset, asset.combinedLiability));
                 }
             }
             totalAssets += totalBusiness;
@@ -178,10 +216,6 @@ namespace UI.Panels.PlayerDetails
                 foreach (AbstractAsset asset in player.portfolio.otherAssets)
                 {
                     totalOtherAssets += asset.value;
-                    if (asset.combinedLiability.amount > 0)
-                    {
-                        liabilities.Add(asset.combinedLiability);
-                    }
                 }
 
                 currentIndex = AddItemValueAsCurrency(
@@ -194,30 +228,37 @@ namespace UI.Panels.PlayerDetails
 
                 foreach (AbstractAsset asset in player.portfolio.otherAssets)
                 {
+                    AbstractLiability loan = asset.combinedLiability;
                     currentIndex = AddItemValueAsCurrency(
                         _panelAssets.transform.parent,
                         currentIndex,
                         _panelAssets.tabCount + 2,
                         asset.name,
                         asset.value,
-                        false);
+                        false,
+                        getClickAction(asset, loan));
+
+                    if (loan.amount > 0)
+                    {
+                        liabilities.Add(new AssetContext(asset, loan));
+                    }
                 }
             }
             totalAssets += totalOtherAssets;
 
             // Other Liabilities
             currentIndex = _panelLiabilities.transform.GetSiblingIndex() + 1;
-            foreach (AbstractLiability liability in liabilities)
+            foreach (AssetContext assetContext in liabilities)
             {
-                totalLiabilities += liability.amount;
-
+                totalLiabilities += assetContext.Item2.amount;
                 currentIndex = AddItemValueAsCurrency(
                     _panelLiabilities.transform.parent,
                     currentIndex,
                     _panelLiabilities.tabCount + 1,
-                    liability.name,
-                    liability.amount,
-                    true);
+                    assetContext.Item2.shortName,
+                    assetContext.Item2.amount,
+                    true,
+                    getClickAction(assetContext.Item1, assetContext.Item2));
             }
 
             int netWorth = totalAssets - totalLiabilities;
@@ -233,6 +274,12 @@ namespace UI.Panels.PlayerDetails
         private void OnEnable()
         {
             RefreshContent();
+        }
+
+        private void reloadWindow()
+        {
+            GetComponent<MessageBox>().Destroy();
+            UIManager.Instance.ShowAssetLiabilityStatusPanel();
         }
     }
 }

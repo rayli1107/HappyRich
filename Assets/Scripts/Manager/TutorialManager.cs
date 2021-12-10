@@ -11,16 +11,6 @@ public class TutorialManager : MonoBehaviour
 #pragma warning disable 0649
     [SerializeField]
     private TMP_SpriteAsset _spriteAsset;
-    [SerializeField]
-    private int _iconIndexAge = 0;
-    [SerializeField]
-    private int _iconIndexCash = 1;
-    [SerializeField]
-    private int _iconIndexCashflow = 2;
-    [SerializeField]
-    private int _iconIndexFire = 3;
-    [SerializeField]
-    private int _iconIndexHappiness = 4;
 #pragma warning restore 0649
 
     public static TutorialManager Instance { get; private set; }

@@ -1,5 +1,8 @@
-﻿using Assets;
+﻿using Actions;
+using Assets;
 using PlayerInfo;
+using System;
+using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
 
@@ -24,13 +27,38 @@ namespace UI.Panels.PlayerDetails
 
         public Player player;
 
+        private void showAssetLiabilityDetails(
+            AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
+        {
+            List<string> details =
+                asset == null ? loan.GetDetails() : asset.GetDetails();
+            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", details), ButtonChoiceType.OK_ONLY, null);
+            panel.text.fontSizeMax = fontSizeMax;
+        }
+
+        private Action getClickAction(
+            AbstractAsset asset, AbstractLiability loan)
+        {
+            if (loan != null && loan.payable && loan.amount > 0)
+            {
+                return () => LoanPayoffActions.PayAssetLoanPrincipal(
+                    player, asset, loan, reloadWindow);
+            }
+            else
+            {
+                return () => showAssetLiabilityDetails(asset, loan);
+            }
+        }
+
         private int AddItemValueAsCurrency(
             Transform parentTranform,
             int index,
             int tab,
             string label,
             int value,
-            bool flip)
+            bool flip,
+            Action clickAction = null)
         {
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
             panel.setLabel(label);
@@ -44,6 +72,7 @@ namespace UI.Panels.PlayerDetails
             }
             panel.setTabCount(tab);
             panel.transform.SetSiblingIndex(index);
+            panel.clickAction = clickAction;
             return index + 1;
         }
 
@@ -105,7 +134,8 @@ namespace UI.Panels.PlayerDetails
                         _panelPassiveIncome.tabCount + 1,
                         asset.name,
                         income,
-                        false);
+                        false,
+                        getClickAction(asset, asset.combinedLiability));
                 }
             }
 
@@ -187,7 +217,8 @@ namespace UI.Panels.PlayerDetails
                         _panelExpenses.tabCount + 1,
                         asset.name,
                         -1 * income,
-                        true);
+                        true,
+                        getClickAction(asset, asset.combinedLiability));
                 }
             }
 
@@ -202,9 +233,10 @@ namespace UI.Panels.PlayerDetails
                         _panelExpenses.transform.parent,
                         index,
                         _panelExpenses.tabCount + 1,
-                        liability.name,
+                        liability.shortName,
                         expense,
-                        true);
+                        true,
+                        getClickAction(null, liability));
                 }
             }
             if (_showTotalValues)
@@ -215,7 +247,6 @@ namespace UI.Panels.PlayerDetails
             {
                 _panelExpenses.removeValue();
             }
-
         }
 
         public void RefreshContent()
@@ -236,6 +267,12 @@ namespace UI.Panels.PlayerDetails
         private void OnEnable()
         {
             RefreshContent();
+        }
+
+        private void reloadWindow()
+        {
+            GetComponent<MessageBox>().Destroy();
+            UIManager.Instance.ShowAssetLiabilityStatusPanel();
         }
     }
 }

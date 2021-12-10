@@ -10,6 +10,8 @@ namespace Assets
         private bool _delayed;
         public override int expense => _delayed ? 0 : base.expense;
         public int delayedExpense => _delayed ? base.expense : 0;
+        public override string longName => string.Format(
+            "{0} - {1}", shortName, asset.name);
 
         public AbstractInvestment asset { get; private set; }
 
@@ -119,7 +121,7 @@ namespace Assets
     {
         public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
-                   string.Format("Mortgage - {0}", asset.label),
+                   "Mortgage",
                    defaultltv,
                    maxltv,
                    InterestRateManager.Instance.realEstateLoanRate,
@@ -132,7 +134,7 @@ namespace Assets
     {
         public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
-                   string.Format("Business Loan - {0}", asset.label),
+                   "Business Loan",
                    defaultltv,
                    maxltv,
                    InterestRateManager.Instance.businessLoanRate,
@@ -145,7 +147,7 @@ namespace Assets
     {
         public StartupLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
             : base(asset,
-                   string.Format("Startup Loan - {0}", asset.label),
+                   "Startup Loan",
                    defaultltv,
                    maxltv,
                    InterestRateManager.Instance.startupBusinessLoanRate,
@@ -181,7 +183,7 @@ namespace Assets
             int interestRate,
             bool delayed) :
             base(asset,
-                 string.Format("Private Loan - %s", asset.label),
+                 "Private Loan",
                  0,
                  maxltv,
                  interestRate,

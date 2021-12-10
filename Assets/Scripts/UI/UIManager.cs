@@ -262,7 +262,7 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowNumberInputPanel(
+        public SimpleNumberInputPanel ShowNumberInputPanel(
             string message,
             int maxValue,
             Action<ButtonType, int> numberInputCallback,
@@ -281,6 +281,7 @@ namespace UI
             messageBox.EnableButtons(buttonChoice);
 
             panel.Refresh();
+            return panel;
         }
 
         public void ShowRentalRealEstatePurchasePanel(

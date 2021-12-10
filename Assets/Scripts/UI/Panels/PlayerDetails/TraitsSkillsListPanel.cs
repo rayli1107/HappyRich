@@ -28,12 +28,7 @@ namespace UI.Panels.PlayerDetails
             panel.removeValue();
             panel.setTabCount(1);
             panel.transform.SetSiblingIndex(index);
-
-            if (clickAction != null)
-            {
-                panel.clickAction = clickAction;
-                panel.EnableClick(true);
-            }
+            panel.clickAction = clickAction;
         }
 
         public void Refresh()

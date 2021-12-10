@@ -38,6 +38,9 @@ public class Localization : MonoBehaviour
 #pragma warning restore 0649
 
     public static Localization Instance { get; private set; }
+    public Color colorNegative => _colorNegative;
+    public Color colorAsset => _colorRealEstate;
+
     private CultureInfo _cultureInfo;
     private void Awake()
     {
@@ -205,5 +208,15 @@ public class Localization : MonoBehaviour
     public string GetSpecialist(SpecialistInfo info)
     {
         return colorWrap(info.specialistName, _colorSpecialist);
+    }
+
+    public string GetAsset(AbstractAsset asset)
+    {
+        return colorWrap(asset.name, colorAsset);
+    }
+
+    public string GetLiability(AbstractLiability liability)
+    {
+        return colorWrap(liability.longName, colorNegative);
     }
 }

@@ -33,12 +33,7 @@ namespace UI.Panels.PlayerDetails
             panel.setLabel(label);
             panel.setValueAsChange(value);
             panel.setTabCount(1);
-
-            if (clickAction != null)
-            {
-                panel.clickAction = clickAction;
-                panel.EnableClick(true);
-            }
+            panel.clickAction = clickAction;
         }
 
         public void Refresh()

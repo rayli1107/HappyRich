@@ -343,4 +343,30 @@ public static class TransactionManager
             investment.originalPrice,
             (bool b) => buyTimedInvestmentDebitHandler(player, investment, handler, b));
     }
+
+    private static void payLoanPrincipalHandler(
+        bool success,
+        AbstractLiability loan,
+        int amount,
+        TransactionHandler handler)
+    {
+        if (success)
+        {
+            loan.PayOff(amount);
+        }
+        handler?.Invoke(success);
+    }
+
+    public static void PayLoanPrincipal(
+        Player player,
+        AbstractLiability loan,
+        int amount,
+        TransactionHandler handler)
+    {
+        int payAmount = Mathf.Min(amount, loan.amount);
+        TryDebit.Run(
+            player,
+            amount,
+            b => payLoanPrincipalHandler(b, loan, amount, handler));
+    }
 }

@@ -20,11 +20,11 @@ namespace StateMachine
             //                SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.BUSINESS_OPERATIONS));
             //            GameManager.Instance.player.AddSkill(
             //                SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.REAL_ESTATE_VALUATION));
+/*
             GameManager.Instance.player.contacts.Add(
                 new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
             GameManager.Instance.player.contacts.Add(
                 new InvestmentPartner("Bob", 200000, RiskTolerance.kLow, 10));
-            /*
                         GameManager.Instance.player.contacts.Add(
                             new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
                         GameManager.Instance.player.contacts.Add(
@@ -47,10 +47,10 @@ namespace StateMachine
                         GameManager.Instance.player.AddSpecialist(
                             SpecialistManager.Instance.GetSpecialistInfo(
                                 ScriptableObjects.SpecialistType.LOAN_AGENT));
-                                */
 
             GameManager.Instance.player.portfolio.AddCash(5000000);
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
+            */
         }
 
         public void ExitState()

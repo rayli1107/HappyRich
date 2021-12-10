@@ -176,5 +176,27 @@ namespace Assets
             capitalPerShare = 0;
             asset = company;
         }
+
+        public override List<string> GetDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = asset.GetDetails();
+            if (hasInvestors)
+            {
+                details.Add(
+                    string.Format(
+                        "Your Equity: {0}",
+                        local.GetPercent(equity, false)));
+                details.Add(
+                    string.Format(
+                        "Your Asset Value: {0}",
+                        local.GetCurrency(value)));
+                details.Add(
+                    string.Format(
+                        "Your Profit Share: {0}",
+                        local.GetCurrency(income)));
+            }
+            return details;
+        }
     }
 }

@@ -421,7 +421,7 @@ namespace UI.Panels.PlayerDetails
         private void reloadWindow()
         {
             GetComponent<MessageBox>().Destroy();
-            UIManager.Instance.ShowAssetLiabilityStatusPanel();
+            UIManager.Instance.ShowIncomeExpenseStatusPanel();
         }
     }
 }

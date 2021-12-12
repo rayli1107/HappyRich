@@ -35,8 +35,6 @@ namespace UI
         [SerializeField]
         private StockMarketPanel _prefabStockMarketPanel;
         [SerializeField]
-        private StockPanel _prefabStockTradePanel;
-        [SerializeField]
         private SimpleNumberInputPanel _prefabNumberInputPanel;
         [SerializeField]
         private RentalRealEstatePurchasePanel _prefabAdvancedRentalRealEstatePurchasePanel;
@@ -82,7 +80,12 @@ namespace UI
         private RaisePersonalFundsMessageBox _prefabRaisePersonalFundsMessageBox;
         [SerializeField]
         private GameObject _prefabMessageBoxPanel;
-
+        [SerializeField]
+        private GrowthStockComponent _prefabGrowthStockPanel;
+        [SerializeField]
+        private YieldStockComponent _prefabYieldStockComponent;
+        [SerializeField]
+        private CryptoComponent _prefabCryptoComponent;
         [SerializeField]
         private Button _buttonEndTurnNotReady;
         [SerializeField]
@@ -254,12 +257,52 @@ namespace UI
             panel.Refresh();
         }
 
-        public void ShowStockTradePanel(Assets.AbstractStock stock)
+        private void setupStockPanel(
+            Player player,
+            StockPanel panel,
+            Assets.AbstractStock stock,
+            Action callback=null)
         {
-            StockPanel panel = Instantiate(_prefabStockTradePanel, transform);
-            panel.player = GameManager.Instance.player;
+            panel.player = player;
             panel.stock = stock;
+            panel.GetComponent<MessageBox>().messageBoxHandler = _ => callback?.Invoke();
             panel.Refresh();
+        }
+
+        public void ShowGrowthStockPanel(
+            Assets.GrowthStock stock,
+            Action callback=null)
+        {
+            Player player = GameManager.Instance.player;
+            GrowthStockComponent component = Instantiate(_prefabGrowthStockPanel, transform);
+            component.player = player;
+            component.growthStock = stock;
+            component.Refresh();
+            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
+        }
+
+        public void ShowYieldStockPanel(
+            Assets.YieldStock stock,
+            Action callback=null)
+        {
+            Player player = GameManager.Instance.player;
+            YieldStockComponent component = Instantiate(_prefabYieldStockComponent, transform);
+            component.player = player;
+            component.yieldStock = stock;
+            component.Refresh();
+            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
+        }
+
+        public void ShowCryptoPanel(
+            Assets.AbstractCryptoCurrency stock,
+            Action callback=null)
+        {
+            Player player = GameManager.Instance.player;
+            CryptoComponent component = Instantiate(_prefabCryptoComponent, transform);
+            component.player = player;
+            component.crypto = stock;
+            component.Refresh();
+            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
         }
 
         public SimpleNumberInputPanel ShowNumberInputPanel(

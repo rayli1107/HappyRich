@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Actions;
+using PlayerInfo;
+using System;
+using System.Collections.Generic;
+using UI;
+using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Assets
@@ -11,6 +16,8 @@ namespace Assets
         public virtual int amount { get; protected set; }
         public int interestRate { get; private set; }
         public virtual int expense => amount * interestRate / 100;
+
+        private const int _detailFontSizeMax = 32;
 
         public AbstractLiability(
             string name, int amount, int interestRate)
@@ -78,6 +85,23 @@ namespace Assets
                     "Annual Payment: {0}",
                     local.GetCurrency(expense, true))
             };
+        }
+
+        public virtual void OnDetail(Player player, Action callback)
+        {
+            if (payable && amount > 0)
+            {
+                LoanPayoffActions.PayAssetLoanPrincipal(
+                    player, null, this, callback);
+                return;
+            }
+
+            List<string> details = GetDetails();
+            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", details),
+                ButtonChoiceType.OK_ONLY,
+                _ => callback?.Invoke());
+            panel.text.fontSizeMax = _detailFontSizeMax;
         }
     }
 

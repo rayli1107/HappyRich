@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Actions;
+using PlayerInfo;
+using System;
+using System.Collections.Generic;
+using UI;
+using UI.Panels.Templates;
 
 namespace Assets
 {
     public class AbstractAsset
     {
         public virtual string name { get; protected set; }
+        private const int _detailFontSizeMax = 32;
 
         public AbstractLiability combinedLiability
         {
@@ -80,6 +86,24 @@ namespace Assets
             }
 
             return details;
+        }
+
+        public virtual void OnDetail(Player player, Action callback)
+        {
+            AbstractLiability loan = combinedLiability;
+            if (loan != null && loan.payable && loan.amount > 0)
+            {
+                LoanPayoffActions.PayAssetLoanPrincipal(
+                    player, this, loan, callback);
+                return;
+            }
+
+            List<string> details = GetDetails();
+            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", details),
+                ButtonChoiceType.OK_ONLY,
+                _ => callback?.Invoke());
+            panel.text.fontSizeMax = _detailFontSizeMax;
         }
     }
 

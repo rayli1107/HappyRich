@@ -26,7 +26,7 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
-
+        /*
         private void showAssetLiabilityDetails(
             AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
         {
@@ -49,7 +49,7 @@ namespace UI.Panels.PlayerDetails
             {
                 return () => showAssetLiabilityDetails(asset, loan);
             }
-        }
+        }*/
 
         private int AddItemValueAsCurrency(
             Transform parentTranform,
@@ -116,11 +116,131 @@ namespace UI.Panels.PlayerDetails
             }
         }
 
+        private void addInvestmentsByType(
+            ItemValuePanel panelParent,
+            Player player,
+            string investmentType,
+            List<AbstractAsset> assets,
+            int tabCount,
+            ref int index,
+            ref int total,
+            bool positive)
+        {
+/*            Localization local = Localization.Instance;
+            Converter<AbstractAsset, string> convertFn =
+                a => string.Format(
+                    "{0} - {1}", a.name, local.GetCurrency(a.expectedIncome));
+            Debug.LogFormat(
+                "{0} Before {1}",
+                investmentType,
+                string.Join("\n", assets.ConvertAll(convertFn)));*/
+            if (positive)
+            {
+                assets = assets.FindAll(a => a.expectedIncome > 0);
+            }
+            else
+            {
+                assets = assets.FindAll(a => a.expectedIncome < 0);
+            }
+/*
+ *Debug.LogFormat(
+                "{0} After {1}",
+                investmentType,
+                string.Join("\n", assets.ConvertAll(convertFn)));*/
+            if (assets.Count == 0)
+            {
+                return;
+            }
+
+            index = AddItemValueAsCurrency(
+                panelParent.transform.parent,
+                index,
+                tabCount,
+                investmentType,
+                0,
+                false);
+
+            foreach (AbstractAsset asset in assets)
+            {
+                int value = (positive ? 1 : -1) * asset.expectedIncome;
+                total += value;
+                index = AddItemValueAsCurrency(
+                    panelParent.transform.parent,
+                    index,
+                    tabCount + 1,
+                    asset.name,
+                    value,
+                    !positive,
+                    () => asset.OnDetail(player, reloadWindow));
+            }
+        }
+
         private void AddPassiveIncome()
         {
             int passiveIncome = 0;
             int index = _panelPassiveIncome.transform.GetSiblingIndex() + 1;
 
+            // Stocks
+            List<PurchasedStock> stocks = new List<PurchasedStock>();
+            foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
+            {
+                if (entry.Value.expectedIncome > 0)
+                {
+                    stocks.Add(entry.Value);
+                }
+            }
+            if (stocks.Count > 0)
+            {
+                index = AddItemValueAsCurrency(
+                    _panelPassiveIncome.transform.parent,
+                    index,
+                    _panelPassiveIncome.tabCount + 1,
+                    "Liquid Assets",
+                    0,
+                    false);
+                foreach (PurchasedStock stock in stocks)
+                {
+                    int income = stock.expectedIncome;
+                    passiveIncome += income;
+                    index = AddItemValueAsCurrency(
+                        _panelPassiveIncome.transform.parent,
+                        index,
+                        _panelPassiveIncome.tabCount + 2,
+                        stock.stock.longName,
+                        income,
+                        false,
+                        () => stock.OnDetail(player, reloadWindow));
+                }
+            }
+
+            addInvestmentsByType(
+                _panelPassiveIncome,
+                player,
+                "Real Estate",
+                player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
+                _panelPassiveIncome.tabCount + 1,
+                ref index,
+                ref passiveIncome,
+                true);
+            addInvestmentsByType(
+                _panelPassiveIncome,
+                player,
+                "Businesses",
+                player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
+                _panelPassiveIncome.tabCount + 1,
+                ref index,
+                ref passiveIncome,
+                true);
+            addInvestmentsByType(
+                _panelPassiveIncome,
+                player,
+                "Other Assets",
+                player.portfolio.otherAssets,
+                _panelPassiveIncome.tabCount + 1,
+                ref index,
+                ref passiveIncome,
+                true);
+            /*
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
                 int income = asset.expectedIncome;
@@ -138,6 +258,7 @@ namespace UI.Panels.PlayerDetails
                         getClickAction(asset, asset.combinedLiability));
                 }
             }
+            */
 
             if (_showTotalValues)
             {
@@ -199,11 +320,39 @@ namespace UI.Panels.PlayerDetails
                     _panelExpenses.tabCount + 1,
                     "Health Insurance",
                     PersonalEventManager.Instance.healthInsuranceCost,
-                    true);
-
+                    true,
+                    () => CancelHealthInsurance.Run(player, reloadWindow));
             }
 
             // Assets with negative cashflow
+            addInvestmentsByType(
+                _panelExpenses,
+                player,
+                "Real Estate",
+                player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
+                _panelExpenses.tabCount + 1,
+                ref index,
+                ref expenses,
+                false);
+            addInvestmentsByType(
+                _panelExpenses,
+                player,
+                "Businesses",
+                player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
+                _panelExpenses.tabCount + 1,
+                ref index,
+                ref expenses,
+                false);
+            addInvestmentsByType(
+                _panelExpenses,
+                player,
+                "Other Assets",
+                player.portfolio.otherAssets,
+                _panelExpenses.tabCount + 1,
+                ref index,
+                ref expenses,
+                false);
+            /*
             foreach (AbstractAsset asset in player.portfolio.assets)
             {
                 int income = asset.expectedIncome;
@@ -221,7 +370,7 @@ namespace UI.Panels.PlayerDetails
                         getClickAction(asset, asset.combinedLiability));
                 }
             }
-
+            */
             foreach (AbstractLiability liability in player.portfolio.liabilities)
             {
                 int expense = liability.expense;
@@ -236,7 +385,7 @@ namespace UI.Panels.PlayerDetails
                         liability.shortName,
                         expense,
                         true,
-                        getClickAction(null, liability));
+                        () => liability.OnDetail(player, reloadWindow));
                 }
             }
             if (_showTotalValues)

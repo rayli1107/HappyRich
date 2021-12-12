@@ -32,7 +32,8 @@ namespace UI.Panels.PlayerDetails
         {
         }
 
-        private void showAssetLiabilityDetails(
+/*
+ *private void showAssetLiabilityDetails(
             AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
         {
             List<string> details =
@@ -55,7 +56,7 @@ namespace UI.Panels.PlayerDetails
                 return () => showAssetLiabilityDetails(asset, loan);
             }
         }
-
+        */
         private int AddItemValueAsCurrency(
             Transform parentTranform,
             int index,
@@ -125,10 +126,11 @@ namespace UI.Panels.PlayerDetails
                     _panelAssets.transform.parent,
                     currentIndex,
                     _panelAssets.tabCount + 1,
-                    "Stocks",
+                    "Liquid Assets",
                     0,
                     false);
 
+                List<PurchasedStock> purchasedStocks = new List<PurchasedStock>();
                 foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
                 {
                     PurchasedStock stock = entry.Value;
@@ -136,9 +138,10 @@ namespace UI.Panels.PlayerDetails
                         _panelAssets.transform.parent,
                         currentIndex,
                         _panelAssets.tabCount + 2,
-                        stock.stock.name,
+                        stock.stock.longName,
                         stock.value,
-                        false);
+                        false,
+                        () => stock.OnDetail(player, reloadWindow));
                 }
             }
             totalAssets += totalStocks;
@@ -173,7 +176,7 @@ namespace UI.Panels.PlayerDetails
                         asset.name,
                         asset.value,
                         false,
-                        getClickAction(asset, asset.combinedLiability));
+                        () => asset.OnDetail(player, reloadWindow));
                 }
             }
             totalAssets += totalRealEstate;
@@ -205,7 +208,7 @@ namespace UI.Panels.PlayerDetails
                         asset.name,
                         asset.value,
                         false,
-                        getClickAction(asset, asset.combinedLiability));
+                        () => asset.OnDetail(player, reloadWindow));
                 }
             }
             totalAssets += totalBusiness;
@@ -236,7 +239,7 @@ namespace UI.Panels.PlayerDetails
                         asset.name,
                         asset.value,
                         false,
-                        getClickAction(asset, loan));
+                        () => asset.OnDetail(player, reloadWindow));
 
                     if (loan.amount > 0)
                     {
@@ -250,6 +253,15 @@ namespace UI.Panels.PlayerDetails
             currentIndex = _panelLiabilities.transform.GetSiblingIndex() + 1;
             foreach (AssetContext assetContext in liabilities)
             {
+                Action detailAction = null;
+                if (assetContext.Item1 != null)
+                {
+                    detailAction = () => assetContext.Item1.OnDetail(player, reloadWindow);
+                }
+                else
+                {
+                    detailAction = () => assetContext.Item2.OnDetail(player, reloadWindow);
+                }
                 totalLiabilities += assetContext.Item2.amount;
                 currentIndex = AddItemValueAsCurrency(
                     _panelLiabilities.transform.parent,
@@ -258,7 +270,7 @@ namespace UI.Panels.PlayerDetails
                     assetContext.Item2.shortName,
                     assetContext.Item2.amount,
                     true,
-                    getClickAction(assetContext.Item1, assetContext.Item2));
+                    detailAction);
             }
 
             int netWorth = totalAssets - totalLiabilities;

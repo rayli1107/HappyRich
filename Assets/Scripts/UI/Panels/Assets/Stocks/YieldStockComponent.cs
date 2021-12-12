@@ -13,8 +13,6 @@ namespace UI.Panels.Assets
 #pragma warning disable 0649
         [SerializeField]
         private TextMeshProUGUI _textYield;
-        [SerializeField]
-        private YieldStockComponent _prefabYieldStockComponent;
 #pragma warning restore 0649
 
         public Player player;
@@ -48,20 +46,5 @@ namespace UI.Panels.Assets
 
             Refresh();
         }
-
-        public void ShowStockPanel()
-        {
-            YieldStockComponent component = Instantiate(
-                _prefabYieldStockComponent, UIManager.Instance.transform);
-            component.player = player;
-            component.yieldStock = yieldStock;
-            component.Refresh();
-
-            StockPanel panel = component.GetComponent<StockPanel>();
-            panel.player = player;
-            panel.stock = yieldStock;
-            panel.Refresh();
-        }
-
     }
 }

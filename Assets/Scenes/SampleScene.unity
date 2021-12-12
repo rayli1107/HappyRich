@@ -5383,8 +5383,6 @@ MonoBehaviour:
     type: 3}
   _prefabStockMarketPanel: {fileID: 756440662557103384, guid: be841ab8d8cab894a9f40e5848f14632,
     type: 3}
-  _prefabStockTradePanel: {fileID: 946307099505382972, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
-    type: 3}
   _prefabNumberInputPanel: {fileID: 8296196116867053652, guid: c759e9deb4a9ac84983c72ea69a643d6,
     type: 3}
   _prefabAdvancedRentalRealEstatePurchasePanel: {fileID: 6230124628700706953, guid: a8c3d35e773ad6245986a79943288397,
@@ -5430,6 +5428,12 @@ MonoBehaviour:
   _prefabRaisePersonalFundsMessageBox: {fileID: 2406053273671097298, guid: 644a0a6b71aff4a41acad7f64515b405,
     type: 3}
   _prefabMessageBoxPanel: {fileID: 6847429962138553456, guid: 77b9128f0948b0049b802d3dfea6f0b0,
+    type: 3}
+  _prefabGrowthStockPanel: {fileID: 8163780731993542367, guid: 493c03578a8f3894a825671505890fcb,
+    type: 3}
+  _prefabYieldStockComponent: {fileID: 5277625631823845635, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
+    type: 3}
+  _prefabCryptoComponent: {fileID: -1981182131328805253, guid: a9b4b1fe707491546baa0c8694117f9e,
     type: 3}
   _buttonEndTurnNotReady: {fileID: 630578663}
   _buttonEndTurnReady: {fileID: 1667852064}

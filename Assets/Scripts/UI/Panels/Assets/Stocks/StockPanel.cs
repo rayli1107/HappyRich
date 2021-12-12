@@ -13,6 +13,8 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textName;
         [SerializeField]
+        private TextMeshProUGUI _textTitle;
+        [SerializeField]
         private TextMeshProUGUI _textValue;
         [SerializeField]
         private TextMeshProUGUI _textChange;
@@ -34,6 +36,11 @@ namespace UI.Panels.Assets
             if (_textName != null)
             {
                 _textName.text = stock.name;
+            }
+
+            if (_textTitle != null)
+            {
+                _textTitle.text = stock.longName;
             }
 
             if (_textValue != null)
@@ -84,7 +91,7 @@ namespace UI.Panels.Assets
 
         public void OnClick()
         {
-            UIManager.Instance.ShowStockTradePanel(stock);
+            stock.OnDetail(null);
         }
 
         public void OnBuy()

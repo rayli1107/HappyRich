@@ -10,11 +10,6 @@ namespace UI.Panels.Assets
 {
     public class CryptoComponent : MonoBehaviour
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private CryptoComponent _prefabCryptoComponent;
-#pragma warning restore 0649
-
         public Player player;
         public AbstractCryptoCurrency crypto;
 
@@ -30,20 +25,6 @@ namespace UI.Panels.Assets
             }
 
             Refresh();
-        }
-
-        public void ShowStockPanel()
-        {
-            CryptoComponent component = Instantiate(
-                _prefabCryptoComponent, UIManager.Instance.transform);
-            component.player = player;
-            component.crypto = crypto;
-            component.Refresh();
-
-            StockPanel panel = component.GetComponent<StockPanel>();
-            panel.player = player;
-            panel.stock = crypto;
-            panel.Refresh();
         }
     }
 }

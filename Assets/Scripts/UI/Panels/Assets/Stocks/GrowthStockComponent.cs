@@ -13,8 +13,6 @@ namespace UI.Panels.Assets
 #pragma warning disable 0649
         [SerializeField]
         private TextMeshProUGUI _textEstimatedValue;
-        [SerializeField]
-        private GrowthStockComponent _prefabGrowthStockPanel;
 #pragma warning restore 0649
 
         public Player player;
@@ -41,20 +39,6 @@ namespace UI.Panels.Assets
             }
 
             Refresh();
-        }
-
-        public void ShowStockPanel()
-        {
-            GrowthStockComponent component = Instantiate(
-                _prefabGrowthStockPanel, UIManager.Instance.transform);
-            component.player = player;
-            component.growthStock = growthStock;
-            component.Refresh();
-
-            StockPanel panel = component.GetComponent<StockPanel>();
-            panel.player = player;
-            panel.stock = growthStock;
-            panel.Refresh();
         }
     }
 }

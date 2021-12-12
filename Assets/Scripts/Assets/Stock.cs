@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PlayerInfo;
 using UnityEngine;
 
 namespace Assets
@@ -37,10 +38,18 @@ namespace Assets
 
             return false;
         }
+
+        public override void OnDetail(Player player, Action callback)
+        {
+            stock.OnDetail(callback);
+        }
     }
-    public class AbstractStock
+
+    public abstract class AbstractStock
     {
         public string name { get; private set; }
+        public abstract string longName { get; }
+
         public int value { get; protected set; }
         public int prevValue { get; private set; }
         private int _turnCount;
@@ -68,6 +77,8 @@ namespace Assets
             ++_turnCount;
             prevValue = value;
         }
+
+        public abstract void OnDetail(Action callback);
         /*
         public virtual string GetDescription()
         {
@@ -88,6 +99,7 @@ namespace Assets
     }
 
     public class GrowthStock : AbstractStock {
+        public override string longName => string.Format("Growth Stock - {0}", name);
         private int _currentPeriodTurn;
         public float basePrice { get; private set; }
         public float variance => (value - basePrice) / basePrice;
@@ -117,10 +129,16 @@ namespace Assets
             Debug.LogFormat("{0} prev {1} cur {2} change {3} variance {4}",
                 name, prevValue, value, change, variance);
         }
+
+        public override void OnDetail(Action callback)
+        {
+            UI.UIManager.Instance.ShowGrowthStockPanel(this, callback);
+        }
     }
 
     public class YieldStock : AbstractStock
     {
+        public override string longName => string.Format("Yield Stock - {0}", name);
         public Vector2Int yieldRange { get; private set; }
         public override int expectedYield => yieldRange.x;
         public override int currentYield => _currentYield;
@@ -139,10 +157,16 @@ namespace Assets
             _currentYield = random.Next(yieldRange.x, yieldRange.y + 1);
         }
 
+        public override void OnDetail(Action callback)
+        {
+            UI.UIManager.Instance.ShowYieldStockPanel(this, callback);
+        }
+
     }
 
     public abstract class AbstractCryptoCurrency : AbstractStock
     {
+        public override string longName => string.Format("Cryptocurrency - {0}", name);
         private int _turnDelay;
         private int _turn;
 
@@ -164,6 +188,10 @@ namespace Assets
             {
                 OnTurnStartDelayed(random);
             }
+        }
+        public override void OnDetail(Action callback)
+        {
+            UI.UIManager.Instance.ShowCryptoPanel(this, callback);
         }
     }
 

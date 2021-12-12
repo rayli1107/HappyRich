@@ -1056,7 +1056,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54bb6ad8865b0474d8d17380365a9152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabCryptoComponent: {fileID: 0}
 --- !u!114 &946307099505382972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,7 +1068,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a232abddfdace4e9eba33728782422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textName: {fileID: 3680469937727623120}
+  _textName: {fileID: 0}
+  _textTitle: {fileID: 3680469937727623120}
   _textValue: {fileID: 7191485848982912916}
   _textChange: {fileID: 8693824631577279745}
   _textShares: {fileID: 8263772313512702158}
@@ -1895,7 +1895,7 @@ PrefabInstance:
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 255
       objectReference: {fileID: 0}
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -1905,7 +1905,7 @@ PrefabInstance:
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -1915,7 +1915,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 255
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

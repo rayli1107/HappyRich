@@ -33,7 +33,7 @@ namespace StateMachine
             }
             else
             {
-                player.OnPlayerTurnStart();
+                player.OnPlayerTurnStart(GameManager.Instance.Random);
             }
             UI.UIManager.Instance.UpdatePlayerInfo(player);
             _tutorialAction.Run();

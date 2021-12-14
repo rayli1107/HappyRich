@@ -109,7 +109,7 @@ public class BusinessManager : MonoBehaviour
                 franchiseFee,
                 minIncome,
                 maxIncome,
-                actualIncome,
+                profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
             return new BuyInvestmentContext(
@@ -122,7 +122,7 @@ public class BusinessManager : MonoBehaviour
                 price,
                 minIncome,
                 maxIncome,
-                actualIncome,
+                profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
             return new BuyInvestmentContext(

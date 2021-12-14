@@ -111,8 +111,9 @@ namespace PlayerInfo
             mentalStates = new List<AbstractPlayerState>();
         }
 
-        public void OnPlayerTurnStart()
+        public void OnPlayerTurnStart(System.Random random)
         {
+            portfolio.OnTurnStart(random);
             DistributeCashflow();
             UpdateContacts();
             foreach (AbstractPlayerState state in states)

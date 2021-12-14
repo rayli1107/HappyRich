@@ -10,12 +10,8 @@ namespace UI.Panels.Assets
 {
     public class AbstractBusinessPurchasePanel : AbstractInvestmentPanel
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private TextMeshProUGUI _textIncomeRange;
-#pragma warning restore 0649
 
-        protected AbstractBusiness _business;
+        protected VariableIncomeBusiness _business;
 
         public override void Refresh()
         {
@@ -61,32 +57,6 @@ namespace UI.Panels.Assets
             if (_privateLoanControlPanel != null && !enableEquityPanel)
             {
                 EnablePrivateLoanPanel(enableDebtPanel);
-            }
-        }
-
-
-        private int calculateIncome(int income)
-        {
-            int loanPayment = asset.combinedLiability.expense;
-            income -= loanPayment;
-            int investorCashflow = Mathf.FloorToInt(partialAsset.investorEquity * income);
-            return income - investorCashflow;
-        }
-    
-        protected override void AdjustNumbers()
-        {
-            base.AdjustNumbers();
-
-            Localization local = Localization.Instance;
-
-            if (_textIncomeRange != null)
-            {
-                int minIncome = calculateIncome(_business.minIncome);
-                int maxIncome = calculateIncome(_business.maxIncome);
-                _textIncomeRange.text = string.Format(
-                    "{0} - {1}",
-                    local.GetCurrency(minIncome),
-                    local.GetCurrency(maxIncome));
             }
         }
     }

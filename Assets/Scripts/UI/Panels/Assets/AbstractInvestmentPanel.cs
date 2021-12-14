@@ -111,7 +111,19 @@ namespace UI.Panels.Assets
 
             if (_textAnnualIncome != null)
             {
-                _textAnnualIncome.text = local.GetCurrency(partialAsset.income);
+                int incomeLow = partialAsset.incomeRange.x;
+                int incomeHigh = partialAsset.incomeRange.y;
+                if (incomeLow == incomeHigh)
+                {
+                    _textAnnualIncome.text = local.GetCurrency(incomeLow);
+                }
+                else
+                {
+                    _textAnnualIncome.text = string.Format(
+                        "{0} ~ {1}",
+                        local.GetCurrency(incomeLow),
+                        local.GetCurrency(incomeHigh));
+                }
             }
 
             if (_textTotalLTV != null)

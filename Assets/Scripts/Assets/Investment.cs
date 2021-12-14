@@ -16,9 +16,18 @@ namespace Assets
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
 
-        private int _baseIncome;
+        protected Vector2Int _baseIncomeRange;
+        protected int _incomeIncrement;
+        protected virtual int _baseIncome { get; private set; }
         public float multiplier;
         public override int totalIncome => Mathf.FloorToInt(_baseIncome * multiplier);
+        public Vector2Int totalIncomeRange => new Vector2Int(
+            Mathf.FloorToInt(_baseIncomeRange.x * multiplier),
+            Mathf.FloorToInt(_baseIncomeRange.y * multiplier));
+        public override int expectedTotalIncome => totalIncomeRange.x;
+        public Vector2Int incomeRange => new Vector2Int(
+            calculateNetIncome(totalIncomeRange.x),
+            calculateNetIncome(totalIncomeRange.y));
 
         public AdjustableSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
@@ -74,7 +83,7 @@ namespace Assets
             int annualIncome)
             : base(name, marketValue, 0)
         {
-            _baseIncome = annualIncome;
+            _baseIncomeRange = new Vector2Int(annualIncome, annualIncome);
             multiplier = 1;
             this.originalPrice = originalPrice;
             label = name;
@@ -103,6 +112,21 @@ namespace Assets
         {
             base.OnPurchaseCancel();
             ClearPrivateLoan();
+        }
+
+        public override void OnTurnStart(System.Random random)
+        {
+            base.OnTurnStart(random);
+            if (_baseIncomeRange.x == _baseIncomeRange.y)
+            {
+                _baseIncome = _baseIncomeRange.x;
+            }
+            else
+            {
+                int x = _baseIncomeRange.x / _incomeIncrement;
+                int y = _baseIncomeRange.y / _incomeIncrement;
+                _baseIncome = random.Next(x, y + 1) * _incomeIncrement;
+            }
         }
     }
 }

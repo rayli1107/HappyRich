@@ -30,8 +30,9 @@ namespace Assets
 
         public virtual int totalIncome { get; private set; }
         public virtual int value { get; private set; }
-        public virtual int income => totalIncome - combinedLiability.expense;
-        public virtual int expectedIncome => income;
+        public virtual int income => calculateNetIncome(totalIncome);
+        public virtual int expectedTotalIncome => totalIncome;
+        public virtual int expectedIncome => calculateNetIncome(expectedTotalIncome);
 
         private CombinedLiability _combinedLiability;
 
@@ -57,6 +58,10 @@ namespace Assets
         public virtual void OnPurchaseCancel()
         {
 
+        }
+        protected int calculateNetIncome(int total)
+        {
+            return total - combinedLiability.expense;
         }
 
         public virtual List<string> GetDetails()
@@ -104,6 +109,11 @@ namespace Assets
                 ButtonChoiceType.OK_ONLY,
                 _ => callback?.Invoke());
             panel.text.fontSizeMax = _detailFontSizeMax;
+        }
+
+        public virtual void OnTurnStart(System.Random random)
+        {
+
         }
     }
 

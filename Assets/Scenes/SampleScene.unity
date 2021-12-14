@@ -821,8 +821,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultHappiness: 50
-  _requiredHappiness: 50
+  _requiredHappiness: 100
   _retirementAge: 60
+  _cheatMode: 1
 --- !u!4 &204261753
 Transform:
   m_ObjectHideFlags: 0
@@ -3458,6 +3459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _smallInvestments:
   - {fileID: 11400000, guid: 84e1207c2e20bff468daea763c8ffa73, type: 2}
+  - {fileID: 11400000, guid: c4569814d1a2aa7469e708624d0e5748, type: 2}
   _maxBusinessLoanLTV: 75
   _maxPrivateLoanLTV: 90
   _defaultEquitySplit: 0.6
@@ -3591,7 +3593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23d0ad0bbf72ff4fa284cf60fe9dc13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultAvailableInvestments: 2
+  _defaultAvailableInvestments: 5
   _hustledAvailableInvestments: 3
   _additionalInvestmentRealEstateBroker: 1
   _additionalInvestmentEntrepreneaur: 1

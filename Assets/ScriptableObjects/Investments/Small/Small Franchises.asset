@@ -23,8 +23,8 @@ MonoBehaviour:
   - Texas Fried Chicken
   priceRange: {x: 50000, y: 200000}
   priceIncrement: 10000
-  minIncomeRange: {x: 30, y: 50}
-  maxIncomeRange: {x: 90, y: 110}
+  minIncomeRange: {x: 30, y: 40}
+  maxIncomeRange: {x: 60, y: 70}
   incomeIncrement: 1000
   franchise: 1
   franchiseFeeRange: {x: 100, y: 200}

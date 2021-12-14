@@ -222,5 +222,10 @@ namespace PlayerInfo
             startupEntities = startupEntities.FindAll(e => !e.Item2.exited);
             return exitedStartups;
         }
+
+        public void OnTurnStart(System.Random random)
+        {
+            assets.ForEach(a => a.OnTurnStart(random));
+        }
     }
 }

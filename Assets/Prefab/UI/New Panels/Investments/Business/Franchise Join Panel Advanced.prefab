@@ -18,12 +18,10 @@ MonoBehaviour:
   _textMessage: {fileID: 7252498357197491488}
   _textPurchasePrice: {fileID: 8732439789641882633}
   _textDownPayment: {fileID: 2679322408225507319}
-  _textAnnualIncome: {fileID: 0}
+  _textAnnualIncome: {fileID: 2405479652773172705}
+  _textInterestFee: {fileID: 0}
   _textTotalLTV: {fileID: 8003281593243997634}
   _textOwnershipInterest: {fileID: 6746537587671702506}
-  _textIncomeRange: {fileID: 2405479652773172705}
-  _messageBusinessOperationSkill: ' Your expertise in {0} can potentially help the
-    business generate more income.'
   _textFranchiseFee: {fileID: 5194140020522187291}
 --- !u!114 &178617159131974099
 MonoBehaviour:
@@ -3352,7 +3350,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 390
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

@@ -48,9 +48,14 @@ namespace StateMachine
                             SpecialistManager.Instance.GetSpecialistInfo(
                                 ScriptableObjects.SpecialistType.LOAN_AGENT));
 
+
             GameManager.Instance.player.portfolio.AddCash(5000000);
-            UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
             */
+            if (GameManager.Instance.cheatMode)
+            {
+                GameManager.Instance.player.portfolio.AddCash(5000000);
+            }
+            UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
         }
 
         public void ExitState()

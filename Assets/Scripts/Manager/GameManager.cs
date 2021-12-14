@@ -11,11 +11,14 @@ public class GameManager : MonoBehaviour
     private int _requiredHappiness = 50;
     [SerializeField]
     private int _retirementAge = 60;
+    [SerializeField]
+    private bool _cheatMode = false;
 #pragma warning restore 0649
 
     public int defaultHappiness => _defaultHappiness;
     public int requiredHappiness => _requiredHappiness;
     public int retirementAge => _retirementAge;
+    public bool cheatMode => _cheatMode;
 
     public static GameManager Instance { get; private set; }
     public Player player { get; private set; }

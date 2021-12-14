@@ -138,7 +138,7 @@ namespace Assets
 
     public class YieldStock : AbstractStock
     {
-        public override string longName => string.Format("Yield Stock - {0}", name);
+        public override string longName => string.Format("Dividend Stock - {0}", name);
         public Vector2Int yieldRange { get; private set; }
         public override int expectedYield => yieldRange.x;
         public override int currentYield => _currentYield;

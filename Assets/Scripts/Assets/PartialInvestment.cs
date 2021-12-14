@@ -41,12 +41,15 @@ namespace Assets
         public int investorCapital => investorShares * capitalPerShare;
 
         public float investorEquity => investorShares * equityPerShare;
-        public int investorCashflow => Mathf.FloorToInt(investorEquity * asset.income);
+        public int investorCashflow => getInvestorCashflow(asset.income);
 
         public bool hasInvestors => investorShares > 0;
 
         public int fundsNeeded => asset.downPayment - investorCapital;
         public float equity => 1 - investorEquity;
+        public Vector2Int incomeRange => new Vector2Int(
+            getOwnerCashflow(asset.incomeRange.x),
+            getOwnerCashflow(asset.incomeRange.y));
 
         public override int value
         {
@@ -74,7 +77,7 @@ namespace Assets
             }
         }
 
-        public override int income => asset.income - investorCashflow;
+        public override int income => getOwnerCashflow(asset.income);
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
         public PartialInvestment(
@@ -197,6 +200,23 @@ namespace Assets
                         local.GetCurrency(income)));
             }
             return details;
+        }
+
+        public override void OnTurnStart(System.Random random)
+        {
+            base.OnTurnStart(random);
+            asset.OnTurnStart(random);
+        }
+
+        private int getInvestorCashflow(int assetIncome)
+        {
+            return Mathf.Max(
+                Mathf.FloorToInt(investorEquity * assetIncome), 0);
+        }
+
+        private int getOwnerCashflow(int assetIncome)
+        {
+            return assetIncome - getInvestorCashflow(assetIncome);
         }
     }
 }

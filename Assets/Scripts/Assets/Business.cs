@@ -7,20 +7,10 @@ namespace Assets
     public class AbstractBusiness : AbstractInvestment
     {
         public override bool returnCapital => false;
-        public int minIncome { get; private set; }
-        public int maxIncome { get; private set; }
-
-        public AbstractBusiness(
-            string description,
-            int originalCost,
-            int minIncome,
-            int maxIncome,
-            int actualIncome)
-            : base(description, originalCost, originalCost, actualIncome)
+        public AbstractBusiness(string name, int originalPrice, int value, int income)
+            : base(name, originalPrice, value, income)
         {
-            this.description = description;
-            this.minIncome = minIncome;
-            this.maxIncome = maxIncome;
+
         }
 
         public void SetName(string name)
@@ -28,24 +18,39 @@ namespace Assets
             label = name;
         }
     }
+    public class VariableIncomeBusiness : AbstractBusiness
+    {
+        public VariableIncomeBusiness(
+            string description,
+            int originalCost,
+            int minIncome,
+            int maxIncome,
+            int incomeIncrement)
+            : base(description, originalCost, originalCost, 0)
+        {
+            this.description = description;
+            _baseIncomeRange = new Vector2Int(minIncome, maxIncome);
+            _incomeIncrement = incomeIncrement;
+        }
+    }
 
-    public class SmallBusiness : AbstractBusiness
+    public class SmallBusiness : VariableIncomeBusiness
     {
         public SmallBusiness(
             string description,
             int startupCost,
             int minIncome,
             int maxIncome,
-            int actualIncome,
+            int incomeIncrement,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, minIncome, maxIncome, actualIncome)
+            : base(description, startupCost, minIncome, maxIncome, incomeIncrement)
         {
             primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
         }
     }
 
-    public class Franchise : AbstractBusiness
+    public class Franchise : VariableIncomeBusiness
     {
         public int franchiseFee { get; private set; }
         public override int value => originalPrice + franchiseFee;
@@ -57,10 +62,10 @@ namespace Assets
             int franchiseFee,
             int minIncome,
             int maxIncome,
-            int actualIncome,
+            int incomeIncrement,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, minIncome, maxIncome, actualIncome)
+            : base(description, startupCost, minIncome, maxIncome, incomeIncrement)
         {
             this.franchiseFee = franchiseFee;
             primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
@@ -94,7 +99,7 @@ namespace Assets
             Startup startup,
             int value,
             int income)
-            : base(startup.description, value, income, income, income)
+            : base(startup.description, startup.totalCost, value, income)
         {
             this.startup = startup;
             SetName(startup.label);

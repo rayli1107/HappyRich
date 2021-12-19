@@ -84,7 +84,7 @@ namespace UI.Panels.Assets
 
         private bool checkRaiseEquity()
         {
-            return partialAsset.maxShares > 0;
+            return partialAsset.totalShares > 0;
         }
 
         private bool checkEnableCancelForPrivateLoanPanel()
@@ -92,12 +92,27 @@ namespace UI.Panels.Assets
             return asset.primaryLoan != null;
         }
 
+        protected string getIncomeRangeString(Vector2Int range)
+        {
+            Localization local = Localization.Instance;
+            int incomeLow = range.x;
+            int incomeHigh = range.y;
+            if (incomeLow == incomeHigh)
+            {
+                return local.GetCurrency(incomeLow);
+            }
+            else
+            {
+                return string.Format(
+                    "{0} ~ {1}",
+                    local.GetCurrency(incomeLow),
+                    local.GetCurrency(incomeHigh));
+            }
+        }
+
         protected virtual void AdjustNumbers()
         {
             Localization local = Localization.Instance;
-
-            int privateLoanAmount = asset.privateLoan == null ? 0 : asset.privateLoan.amount;
-            int investorAmount = partialAsset.investorCapital;
 
             if (_textDownPayment != null)
             {
@@ -111,19 +126,7 @@ namespace UI.Panels.Assets
 
             if (_textAnnualIncome != null)
             {
-                int incomeLow = partialAsset.incomeRange.x;
-                int incomeHigh = partialAsset.incomeRange.y;
-                if (incomeLow == incomeHigh)
-                {
-                    _textAnnualIncome.text = local.GetCurrency(incomeLow);
-                }
-                else
-                {
-                    _textAnnualIncome.text = string.Format(
-                        "{0} ~ {1}",
-                        local.GetCurrency(incomeLow),
-                        local.GetCurrency(incomeHigh));
-                }
+                _textAnnualIncome.text = getIncomeRangeString(partialAsset.incomeRange);
             }
 
             if (_textTotalLTV != null)

@@ -10,6 +10,12 @@ namespace UI.Panels.Assets
 {
     public class StartupPurchasePanel : AbstractInvestmentPanel
     {
+        protected override void Awake()
+        {
+            base.Awake();
+            GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
+        }
+
         public override void Refresh()
         {
             base.Refresh();
@@ -57,6 +63,20 @@ namespace UI.Panels.Assets
                 messageBox.messageBoxHandler,
                 messageBox.startTransactionHandler,
                 advanced);
+        }
+
+        private string GetConfirmMessage(ButtonType buttonType)
+        {
+            Localization local = Localization.Instance;
+            if (buttonType == ButtonType.OK)
+            {
+                return string.Format(
+                    "Start the {0} business for {1}? You'll need to prepare a total of {2}.",
+                    local.GetBusinessDescription(asset.description),
+                    local.GetCurrency(asset.totalCost, true),
+                    local.GetCurrency(partialAsset.fundsNeeded));
+            }
+            return "";
         }
     }
 }

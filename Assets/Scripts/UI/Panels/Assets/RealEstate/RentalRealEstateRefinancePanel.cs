@@ -76,16 +76,20 @@ namespace UI.Panels.Assets
                     returnedCapitalList[0].Item2);
             }
 
-            int actualIncome = refinancedAsset.income;
-            int investorCashflow = Mathf.FloorToInt(
-                partialAsset.investorEquity * actualIncome);
-            int ownerIncome = actualIncome - investorCashflow;
-
             if (_textAnnualIncome != null)
             {
-                _textAnnualIncome.text = local.GetCurrency(ownerIncome);
+                Vector2Int ownerIncomeRange = new Vector2Int(
+                    partialAsset.GetOwnerCashflow(refinancedAsset.incomeRange.x),
+                    partialAsset.GetOwnerCashflow(refinancedAsset.incomeRange.y));
+                _textAnnualIncome.text = getIncomeRangeString(ownerIncomeRange);
             }
+            /*
+                        int actualIncome = refinancedAsset.income;
+                        int investorCashflow = Mathf.FloorToInt(
+                            partialAsset.investorEquity * actualIncome);
+                        int ownerIncome = actualIncome - investorCashflow;
 
+                        */
         }
 
         public void OnResetRefinanceButton()

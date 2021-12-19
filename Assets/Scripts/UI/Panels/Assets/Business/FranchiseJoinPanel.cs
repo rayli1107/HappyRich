@@ -66,9 +66,10 @@ namespace UI.Panels.Assets
             if (buttonType == ButtonType.OK)
             {
                 return string.Format(
-                    "Join the {0} franchise for {1}?",
+                    "Join the {0} franchise for {1}? You'll need to prepare a total of {2}.",
                     local.GetBusinessDescription(asset.description),
-                    local.GetCurrency(asset.totalCost, true));
+                    local.GetCurrency(asset.totalCost, true),
+                    local.GetCurrency(partialAsset.fundsNeeded));
             }
             return "";
         }

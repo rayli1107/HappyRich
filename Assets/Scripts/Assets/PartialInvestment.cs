@@ -41,6 +41,9 @@ namespace Assets
         public int investorCapital => investorShares * capitalPerShare;
 
         public float investorEquity => investorShares * equityPerShare;
+        public Vector2Int investorCashflowRange => new Vector2Int(
+            getInvestorCashflow(asset.incomeRange.x),
+            getInvestorCashflow(asset.incomeRange.y));
         public int investorCashflow => getInvestorCashflow(asset.income);
 
         public bool hasInvestors => investorShares > 0;
@@ -48,8 +51,9 @@ namespace Assets
         public int fundsNeeded => asset.downPayment - investorCapital;
         public float equity => 1 - investorEquity;
         public Vector2Int incomeRange => new Vector2Int(
-            getOwnerCashflow(asset.incomeRange.x),
-            getOwnerCashflow(asset.incomeRange.y));
+            GetOwnerCashflow(asset.incomeRange.x),
+            GetOwnerCashflow(asset.incomeRange.y));
+        public override int expectedIncome => GetOwnerCashflow(asset.incomeRange.x);
 
         public override int value
         {
@@ -77,7 +81,7 @@ namespace Assets
             }
         }
 
-        public override int income => getOwnerCashflow(asset.income);
+        public override int income => GetOwnerCashflow(asset.income);
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
         public PartialInvestment(
@@ -194,10 +198,27 @@ namespace Assets
                     string.Format(
                         "Your Asset Value: {0}",
                         local.GetCurrency(value)));
-                details.Add(
-                    string.Format(
-                        "Your Profit Share: {0}",
-                        local.GetCurrency(income)));
+
+                int incomeLow = incomeRange.x;
+                int incomeHigh = incomeRange.y;
+                if (incomeLow == incomeHigh)
+                {
+                    if (incomeLow != 0)
+                    {
+                        details.Add(
+                            string.Format(
+                                "Your Profit Share: {0}",
+                                local.GetCurrency(incomeLow)));
+                    }
+                }
+                else
+                {
+                    details.Add(
+                        string.Format(
+                            "Your Profit Share: {0} ~ {1}",
+                            local.GetCurrency(incomeLow),
+                            local.GetCurrency(incomeHigh)));
+                }
             }
             return details;
         }
@@ -214,7 +235,7 @@ namespace Assets
                 Mathf.FloorToInt(investorEquity * assetIncome), 0);
         }
 
-        private int getOwnerCashflow(int assetIncome)
+        public int GetOwnerCashflow(int assetIncome)
         {
             return assetIncome - getInvestorCashflow(assetIncome);
         }

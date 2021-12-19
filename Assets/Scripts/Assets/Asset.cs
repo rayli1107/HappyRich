@@ -64,6 +64,38 @@ namespace Assets
             return total - combinedLiability.expense;
         }
 
+        protected virtual List<string> getTotalIncomeDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>();
+            if (totalIncome > 0)
+            {
+                details.Add(
+                    string.Format(
+                        "Total Income: {0}",
+                        local.GetCurrency(totalIncome)));
+            }
+            return details;
+        }
+
+        protected virtual List<string> getNetIncomeDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>();
+            int netIncome = income;
+            if (netIncome > 0)
+            {
+                details.Add(
+                    string.Format("Net Income: {0}", local.GetCurrency(netIncome)));
+            }
+            return details;
+        }
+
+        public virtual List<string> getPurchaseDetails()
+        {
+            return new List<string>();
+        }
+
         public virtual List<string> GetDetails()
         {
             Localization local = Localization.Instance;
@@ -74,21 +106,10 @@ namespace Assets
                     "Total Value: {0}",
                     local.GetCurrency(value)),
             };
-
-            if (totalIncome > 0)
-            {
-                details.Add(
-                    string.Format("Total Income: {0}", local.GetCurrency(totalIncome)));
-            }
-
+            details.AddRange(getPurchaseDetails());
+            details.AddRange(getTotalIncomeDetails());
             details.AddRange(combinedLiability.GetPartialDetails());
-
-            int netIncome = income;
-            if (netIncome > 0)
-            {
-                details.Add(
-                    string.Format("Net Income: {0}", local.GetCurrency(netIncome)));
-            }
+            details.AddRange(getNetIncomeDetails());
 
             return details;
         }

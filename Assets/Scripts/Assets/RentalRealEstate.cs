@@ -27,6 +27,7 @@ namespace Assets
 
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
+        public override int loanValue => value;
 
         public RefinancedRealEstate(
             DistressedRealEstate distressedAsset,
@@ -65,5 +66,11 @@ namespace Assets
                 distressedAsset.actualIncome,
                 income);
         }
+
+        public override List<string> getPurchaseDetails()
+        {
+            return distressedAsset.getPurchaseDetails();
+        }
+
     }
 }

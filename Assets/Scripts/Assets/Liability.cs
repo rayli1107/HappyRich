@@ -42,26 +42,30 @@ namespace Assets
         public virtual List<string> GetPartialDetails()
         {
             Localization local = Localization.Instance;
-            if (amount == 0)
+            List<string> details = new List<string>();
+            if (amount > 0)
             {
-                return new List<string>();
+                details.Add(
+                    string.Format(
+                        "{0} Amount: {1}",
+                        shortName,
+                        local.GetCurrency(amount, true)));
+                details.Add(
+                    string.Format(
+                        "{0} Interest Rate: {1}",
+                        shortName,
+                        local.colorWrap(
+                            string.Format("{0}%", interestRate), local.colorNegative)));
+                if (expense > 0)
+                {
+                    details.Add(
+                        string.Format(
+                            "{0} Annual Payment: {1}",
+                            shortName,
+                            local.GetCurrency(expense, true)));
+                }
             }
-
-            return new List<string>()
-            {
-                string.Format(
-                    "{0} Amount: {1}",
-                    shortName,
-                    local.GetCurrency(amount, true)),
-                string.Format(
-                    "{0} Interest Rate: {1}",
-                    shortName,
-                    local.colorWrap(string.Format("{0}%", interestRate), local.colorNegative)),
-                string.Format(
-                    "{0} Annual Payment: {1}",
-                    shortName,
-                    local.GetCurrency(expense, true))
-            };
+            return details;
         }
 
         public virtual List<string> GetDetails()
@@ -171,20 +175,22 @@ namespace Assets
         public override List<string> GetPartialDetails()
         {
             Localization local = Localization.Instance;
-            if (amount == 0)
+            List<string> details = new List<string>();
+            if (amount > 0)
             {
-                return new List<string>();
+                details.Add(
+                    string.Format(
+                        "Total Loan Amount: {0}",
+                        local.GetCurrency(amount, true)));
+                if (expense > 0)
+                {
+                    details.Add(
+                        string.Format(
+                            "Total Loan Payment: {0}",
+                            local.GetCurrency(expense, true)));
+                }
             }
-
-            return new List<string>()
-            {
-                string.Format(
-                    "Total Loan Amount: {0}",
-                    local.GetCurrency(amount, true)),
-                string.Format(
-                    "Total Loan Payment: {0}",
-                    local.GetCurrency(expense, true))
-            };
+            return details;
         }
     }
 }

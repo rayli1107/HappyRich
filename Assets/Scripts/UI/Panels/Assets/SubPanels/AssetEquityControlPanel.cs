@@ -78,7 +78,19 @@ namespace UI.Panels.Assets
 
             if (_textInvestorCashflow != null)
             {
-                _textInvestorCashflow.text = local.GetCurrency(partialAsset.investorCashflow);
+                int incomeLow = partialAsset.investorCashflowRange.x;
+                int incomeHigh = partialAsset.investorCashflowRange.y;
+                if (incomeLow == incomeHigh)
+                {
+                    _textInvestorCashflow.text = local.GetCurrency(incomeLow);
+                }
+                else
+                {
+                    _textInvestorCashflow.text = string.Format(
+                        "{0} ~ {1}",
+                        local.GetCurrency(incomeLow),
+                        local.GetCurrency(incomeHigh));
+                }
             }
 
             if (_textAmountRaised != null)

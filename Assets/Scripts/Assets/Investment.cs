@@ -126,7 +126,49 @@ namespace Assets
                 int x = _baseIncomeRange.x / _incomeIncrement;
                 int y = _baseIncomeRange.y / _incomeIncrement;
                 _baseIncome = random.Next(x, y + 1) * _incomeIncrement;
+                Debug.LogFormat(
+                    "{0} newIncome: {1}", name, _baseIncome);
             }
+        }
+
+        private List<string> getIncomeRangeDetail(
+            string label, Vector2Int range)
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>();
+            int incomeLow = range.x;
+            int incomeHigh = range.y;
+            if (incomeLow == incomeHigh)
+            {
+                if (incomeLow != 0)
+                {
+                    details.Add(
+                        string.Format(
+                            "{0}: {1}",
+                            label,
+                            local.GetCurrency(incomeLow)));
+                }
+            }
+            else
+            {
+                details.Add(
+                    string.Format(
+                        "{0}: {1} ~ {2}",
+                        label,
+                        local.GetCurrency(incomeLow),
+                        local.GetCurrency(incomeHigh)));
+            }
+            return details;
+        }
+
+        protected override List<string> getTotalIncomeDetails()
+        {
+            return getIncomeRangeDetail("Total Income", totalIncomeRange);
+        }
+
+        protected override List<string> getNetIncomeDetails()
+        {
+            return getIncomeRangeDetail("Net Income", incomeRange);
         }
     }
 }

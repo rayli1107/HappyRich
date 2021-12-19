@@ -70,8 +70,22 @@ namespace Assets
             this.franchiseFee = franchiseFee;
             primaryLoan = new BusinessLoan(this, loanLtv, maxLoanLtv, false);
         }
-    }
 
+        public override List<string> getPurchaseDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>();
+            details.Add(
+                string.Format(
+                    "Startup Cost: {0}",
+                    local.GetCurrency(originalPrice)));
+            details.Add(
+                string.Format(
+                    "Franchise Fee: {0}",
+                    local.GetCurrency(franchiseFee)));
+            return details;
+        }
+    }
 
     public class PublicCompany : AbstractBusiness
     {
@@ -107,6 +121,21 @@ namespace Assets
             originalInterest = startup.accruedDelayedInterest;
             _restructuredLoan = new RestructuredBusinessLoan(startup);
         }
-    }
 
+        public override List<string> getPurchaseDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>();
+            details.Add(
+                string.Format(
+                    "Startup Cost: {0}",
+                    local.GetCurrency(originalPrice)));
+            details.Add(
+                string.Format(
+                    "Interest Fee: {0}",
+                    local.GetCurrency(originalInterest)));
+            return details;
+        }
+
+    }
 }

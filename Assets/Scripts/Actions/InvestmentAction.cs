@@ -8,15 +8,21 @@ namespace Actions
 {
     public static class BuyInvestmentUtiliy
     {
-        public static void messageBoxHandler(
+        private static void messageBoxHandler(
             ButtonType buttonType,
+            Player player,
+            string message,
             PartialInvestment partialAsset,
             Action<bool> callback)
         {
             if (buttonType == ButtonType.OK)
             {
                 partialAsset.OnPurchase();
-                callback?.Invoke(true);
+                UIManager.Instance.ShowSimpleMessageBox(
+                    message,
+                    ButtonChoiceType.OK_ONLY,
+                    _ => callback?.Invoke(true),
+                    () => partialAsset.OnDetail(player, null));
             }
             else
             {
@@ -25,6 +31,47 @@ namespace Actions
             }
         }
 
+        public static void OnPurchaseRealEstate(
+            ButtonType buttonType,
+            Player player,
+            PartialInvestment partialAsset,
+            Action<bool> callback)
+        {
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "Congratulations! You've successfully purchased the {0} property!",
+                Localization.Instance.GetRealEstateDescription(
+                    partialAsset.asset.description));
+            messageBoxHandler(buttonType, player, message, partialAsset, callback);
+        }
+
+        public static void OnPurchaseBusiness(
+            ButtonType buttonType,
+            Player player,
+            PartialInvestment partialAsset,
+            Action<bool> callback)
+        {
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "Congratulations! You've successfully invested in the {0} business!",
+                Localization.Instance.GetBusinessDescription(
+                    partialAsset.asset.name));
+            messageBoxHandler(buttonType, player, message, partialAsset, callback);
+        }
+
+        public static void OnPurchaseStartup(
+            ButtonType buttonType,
+            Player player,
+            PartialInvestment partialAsset,
+            Action<bool> callback)
+        {
+            Localization local = Localization.Instance;
+            string message = string.Format(
+                "You've successfully founded the startup {0}!",
+                Localization.Instance.GetBusinessDescription(
+                    partialAsset.asset.name));
+            messageBoxHandler(buttonType, player, message, partialAsset, callback);
+        }
         public static void GetBuyAction(
             Player player,
             AbstractInvestment asset,
@@ -52,7 +99,8 @@ namespace Actions
                 (partialAsset, cb) => UIManager.Instance.ShowRentalRealEstatePurchasePanel(
                     asset,
                     partialAsset,
-                    b => BuyInvestmentUtiliy.messageBoxHandler(b, partialAsset, cb),
+                    b => BuyInvestmentUtiliy.OnPurchaseRealEstate(
+                        b, player, partialAsset, cb),
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
@@ -73,7 +121,8 @@ namespace Actions
                 (partialAsset, cb) => UIManager.Instance.ShowDistressedRealEstatePurchasePanel(
                     asset,
                     partialAsset,
-                    b => BuyInvestmentUtiliy.messageBoxHandler(b, partialAsset, cb),
+                    b => BuyInvestmentUtiliy.OnPurchaseRealEstate(
+                        b, player, partialAsset, cb),
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
@@ -89,8 +138,9 @@ namespace Actions
             string name)
         {
             business.SetName(name);
-
-            Localization local = Localization.Instance;
+            handler?.Invoke(true);
+/*
+ *Localization local = Localization.Instance;
             string message = string.Format(
                 "After stabilizing business operations, {0} started generating " +
                 "a total revenue of {1}",
@@ -98,6 +148,7 @@ namespace Actions
                 local.GetCurrency(business.totalIncome));
             UIManager.Instance.ShowSimpleMessageBox(
                 message, ButtonChoiceType.OK_ONLY, _ => handler?.Invoke(true));
+                */
         }
 
         private static string confirmNameCallback(string name)
@@ -146,7 +197,8 @@ namespace Actions
                 (partialAsset, cb) => UIManager.Instance.ShowSmallBusinessPurchasePanel(
                     business,
                     partialAsset,
-                    b => BuyInvestmentUtiliy.messageBoxHandler(b, partialAsset, cb),
+                    b => BuyInvestmentUtiliy.OnPurchaseBusiness(
+                        b, player, partialAsset, cb),
                     handler => startTransaction(handler, partialAsset),
                     false);
 
@@ -157,6 +209,7 @@ namespace Actions
 
     public static class JoinFranchiseAction
     {
+/*
         private static void transactionHandler(
             Franchise business,
             TransactionHandler handler,
@@ -177,6 +230,7 @@ namespace Actions
             UIManager.Instance.ShowSimpleMessageBox(
                 message, ButtonChoiceType.OK_ONLY, (_) => handler?.Invoke(true));
         }
+        */
 
         public static Action<Action<bool>> GetBuyAction(
             Player player,
@@ -187,12 +241,13 @@ namespace Actions
                     player,
                     partialAsset,
                     business,
-                    success => transactionHandler(business, handler, success));
+                    success => handler?.Invoke(success));
             Action<PartialInvestment, Action<bool>> showFn =
                 (partialAsset, cb) => UIManager.Instance.ShowFranchiseJoinPanel(
                     business,
                     partialAsset,
-                    b => BuyInvestmentUtiliy.messageBoxHandler(b, partialAsset, cb),
+                    b => BuyInvestmentUtiliy.OnPurchaseBusiness(
+                        b, player, partialAsset, cb),
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
@@ -257,7 +312,8 @@ namespace Actions
                 (partialAsset, cb) => UIManager.Instance.ShowStartupPurchasePanel(
                     startup,
                     partialAsset,
-                    b => BuyInvestmentUtiliy.messageBoxHandler(b, partialAsset, cb),
+                    b => BuyInvestmentUtiliy.OnPurchaseStartup(
+                        b, player, partialAsset, cb),
                     handler => startTransaction(handler, partialAsset),
                     false);
 

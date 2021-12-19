@@ -21,10 +21,6 @@ namespace StateMachine
             //            GameManager.Instance.player.AddSkill(
             //                SkillManager.Instance.GetSkillInfo(ScriptableObjects.SkillType.REAL_ESTATE_VALUATION));
 /*
-            GameManager.Instance.player.contacts.Add(
-                new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
-            GameManager.Instance.player.contacts.Add(
-                new InvestmentPartner("Bob", 200000, RiskTolerance.kLow, 10));
                         GameManager.Instance.player.contacts.Add(
                             new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
                         GameManager.Instance.player.contacts.Add(
@@ -54,6 +50,11 @@ namespace StateMachine
             if (GameManager.Instance.cheatMode)
             {
                 GameManager.Instance.player.portfolio.AddCash(5000000);
+                GameManager.Instance.player.contacts.Add(
+                    new InvestmentPartner("Alice", 200000, RiskTolerance.kHigh, 10));
+                GameManager.Instance.player.contacts.Add(
+                    new InvestmentPartner("Bob", 200000, RiskTolerance.kLow, 10));
+
             }
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);
         }

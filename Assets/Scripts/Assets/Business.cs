@@ -132,8 +132,8 @@ namespace Assets
                     local.GetCurrency(originalPrice)));
             details.Add(
                 string.Format(
-                    "Interest Fee: {0}",
-                    local.GetCurrency(originalInterest)));
+                    "Total Startup Loan Interest : {0}",
+                    local.GetCurrency(originalInterest, true)));
             return details;
         }
 

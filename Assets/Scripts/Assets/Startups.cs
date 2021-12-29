@@ -45,5 +45,31 @@ namespace Assets
         {
             ++_turn;
         }
+
+        protected override List<string> getValueDetails()
+        {
+            return new List<string>();
+        }
+
+        public override List<string> getPurchaseDetails()
+        {
+            Localization local = Localization.Instance;
+            List<string> details = new List<string>()
+            {
+                string.Format(
+                    "Startup Cost: {0}",
+                    local.GetCurrency(totalCost))
+            };
+            int interest = delayedInterest;
+            if (interest > 0)
+            {
+                details.Add(
+                    string.Format(
+                        "Annual Interest: {0}",
+                        local.GetCurrency(interest, true)));
+            }
+            return details;
+        }
+
     }
 }

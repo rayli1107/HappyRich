@@ -45,9 +45,10 @@ namespace UI.Panels.Assets
             if (buttonType == ButtonType.OK)
             {
                 return string.Format(
-                    "Start a {0} business for {1}?",
+                    "Start a {0} business for {1}? You'll need to prepare a total of {2}.",
                     local.GetBusinessDescription(asset.description),
-                    local.GetCurrency(asset.totalCost, true));
+                    local.GetCurrency(asset.totalCost, true),
+                    local.GetCurrency(partialAsset.fundsNeeded));
             }
             return "";
         }

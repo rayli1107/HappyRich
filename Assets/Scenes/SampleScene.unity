@@ -823,7 +823,7 @@ MonoBehaviour:
   _defaultHappiness: 50
   _requiredHappiness: 100
   _retirementAge: 60
-  _cheatMode: 1
+  _cheatMode: 0
 --- !u!4 &204261753
 Transform:
   m_ObjectHideFlags: 0

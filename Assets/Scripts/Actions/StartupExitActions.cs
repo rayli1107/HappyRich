@@ -16,7 +16,7 @@ namespace Actions
     public static class StartupPublicAction
     {
         private const int detailFontSize = 36;
-
+/*
         private static void detailhandler(
             StartupEntity entity,
             PublicCompany publicCompany)
@@ -31,7 +31,7 @@ namespace Actions
                     local.GetCurrency(publicCompany.value)),
                 string.Format(
                     "Total Revenue: {0}",
-                     local.GetCurrency(publicCompany.totalIncome)),
+                     local.GetCurrency(publicCompany.)),
                 string.Format(
                     "Original Loan: {0}",
                     local.GetCurrency(publicCompany.originalLoanAmount, true)),
@@ -58,17 +58,7 @@ namespace Actions
             SimpleTextMessageBox msgBox = UIManager.Instance.ShowSimpleMessageBox(
                 string.Join("\n", messages), ButtonChoiceType.OK_ONLY, null);
             msgBox.text.fontSizeMax = detailFontSize;
-        }
-
-        private static void messageHandler(
-            Player player,
-            StartupEntity entity,
-            PublicCompany company,
-            Action callback)
-        {
-            TransactionManager.ListPublicCompany(player, entity.Item1, company);
-            callback?.Invoke();
-        }
+        }*/
 
         public static void Run(
             Player player,
@@ -79,6 +69,8 @@ namespace Actions
         {
             PublicCompany company = new PublicCompany(
                 entity.Item2, value, income);
+            PartialInvestment partialEntity = entity.Item1;
+            TransactionManager.ListPublicCompany(player, partialEntity, company);
 
             Localization local = Localization.Instance;
             string message = string.Format(
@@ -90,8 +82,9 @@ namespace Actions
             UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,
-                _ => messageHandler(player, entity, company, callback),
-                () => detailhandler(entity, company));
+                _ => callback?.Invoke(),
+                () => partialEntity.OnDetail(player, null));
+//                () => detailhandler(entity, company));
         }
 
     }

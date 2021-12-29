@@ -31,7 +31,7 @@ namespace Assets
     {
         public RestructuredBusinessLoan(Startup startup)
             : base(startup,
-                   string.Format("Business Loan - {0}", startup.label),
+                   "Business Loan",
                    startup.combinedLiability.amount + startup.accruedDelayedInterest,
                    InterestRateManager.Instance.businessLoanRate,
                    false)

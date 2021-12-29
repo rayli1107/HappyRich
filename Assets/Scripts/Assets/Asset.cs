@@ -91,6 +91,17 @@ namespace Assets
             return details;
         }
 
+        protected virtual List<string> getValueDetails()
+        {
+            Localization local = Localization.Instance;
+            return new List<string>()
+            {
+                string.Format(
+                    "Total Value: {0}",
+                    local.GetCurrency(value)),
+            };
+        }
+
         public virtual List<string> getPurchaseDetails()
         {
             return new List<string>();
@@ -102,10 +113,8 @@ namespace Assets
             List<string> details = new List<string>()
             {
                 local.GetAsset(this),
-                string.Format(
-                    "Total Value: {0}",
-                    local.GetCurrency(value)),
             };
+            details.AddRange(getValueDetails());
             details.AddRange(getPurchaseDetails());
             details.AddRange(getTotalIncomeDetails());
             details.AddRange(combinedLiability.GetPartialDetails());

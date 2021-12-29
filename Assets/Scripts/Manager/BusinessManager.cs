@@ -81,7 +81,7 @@ public class BusinessManager : MonoBehaviour
         {
             franchiseFee = calculateValueFactor(
                 random, price, profile.franchiseFeeRange, profile.priceIncrement);
-            franchiseFee = Mathf.Min(franchiseFee, profile.priceIncrement);
+            franchiseFee = Mathf.Max(franchiseFee, profile.priceIncrement);
         }
 
         int minIncomeBonus = 0;

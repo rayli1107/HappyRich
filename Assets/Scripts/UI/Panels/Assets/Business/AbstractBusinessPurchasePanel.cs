@@ -40,7 +40,7 @@ namespace UI.Panels.Assets
                 */
                 _textMessage.text = message;
             }
-
+            /*
             if (_securedLoanControlPanel != null)
             {
                 EnableSecuredLoanPanel(true);
@@ -58,6 +58,7 @@ namespace UI.Panels.Assets
             {
                 EnablePrivateLoanPanel(enableDebtPanel);
             }
+            */
         }
     }
 }

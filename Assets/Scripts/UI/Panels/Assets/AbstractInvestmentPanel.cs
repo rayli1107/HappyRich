@@ -5,6 +5,7 @@ using System;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
@@ -39,7 +40,7 @@ namespace UI.Panels.Assets
         public PartialInvestment partialAsset;
 
         protected string _messageTemplate { get; private set; }
-
+        private bool _buttomPanelSet;
 
         protected virtual void Awake()
         {
@@ -71,6 +72,8 @@ namespace UI.Panels.Assets
             {
                 _messageTemplate = _textMessage.text;
             }
+
+            _buttomPanelSet = false;
         }
 
         private bool checkRaiseDebt()
@@ -162,12 +165,50 @@ namespace UI.Panels.Assets
                     asset.originalPrice);
             }
 
+            EnableSecuredLoanPanel(false);
+            EnablePrivateLoanPanel(false);
+            EnableEquityPanel(false);
+            if (partialAsset.investorShares > 0)
+            {
+                EnableEquityPanel(true);
+            }
+            else if (asset.privateLoan != null && asset.privateLoan.maxltv > 0)
+            {
+                EnablePrivateLoanPanel(true);
+            }
+            else if (asset.primaryLoan != null && asset.primaryLoan.maxltv > 0)
+            {
+                EnableSecuredLoanPanel(true);
+            }
+            /*
+            if (asset.primaryLoan != null && asset.primaryLoan.maxltv > 0)
+            {
+                EnableSecuredLoanPanel(true);
+            }
+            bool enableEquityPanel = partialAsset.investorShares > 0;
+            bool enableDebtPanel = !enableEquityPanel && asset.privateLoan != null;
+            EnableEquityPanel(enableEquityPanel);
+            EnablePrivateLoanPanel(enableDebtPanel);
+            */
             AdjustNumbers();
         }
 
         public void OnEnable()
         {
             Refresh();
+        }
+
+        private void setButtomPanelLayout(GameObject panel)
+        {
+            if (!_buttomPanelSet)
+            {
+                _buttomPanelSet = true;
+                LayoutElement layoutElement = panel.GetComponent<LayoutElement>();
+                if (layoutElement != null)
+                {
+                    layoutElement.ignoreLayout = false;
+                }
+            }
         }
 
         protected void EnableSecuredLoanPanel(bool enable)
@@ -180,6 +221,7 @@ namespace UI.Panels.Assets
                     _securedLoanControlPanel.asset = asset;
                     _securedLoanControlPanel.gameObject.SetActive(true);
                     _securedLoanControlPanel.Refresh();
+                    setButtomPanelLayout(_securedLoanControlPanel.gameObject);
                 }
                 else
                 {
@@ -198,6 +240,7 @@ namespace UI.Panels.Assets
                     _privateLoanControlPanel.asset = asset;
                     _privateLoanControlPanel.gameObject.SetActive(true);
                     _privateLoanControlPanel.Refresh();
+                    setButtomPanelLayout(_privateLoanControlPanel.gameObject);
                 }
                 else
                 {
@@ -217,6 +260,7 @@ namespace UI.Panels.Assets
                     _equityControlPanel.partialAsset = partialAsset;
                     _equityControlPanel.gameObject.SetActive(true);
                     _equityControlPanel.Refresh();
+                    setButtomPanelLayout(_equityControlPanel.gameObject);
                 }
                 else
                 {

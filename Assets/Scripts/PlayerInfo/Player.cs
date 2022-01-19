@@ -1,5 +1,7 @@
-﻿using PlayerState;
+﻿using Actions;
+using PlayerState;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -114,7 +116,6 @@ namespace PlayerInfo
         public void OnPlayerTurnStart(System.Random random)
         {
             portfolio.OnTurnStart(random);
-            DistributeCashflow();
             UpdateContacts();
             foreach (AbstractPlayerState state in states)
             {
@@ -136,10 +137,18 @@ namespace PlayerInfo
             contacts = newContacts;
         }
 
-        private void DistributeCashflow()
+        public void DistributeCashflow(Action callback)
         {
-            Snapshot snapshot = new Snapshot(this);
-            portfolio.AddCash(snapshot.actualCashflow);
+            int cashflow = new Snapshot(this).actualCashflow;
+            if (cashflow >= 0)
+            {
+                portfolio.AddCash(cashflow);
+                callback?.Invoke();
+            }
+            else
+            {
+                ForceDebit.Run(this, -1 * cashflow, callback);
+            }
         }
 
         public Profession GetMainJob()

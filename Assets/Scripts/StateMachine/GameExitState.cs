@@ -1,4 +1,6 @@
-﻿namespace StateMachine
+﻿using UnityEngine.SceneManagement;
+
+namespace StateMachine
 {
     public class GameExitState : IState
     {
@@ -11,7 +13,8 @@
 
         public void EnterState(StateMachineParameter param)
         {
-            System.Environment.Exit(1);
+            Scene scene = SceneManager.GetActiveScene(); 
+            SceneManager.LoadScene(scene.name);
         }
 
         public void ExitState()

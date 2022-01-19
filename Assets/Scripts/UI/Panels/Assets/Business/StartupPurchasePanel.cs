@@ -33,7 +33,7 @@ namespace UI.Panels.Assets
                     local.GetBusinessDescription(asset.description));
                 _textMessage.text = message;
             }
-
+/*
             if (_securedLoanControlPanel != null)
             {
                 EnableSecuredLoanPanel(true);
@@ -51,6 +51,7 @@ namespace UI.Panels.Assets
             {
                 EnablePrivateLoanPanel(enableDebtPanel);
             }
+*/
         }
 
         public void SwitchView(bool advanced)

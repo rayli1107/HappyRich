@@ -53,16 +53,6 @@ namespace UI.Panels.Assets
                     _textEstimatedValue.text = "???";
                 }
             }
-
-            if (_securedLoanControlPanel != null)
-            {
-                EnableSecuredLoanPanel(true);
-            }
-
-            bool enableEquityPanel = partialAsset.investorShares > 0;
-            bool enableDebtPanel = !enableEquityPanel && asset.privateLoan != null;
-            EnableEquityPanel(enableEquityPanel);
-            EnablePrivateLoanPanel(enableDebtPanel);
         }
 
         private string GetConfirmMessage(ButtonType buttonType)

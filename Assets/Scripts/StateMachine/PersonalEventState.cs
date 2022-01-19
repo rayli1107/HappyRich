@@ -23,10 +23,15 @@ namespace StateMachine
                "Personal Event", new Color(1, 0.5f, 0), runPersonalEvent);
         }
 
+        private void distributeCashflow()
+        {
+            GameManager.Instance.player.DistributeCashflow(
+                () => _stateMachine.ChangeState(_stateMachine.YearEndEventState));
+        }
+
         private void runPersonalEvent()
         {
-            PersonalEventManager.Instance.GetPersonalEvent()?.Invoke(
-                () => _stateMachine.ChangeState(_stateMachine.YearEndEventState));
+            PersonalEventManager.Instance.GetPersonalEvent()?.Invoke(distributeCashflow);
         }
 
         public void ExitState()

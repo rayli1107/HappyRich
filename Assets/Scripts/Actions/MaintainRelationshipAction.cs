@@ -4,11 +4,10 @@ using ScriptableObjects;
 using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
+using UnityEngine;
 
 namespace Actions
 {
-    
-
     public class MaintainRelationshipAction : AbstractAction
     {
         private Player _player;
@@ -99,7 +98,6 @@ namespace Actions
             }
 
             List<Action> actions = new List<Action>();
-/*
             if (SpecialistManager.Instance.HasNewSpecialistsAvailable(_player))
             {
                 actions.Add(addSpecialist);
@@ -112,7 +110,7 @@ namespace Actions
                 GrowthStock stock = stockTips[GameManager.Instance.Random.Next(stockTips.Count)];
                 actions.Add(() => showStockTip(stock));
             }
-*/
+
             List<AbstractCryptoCurrency> cryptos = StockManager.Instance.cryptoCurrencies.FindAll(x => !x.tookOff);
             if (cryptos.Count > 0)
             {

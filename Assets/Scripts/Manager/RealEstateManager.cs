@@ -155,6 +155,7 @@ public class RealEstateManager : MonoBehaviour
             random, template.basePrice, _distressedPurchasePriceRange, template.priceIncrement);
         int rehabPrice = calculatePrice(
             random, template.basePrice, _distressedRehabPriceRange, template.priceIncrement);
+        rehabPrice = Mathf.Max(rehabPrice, template.priceIncrement);
 
         int unitCount = 1;
         if (template.unitCount.Length > 0)
@@ -258,7 +259,7 @@ public class RealEstateManager : MonoBehaviour
 
         int index = random.Next(player.portfolio.rentalProperties.Count);
         RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
-        int offer = calculateOfferPrice(asset.template, random);
+        int offer = calculateOfferPrice(asset.template, random) * asset.unitCount;
         return SellRealEstateEvent.GetEvent(player, index, offer);
     }
 }

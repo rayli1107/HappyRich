@@ -23,16 +23,6 @@ namespace StateMachine
         {
             MarketEventManager.Instance.GetMarketEvent()?.Invoke(
                 () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));
-/*            List<Action<Action>> actions = new List<Action<Action>>();
-            actions.AddRange(StockManager.Instance.GetMarketEventActions(GameManager.Instance.Random));
-            actions.AddRange(
-                RiskyInvestmentManager.Instance.GetMarketEventActions(
-                    GameManager.Instance.player, GameManager.Instance.Random));
-            actions.AddRange(
-                InvestmentPartnerManager.Instance.GetMarketEventActions(
-                    GameManager.Instance.player, GameManager.Instance.Random));
-            CompositeActions.GetAndAction(actions)?.Invoke(
-                () => _stateMachine.ChangeState(_stateMachine.StockMarketEventState));*/
         }
 
         public void ExitState()

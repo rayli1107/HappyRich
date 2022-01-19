@@ -52,14 +52,12 @@ public class SelfImprovementManager : MonoBehaviour
     {
         _selfReflectionStates = new List<Action<Player, Action<AbstractPlayerState>>>();
         _selfReflectionStates.Add((p, cb) => cb(new FamilyOrientedState(p)));
-/*
         _selfReflectionStates.Add((p, cb) => cb(new Frugality(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Minimalism(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Hustling(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Tranquil(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Extrovert(p)));
         _selfReflectionStates.Add((p, cb) => cb(new Extravagant(p)));
-        */
     }
 
     public Action<Player, Action<AbstractPlayerState>> GetSelfReflectionState(System.Random random)

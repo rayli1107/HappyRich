@@ -68,7 +68,10 @@ public class InvestmentManager : MonoBehaviour
         GetInvestmentFn getBusinessFn)
     {
         int randomCount = _defaultAvailableInvestments;
-
+        if (GameManager.Instance.cheatMode)
+        {
+            randomCount *= 3;
+        }
         foreach (AbstractPlayerState state in player.states)
         {
             if (state is Hustling)

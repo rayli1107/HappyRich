@@ -104,6 +104,7 @@ public class PersonalEventManager : MonoBehaviour
         allEvents.Add(getGoodEvent(player, random));
         allEvents.Add(getNeutralEvent(player, random));
         allEvents.Add(getFamilyEvent(player, random));
+        allEvents.Add(getFamilyEvent(player, random));
         if (player.age >= _oldAgeThreshold)
         {
             allEvents.Add(getOldAgeEvent(player, random));

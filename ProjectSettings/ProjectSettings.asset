@@ -166,8 +166,8 @@ PlayerSettings:
   applicationIdentifier:
     Standalone: com.Company.ProductName
   buildNumber: {}
-  AndroidBundleVersionCode: 4
-  AndroidMinSdkVersion: 30
+  AndroidBundleVersionCode: 5
+  AndroidMinSdkVersion: 29
   AndroidTargetSdkVersion: 30
   AndroidPreferredInstallLocation: 1
   aotOptions: 

@@ -25,7 +25,6 @@ namespace UI
             float h = Screen.safeArea.height;
 
             float deviceFactor = h / w;
-            Debug.LogFormat("device factor {0}", deviceFactor);
             if (deviceFactor < _factorRange.x)
             {
                 float w2 = h / _factorRange.x;
@@ -49,6 +48,8 @@ namespace UI
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
 
+/*
+ * Debug.LogFormat("device factor {0}", deviceFactor);
             Debug.LogFormat(
                 "RectTransform rect {0}", rect.rect);
             Debug.LogFormat(
@@ -59,7 +60,7 @@ namespace UI
                 "RectTransform offsetMin {0}", rect.offsetMin);
             Debug.LogFormat(
                 "RectTransform offsetMax {0}", rect.offsetMax);
-
+*/
             float scaledWidth = _screenWidth / w;
             CanvasScaler scaler = GetComponentInParent<CanvasScaler>();
             scaler.referenceResolution = new Vector2(scaledWidth, scaledWidth);

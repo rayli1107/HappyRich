@@ -170,5 +170,15 @@ namespace Assets
         {
             return getIncomeRangeDetail("Net Income", incomeRange);
         }
+
+        public string GetActionLabel()
+        {
+            Localization local = Localization.Instance;
+            return string.Format(
+                "{0}\nCost: {1}",
+                label,
+                local.GetCurrency(originalPrice));
+        }
+
     }
 }

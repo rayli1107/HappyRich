@@ -12,11 +12,14 @@ public class SkillManager : MonoBehaviour
     private int _initialCost = 20000;
     [SerializeField]
     private int _additionalCost = 10000;
+    [SerializeField]
+    private int _numberOfChoices = 2;
 #pragma warning restore 0649
 
     public static SkillManager Instance { get; private set; }
 
     private Dictionary<SkillType, SkillInfo> _skillInfo;
+    public List<SkillInfo> currentAvailableSkills { get; private set; }
 
     private void Awake()
     {
@@ -27,6 +30,7 @@ public class SkillManager : MonoBehaviour
         {
             _skillInfo[skillInfo.skillType] = skillInfo;
         }
+        currentAvailableSkills = new List<SkillInfo>();
     }
 
     public SkillInfo GetSkillInfo(SkillType skillType)
@@ -39,17 +43,23 @@ public class SkillManager : MonoBehaviour
         return _initialCost + _additionalCost * player.skills.Count;
     }
 
-    public SkillInfo GetSkill(Player player, System.Random random)
+    public void OnPlayerTurnStart(Player player, System.Random random)
     {
-        List<SkillInfo> newSkills = new List<SkillInfo>();
+        currentAvailableSkills.Clear();
+
+        List<SkillInfo> availableSkills = new List<SkillInfo>();
         foreach (SkillInfo skillInfo in _skills)
         {
             if (!player.HasSkill(skillInfo.skillType))
             {
-                newSkills.Add(skillInfo);
+                availableSkills.Add(skillInfo);
             }
         }
 
-        return newSkills.Count == 0 ? null : newSkills[random.Next(newSkills.Count)];
+        while (currentAvailableSkills.Count < _numberOfChoices && availableSkills.Count > 0) {
+            int index = random.Next(availableSkills.Count);
+            currentAvailableSkills.Add(availableSkills[index]);
+            availableSkills.RemoveAt(index);
+        }
     }
 }

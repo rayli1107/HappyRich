@@ -9,24 +9,16 @@ namespace Actions
 {
     public static class TrainingAction
     {
-        private static void actionFinished(
-            Player player, Action callback)
-        {
-            UIManager.Instance.UpdatePlayerInfo(player);
-            GameManager.Instance.StateMachine.OnPlayerActionDone();
-            callback?.Invoke();
-        }
-
         private static void transactionHandler(
             Player player,
             SkillInfo skill,
             int cost,
-            Action callback,
+            Action<bool> callback,
             bool success)
         {
             if (success)
             {
-                actionFinished(player, callback);
+                callback?.Invoke(true);
             }
             else
             {
@@ -38,7 +30,7 @@ namespace Actions
             Player player,
             SkillInfo skill,
             int cost,
-            Action callback,            
+            Action<bool> callback,            
             ButtonType button)
         {
             if (button == ButtonType.OK)
@@ -51,7 +43,7 @@ namespace Actions
             }
             else
             {
-                actionFinished(player, callback);
+                callback?.Invoke(false);
             }
         }
 
@@ -59,7 +51,7 @@ namespace Actions
             Player player,
             SkillInfo skill,
             int cost,
-            Action callback)
+            Action<bool> callback)
         {
             Localization local = Localization.Instance;
             List<string> messages = new List<string>()
@@ -80,20 +72,10 @@ namespace Actions
                 b => messageBoxHandler(player, skill, cost, callback, b));
         }
 
-        public static void Run(Player player, System.Random random, Action<bool> callback)
+        public static void Run(Player player, SkillInfo skill, Action<bool> callback)
         {
-            SkillInfo skill = SkillManager.Instance.GetSkill(player, random);
-            if (skill == null)
-            {
-                UIManager.Instance.ShowSimpleMessageBox(
-                    "You didn't find any meaning traning courses.",
-                    ButtonChoiceType.OK_ONLY,
-                    _ => callback?.Invoke(false));
-                return;
-            }
-
             int cost = SkillManager.Instance.GetCost(player);
-            showApplyConfirmation(player, skill, cost, () => callback?.Invoke(true));
+            showApplyConfirmation(player, skill, cost, callback);
         }
     }
 }

@@ -5,6 +5,7 @@ using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Assets;
 using UnityEngine;
 
 public class RealEstateTemplate
@@ -141,7 +142,7 @@ public class RealEstateManager : MonoBehaviour
         return 0;
     }
 
-    private BuyInvestmentContext GetDistressedRealEstateAction(
+    private AvailableActionContext GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random)
@@ -178,11 +179,12 @@ public class RealEstateManager : MonoBehaviour
             unitCount,
             maxMortgageLtv,
             _maxDistressedLoanLTV);
-        return new BuyInvestmentContext(
-            asset, BuyDistressedRealEstateAction.GetBuyAction(player, asset));
+        return new AvailableActionContext(
+            asset.GetActionLabel(),
+            BuyDistressedRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private BuyInvestmentContext GetRentalRealEstateAction(
+    private AvailableActionContext GetRentalRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random)
@@ -206,11 +208,12 @@ public class RealEstateManager : MonoBehaviour
         int ltv = getRentalMortgageLTV(player);
         RentalRealEstate asset = new RentalRealEstate(
             template, price, price, annualIncome, ltv, ltv, unitCount);
-        return new BuyInvestmentContext(
-            asset, BuyRentalRealEstateAction.GetBuyAction(player, asset));
+        return new AvailableActionContext(
+            asset.GetActionLabel(),
+            BuyRentalRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private BuyInvestmentContext GetInvestmentAction(
+    private AvailableActionContext GetInvestmentAction(
         Player player,
         List<RealEstateTemplate> templates,
         System.Random random)
@@ -226,13 +229,13 @@ public class RealEstateManager : MonoBehaviour
         }
     }
 
-    public BuyInvestmentContext GetSmallInvestmentAction(
+    public AvailableActionContext GetSmallInvestmentAction(
         Player player, System.Random random)
     {
         return GetInvestmentAction(player, _smallInvestments, random);
     }
 
-    public BuyInvestmentContext GetLargeInvestmentAction(
+    public AvailableActionContext GetLargeInvestmentAction(
         Player player, System.Random random)
     {
         return GetInvestmentAction(player, _largeInvestments, random);

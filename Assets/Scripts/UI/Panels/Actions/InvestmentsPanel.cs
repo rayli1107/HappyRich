@@ -27,7 +27,7 @@ namespace UI.Panels.Actions
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            UIManager.Instance.ShowAvailableInvestmentsPanel(
+            UIManager.Instance.ShowAvailableActionsPanel(
                 InvestmentManager.Instance.GetAvailableSmallInvestments(
                     player, GameManager.Instance.Random),
                 _ => InvesmtmentActionCallback());
@@ -36,7 +36,7 @@ namespace UI.Panels.Actions
         public void OnLargeInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
-            UIManager.Instance.ShowAvailableInvestmentsPanel(
+            UIManager.Instance.ShowAvailableActionsPanel(
                 InvestmentManager.Instance.GetAvailableLargeInvestments(
                     player, GameManager.Instance.Random),
                 _ => InvesmtmentActionCallback());

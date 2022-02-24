@@ -4,6 +4,7 @@ using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Assets;
 using UnityEngine;
 
 using StartupEntity = System.Tuple<
@@ -47,7 +48,7 @@ public class StartupManager : MonoBehaviour
     {
     }
 
-    public BuyInvestmentContext GetStartupInvestmentAction(
+    public AvailableActionContext GetStartupInvestmentAction(
         Player player, System.Random random)
     {
         string idea = _startupIdeas[random.Next(_startupIdeas.Length)];
@@ -59,8 +60,9 @@ public class StartupManager : MonoBehaviour
             s => s.specialistType == SpecialistType.LOAN_AGENT) ?
             _loanAgentStartupLoanLTV : _maxStartupLoanLTV;
         Startup startup = new Startup(idea, label, cost, duration, ltv, ltv);
-        return new BuyInvestmentContext(
-            startup, PurchaseStartupAction.GetBuyAction(player, startup));
+        return new AvailableActionContext(
+            startup.GetActionLabel(),
+            PurchaseStartupAction.GetBuyAction(player, startup));
     }
 
     private int getExitWeight(Player player, Vector2Int values)

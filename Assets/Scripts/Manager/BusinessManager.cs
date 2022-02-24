@@ -4,6 +4,7 @@ using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Assets;
 using UnityEngine;
 
 using Investment = System.Tuple<InvestmentPartner, int>;
@@ -63,14 +64,14 @@ public class BusinessManager : MonoBehaviour
         return random.Next(n1, n2 + 1) * increment;
     }
 
-    private BuyInvestmentContext GetBusinessInvestmentAction(
+    private AvailableActionContext GetBusinessInvestmentAction(
         Player player,
         BusinessProfile[] templates,
         System.Random random)
     {
         if (templates == null || templates.Length == 0)
         {
-            return new BuyInvestmentContext(null, null);
+            return new AvailableActionContext(null, null);
         }
 
         BusinessProfile profile = templates[random.Next(templates.Length)];
@@ -112,8 +113,9 @@ public class BusinessManager : MonoBehaviour
                 profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
-            return new BuyInvestmentContext(
-                franchise, JoinFranchiseAction.GetBuyAction(player, franchise));
+            return new AvailableActionContext(
+                franchise.GetActionLabel(),
+                JoinFranchiseAction.GetBuyAction(player, franchise));
         }
         else
         {
@@ -125,12 +127,13 @@ public class BusinessManager : MonoBehaviour
                 profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
-            return new BuyInvestmentContext(
-                business, PurchaseSmallBusinessAction.GetBuyAction(player, business));
+            return new AvailableActionContext(
+                business.GetActionLabel(),
+                PurchaseSmallBusinessAction.GetBuyAction(player, business));
         }
     }
 
-    public BuyInvestmentContext GetSmallInvestmentAction(
+    public AvailableActionContext GetSmallInvestmentAction(
         Player player, System.Random random)
     {
         return GetBusinessInvestmentAction(player, _smallInvestments, random);

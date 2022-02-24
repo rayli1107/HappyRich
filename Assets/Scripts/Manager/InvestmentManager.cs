@@ -6,14 +6,15 @@ using PlayerState;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
+using UI.Panels.Assets;
 using UnityEngine;
 
 using GetInvestmentFn = System.Func<
     PlayerInfo.Player,
     System.Random,
-    BuyInvestmentContext>;
+    UI.Panels.Assets.AvailableActionContext>;
 using Investment = System.Tuple<InvestmentPartner, int>;
-
+/*
 public struct BuyInvestmentContext
 {
     public AbstractInvestment asset { get; private set; }
@@ -25,7 +26,7 @@ public struct BuyInvestmentContext
         this.asset = asset;
         this.buyAction = buyAction;
     }
-}
+}*/
 
 public class InvestmentManager : MonoBehaviour
 {
@@ -61,7 +62,7 @@ public class InvestmentManager : MonoBehaviour
         return random.Next(2) == 0 ? fn1 : fn2;
     }
 
-    private List<BuyInvestmentContext> getAvailableInvestments(
+    private List<AvailableActionContext> getAvailableInvestments(
         Player player,
         System.Random random,
         GetInvestmentFn getRealEstateFn,
@@ -81,7 +82,7 @@ public class InvestmentManager : MonoBehaviour
             }
         }
 
-        List<BuyInvestmentContext> actions = new List<BuyInvestmentContext>();
+        List<AvailableActionContext> actions = new List<AvailableActionContext>();
         for (int i = 0; i < randomCount; ++i)
         {
             GetInvestmentFn fn = GetRandomInvestmentFn(random, getRealEstateFn, getBusinessFn);
@@ -109,7 +110,7 @@ public class InvestmentManager : MonoBehaviour
         return actions;
     }
 
-    public List<BuyInvestmentContext> GetAvailableSmallInvestments(
+    public List<AvailableActionContext> GetAvailableSmallInvestments(
         Player player, System.Random random)
     {
         return getAvailableInvestments(
@@ -119,7 +120,7 @@ public class InvestmentManager : MonoBehaviour
             BusinessManager.Instance.GetSmallInvestmentAction);
     }
 
-    public List<BuyInvestmentContext> GetAvailableLargeInvestments(
+    public List<AvailableActionContext> GetAvailableLargeInvestments(
         Player player, System.Random random)
     {
         return getAvailableInvestments(

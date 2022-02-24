@@ -9,23 +9,34 @@ using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
-using GetInvestmentFn = System.Func<
-    PlayerInfo.Player,
-    System.Random,
-    System.Action<System.Action<bool>>>;
 namespace UI.Panels.Assets
 {
-    public class AvailableInvestmentsPanel : MonoBehaviour
+    public struct AvailableActionContext
+    {
+        public string label { get; private set; }
+        public Action<Action<bool>> buyAction { get; private set; }
+
+        public AvailableActionContext(
+            string label, Action<Action<bool>> buyAction)
+        {
+            this.label = label;
+            this.buyAction = buyAction;
+        }
+    }
+
+    public class AvailableActionsPanel : MonoBehaviour
     {
 #pragma warning disable 0649
         [SerializeField]
         protected TextMeshProUGUI _textAvailableCash;
         [SerializeField]
-        protected Button  _prefabInvestmentButton;
+        protected Button  _prefabActionButton;
 #pragma warning restore 0649
 
         public Player player;
+        public int maxAllowed = -1;
         private List<Button> _buyActionButtons;
+        private int _resolved;
 
         private void Awake()
         {
@@ -37,9 +48,14 @@ namespace UI.Panels.Assets
             if (success && index < _buyActionButtons.Count)
             {
                 _buyActionButtons[index].gameObject.SetActive(false);
+                ++_resolved;
             }
 
-            if (!_buyActionButtons.Exists(b => b.gameObject.activeInHierarchy))
+            if (maxAllowed >= 0 &&_resolved >= maxAllowed)
+            {
+                GetComponent<MessageBox>().OnButtonOk();
+            }
+            else if (!_buyActionButtons.Exists(b => b.gameObject.activeInHierarchy))
             {
                 GetComponent<MessageBox>().OnButtonCancel();
             }
@@ -51,14 +67,18 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
-            Localization local = Localization.Instance;
-            _textAvailableCash.text = string.Format(
-                "Available Cash: {0}", local.GetCurrency(player.cash));
+            if (_textAvailableCash != null)
+            {
+                Localization local = Localization.Instance;
+                _textAvailableCash.text = string.Format(
+                    "Available Cash: {0}", local.GetCurrency(player.cash));
+            }
         }
 
         public virtual void Initialize(
-            List<BuyInvestmentContext> buyActions)
+            List<AvailableActionContext> buyActions)
         {
+            _resolved = 0;
             Transform parentTransform = GetComponentInChildren<VerticalLayoutGroup>().transform;
 
             foreach (Button button in GetComponentsInChildren<Button>())
@@ -75,14 +95,17 @@ namespace UI.Panels.Assets
             for (int i = 0; i < buyActions.Count; ++i)
             {
                 int index = i;
-                AbstractInvestment asset = buyActions[index].asset;
+//                AbstractInvestment asset = buyActions[index].asset;
                 Action buyAction = () => buyActions[index].buyAction(
                     success => buyCallback(index, success));
-                Button button = Instantiate(_prefabInvestmentButton, parentTransform);
-                button.GetComponentInChildren<TextMeshProUGUI>().text = string.Format(
+                Button button = Instantiate(_prefabActionButton, parentTransform);
+                button.GetComponentInChildren<TextMeshProUGUI>().text = buyActions[index].label;
+/*
+ * button.GetComponentInChildren<TextMeshProUGUI>().text = string.Format(
                     "{0}\nCost: {1}",
                     asset.label,
                     local.GetCurrency(asset.originalPrice));
+*/
                 button.onClick.AddListener(new UnityEngine.Events.UnityAction(buyAction));
                 button.transform.SetSiblingIndex(index + 1);
                 button.gameObject.SetActive(true);
@@ -94,8 +117,12 @@ namespace UI.Panels.Assets
 
         private string GetConfirmMessage(ButtonType buttonType)
         {
-            return _buyActionButtons.Exists(b => b.gameObject.activeInHierarchy) ?
-                "Pass on these investment opportunities?" : "";
+            if (buttonType == ButtonType.CANCEL)
+            {
+                return _buyActionButtons.Exists(b => b.gameObject.activeInHierarchy) ?
+                    "Pass on these opportunities?" : "";
+            }
+            return "";
         }
     }
 }

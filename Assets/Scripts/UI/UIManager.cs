@@ -65,7 +65,7 @@ namespace UI
         [SerializeField]
         private ContactListPanel _prefabContactListPanel;
         [SerializeField]
-        private AvailableInvestmentsPanel _prefabAvailableInvestmentsPanel;
+        private AvailableActionsPanel _prefabAvailableActionsPanel;
         [SerializeField]
         private HappinessListPanel _prefabHappinessListPanel;
         [SerializeField]
@@ -554,13 +554,15 @@ namespace UI
             ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
         }
 
-        public void ShowAvailableInvestmentsPanel(
-            List<BuyInvestmentContext> buyActions,
-            MessageBoxHandler messageBoxHandler)
+        public void ShowAvailableActionsPanel(
+            List<AvailableActionContext> buyActions,
+            MessageBoxHandler messageBoxHandler,
+            int maxAllowed = -1)
         {
-            AvailableInvestmentsPanel panel = Instantiate(
-                _prefabAvailableInvestmentsPanel, transform);
+            AvailableActionsPanel panel = Instantiate(
+                _prefabAvailableActionsPanel, transform);
             panel.player = GameManager.Instance.player;
+            panel.maxAllowed = maxAllowed;
             panel.Initialize(buyActions);
 
             MessageBox messageBox = panel.GetComponent<MessageBox>();

@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 4180684778016655820}
   - component: {fileID: 1431809723817457533}
   m_Layer: 5
-  m_Name: Available Investments
+  m_Name: Available Actions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,11 +467,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4707468395760701111}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a62b96c39c5b141bf0834633cb3107, type: 3}
+  m_Script: {fileID: 11500000, guid: be4396c5203d6674181c62835f1d438d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _textAvailableCash: {fileID: 1159355124684472049}
-  _prefabInvestmentButton: {fileID: 5221160128927752180}
+  _prefabActionButton: {fileID: 5221160128927752180}
+  maxAllowed: -1
 --- !u!1 &5460841456359694848
 GameObject:
   m_ObjectHideFlags: 0

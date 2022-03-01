@@ -10,14 +10,16 @@ namespace UI.Panels.Actions
 
         public void OnNewJobButton()
         {
-            UIManager.Instance.DestroyAllModal();
-            new FindNewJob(player).Start();
+            JobActions.SearchNewJobs(
+                GameManager.Instance.player, GameManager.Instance.Random);
         }
 
         public void OnApplyOldJobButton()
         {
-            UIManager.Instance.ShowJobListPanel(
-                PlayerDetails.JobListPanelMode.kOldJobs);
+            JobActions.SearchOldJobs(
+                GameManager.Instance.player, GameManager.Instance.Random);
+//            UIManager.Instance.ShowJobListPanel(
+                //PlayerDetails.JobListPanelMode.kOldJobs);
         }
     }
 }

@@ -855,6 +855,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bc34682c295f55842abe7f3dc9846bbd, type: 2}
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
+  - {fileID: 11400000, guid: b70c521c4e9065446abbd6973908c834, type: 2}
+  - {fileID: 11400000, guid: 16b9e07653e755d43931ade213c94d2b, type: 2}
+  - {fileID: 11400000, guid: 37ea49e1dc579f840933674edbefd907, type: 2}
+  - {fileID: 11400000, guid: f04c69ca7f304d546ac16a0c4b425151, type: 2}
+  - {fileID: 11400000, guid: f5d2ac76ed797d44492d67f4b1aa1969, type: 2}
   _applyOldJobSuccessChance: 0.5
   _jobBonusMultiplier: {x: 0.1, y: 0.4}
   _jobBonusIncrement: 0.1
@@ -1671,6 +1676,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2fb470b31a492344905e4d45fdc2f86, type: 2}
   _initialCost: 20000
   _additionalCost: 10000
+  _numberOfChoices: 2
 --- !u!1 &630578660
 GameObject:
   m_ObjectHideFlags: 0

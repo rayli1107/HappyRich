@@ -1,4 +1,5 @@
-﻿using ScriptableObjects;
+﻿using PlayerInfo;
+using ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,17 +13,31 @@ public class JobManager : MonoBehaviour
     [SerializeField]
     private float _applyOldJobSuccessChance = 0.5f;
     [SerializeField]
+    private float _applyNewJobSuccessChance = 0.25f;
+    [SerializeField]
     private Vector2 _jobBonusMultiplier = new Vector2(0.1f, 0.4f);
     [SerializeField]
     private float _jobBonusIncrement = 0.1f;
+    [SerializeField]
+    private int _numberOfChoices = 2;
+    [SerializeField]
+    private int _maxAllowedJobs = 2;
 #pragma warning restore 0649
 
-    public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
+/*    public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
+    public float applyNewJobSuccessChance => _applyNewJobSuccessChance;
+*/
+    public int maxAllowedJobs => _maxAllowedJobs;
+
+    private Profession _currentFullTime;
+    private List<Profession> _currentPartTimes;
+
     public static JobManager Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
+        _currentPartTimes = new List<Profession>();
     }
 
     public List<Profession> GetInitialProfessionList(System.Random random)
@@ -37,20 +52,29 @@ public class JobManager : MonoBehaviour
         return _professions[random.Next(_professions.Length)];
     }
 
-    public Profession FindJob(System.Random random, bool hasFullTime)
+    public void OnPlayerTurnStart(System.Random random)
     {
-        List<Profession> jobs = new List<Profession>(_partTimeJobs);
-        if (!hasFullTime)
+        _currentFullTime = _professions[random.Next(_professions.Length)];
+
+        List<Profession> availableJobs = new List<Profession>(_partTimeJobs);
+        _currentPartTimes.Clear();
+        while (_currentPartTimes.Count < _numberOfChoices && availableJobs.Count > 0)
         {
-            foreach (Profession job in _professions)
-            {
-                if (job.searchable)
-                {
-                    jobs.Add(job);
-                }
-            }
+            int index = random.Next(availableJobs.Count);
+            _currentPartTimes.Add(availableJobs[index]);
+            availableJobs.RemoveAt(index);
         }
-        return jobs[random.Next(jobs.Count)];
+    }
+
+    public List<Profession> GetAvailableNewJobs(Player player)
+    {
+        List<Profession> results = new List<Profession>();
+        if (!player.jobs.Exists(j => j.fullTime))
+        {
+            results.Add(_currentFullTime);
+        }
+        results.AddRange(_currentPartTimes);
+        return results;
     }
 
     public int GetJobBonus(Profession job, System.Random random)
@@ -59,5 +83,12 @@ public class JobManager : MonoBehaviour
         int low = Mathf.FloorToInt(job.salary * _jobBonusMultiplier.x) / increment;
         int high = Mathf.FloorToInt(job.salary * _jobBonusMultiplier.y) / increment;
         return random.Next(low, high + 1) * increment;
+    }
+
+    public float GetJobSuccessChance(Player player, Profession job)
+    {
+        return player.oldJobs.Contains(job) ?
+            _applyOldJobSuccessChance :
+            _applyNewJobSuccessChance;
     }
 }

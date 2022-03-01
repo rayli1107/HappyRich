@@ -556,12 +556,14 @@ namespace UI
 
         public void ShowAvailableActionsPanel(
             List<AvailableActionContext> buyActions,
+            Func<string> getLabelFn,
             MessageBoxHandler messageBoxHandler,
             int maxAllowed = -1)
         {
             AvailableActionsPanel panel = Instantiate(
                 _prefabAvailableActionsPanel, transform);
             panel.player = GameManager.Instance.player;
+            panel.getLabelFn = getLabelFn;
             panel.maxAllowed = maxAllowed;
             panel.Initialize(buyActions);
 

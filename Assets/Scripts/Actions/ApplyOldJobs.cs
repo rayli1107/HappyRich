@@ -1,26 +1,16 @@
 ﻿using PlayerInfo;
 using ScriptableObjects;
+using System;
 using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Actions
 {
-    public class ApplyOldJob : AbstractAction
+    /*
+    public class ApplyOldJobsAction
     {
-        private Player _player;
-        private Profession _job;
-
-        private float successChance => (
-            _job.searchable ? 1f : JobManager.Instance.applyOldJobSuccessChance);
-
-        public ApplyOldJob(Player player, Profession job, ActionCallback actionCallback)
-            : base(actionCallback)
-        {
-            _player = player;
-            _job = job;
-        }
-
-        public override void Start()
+        private static void applyJob(
+            Player player, System.Random random, Profession job, Action<bool> callback)
         {
             Localization local = Localization.Instance;
             string message = string.Format(
@@ -69,7 +59,7 @@ namespace Actions
             }
         }
     }
-
+*/
     /*
     public class FindNewJob : AbstractAction, ITransactionHandler, IMessageBoxHandler
     {

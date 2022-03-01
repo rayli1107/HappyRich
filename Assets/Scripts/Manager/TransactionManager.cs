@@ -185,8 +185,8 @@ public static class TransactionManager
     {
         TryDebit.Run(
             player,
-            job.jobCost,
-            (bool b) => applyJobTransactionHandler(player, job, handler, b));
+            player.oldJobs.Contains(job) ? 0 : job.jobCost,
+            (bool b) => applyJobTransactionHandler(player, job, handler, b));;
     }
 
     public static void BuyStock(

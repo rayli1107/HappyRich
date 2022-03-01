@@ -71,7 +71,7 @@ namespace UI.Panels.PlayerDetails
         {
             if (player != null && job != null)
             {
-                new ApplyOldJob(player, job, onApplyJobCallback).Start();
+//                new ApplyOldJob(player, job, onApplyJobCallback).Start();
             }
         }
 

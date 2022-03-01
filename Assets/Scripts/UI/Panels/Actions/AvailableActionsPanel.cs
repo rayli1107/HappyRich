@@ -35,6 +35,7 @@ namespace UI.Panels.Assets
 
         public Player player;
         public int maxAllowed = -1;
+        public Func<string> getLabelFn;
         private List<Button> _buyActionButtons;
         private int _resolved;
 
@@ -51,7 +52,7 @@ namespace UI.Panels.Assets
                 ++_resolved;
             }
 
-            if (maxAllowed >= 0 &&_resolved >= maxAllowed)
+            if (maxAllowed >= 0 &&_resolved >= maxAllowed) 
             {
                 GetComponent<MessageBox>().OnButtonOk();
             }
@@ -67,11 +68,12 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
-            if (_textAvailableCash != null)
+            if (_textAvailableCash != null && getLabelFn != null)
             {
                 Localization local = Localization.Instance;
                 _textAvailableCash.text = string.Format(
                     "Available Cash: {0}", local.GetCurrency(player.cash));
+                _textAvailableCash.text = getLabelFn();
             }
         }
 
@@ -95,17 +97,10 @@ namespace UI.Panels.Assets
             for (int i = 0; i < buyActions.Count; ++i)
             {
                 int index = i;
-//                AbstractInvestment asset = buyActions[index].asset;
                 Action buyAction = () => buyActions[index].buyAction(
                     success => buyCallback(index, success));
                 Button button = Instantiate(_prefabActionButton, parentTransform);
                 button.GetComponentInChildren<TextMeshProUGUI>().text = buyActions[index].label;
-/*
- * button.GetComponentInChildren<TextMeshProUGUI>().text = string.Format(
-                    "{0}\nCost: {1}",
-                    asset.label,
-                    local.GetCurrency(asset.originalPrice));
-*/
                 button.onClick.AddListener(new UnityEngine.Events.UnityAction(buyAction));
                 button.transform.SetSiblingIndex(index + 1);
                 button.gameObject.SetActive(true);

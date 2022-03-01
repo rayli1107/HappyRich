@@ -24,12 +24,20 @@ namespace UI.Panels.Actions
             GameManager.Instance.StateMachine.OnPlayerActionDone();
         }
 
+        private string getLabel()
+        {
+            return string.Format(
+                "Available Cash: {0}",
+                Localization.Instance.GetCurrency(GameManager.Instance.player.cash));
+        }
+
         public void OnSmallInvestmentButton()
         {
             UIManager.Instance.DestroyAllModal();
             UIManager.Instance.ShowAvailableActionsPanel(
                 InvestmentManager.Instance.GetAvailableSmallInvestments(
                     player, GameManager.Instance.Random),
+                getLabel,
                 _ => InvesmtmentActionCallback());
         }
 
@@ -39,6 +47,7 @@ namespace UI.Panels.Actions
             UIManager.Instance.ShowAvailableActionsPanel(
                 InvestmentManager.Instance.GetAvailableLargeInvestments(
                     player, GameManager.Instance.Random),
+                getLabel,
                 _ => InvesmtmentActionCallback());
         }
 

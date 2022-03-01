@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d769073e1204cd48a898ceadc223e09, type: 3}
-  m_Name: Game Developer
+  m_Name: Food Delivery
   m_EditorClassIdentifier: 
   fullTime: 0
   searchable: 1
-  professionName: Game Developer
-  salary: 30000
-  jobCost: 20000
+  professionName: Food Delivery
+  salary: 25000
+  jobCost: 15000
   personalExpenses: 0
   autoLoan: 0
   costPerChild: 0

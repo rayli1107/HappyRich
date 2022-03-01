@@ -35,6 +35,20 @@ namespace UI.Panels.Actions
             }
         }
 
+        private string getTrainingActionsLabel()
+        {
+            List<string> messages = new List<string>()
+            {
+                "You can choose to take one of the following available professional " +
+                "training courses.",
+                "",
+                string.Format(
+                    "Available Cash: {0}",
+                    Localization.Instance.GetCurrency(GameManager.Instance.player.cash))
+            };
+            return string.Join("\n", messages);                
+        }
+
         public void OnTrainingButton()
         {
             if (SkillManager.Instance.currentAvailableSkills.Count == 0)
@@ -62,7 +76,7 @@ namespace UI.Panels.Actions
             }
 
             UIManager.Instance.ShowAvailableActionsPanel(
-                actionContextList, trainingHandler, 1);
+                actionContextList, getTrainingActionsLabel, trainingHandler, 1);
         }
     }
 }

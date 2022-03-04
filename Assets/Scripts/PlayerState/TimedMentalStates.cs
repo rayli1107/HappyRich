@@ -41,7 +41,7 @@ namespace PlayerState
             "You're still devastated from the recent tragedy.";
 
         public override int happinessModifier =>
-            -1 * SelfImprovementManager.Instance.GetTragedyPenalty(player);
+            -1 * MentalStateManager.Instance.GetTragedyPenalty(player);
 
         public TragedyPenaltyState(Player player, int turn) : base(player, turn, "Recent tragedy")
         {
@@ -77,9 +77,9 @@ namespace PlayerState
             "Know well what leads you forward and what holds you back, and " +
             "choose the path that leads to wisdom.";
         public override int happinessModifier =>
-            SelfImprovementManager.Instance.meditatedHappinessModifier;
+            MentalStateManager.Instance.meditatedHappinessModifier;
         public MedidatedState(Player player) : base(
-            player, SelfImprovementManager.Instance.meditatedDuration, "Meditated")
+            player, MentalStateManager.Instance.meditatedDuration, "Meditated")
         {
         }
     }

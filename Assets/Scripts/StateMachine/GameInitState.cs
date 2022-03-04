@@ -29,7 +29,7 @@ namespace StateMachine
             RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
             StockManager.Instance.Initialize(GameManager.Instance.Random);
             BusinessManager.Instance.Initialize(GameManager.Instance.Random);
-            SelfImprovementManager.Instance.Initialize();
+            MentalStateManager.Instance.Initialize();
             RiskyInvestmentManager.Instance.Initialize(GameManager.Instance.Random);
             FamilyManager.Instance.Initialize(GameManager.Instance.Random);
 
@@ -59,7 +59,7 @@ namespace StateMachine
                 PersonalEventManager.Instance != null &&
                 RealEstateManager.Instance != null &&
                 RiskyInvestmentManager.Instance != null &&
-                SelfImprovementManager.Instance != null &&
+                MentalStateManager.Instance != null &&
                 SkillManager.Instance != null &&
                 SpecialistManager.Instance != null &&
                 StartupManager.Instance != null &&

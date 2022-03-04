@@ -27,6 +27,8 @@ namespace UI.Panels.PlayerDetails
         [SerializeField]
         private TextMeshProUGUI _textAutoLoan;
         [SerializeField]
+        private TextMeshProUGUI _textStudentLoan;
+        [SerializeField]
         private TextMeshProUGUI _textChildExpenses;
 #pragma warning restore 0649
 
@@ -72,6 +74,11 @@ namespace UI.Panels.PlayerDetails
             if (_textAutoLoan != null)
             {
                 _textAutoLoan.text = local.GetCurrency(profession.autoLoan, true);
+            }
+
+            if (_textStudentLoan != null)
+            {
+                _textStudentLoan.text = local.GetCurrency(profession.jobCost, true);
             }
 
             if (_textChildExpenses != null)

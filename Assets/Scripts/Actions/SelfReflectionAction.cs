@@ -61,7 +61,7 @@ namespace Actions
             Action cb = () => callback?.Invoke(true);
 
             if (player.meditatedCount >=
-                SelfImprovementManager.Instance.enlightenedThreshold)
+                MentalStateManager.Instance.enlightenedThreshold)
             {
                 string message = string.Format(
                     "After many years of meditation, you've finally reached a " +
@@ -77,7 +77,7 @@ namespace Actions
             }
 
             Action<Player, Action<AbstractPlayerState>> addAction =
-                SelfImprovementManager.Instance.GetSelfReflectionState(random);
+                MentalStateManager.Instance.GetSelfReflectionState(random);
             addAction?.Invoke(
                 player, s => addPlayerState(player, s, true, cb));
         }

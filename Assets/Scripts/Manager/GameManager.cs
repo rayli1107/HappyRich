@@ -1,5 +1,7 @@
 ﻿using PlayerInfo;
+using PlayerState;
 using ScriptableObjects;
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -43,6 +45,10 @@ public class GameManager : MonoBehaviour
     public void CreatePlayer(Profession profession)
     {
         player = new Player(profession, defaultHappiness);
+
+        Action<Player, Action<Personality>> cb =
+            MentalStateManager.Instance.GetPersonality(Random);
+        cb?.Invoke(player, p => player.personality = p);
     }
 
     // Update is called once per frame

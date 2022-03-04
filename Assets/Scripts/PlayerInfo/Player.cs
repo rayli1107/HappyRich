@@ -65,6 +65,7 @@ namespace PlayerInfo
             }
         }
 
+        public Personality personality;
         public List<AbstractPlayerState> passiveStates { get; private set; }
         public List<AbstractPlayerState> mentalStates { get; private set; }
         public List<AbstractPlayerState> states
@@ -72,6 +73,7 @@ namespace PlayerInfo
             get
             {
                 List<AbstractPlayerState> states = new List<AbstractPlayerState>();
+                states.Add(personality);
                 states.AddRange(passiveStates);
                 states.AddRange(mentalStates);
                 return states;

@@ -861,8 +861,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f04c69ca7f304d546ac16a0c4b425151, type: 2}
   - {fileID: 11400000, guid: f5d2ac76ed797d44492d67f4b1aa1969, type: 2}
   _applyOldJobSuccessChance: 0.5
+  _applyNewJobSuccessChance: 0.25
   _jobBonusMultiplier: {x: 0.1, y: 0.4}
   _jobBonusIncrement: 0.1
+  _numberOfChoices: 2
+  _maxAllowedJobs: 2
 --- !u!114 &204261756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1637,10 +1640,14 @@ MonoBehaviour:
   _tragedyDuration: 3
   _extrovertThreshold: 10
   _extrovertHappinessModifier: 10
+  _introvertHappinessModifier: 20
+  _romanticHappinessModifier: 10
   _meditatedHappinessModifier: 10
   _meditatedDuration: 3
   _enlightenedThreshold: 5
   _enlightenedHappinessModifier: 30
+  _riskTakerHappinessModifier: 20
+  _riskAverseHappinessModifier: 20
 --- !u!4 &628575512
 Transform:
   m_ObjectHideFlags: 0

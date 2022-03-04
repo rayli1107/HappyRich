@@ -227,5 +227,26 @@ namespace PlayerInfo
         {
             assets.ForEach(a => a.OnTurnStart(random));
         }
+
+        public bool hasHighRiskInvestments
+        {
+            get
+            {
+                if (distressedProperties.Count > 0 ||
+                    startupEntities.Count > 0 ||
+                    timedInvestments.Count > 0)
+                {
+                    return true;
+                }
+                foreach (KeyValuePair<string, PurchasedStock> kv in stocks)
+                {
+                    if (kv.Value.stock is AbstractCryptoCurrency)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace UI.Panels.PlayerDetails
     {
 #pragma warning disable 0649
         [SerializeField]
+        private ItemValuePanel _panelPersonality;
+        [SerializeField]
         private ItemValuePanel _panelTraits;
         [SerializeField]
         private ItemValuePanel _panelSkills;
@@ -39,12 +41,19 @@ namespace UI.Panels.PlayerDetails
             }
 
             Localization local = Localization.Instance;
+
+            // Personality
+            Transform parentTransform = _panelPersonality.transform.parent;
+            int index = _panelPersonality.transform.GetSiblingIndex() + 1;
+            Action action = () => UIManager.Instance.ShowPlayerStateInfo(player.personality, null);
+            AddItem(parentTransform, index, local.GetPlayerState(player.personality), action);
+
             // Traits
-            Transform parentTransform = _panelTraits.transform.parent;
-            int index = _panelTraits.transform.GetSiblingIndex() + 1;
+            parentTransform = _panelTraits.transform.parent;
+            index = _panelTraits.transform.GetSiblingIndex() + 1;
             foreach (AbstractPlayerState trait in player.mentalStates.FindAll(s => s is SelfReflectionState))
             {
-                Action action = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
+                action = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
                 AddItem(parentTransform, index, local.GetPlayerState(trait), action);
                 ++index;
             }
@@ -54,7 +63,7 @@ namespace UI.Panels.PlayerDetails
             index = _panelSkills.transform.GetSiblingIndex() + 1;
             foreach (SkillInfo skillInfo in player.skills)
             {
-                Action action = () => UIManager.Instance.ShowSkillInfo(skillInfo, null);
+                action = () => UIManager.Instance.ShowSkillInfo(skillInfo, null);
                 AddItem(parentTransform, index, local.GetSkill(skillInfo), action);
                 ++index;
             }

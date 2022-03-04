@@ -63,35 +63,6 @@ namespace PlayerState
         }
     }
 
-    public class Extrovert : SelfReflectionState
-    {
-        public override string description => string.Join(
-            "\n",
-            "You realized that surrounding yourself with better people is part of " +
-            "what makes you successful.",
-            "",
-            string.Format("Happiness +{0} when you have {1} or more contacts.",
-                SelfImprovementManager.Instance.extrovertHappinessModifier,
-                SelfImprovementManager.Instance.extrovertThreshold));
-
-        public override int happinessModifier
-        {
-            get
-            {
-                if (player.contacts.Count + player.specialists.Count >=
-                    SelfImprovementManager.Instance.extrovertThreshold)
-                {
-                    return SelfImprovementManager.Instance.extrovertHappinessModifier;
-                }
-                return 0;
-            }
-        }
-            
-        public Extrovert(Player player) : base(player, "Extrovert")
-        {
-        }
-    }
-
     public class Extravagant : SelfReflectionState
     {
         public override string description => string.Join(
@@ -104,6 +75,23 @@ namespace PlayerState
         public Extravagant(Player player) : base(player, "Extravagant")
         {
 
+        }
+    }
+
+    public class FamilyOrientedState : SelfReflectionState
+    {
+        public override string description => string.Format(
+            "You realize you're a family oreinted man, and your family means everything " +
+            "to you. Happiness +10 when you're married and have at least {0} children.",
+            FamilyManager.Instance.familyOrientedChildThreshold);
+
+        public override int happinessModifier =>
+            player.spouse != null &&
+            player.numChild >= FamilyManager.Instance.familyOrientedChildThreshold ?
+            FamilyManager.Instance.familyOrientedHappinessModifier : 0;
+
+        public FamilyOrientedState(Player player) : base(player, "Family Oriented")
+        {
         }
     }
 
@@ -131,7 +119,7 @@ namespace PlayerState
             "You've become one with the universe.";
 
         public override int happinessModifier =>
-            SelfImprovementManager.Instance.enlightenedHappinessModifier;
+            MentalStateManager.Instance.enlightenedHappinessModifier;
 
         public Enlightenment(Player player) : base(player, "Enlightenment")
         {

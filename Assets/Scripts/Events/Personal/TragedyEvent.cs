@@ -51,7 +51,7 @@ namespace Events.Personal
             string message = "One of your close relatives passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.AddMentalState(
-                new TragedyPenaltyState(player, SelfImprovementManager.Instance.tragedyDuration));
+                new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,
@@ -64,7 +64,7 @@ namespace Events.Personal
                 "Sorry for your loss.";
             player.spouse = null;
             player.AddMentalState(
-                new TragedyPenaltyState(player, SelfImprovementManager.Instance.tragedyDuration));
+                new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,
@@ -77,7 +77,7 @@ namespace Events.Personal
                 "Sorry for your loss.";
             player.numChild = Math.Max(player.numChild - 1, 0);
             player.AddMentalState(
-                new TragedyPenaltyState(player, SelfImprovementManager.Instance.tragedyDuration));
+                new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,

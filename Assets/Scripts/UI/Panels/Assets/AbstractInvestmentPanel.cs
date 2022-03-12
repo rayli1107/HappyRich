@@ -168,7 +168,8 @@ namespace UI.Panels.Assets
             EnableSecuredLoanPanel(false);
             EnablePrivateLoanPanel(false);
             EnableEquityPanel(false);
-            if (partialAsset.investorShares > 0)
+
+            if (checkRaiseEquity())
             {
                 EnableEquityPanel(true);
             }
@@ -180,16 +181,7 @@ namespace UI.Panels.Assets
             {
                 EnableSecuredLoanPanel(true);
             }
-            /*
-            if (asset.primaryLoan != null && asset.primaryLoan.maxltv > 0)
-            {
-                EnableSecuredLoanPanel(true);
-            }
-            bool enableEquityPanel = partialAsset.investorShares > 0;
-            bool enableDebtPanel = !enableEquityPanel && asset.privateLoan != null;
-            EnableEquityPanel(enableEquityPanel);
-            EnablePrivateLoanPanel(enableDebtPanel);
-            */
+
             AdjustNumbers();
         }
 

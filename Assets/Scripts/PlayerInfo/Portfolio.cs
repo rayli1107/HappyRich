@@ -225,6 +225,17 @@ namespace PlayerInfo
 
         public void OnTurnStart(System.Random random)
         {
+            List<string> stocksDelisted = new List<string>();
+            foreach (string name in stocks.Keys) 
+            {
+                AbstractStock stock = StockManager.Instance.GetStockByName(name);
+                if (stock == null || stock.value == 0)
+                {
+                    stocksDelisted.Add(name);
+                }
+            }
+            stocksDelisted.ForEach(s => stocks.Remove(s));
+
             assets.ForEach(a => a.OnTurnStart(random));
         }
 

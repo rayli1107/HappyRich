@@ -3524,7 +3524,7 @@ MonoBehaviour:
   _growthStockVariance: {x: 0.8, y: 1.2}
   _growthStockMinPeriod: 3
   _growthStockUpdateChance: 0.5
-  _cryptoSuccessProbability: 0.5
+  _cryptoSuccessProbability: 0.4
   _cryptoInitialValue: 1
   _cryptoTurnDelayRange: {x: 5, y: 8}
   _cryptoInitialMultiplier: {x: 5, y: 10}
@@ -4863,6 +4863,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e43a140989e80e45bbae711bb21ddc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enableInvestmentEvents: 1
+  _enableStockEvents: 1
+  _enableInvestmentPartnerEvents: 1
+  _enableRealEstateEvents: 1
 --- !u!1 &1667852061
 GameObject:
   m_ObjectHideFlags: 0

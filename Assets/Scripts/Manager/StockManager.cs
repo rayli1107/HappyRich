@@ -175,4 +175,14 @@ public class StockManager : MonoBehaviour
         }
         return null;
     }
+
+    public AbstractStock GetStockByName(string name)
+    {
+        AbstractStock result;
+        if (_stocks.TryGetValue(name, out result))
+        {
+            return result;
+        }
+        return null;
+    }
 }

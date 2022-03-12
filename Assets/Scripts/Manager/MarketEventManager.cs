@@ -9,6 +9,17 @@ using UnityEngine;
 
 public class MarketEventManager : MonoBehaviour
 {
+#pragma warning disable 0649
+    [SerializeField]
+    private bool _enableInvestmentEvents = true;
+    [SerializeField]
+    private bool _enableStockEvents = true;
+    [SerializeField]
+    private bool _enableInvestmentPartnerEvents = true;
+    [SerializeField]
+    private bool _enableRealEstateEvents = true;
+#pragma warning restore 0649
+
     public static MarketEventManager Instance { get; private set; }
 
     private void Awake()
@@ -37,16 +48,20 @@ public class MarketEventManager : MonoBehaviour
         System.Random random = GameManager.Instance.Random;
 
         List<Action<Action>> allEvents = new List<Action<Action>>();
-        if (GameManager.Instance.cheatMode)
-        {
-            allEvents.Add(RealEstateManager.Instance.GetMarketEvent(player, random));
-        }
-        else
+        if (_enableInvestmentEvents)
         {
             allEvents.Add(InvestmentManager.Instance.GetMarketEvent(player, random));
+        }
+        if (_enableStockEvents)
+        {
             allEvents.Add(StockManager.Instance.GetMarketEvent(random));
-            //        allEvents.Add(RiskyInvestmentManager.Instance.GetMarketEvent(player, random));
+        }
+        if (_enableInvestmentPartnerEvents)
+        {
             allEvents.Add(InvestmentPartnerManager.Instance.GetMarketEvent(player, random));
+        }
+        if (_enableRealEstateEvents)
+        {
             allEvents.Add(RealEstateManager.Instance.GetMarketEvent(player, random));
         }
         Action <Action> marketEvent = getRandomEvent(allEvents, random);

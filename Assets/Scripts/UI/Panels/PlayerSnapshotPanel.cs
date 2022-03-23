@@ -55,7 +55,7 @@ namespace UI.Panels
 
             if (_textCashflow)
             {
-                _textCashflow.text = local.GetCurrency(snapshot.expectedCashflow);
+                _textCashflow.text = local.GetCurrency(snapshot.expectedCashflow, false, true);
             }
 
             if (_textNetworth)

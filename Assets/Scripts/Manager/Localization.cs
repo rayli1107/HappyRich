@@ -145,16 +145,23 @@ public class Localization : MonoBehaviour
         }
     }
 
-    public string GetCurrencyPlain(int amount)
+    public string GetCurrencyPlain(int amount, bool showPositiveSign=false)
     {
         if (amount < 0)
         {
             return "-" + GetAbsCurrency(-1 * amount);
         }
-        return GetAbsCurrency(amount);
+        else if (showPositiveSign)
+        {
+            return "+" + GetAbsCurrency(amount);
+        }
+        else
+        {
+            return GetAbsCurrency(amount);
+        }
     }
 
-    public string GetCurrency(int amount, bool flipped=false)
+    public string GetCurrency(int amount, bool flipped=false, bool showPositiveSign=false)
     {
         bool positive = amount >= 0;
         if (flipped)
@@ -165,9 +172,9 @@ public class Localization : MonoBehaviour
         Color c = positive ? _colorPositive : _colorNegative;
         if (amount < 0)
         {
-            return colorWrap(GetCurrencyPlain(amount), c);
+            return colorWrap(GetCurrencyPlain(amount, showPositiveSign), c);
         }
-        return colorWrap(GetCurrencyPlain(amount), c);
+        return colorWrap(GetCurrencyPlain(amount, showPositiveSign), c);
     }
 
     public string GetPercentPlain(float pct, bool showPositive=true)

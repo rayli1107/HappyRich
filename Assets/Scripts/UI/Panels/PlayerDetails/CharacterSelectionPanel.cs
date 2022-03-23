@@ -38,52 +38,56 @@ namespace UI.Panels.PlayerDetails
 
         public void Refresh()
         {
-            Profession profession = professions[professionIndex];
-            Localization local = Localization.Instance;
-
-            if (_image != null)
+            Debug.Log("ABC");
+            if (professionIndex >= 0 && professionIndex < professions.Count)
             {
-                _image.sprite = profession.image;
-            }
+                Profession profession = professions[professionIndex];
+                Localization local = Localization.Instance;
 
-            if (_textProfession != null)
-            {
-                _textProfession.text = local.GetJobName(profession);
-            }
+                if (_image != null)
+                {
+                    _image.sprite = profession.image;
+                }
 
-            if (_textAnnualIncome != null)
-            {
-                _textAnnualIncome.text = local.GetCurrency(profession.salary);
-            }
+                if (_textProfession != null)
+                {
+                    _textProfession.text = local.GetJobName(profession);
+                }
 
-            if (_textAnnualExpense != null)
-            {
-                _textAnnualExpense.text = local.GetCurrency(profession.personalExpenses, true);
-            }
+                if (_textAnnualIncome != null)
+                {
+                    _textAnnualIncome.text = local.GetCurrency(profession.salary);
+                }
 
-            if (_textStartingAge != null)
-            {
-                _textStartingAge.text = profession.startingAge.ToString(); ;
-            }
+                if (_textAnnualExpense != null)
+                {
+                    _textAnnualExpense.text = local.GetCurrency(profession.personalExpenses, true);
+                }
 
-            if (_textStartingCash != null)
-            {
-                _textStartingCash.text = local.GetCurrencyPlain(profession.startingCash);
-            }
+                if (_textStartingAge != null)
+                {
+                    _textStartingAge.text = profession.startingAge.ToString(); ;
+                }
 
-            if (_textAutoLoan != null)
-            {
-                _textAutoLoan.text = local.GetCurrency(profession.autoLoan, true);
-            }
+                if (_textStartingCash != null)
+                {
+                    _textStartingCash.text = local.GetCurrencyPlain(profession.startingCash);
+                }
 
-            if (_textStudentLoan != null)
-            {
-                _textStudentLoan.text = local.GetCurrency(profession.jobCost, true);
-            }
+                if (_textAutoLoan != null)
+                {
+                    _textAutoLoan.text = local.GetCurrency(profession.autoLoan, true);
+                }
 
-            if (_textChildExpenses != null)
-            {
-                _textChildExpenses.text = local.GetCurrency(profession.costPerChild, true);
+                if (_textStudentLoan != null)
+                {
+                    _textStudentLoan.text = local.GetCurrency(profession.jobCost, true);
+                }
+
+                if (_textChildExpenses != null)
+                {
+                    _textChildExpenses.text = local.GetCurrency(profession.costPerChild, true);
+                }
             }
         }
 

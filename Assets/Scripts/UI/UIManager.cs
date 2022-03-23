@@ -580,6 +580,7 @@ namespace UI
             panel.professionIndex = 0;
             panel.selectionCallback = callback;
             panel.gameObject.SetActive(true);
+            panel.Refresh();
         }
 
         public void ShowRaisePersonalFundsMessageBox(

@@ -169,7 +169,7 @@ namespace UI.Panels.Assets
             EnablePrivateLoanPanel(false);
             EnableEquityPanel(false);
 
-            if (checkRaiseEquity())
+            if (partialAsset.investorShares > 0)
             {
                 EnableEquityPanel(true);
             }
@@ -180,6 +180,10 @@ namespace UI.Panels.Assets
             else if (asset.primaryLoan != null && asset.primaryLoan.maxltv > 0)
             {
                 EnableSecuredLoanPanel(true);
+            }
+            else if (checkRaiseEquity())
+            {
+                EnableEquityPanel(true);
             }
 
             AdjustNumbers();

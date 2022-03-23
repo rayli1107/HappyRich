@@ -52,8 +52,8 @@ namespace StateMachine
                 GameManager.Instance.player.portfolio.AddCash(5000000);
                 GameManager.Instance.player.contacts.Add(
                     new InvestmentPartner("Alice", 2000000, RiskTolerance.kHigh, 10));
-                GameManager.Instance.player.contacts.Add(
-                    new InvestmentPartner("Bob", 2000000, RiskTolerance.kLow, 10));
+//                GameManager.Instance.player.contacts.Add(
+                    //new InvestmentPartner("Bob", 2000000, RiskTolerance.kLow, 10));
 
             }
             UI.UIManager.Instance.UpdatePlayerInfo(GameManager.Instance.player);

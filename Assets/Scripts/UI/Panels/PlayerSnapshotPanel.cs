@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using Actions;
+using PlayerInfo;
 using ScriptableObjects;
 using TMPro;
 using UnityEngine;
@@ -25,7 +26,14 @@ namespace UI.Panels
         private TextMeshProUGUI _textCashflow;
         [SerializeField]
         private TextMeshProUGUI _textNetworth;
+        [SerializeField]
+        private Button _buttonBuyInsurance;
+        [SerializeField]
+        private Button _buttonCancelInsurance;
 #pragma warning restore 0649
+
+private System.Action _buyInsuranceAction;
+        private System.Action _cancelInsuranceAction;
 
         public void UpdatePlayerInfo(Player player)
         {
@@ -77,6 +85,34 @@ namespace UI.Panels
             {
                 _textProfession.text = job != null ? job.name : "Unemployed";
             }
+
+            _buyInsuranceAction =
+                () => BuyHealthInsuranceAction.Run(player, () => UpdatePlayerInfo(player));
+            _cancelInsuranceAction =
+                () => CancelHealthInsurance.Run(player, () => UpdatePlayerInfo(player));
+
+            if (_buttonBuyInsurance != null)
+            {
+                _buttonBuyInsurance.gameObject.SetActive(
+                    player != null && !player.portfolio.hasHealthInsurance);
+            }
+
+            if (_buttonCancelInsurance != null)
+            {
+                _buttonCancelInsurance.gameObject.SetActive(
+                    player != null && player.portfolio.hasHealthInsurance);
+            }
+        }
+
+
+        public void OnBuyInsurance()
+        {
+            _buyInsuranceAction?.Invoke();
+        }
+
+        public void OnCancelInsurance()
+        {
+            _cancelInsuranceAction?.Invoke();
         }
     }
 }

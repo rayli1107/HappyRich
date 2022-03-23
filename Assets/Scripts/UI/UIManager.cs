@@ -227,7 +227,6 @@ namespace UI
             PlayerStatusMenuPanel panel = Instantiate(_prefabPlayerStatusManeuPanel, transform);
             panel.player = GameManager.Instance.player;
             panel.gameObject.SetActive(true);
-            panel.Refresh();
         }
 
         public void ShowAssetLiabilityStatusPanel()

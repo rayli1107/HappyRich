@@ -18,6 +18,8 @@ namespace UI.Panels.Actions
 
         public Player player;
 
+        private TutorialAction _tutorialAction => TutorialManager.Instance.InvestmentOnce;
+
         private void InvesmtmentActionCallback()
         {
             UIManager.Instance.UpdatePlayerInfo(player);
@@ -66,9 +68,15 @@ namespace UI.Panels.Actions
             }
         }
 
+        public void OnHelpButton()
+        {
+            _tutorialAction.ForceRun(null);
+        }
+
         private void OnEnable()
         {
             Refresh();
+            _tutorialAction.Run(null);
         }
     }
 }

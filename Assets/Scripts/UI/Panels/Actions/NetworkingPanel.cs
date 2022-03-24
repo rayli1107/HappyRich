@@ -9,10 +9,7 @@ namespace UI.Panels.Actions
     {
         public Player player;
 
-        private void onNewInvestorDone()
-        {
-            GameManager.Instance.StateMachine.OnPlayerActionDone();
-        }
+        private TutorialAction _tutorialAction => TutorialManager.Instance.NetworkingOnce;
 
         public void OnNewInvestorsButton()
         {
@@ -26,6 +23,16 @@ namespace UI.Panels.Actions
         {
             UIManager.Instance.DestroyAllModal();
             new MaintainRelationshipAction(player).Start();
+        }
+
+        public void OnHelpButton()
+        {
+            _tutorialAction.ForceRun(null);
+        }
+
+        private void OnEnable()
+        {
+            _tutorialAction.Run(null);
         }
     }
 }

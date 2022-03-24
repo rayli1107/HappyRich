@@ -16,6 +16,8 @@ namespace Assets
         public override int totalIncome => Mathf.FloorToInt(
             count * stock.value * stock.currentYield / 100f);
 
+        public override string name => stock.longName;
+
         public PurchasedStock(AbstractStock stock) : base(stock.name, 0, 0)
         {
             this.stock = stock;

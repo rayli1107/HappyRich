@@ -17,7 +17,7 @@ namespace StateMachine
 
         public void EnterState(StateMachineParameter param)
         {
-            _initAction = new RunOnceAction(runInit);
+            _initAction = new RunOnceAction(_ => runInit());
         }
 
         public void ExitState()
@@ -36,7 +36,7 @@ namespace StateMachine
             List<Action<Action>> actions = new List<Action<Action>>()
             {
                 TutorialManager.Instance.GetEnableTutorialAction(),
-                TutorialManager.Instance.GetGameInitMessageAction()
+                TutorialManager.Instance.GameInitOnce.Run
             };
             CompositeActions.GetAndAction(actions)?.Invoke(
                 () => _stateMachine.ChangeState(_stateMachine.CharacterSelectionState));
@@ -66,7 +66,7 @@ namespace StateMachine
                 StockManager.Instance != null &&
                 TutorialManager.Instance != null)
             {
-                _initAction.Run();
+                _initAction.Run(null);
             }
         }
     }

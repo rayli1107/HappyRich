@@ -38,7 +38,6 @@ namespace UI.Panels.PlayerDetails
 
         public void Refresh()
         {
-            Debug.Log("ABC");
             if (professionIndex >= 0 && professionIndex < professions.Count)
             {
                 Profession profession = professions[professionIndex];

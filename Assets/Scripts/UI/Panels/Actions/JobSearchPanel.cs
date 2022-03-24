@@ -8,6 +8,8 @@ namespace UI.Panels.Actions
     {
         public Player player;
 
+        private TutorialAction _tutorialAction => TutorialManager.Instance.JobSearchOnce;
+
         public void OnNewJobButton()
         {
             JobActions.SearchNewJobs(
@@ -18,8 +20,16 @@ namespace UI.Panels.Actions
         {
             JobActions.SearchOldJobs(
                 GameManager.Instance.player, GameManager.Instance.Random);
-//            UIManager.Instance.ShowJobListPanel(
-                //PlayerDetails.JobListPanelMode.kOldJobs);
+        }
+
+        public void OnHelpButton()
+        {
+            _tutorialAction.ForceRun(null);
+        }
+
+        private void OnEnable()
+        {
+            _tutorialAction.Run(null);
         }
     }
 }

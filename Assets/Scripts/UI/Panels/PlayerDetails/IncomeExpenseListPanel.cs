@@ -14,13 +14,13 @@ namespace UI.Panels.PlayerDetails
         [SerializeField]
         private ItemValuePanel _panelTotalCashflow;
         [SerializeField]
-        private ItemValuePanel _panelActiveIncome;
+        private ItemValuePanel _panelFinancialIndependence;
         [SerializeField]
-        private ItemValuePanel _panelPassiveIncome;
+        private ItemValueListPanel _panelActiveIncome;
         [SerializeField]
-        private ItemValuePanel _panelExpenses;
+        private ItemValueListPanel _panelPassiveIncome;
         [SerializeField]
-        private ItemValuePanel _prefabItemValuePanel;
+        private ItemValueListPanel _panelExpenses;
         [SerializeField]
         private bool _showTotalValues = false;
 #pragma warning restore 0649
@@ -51,10 +51,9 @@ namespace UI.Panels.PlayerDetails
             }
         }*/
 
+/*
         private int AddItemValueAsCurrency(
-            Transform parentTranform,
-            int index,
-            int tab,
+            ItemValueListPanel parentPanel,
             string label,
             int value,
             bool flip,
@@ -75,65 +74,50 @@ namespace UI.Panels.PlayerDetails
             panel.clickAction = clickAction;
             return index + 1;
         }
-
+*/
         private void AddActiveIncome()
         {
             int activeIncome = 0;
-            int index = _panelActiveIncome.transform.GetSiblingIndex() + 1;
+            int tabCount = _panelActiveIncome.firstItemValuePanel.tabCount + 1;
 
             foreach (ScriptableObjects.Profession income in player.jobs)
             {
                 activeIncome += income.salary;
-
-                index = AddItemValueAsCurrency(
-                    _panelActiveIncome.transform.parent,
-                    index,
-                    _panelActiveIncome.tabCount + 1,
-                    income.professionName,
-                    income.salary,
-                    false);
+                _panelActiveIncome.AddItemValueAsCurrency(
+                    income.professionName, tabCount, income.salary);
             }
 
             if (player.spouse != null && player.spouse.additionalIncome > 0)
             {
                 activeIncome += player.spouse.additionalIncome;
-                index = AddItemValueAsCurrency(
-                    _panelActiveIncome.transform.parent,
-                    index,
-                    _panelActiveIncome.tabCount + 1,
-                    "Spouse",
-                    player.spouse.additionalIncome,
-                    false);
+                _panelActiveIncome.AddItemValueAsCurrency(
+                    "Spouse", tabCount, player.spouse.additionalIncome);
             }
 
-            if (_showTotalValues)
+            bool enable = _panelActiveIncome.itemCount > 0;
+            _panelActiveIncome.gameObject.SetActive(enable);
+            if (enable)
             {
-                _panelActiveIncome.setValueAsCurrency(activeIncome);
-            }
-            else
-            {
-                _panelActiveIncome.removeValue();
+                if (_showTotalValues)
+                {
+                    _panelActiveIncome.firstItemValuePanel.SetValueAsCurrency(activeIncome);
+                }
+                else
+                {
+                    _panelActiveIncome.firstItemValuePanel.RemoveValue();
+                }
             }
         }
 
         private void addInvestmentsByType(
-            ItemValuePanel panelParent,
+            ItemValueListPanel panelParent,
             Player player,
             string investmentType,
             List<AbstractAsset> assets,
             int tabCount,
-            ref int index,
             ref int total,
             bool positive)
         {
-/*            Localization local = Localization.Instance;
-            Converter<AbstractAsset, string> convertFn =
-                a => string.Format(
-                    "{0} - {1}", a.name, local.GetCurrency(a.expectedIncome));
-            Debug.LogFormat(
-                "{0} Before {1}",
-                investmentType,
-                string.Join("\n", assets.ConvertAll(convertFn)));*/
             if (positive)
             {
                 assets = assets.FindAll(a => a.expectedIncome > 0);
@@ -142,43 +126,28 @@ namespace UI.Panels.PlayerDetails
             {
                 assets = assets.FindAll(a => a.expectedIncome < 0);
             }
-/*
- *Debug.LogFormat(
-                "{0} After {1}",
-                investmentType,
-                string.Join("\n", assets.ConvertAll(convertFn)));*/
+
             if (assets.Count == 0)
             {
                 return;
             }
 
-            index = AddItemValueAsCurrency(
-                panelParent.transform.parent,
-                index,
-                tabCount,
-                investmentType,
-                0,
-                false);
+            panelParent.AddItemValue(investmentType, tabCount);
 
             foreach (AbstractAsset asset in assets)
             {
                 int value = (positive ? 1 : -1) * asset.expectedIncome;
                 total += value;
-                index = AddItemValueAsCurrency(
-                    panelParent.transform.parent,
-                    index,
-                    tabCount + 1,
-                    asset.name,
-                    value,
-                    !positive,
-                    () => asset.OnDetail(player, reloadWindow));
+                ItemValuePanel panel = panelParent.AddItemValueAsCurrency(
+                    asset.name, tabCount + 1, value, !positive);
+                panel.clickAction = () => asset.OnDetail(player, reloadWindow);
             }
         }
 
         private void AddPassiveIncome()
         {
             int passiveIncome = 0;
-            int index = _panelPassiveIncome.transform.GetSiblingIndex() + 1;
+            int baseTabCount = _panelPassiveIncome.firstItemValuePanel.tabCount + 1;
 
             // Stocks
             List<PurchasedStock> stocks = new List<PurchasedStock>();
@@ -191,25 +160,14 @@ namespace UI.Panels.PlayerDetails
             }
             if (stocks.Count > 0)
             {
-                index = AddItemValueAsCurrency(
-                    _panelPassiveIncome.transform.parent,
-                    index,
-                    _panelPassiveIncome.tabCount + 1,
-                    "Liquid Assets",
-                    0,
-                    false);
+                _panelPassiveIncome.AddItemValue("Liquid Assets", baseTabCount);
                 foreach (PurchasedStock stock in stocks)
                 {
                     int income = stock.expectedIncome;
                     passiveIncome += income;
-                    index = AddItemValueAsCurrency(
-                        _panelPassiveIncome.transform.parent,
-                        index,
-                        _panelPassiveIncome.tabCount + 2,
-                        stock.stock.longName,
-                        income,
-                        false,
-                        () => stock.OnDetail(player, reloadWindow));
+                    ItemValuePanel panel = _panelPassiveIncome.AddItemValueAsCurrency(
+                        stock.stock.longName, baseTabCount + 1, income);
+                    panel.clickAction = () => stock.OnDetail(player, reloadWindow);
                 }
             }
 
@@ -218,8 +176,7 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Real Estate",
                 player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
-                _panelPassiveIncome.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref passiveIncome,
                 true);
             addInvestmentsByType(
@@ -227,8 +184,7 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Businesses",
                 player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
-                _panelPassiveIncome.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref passiveIncome,
                 true);
             addInvestmentsByType(
@@ -236,8 +192,7 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Other Assets",
                 player.portfolio.otherAssets,
-                _panelPassiveIncome.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref passiveIncome,
                 true);
             /*
@@ -260,41 +215,36 @@ namespace UI.Panels.PlayerDetails
             }
             */
 
-            if (_showTotalValues)
+            bool enable = _panelPassiveIncome.itemCount > 0;
+            _panelPassiveIncome.gameObject.SetActive(enable);
+            if (enable)
             {
-                _panelPassiveIncome.setValueAsCurrency(passiveIncome);
-            }
-            else
-            {
-                _panelPassiveIncome.removeValue();
+                if (_showTotalValues)
+                {
+                    _panelPassiveIncome.firstItemValuePanel.SetValueAsCurrency(passiveIncome);
+                }
+                else
+                {
+                    _panelPassiveIncome.firstItemValuePanel.RemoveValue();
+                }
             }
         }
 
         private void AddExpenses()
         {
             int expenses = 0;
-            int index = _panelExpenses.transform.GetSiblingIndex() + 1;
+            int baseTabCount = _panelExpenses.firstItemValuePanel.tabCount + 1;
 
             // Personal Expenses
             expenses += player.personalExpenses;
-            index = AddItemValueAsCurrency(
-                _panelExpenses.transform.parent,
-                index,
-                _panelExpenses.tabCount + 1,
-                "Personal Expenses",
-                player.personalExpenses,
-                true);
+            _panelExpenses.AddItemValueAsCurrency(
+                "Personal Expenses", baseTabCount, player.personalExpenses, true);
 
             if (player.spouse != null && player.spouse.additionalExpense > 0)
             {
                 expenses += player.spouse.additionalExpense;
-                index = AddItemValueAsCurrency(
-                    _panelExpenses.transform.parent,
-                    index,
-                    _panelExpenses.tabCount + 1,
-                    "Spouse's Expenses",
-                    player.spouse.additionalExpense,
-                    true);
+                _panelExpenses.AddItemValueAsCurrency(
+                    "Spouse's Expenses", baseTabCount, player.spouse.additionalExpense, true);
             }
 
             // Child Expenses
@@ -302,26 +252,19 @@ namespace UI.Panels.PlayerDetails
             {
                 int childCost = player.numChild * player.costPerChild;
                 expenses += childCost;
-                index = AddItemValueAsCurrency(
-                    _panelExpenses.transform.parent,
-                    index,
-                    _panelExpenses.tabCount + 1,
-                    "Children",
-                    childCost,
-                    true);
+                _panelExpenses.AddItemValueAsCurrency(
+                    "Child Expenses", baseTabCount, childCost, true);
             }
 
             if (player.portfolio.hasHealthInsurance)
             {
                 expenses += PersonalEventManager.Instance.healthInsuranceCost;
-                index = AddItemValueAsCurrency(
-                    _panelExpenses.transform.parent,
-                    index,
-                    _panelExpenses.tabCount + 1,
+                ItemValuePanel panel = _panelExpenses.AddItemValueAsCurrency(
                     "Health Insurance",
+                    baseTabCount,
                     PersonalEventManager.Instance.healthInsuranceCost,
-                    true,
-                    () => CancelHealthInsurance.Run(player, reloadWindow));
+                    true);
+                panel.clickAction = () => CancelHealthInsurance.Run(player, reloadWindow);
             }
 
             // Assets with negative cashflow
@@ -330,8 +273,7 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Real Estate",
                 player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
-                _panelExpenses.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref expenses,
                 false);
             addInvestmentsByType(
@@ -339,8 +281,7 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Businesses",
                 player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
-                _panelExpenses.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref expenses,
                 false);
             addInvestmentsByType(
@@ -348,53 +289,41 @@ namespace UI.Panels.PlayerDetails
                 player,
                 "Other Assets",
                 player.portfolio.otherAssets,
-                _panelExpenses.tabCount + 1,
-                ref index,
+                baseTabCount,
                 ref expenses,
                 false);
-            /*
-            foreach (AbstractAsset asset in player.portfolio.assets)
-            {
-                int income = asset.expectedIncome;
-                if (income < 0)
-                {
-                    expenses -= income;
 
-                    index = AddItemValueAsCurrency(
-                        _panelExpenses.transform.parent,
-                        index,
-                        _panelExpenses.tabCount + 1,
-                        asset.name,
-                        -1 * income,
-                        true,
-                        getClickAction(asset, asset.combinedLiability));
+            // Liabilities
+            List<AbstractLiability> liabilities = player.portfolio.liabilities.FindAll(
+                l => l.expense > 0);
+            if (liabilities.Count > 0)
+            {
+                _panelExpenses.AddItemValue("Other Liabilities", baseTabCount);
+                foreach (AbstractLiability liability in liabilities)
+                {
+                    int expense = liability.expense;
+                    if (expense > 0)
+                    {
+                        expenses += expense;
+                        ItemValuePanel panel = _panelExpenses.AddItemValueAsCurrency(
+                            liability.shortName, baseTabCount + 1, expense, true);
+                        panel.clickAction = () => liability.OnDetail(player, reloadWindow);
+                    }
                 }
             }
-            */
-            foreach (AbstractLiability liability in player.portfolio.liabilities)
-            {
-                int expense = liability.expense;
-                if (expense > 0)
-                {
-                    expenses += expense;
 
-                    index = AddItemValueAsCurrency(
-                        _panelExpenses.transform.parent,
-                        index,
-                        _panelExpenses.tabCount + 1,
-                        liability.shortName,
-                        expense,
-                        true,
-                        () => liability.OnDetail(player, reloadWindow));
+            bool enable = _panelExpenses.itemCount > 0;
+            _panelExpenses.gameObject.SetActive(enable);
+            if (enable)
+            {
+                if (_showTotalValues)
+                {
+                    _panelExpenses.firstItemValuePanel.SetValueAsCurrency(expenses, true);
                 }
-            }
-            if (_showTotalValues)
-            {
-                _panelExpenses.setValueAsCurrency(expenses, true);
-            }
-            else
-            {
-                _panelExpenses.removeValue();
+                else
+                {
+                    _panelExpenses.firstItemValuePanel.RemoveValue();
+                }
             }
         }
 
@@ -410,7 +339,10 @@ namespace UI.Panels.PlayerDetails
             AddExpenses();
 
             Snapshot snapshot = new Snapshot(player);
-            _panelTotalCashflow.setValueAsCurrency(snapshot.expectedCashflow);
+            _panelTotalCashflow.SetValueAsCurrency(snapshot.expectedCashflow);
+
+            int fi = (100 * snapshot.expectedPassiveIncome) / snapshot.expectedExpenses;
+            _panelFinancialIndependence.SetValue(string.Format("{0}%", fi));
         }
 
         private void OnEnable()

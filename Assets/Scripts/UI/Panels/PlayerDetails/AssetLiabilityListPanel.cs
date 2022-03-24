@@ -17,69 +17,74 @@ namespace UI.Panels.PlayerDetails
         [SerializeField]
         private ItemValuePanel _panelNetWorth;
         [SerializeField]
-        private ItemValuePanel _panelAssets;
+        private ItemValuePanel _panelCash;
         [SerializeField]
-        private ItemValuePanel _panelLiabilities;
+        private ItemValueListPanel _panelAssets;
         [SerializeField]
-        private ItemValuePanel _prefabItemValuePanel;
+        private ItemValueListPanel _panelLiabilities;
         [SerializeField]
         private bool _showTotalValues = false;
 #pragma warning restore 0649
 
         public Player player;
 
-        private void Awake()
+        private void addAssetLiabilityByType(
+            string assetType,
+            List<AbstractAsset> assets,
+            List<AssetContext> liabilities,
+            ref int totalAssetValue,
+            ref int totalLiabilityValue)
         {
-        }
+            int totalAssetValueByType = 0;
+            int totalLiabilityValueByType = 0;
 
-/*
- *private void showAssetLiabilityDetails(
-            AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
-        {
-            List<string> details =
-                asset == null ? loan.GetDetails() : asset.GetDetails();
-            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", details), ButtonChoiceType.OK_ONLY, null);
-            panel.text.fontSizeMax = fontSizeMax;
-        }
+            if (liabilities == null)
+            {
+                liabilities = new List<AssetContext>();
+            }
 
-        private Action getClickAction(
-            AbstractAsset asset, AbstractLiability loan)
-        {
-            if (loan != null && loan.payable && loan.amount > 0)
+            if (assets != null && assets.Count > 0)
             {
-                return () => LoanPayoffActions.PayAssetLoanPrincipal(
-                    player, asset, loan, reloadWindow);
+                int tabCount = _panelAssets.firstItemValuePanel.tabCount + 1;
+                _panelAssets.AddItemValue(assetType, tabCount);
+
+                foreach (AbstractAsset asset in assets)
+                {
+                    totalAssetValueByType += asset.value;
+                    if (asset.combinedLiability.amount > 0)
+                    {
+                        liabilities.Add(new AssetContext(asset, asset.combinedLiability));
+                    }
+
+                    ItemValuePanel panel = _panelAssets.AddItemValueAsCurrency(
+                        asset.name, tabCount + 1, asset.value);
+                    panel.clickAction = () => asset.OnDetail(player, reloadWindow);
+                }
             }
-            else
+
+            if (liabilities.Count > 0)
             {
-                return () => showAssetLiabilityDetails(asset, loan);
+                int tabCount = _panelLiabilities.firstItemValuePanel.tabCount + 1;
+                _panelLiabilities.AddItemValue(assetType, tabCount);
+                foreach (AssetContext context in liabilities)
+                {
+                    int amount = context.Item2.amount;
+                    totalLiabilityValueByType += amount;
+                    ItemValuePanel panel = _panelLiabilities.AddItemValueAsCurrency(
+                        context.Item2.longName, tabCount + 1, amount, true);
+                    if (context.Item1 != null)
+                    {
+                        panel.clickAction = () => context.Item1.OnDetail(player, reloadWindow);
+                    }
+                    else
+                    {
+                        panel.clickAction = () => context.Item2.OnDetail(player, reloadWindow);
+                    }
+                }
             }
-        }
-        */
-        private int AddItemValueAsCurrency(
-            Transform parentTranform,
-            int index,
-            int tab,
-            string label,
-            int value,
-            bool flip,
-            Action clickAction = null)
-        {
-            ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.setLabel(label);
-            if (value != 0)
-            {
-                panel.setValueAsCurrency(value, flip);
-            }
-            else
-            {
-                panel.removeValue();
-            }
-            panel.setTabCount(tab);
-            panel.transform.SetSiblingIndex(index);
-            panel.clickAction = clickAction;
-            return index + 1;
+
+            totalAssetValue += totalAssetValueByType;
+            totalLiabilityValue += totalLiabilityValueByType;
         }
 
         public void RefreshContent()
@@ -89,198 +94,57 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            List<AssetContext> liabilities = new List<AssetContext>();
-            foreach (AbstractLiability liability in player.portfolio.liabilities)
-            {
-                liabilities.Add(new AssetContext(null, liability));
-            }
-
             int totalAssets = 0;
-            int totalBusiness = 0;
-            int totalRealEstate = 0;
             int totalLiabilities = 0;
-            int totalStocks = 0;
-            int totalOtherAssets = 0;
-
-            int currentIndex = _panelAssets.transform.GetSiblingIndex() + 1;
 
             // Cash
-            currentIndex = AddItemValueAsCurrency(
-                _panelAssets.transform.parent,
-                currentIndex,
-                _panelAssets.tabCount + 1,
-                "Cash",
-                player.cash,
-                false);
-            totalAssets = player.cash;
+            _panelCash.SetValueAsCurrency(player.cash);
 
             // Stocks
-            if (player.portfolio.stocks.Count > 0)
+            List<AbstractAsset> stocks = new List<AbstractAsset>();
+            foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
             {
-                foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
-                {
-                    totalStocks += entry.Value.value;
-                }
-
-                currentIndex = AddItemValueAsCurrency(
-                    _panelAssets.transform.parent,
-                    currentIndex,
-                    _panelAssets.tabCount + 1,
-                    "Liquid Assets",
-                    0,
-                    false);
-
-                List<PurchasedStock> purchasedStocks = new List<PurchasedStock>();
-                foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
-                {
-                    PurchasedStock stock = entry.Value;
-                    currentIndex = AddItemValueAsCurrency(
-                        _panelAssets.transform.parent,
-                        currentIndex,
-                        _panelAssets.tabCount + 2,
-                        stock.stock.longName,
-                        stock.value,
-                        false,
-                        () => stock.OnDetail(player, reloadWindow));
-                }
+                stocks.Add(entry.Value);
             }
-            totalAssets += totalStocks;
+            addAssetLiabilityByType(
+                "Liquid Assets",
+                stocks,
+                null,
+                ref totalAssets,
+                ref totalLiabilities);
 
             // Real Estate
-            if (player.portfolio.properties.Count > 0)
-            {
-                foreach (PartialInvestment asset in player.portfolio.properties)
-                {
-                    totalRealEstate += asset.value;
-                    if (asset.combinedLiability.amount > 0)
-                    {
-                        liabilities.Add(
-                            new AssetContext(asset, asset.combinedLiability));
-                    }
-                }
-
-                currentIndex = AddItemValueAsCurrency(
-                    _panelAssets.transform.parent,
-                    currentIndex,
-                    _panelAssets.tabCount + 1,
-                    "Real Estate",
-                    0,
-                    false);
-
-                foreach (PartialInvestment asset in player.portfolio.properties)
-                {
-                    currentIndex = AddItemValueAsCurrency(
-                        _panelAssets.transform.parent,
-                        currentIndex,
-                        _panelAssets.tabCount + 2,
-                        asset.name,
-                        asset.value,
-                        false,
-                        () => asset.OnDetail(player, reloadWindow));
-                }
-            }
-            totalAssets += totalRealEstate;
+            addAssetLiabilityByType(
+                "Real Estate",
+                player.portfolio.properties.ConvertAll(a => (AbstractAsset)a),
+                null,
+                ref totalAssets,
+                ref totalLiabilities);
 
             // Business
-            if (player.portfolio.businesses.Count > 0)
-            {
-                currentIndex = AddItemValueAsCurrency(
-                    _panelAssets.transform.parent,
-                    currentIndex,
-                    _panelAssets.tabCount + 1,
-                    "Business",
-                    0,
-                    false);
+            addAssetLiabilityByType(
+                "Business",
+                player.portfolio.businesses.ConvertAll(a => (AbstractAsset)a),
+                null,
+                ref totalAssets,
+                ref totalLiabilities);
 
-                foreach (PartialInvestment asset in player.portfolio.businesses)
-                {
-                    totalBusiness += asset.value;
-                    if (asset.combinedLiability.amount > 0)
-                    {
-                        liabilities.Add(
-                            new AssetContext(asset, asset.combinedLiability));
-                    }
-
-                    currentIndex = AddItemValueAsCurrency(
-                        _panelAssets.transform.parent,
-                        currentIndex,
-                        _panelAssets.tabCount + 2,
-                        asset.name,
-                        asset.value,
-                        false,
-                        () => asset.OnDetail(player, reloadWindow));
-                }
-            }
-            totalAssets += totalBusiness;
-
-            // Other Assets
-            if (player.portfolio.otherAssets.Count > 0)
-            {
-                foreach (AbstractAsset asset in player.portfolio.otherAssets)
-                {
-                    totalOtherAssets += asset.value;
-                }
-
-                currentIndex = AddItemValueAsCurrency(
-                    _panelAssets.transform.parent,
-                    currentIndex,
-                    _panelAssets.tabCount + 1,
-                    "Other Assets",
-                    0,
-                    false);
-
-                foreach (AbstractAsset asset in player.portfolio.otherAssets)
-                {
-                    AbstractLiability loan = asset.combinedLiability;
-                    currentIndex = AddItemValueAsCurrency(
-                        _panelAssets.transform.parent,
-                        currentIndex,
-                        _panelAssets.tabCount + 2,
-                        asset.name,
-                        asset.value,
-                        false,
-                        () => asset.OnDetail(player, reloadWindow));
-
-                    if (loan.amount > 0)
-                    {
-                        liabilities.Add(new AssetContext(asset, loan));
-                    }
-                }
-            }
-            totalAssets += totalOtherAssets;
-
-            // Other Liabilities
-            currentIndex = _panelLiabilities.transform.GetSiblingIndex() + 1;
-            foreach (AssetContext assetContext in liabilities)
-            {
-                Action detailAction = null;
-                if (assetContext.Item1 != null)
-                {
-                    detailAction = () => assetContext.Item1.OnDetail(player, reloadWindow);
-                }
-                else
-                {
-                    detailAction = () => assetContext.Item2.OnDetail(player, reloadWindow);
-                }
-                totalLiabilities += assetContext.Item2.amount;
-                currentIndex = AddItemValueAsCurrency(
-                    _panelLiabilities.transform.parent,
-                    currentIndex,
-                    _panelLiabilities.tabCount + 1,
-                    assetContext.Item2.shortName,
-                    assetContext.Item2.amount,
-                    true,
-                    detailAction);
-            }
+            // Other Assets & Liabilities
+            addAssetLiabilityByType(
+                "Other Assets & Liabilities",
+                player.portfolio.otherAssets,
+                player.portfolio.liabilities.ConvertAll(l => new AssetContext(null, l)),
+                ref totalAssets,
+                ref totalLiabilities);
 
             int netWorth = totalAssets - totalLiabilities;
 
             if (_showTotalValues)
             {
-                _panelAssets.setValueAsCurrency(totalAssets);
-                _panelLiabilities.setValueAsCurrency(totalLiabilities, true);
+                _panelAssets.firstItemValuePanel.SetValueAsCurrency(totalAssets);
+                _panelLiabilities.firstItemValuePanel.SetValueAsCurrency(totalLiabilities, true);
             }
-            _panelNetWorth.setValueAsCurrency(netWorth);
+            _panelNetWorth.SetValueAsCurrency(netWorth);
         }
 
         private void OnEnable()

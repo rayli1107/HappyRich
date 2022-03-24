@@ -6,21 +6,30 @@ namespace Actions
     public class RunOnceAction
     {
         private bool _run;
-        private Action _action;
+        private Action<Action> _action;
 
-        public RunOnceAction(Action action)
+        public RunOnceAction(Action<Action> action)
         {
             _action = action;
             _run = false;
         }
 
-        public void Run()
+        public void Run(Action cb)
         {
             if (!_run)
             {
-                _run = true;
-                _action?.Invoke();
+                ForceRun(cb);
             }
+            else
+            {
+                cb?.Invoke();
+            }
+        }
+
+        public void ForceRun(Action cb)
+        {
+            _run = true;
+            _action?.Invoke(cb);
         }
     }
 

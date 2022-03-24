@@ -11,6 +11,7 @@ namespace UI.Panels.Actions
     public class SelfImprovementPanel : MonoBehaviour
     {
         public Player player;
+        private TutorialAction _tutorialAction => TutorialManager.Instance.SelfImprovementOnce;
 
         private void handler(bool actionDone)
         {
@@ -77,6 +78,16 @@ namespace UI.Panels.Actions
 
             UIManager.Instance.ShowAvailableActionsPanel(
                 actionContextList, getTrainingActionsLabel, trainingHandler, 1);
+        }
+
+        public void OnHelpButton()
+        {
+            _tutorialAction.ForceRun(null);
+        }
+
+        private void OnEnable()
+        {
+            _tutorialAction.Run(null);
         }
     }
 }

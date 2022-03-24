@@ -30,10 +30,10 @@ namespace UI.Panels.PlayerDetails
             }
 
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.setLabel(label);
-            panel.setValueAsChange(value);
-            panel.setTabCount(1);
+            panel.label = label;
+            panel.tabCount = 1;
             panel.clickAction = clickAction;
+            panel.SetValueAsChange(value);
         }
 
         public void Refresh()
@@ -54,7 +54,7 @@ namespace UI.Panels.PlayerDetails
                 AddItem(parentTransform, state.name, modifier, action);
                 totalHappiness += modifier;
             }
-            _panelTotalHappiness.setValuePlain(totalHappiness);
+            _panelTotalHappiness.SetValuePlain(totalHappiness);
         }
 
         private void OnEnable()

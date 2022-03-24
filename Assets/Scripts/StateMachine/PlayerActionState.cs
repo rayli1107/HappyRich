@@ -7,13 +7,10 @@ namespace StateMachine
     public class PlayerActionState : IState
     {
         private StateMachine _stateMachine;
-        private RunOnceAction _tutorialAction;
 
         public PlayerActionState(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
-            _tutorialAction = new RunOnceAction(
-                () => TutorialManager.Instance.GetGameActionMessageAction()?.Invoke(null));
         }
 
         public void EnterState(StateMachineParameter param)
@@ -30,7 +27,7 @@ namespace StateMachine
             JobManager.Instance.OnPlayerTurnStart(GameManager.Instance.Random);
             SkillManager.Instance.OnPlayerTurnStart(player, GameManager.Instance.Random);
             UI.UIManager.Instance.UpdatePlayerInfo(player);
-            _tutorialAction.Run();
+            TutorialManager.Instance.GameStartOnce.Run(null);
         }
 
         public void ExitState()

@@ -1063,7 +1063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _locale: en-US
-  _colorPositive: {r: 0, g: 1, b: 0, a: 1}
+  _colorPositive: {r: 0.5019608, g: 1, b: 0.5019608, a: 1}
   _colorNegative: {r: 1, g: 0.7529412, b: 0.7529412, a: 1}
   _colorJob: {r: 1, g: 1, b: 1, a: 1}
   _colorRealEstate: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -6217,6 +6217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteAsset: {fileID: 11400000, guid: f6ae3aa5f0a31d7408aa2383f0b08fdd, type: 2}
+  _tutorialFontSize: 40
 --- !u!4 &1969456347
 Transform:
   m_ObjectHideFlags: 0

@@ -36,7 +36,23 @@ namespace UI.Panels.Templates
             }
         }
 
-        public int tabCount { get; private set; }
+        private int _tabCount;
+        public int tabCount
+        {
+            get => _tabCount;
+            set
+            {
+                _tabCount = value;
+                _tab.minWidth = tabWidth * _tabCount;
+                _tab.preferredWidth = tabWidth * _tabCount;
+            }
+        }
+
+        public string label
+        {
+            get => _label.text;
+            set { _label.text = value; }
+        }
 
         private Button _button;
 
@@ -44,42 +60,34 @@ namespace UI.Panels.Templates
         {
             _button = GetComponentInChildren<Button>(true);
             clickAction = null;
+            tabCount = 0;
+            RemoveValue();
         }
 
-        public void setTabCount(int i)
-        {
-            tabCount = i;
-            _tab.minWidth = tabWidth * i;
-            _tab.preferredWidth = tabWidth * i;
-        }
-
-        public void setLabel(string s)
-        {
-            _label.text = s;
-        }
-
-        public void removeValue()
+        public void RemoveValue()
         {
             _value.gameObject.SetActive(false);
         }
 
-        public void setValueAsCurrency(int i, bool flipped=false)
+        public void SetValue(string value)
         {
-            Localization local = Localization.Instance;
             _value.gameObject.SetActive(true);
-            _value.text = local.GetCurrency(i, flipped);
+            _value.text = value;
         }
 
-        public void setValueAsChange(int value)
+        public void SetValueAsCurrency(int i, bool flipped=false)
         {
-            _value.gameObject.SetActive(true);
-            _value.text = Localization.Instance.GetValueAsChange(value);
+            SetValue(Localization.Instance.GetCurrency(i, flipped));
         }
 
-        public void setValuePlain(int value)
+        public void SetValueAsChange(int value)
         {
-            _value.gameObject.SetActive(true);
-            _value.text = value.ToString();
+            SetValue(Localization.Instance.GetValueAsChange(value));
+        }
+
+        public void SetValuePlain(int value)
+        {
+            SetValue(value.ToString());
         }
 
         private void OnEnable()

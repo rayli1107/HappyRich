@@ -5,27 +5,63 @@ using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
 
+public class TutorialAction
+{
+    private RunOnceAction _once;
+    private Action<bool, Action> _tutorialAction;
+
+    public TutorialAction(Action<bool, Action> action)
+    {
+        _tutorialAction = action;
+        _once = new RunOnceAction(cb => action?.Invoke(false, cb));
+    }
+
+    public void Run(Action cb)
+    {
+        _once.Run(cb);
+    }
+
+    public void ForceRun(Action cb)
+    {
+        _tutorialAction?.Invoke(true, cb);
+    }
+}
 
 public class TutorialManager : MonoBehaviour
 {
 #pragma warning disable 0649
     [SerializeField]
     private TMP_SpriteAsset _spriteAsset;
+    [SerializeField]
+    private int _tutorialFontSize = 40;
 #pragma warning restore 0649
 
     public static TutorialManager Instance { get; private set; }
     private bool _enableTutorial;
 
+    public TutorialAction GameInitOnce { get; private set; }
+    public TutorialAction GameStartOnce { get; private set; }
+    public TutorialAction InvestmentOnce { get; private set; }
+    public TutorialAction JobSearchOnce { get; private set; }
+    public TutorialAction SelfImprovementOnce { get; private set; }
+    public TutorialAction NetworkingOnce { get; private set; }
+
     private void Awake()
     {
         Instance = this;
         _enableTutorial = false;
+
+        GameInitOnce = new TutorialAction(GetGameInitMessageAction);
+        GameStartOnce = new TutorialAction(GetGameStartMessageAction);
+        InvestmentOnce = new TutorialAction(GetInvestmentAction);
+        JobSearchOnce = new TutorialAction(GetJobSearchAction);
+        SelfImprovementOnce = new TutorialAction(GetSelfImprovementAction);
+        NetworkingOnce = new TutorialAction(GetNetworkingAction);
     }
 
     private void enableTutorialMessageHandler(ButtonType button, Action callback)
     {
         _enableTutorial = button == ButtonType.OK;
-        Debug.LogFormat("enableTutorialMessageHandler {0}", _enableTutorial);
         callback?.Invoke();
     }
 
@@ -37,11 +73,12 @@ public class TutorialManager : MonoBehaviour
             b => enableTutorialMessageHandler(b, cb));
     }
 
-    private void showTutorialMessage(List<string> messages, Action callback)
+    private void showTutorialMessage(bool force, List<string> messages, Action callback)
     {
-        if (_enableTutorial && messages != null)
+        bool enable = force || _enableTutorial;
+        if (enable && messages != null)
         {
-            MessageAction.GetAction(messages, _spriteAsset)?.Invoke(callback);
+            MessageAction.GetAction(messages, _tutorialFontSize, _spriteAsset)?.Invoke(callback);
         }
         else
         {
@@ -49,53 +86,30 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public Action<Action> GetGameActionMessageAction()
+    public void GetGameStartMessageAction(bool force, Action cb)
     {
         Localization local = Localization.Instance;
         List<string> messages = new List<string>()
         {
-            "The <sprite name=\"Cash\"> and <sprite name=\"Cashflow\"> icons " +
-            "represent your current available cash and annual cashflow.",
+            "The <sprite name=\"Cash\"> icon represents your <b>current available cash</b>, " +
+            " and the <sprite name=\"Cashflow\"> icon represents your <b>annual cahsflow</b>.",
 
-            "The <sprite name=\"Happiness\"> icon represents your total happiness, " +
-            "the <sprite name=\"Age\"> icon represents your current age, and the " +
-            "<sprite name=\"Fire\"> icon represents your progress towards " +
-            "financial indepence.",
+            "The <sprite name=\"Happiness\"> icon represents your <b>total happiness</b>, " +
+            "and the <sprite name=\"Fire\"> icon represents your progress towards " +
+            "<b>financial indepence</b>.",
 
-            string.Format(
-                "Financial indepence is achieved once your {0} exceeds your {1}.",
-                local.colorWrap("passive income", Color.green),
-                local.colorWrap("total expenses", new Color(0.72f, 0.43f, 0.48f))),
+            "<b>Financial indepence</b> is achieved once your " +
+            "<b>passive income</b> exceeds your <b>total expenses</b>.",
 
-            "There are four types of actions, and you can perform one action every year.",
-
-            string.Format(
-                "{0} actions allow you to look for additional job to raise your active " +
-                "income. You can have up to one full-time and one part-time job at the " +
-                "same time.",
-                local.colorWrap("Job Search", new Color(0.25f, 0.25f, 1f))),
-
-            string.Format(
-                "{0} actions help you become a better person, both in a professional " +
-                "and personal sense.",
-                local.colorWrap("Self Improvement", new Color(0.25f, 0.25f, 1f))),
-
-            string.Format(
-                "{0} actions allow you to meet more people who can help you in " +
-                "different ways.",
-                local.colorWrap("Networking", new Color(0.25f, 0.25f, 1f))),
-
-            string.Format(
-                "{0} actions allow you to invest in different assets that can help " +
-                "generate passive income.",
-                local.colorWrap("Investment", new Color(0.25f, 0.25f, 1f))),
+            "There are four types of actions, and you can perform one action every year. " +
+            "Click on each action to learn more them.",
 
             "Good luck and have fun!"
         };
-        return cb => showTutorialMessage(messages, cb);
+        showTutorialMessage(force, messages, cb);
     }
 
-    public Action<Action> GetGameInitMessageAction()
+    public void GetGameInitMessageAction(bool force, Action cb)
     {
         Localization local = Localization.Instance;
         string retireAge = GameManager.Instance.retirementAge.ToString();
@@ -105,16 +119,58 @@ public class TutorialManager : MonoBehaviour
             string.Format(
                 "Welcome to the {0}!",
                 local.colorWrap("Game of Prosperity", new Color(1f, 0.6f, 0f))),
-            string.Format(
-                "The goal of the game is to reach {0} and {1} before " +
-                "the age of retirement ({2}).",
-                local.colorWrap("100% Happiness", Color.yellow),
-                local.colorWrap("100% Financial Independence", new Color(0.72f, 0.43f, 0.48f)),
-                local.colorWrap(retireAge, Color.green)),
-            string.Format(
-                "First, please choose your starting profession.")
+            "The goal of the game is to reach <b>100% Happiness</b> and " +
+            "100% <b>Financial Independence</b> before the retirement age, " +
+            "which by default is <b>60</b>.",
+            "First, please choose your starting profession."
         };
 
-        return cb => showTutorialMessage(messages, cb);
+        showTutorialMessage(force, messages, cb);
+    }
+
+    public void GetJobSearchAction(bool force, Action cb)
+    {
+        Localization local = Localization.Instance;
+        List<string> messages = new List<string>()
+        {
+            "<b>Job Search</b> actions allow you to look for additional job to raise your " +
+            "<b>active income</b>. You can have up to one <b>full-time</b> and one " +
+            "<b>part-time job</b> at the same time.",
+        };
+        showTutorialMessage(force, messages, cb);
+    }
+
+    public void GetSelfImprovementAction(bool force, Action cb)
+    {
+        Localization local = Localization.Instance;
+        List<string> messages = new List<string>()
+        {
+            "<b>Self improvement</b> actions help you become a better person, " +
+            "both in a professional and personal sense.",
+        };
+        showTutorialMessage(force, messages, cb);
+    }
+
+    public void GetNetworkingAction(bool force, Action cb)
+    {
+        Localization local = Localization.Instance;
+        List<string> messages = new List<string>()
+        {
+            "<b>Networking</b> actions allow you to meet more people who can help you in " +
+            "different ways.",
+        };
+        showTutorialMessage(force, messages, cb);
+    }
+
+    public void GetInvestmentAction(bool force, Action cb)
+    {
+        Localization local = Localization.Instance;
+        List<string> messages = new List<string>()
+        {
+            "<b>Investment</b> actions allow you to invest in different assets that can help " +
+            "generate passive income.",
+        };
+
+        showTutorialMessage(force, messages, cb);
     }
 }

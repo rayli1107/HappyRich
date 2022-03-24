@@ -26,9 +26,8 @@ namespace UI.Panels.PlayerDetails
             Transform parentTranform, int index, string label, Action clickAction)
         {
             ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.setLabel(label);
-            panel.removeValue();
-            panel.setTabCount(1);
+            panel.label = label;
+            panel.tabCount = 1;
             panel.transform.SetSiblingIndex(index);
             panel.clickAction = clickAction;
         }

@@ -75,21 +75,32 @@ namespace UI.Panels.Templates
             _value.text = value;
         }
 
-        public void SetValueAsCurrency(int i, bool flipped=false)
-        {
-            SetValue(Localization.Instance.GetCurrency(i, flipped));
-        }
-
-        public void SetValueAsChange(int value)
-        {
-            SetValue(Localization.Instance.GetValueAsChange(value));
-        }
-
-        public void SetValuePlain(int value)
+        public void SetValue(int value)
         {
             SetValue(value.ToString());
         }
 
+        /*
+                public void SetValueAsCurrencyPlain(int i, bool flipped = false)
+                {
+                    SetValue(Localization.Instance.GetCurrency(i, flipped));
+                }
+
+                public void SetValueAsCurrency(int i, bool flipped=false)
+                {
+                    SetValue(Localization.Instance.GetCurrency(i, flipped));
+                }
+
+                public void SetValueAsChange(int value)
+                {
+                    SetValue(Localization.Instance.GetValueAsChange(value));
+                }
+
+                public void SetValuePlain(int value)
+                {
+                    SetValue(value.ToString());
+                }
+        */
         private void OnEnable()
         {
             tabCount = 0;

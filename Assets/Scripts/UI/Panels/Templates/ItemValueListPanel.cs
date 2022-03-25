@@ -6,14 +6,14 @@ namespace UI.Panels.Templates
     {
         public ItemValuePanel firstItemValuePanel { get; private set; }
 
-        public int itemCount => GetComponentsInChildren<ItemValuePanel>().Length - 1;
+        public int itemCount => transform.childCount - 1;
 
         private void Awake()
         {
             firstItemValuePanel = GetComponentInChildren<ItemValuePanel>();
         }
 
-        public ItemValuePanel AddItemValue(string label, int tabCount)
+        public ItemValuePanel AddItem(string label, int tabCount)
         {
             ItemValuePanel newPanel = Instantiate(
                 firstItemValuePanel, firstItemValuePanel.transform.parent);
@@ -22,18 +22,26 @@ namespace UI.Panels.Templates
             return newPanel;
         }
 
-        public ItemValuePanel AddItemValueAsPlain(string label, int tabCount, int value)
+        public ItemValuePanel AddItemValue(string label, int tabCount, int value)
         {
-            ItemValuePanel newPanel = AddItemValue(label, tabCount);
-            newPanel.SetValuePlain(value);
+            ItemValuePanel newPanel = AddItem(label, tabCount);
+            newPanel.SetValue(value);
             return newPanel;
         }
 
-        public ItemValuePanel AddItemValueAsCurrency(string label, int tabCount, int value, bool flipped=false)
+        public ItemValuePanel AddItemValue(string label, int tabCount, string value)
         {
-            ItemValuePanel newPanel = AddItemValue(label, tabCount);
-            newPanel.SetValueAsCurrency(value, flipped);
+            ItemValuePanel newPanel = AddItem(label, tabCount);
+            newPanel.SetValue(value);
             return newPanel;
+        }
+
+        public void Clear()
+        {
+            while (transform.childCount > 1)
+            {
+                DestroyImmediate(transform.GetChild(1).gameObject);
+            }
         }
     }
 }

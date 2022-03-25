@@ -124,8 +124,8 @@ namespace Actions
             }
 
 
-
             int index = GameManager.Instance.Random.Next(actions.Count);
+//            Debug.LogFormat("Count {0} index {1}", actions.Count, index);
             actions[index].Invoke();
         }
     }

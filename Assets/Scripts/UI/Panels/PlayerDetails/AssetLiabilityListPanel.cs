@@ -35,6 +35,7 @@ namespace UI.Panels.PlayerDetails
             ref int totalAssetValue,
             ref int totalLiabilityValue)
         {
+            Localization local = Localization.Instance;
             int totalAssetValueByType = 0;
             int totalLiabilityValueByType = 0;
 
@@ -46,7 +47,7 @@ namespace UI.Panels.PlayerDetails
             if (assets != null && assets.Count > 0)
             {
                 int tabCount = _panelAssets.firstItemValuePanel.tabCount + 1;
-                _panelAssets.AddItemValue(assetType, tabCount);
+                _panelAssets.AddItem(assetType, tabCount);
 
                 foreach (AbstractAsset asset in assets)
                 {
@@ -56,8 +57,10 @@ namespace UI.Panels.PlayerDetails
                         liabilities.Add(new AssetContext(asset, asset.combinedLiability));
                     }
 
-                    ItemValuePanel panel = _panelAssets.AddItemValueAsCurrency(
-                        asset.name, tabCount + 1, asset.value);
+                    ItemValuePanel panel = _panelAssets.AddItemValue(
+                        asset.name,
+                        tabCount + 1,
+                        local.GetCurrency(asset.value));
                     panel.clickAction = () => asset.OnDetail(player, reloadWindow);
                 }
             }
@@ -65,13 +68,15 @@ namespace UI.Panels.PlayerDetails
             if (liabilities.Count > 0)
             {
                 int tabCount = _panelLiabilities.firstItemValuePanel.tabCount + 1;
-                _panelLiabilities.AddItemValue(assetType, tabCount);
+                _panelLiabilities.AddItem(assetType, tabCount);
                 foreach (AssetContext context in liabilities)
                 {
                     int amount = context.Item2.amount;
                     totalLiabilityValueByType += amount;
-                    ItemValuePanel panel = _panelLiabilities.AddItemValueAsCurrency(
-                        context.Item2.longName, tabCount + 1, amount, true);
+                    ItemValuePanel panel = _panelLiabilities.AddItemValue(
+                        context.Item2.longName,
+                        tabCount + 1,
+                        local.GetCurrency(amount, true));
                     if (context.Item1 != null)
                     {
                         panel.clickAction = () => context.Item1.OnDetail(player, reloadWindow);
@@ -94,11 +99,12 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
+            Localization local = Localization.Instance;
             int totalAssets = 0;
             int totalLiabilities = 0;
 
             // Cash
-            _panelCash.SetValueAsCurrency(player.cash);
+            _panelCash.SetValue(local.GetCurrency(player.cash));
 
             // Stocks
             List<AbstractAsset> stocks = new List<AbstractAsset>();
@@ -141,10 +147,12 @@ namespace UI.Panels.PlayerDetails
 
             if (_showTotalValues)
             {
-                _panelAssets.firstItemValuePanel.SetValueAsCurrency(totalAssets);
-                _panelLiabilities.firstItemValuePanel.SetValueAsCurrency(totalLiabilities, true);
+                _panelAssets.firstItemValuePanel.SetValue(
+                    local.GetCurrency(totalAssets));
+                _panelLiabilities.firstItemValuePanel.SetValue(
+                    local.GetCurrency(totalLiabilities, true));
             }
-            _panelNetWorth.SetValueAsCurrency(netWorth);
+            _panelNetWorth.SetValue(local.GetCurrency(netWorth));
         }
 
         private void OnEnable()

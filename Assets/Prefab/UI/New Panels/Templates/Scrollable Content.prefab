@@ -231,7 +231,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7965606765464575212}
   m_HandleRect: {fileID: 8895540665849000983}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -672,6 +672,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898488913168299507, guid: b5d29931ca13f7449831e611c76f2c4e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -945,7 +975,7 @@ PrefabInstance:
     - target: {fileID: 6375761285316475730, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6375761285316475730, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

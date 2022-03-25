@@ -11,26 +11,14 @@ namespace UI.Panels.PlayerDetails
     {
 #pragma warning disable 0649
         [SerializeField]
-        private ItemValuePanel _panelPersonality;
+        private ItemValueListPanel _panelPersonality;
         [SerializeField]
-        private ItemValuePanel _panelTraits;
+        private ItemValueListPanel _panelTraits;
         [SerializeField]
-        private ItemValuePanel _panelSkills;
-        [SerializeField]
-        private ItemValuePanel _prefabItemValuePanel;
+        private ItemValueListPanel _panelSkills;
 #pragma warning restore 0649
 
         public Player player;
-
-        private void AddItem(
-            Transform parentTranform, int index, string label, Action clickAction)
-        {
-            ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.label = label;
-            panel.tabCount = 1;
-            panel.transform.SetSiblingIndex(index);
-            panel.clickAction = clickAction;
-        }
 
         public void Refresh()
         {
@@ -42,30 +30,28 @@ namespace UI.Panels.PlayerDetails
             Localization local = Localization.Instance;
 
             // Personality
-            Transform parentTransform = _panelPersonality.transform.parent;
-            int index = _panelPersonality.transform.GetSiblingIndex() + 1;
-            Action action = () => UIManager.Instance.ShowPlayerStateInfo(player.personality, null);
-            AddItem(parentTransform, index, local.GetPlayerState(player.personality), action);
+            int tabCount = _panelPersonality.firstItemValuePanel.tabCount + 1;
+            ItemValuePanel panel = _panelPersonality.AddItem(
+                local.GetPlayerState(player.personality), tabCount);
+            panel.clickAction = () => UIManager.Instance.ShowPlayerStateInfo(player.personality, null);
 
             // Traits
-            parentTransform = _panelTraits.transform.parent;
-            index = _panelTraits.transform.GetSiblingIndex() + 1;
+            tabCount = _panelTraits.firstItemValuePanel.tabCount + 1;
             foreach (AbstractPlayerState trait in player.mentalStates.FindAll(s => s is SelfReflectionState))
             {
-                action = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
-                AddItem(parentTransform, index, local.GetPlayerState(trait), action);
-                ++index;
+                panel = _panelTraits.AddItem(local.GetPlayerState(trait), tabCount);
+                panel.clickAction = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
             }
+            _panelTraits.gameObject.SetActive(_panelTraits.itemCount > 0);
 
             // Skills
-            parentTransform = _panelSkills.transform.parent;
-            index = _panelSkills.transform.GetSiblingIndex() + 1;
+            tabCount = _panelSkills.firstItemValuePanel.tabCount + 1;
             foreach (SkillInfo skillInfo in player.skills)
             {
-                action = () => UIManager.Instance.ShowSkillInfo(skillInfo, null);
-                AddItem(parentTransform, index, local.GetSkill(skillInfo), action);
-                ++index;
+                panel = _panelSkills.AddItem(local.GetSkill(skillInfo), tabCount);
+                panel.clickAction = () => UIManager.Instance.ShowSkillInfo(skillInfo, null);
             }
+            _panelSkills.gameObject.SetActive(_panelSkills.itemCount > 0);
         }
 
         private void OnEnable()

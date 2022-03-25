@@ -5485,7 +5485,7 @@ MonoBehaviour:
     type: 3}
   _prefabSimpleTextPrompt: {fileID: 9019924363112762818, guid: 3b12655bb02dfd34486387755fe68b27,
     type: 3}
-  _prefabStockMarketPanel: {fileID: 756440662557103384, guid: be841ab8d8cab894a9f40e5848f14632,
+  _prefabStockMarketPanel: {fileID: 1991304886829170552, guid: f0e7e02c05129ff46adca7753d75d188,
     type: 3}
   _prefabNumberInputPanel: {fileID: 8296196116867053652, guid: c759e9deb4a9ac84983c72ea69a643d6,
     type: 3}

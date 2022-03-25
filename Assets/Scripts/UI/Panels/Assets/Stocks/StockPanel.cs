@@ -2,6 +2,7 @@
 using Assets;
 using PlayerInfo;
 using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,19 +20,23 @@ namespace UI.Panels.Assets
         [SerializeField]
         private TextMeshProUGUI _textChange;
         [SerializeField]
-        private TextMeshProUGUI _textShares;
+        private ItemValuePanel _panelShares;
         [SerializeField]
-        private TextMeshProUGUI _textTotalValue;
+        private ItemValuePanel _panelTotalValue;
         [SerializeField]
         private Button _buttonSell;
+        [SerializeField]
+        private Button _buttonTrade;
+        [SerializeField]
+        private bool _showAlways = true;
 #pragma warning restore 0649
 
         public Player player;
         public AbstractStock stock;
+        public Button buttonTrade => _buttonTrade;
 
         public void Refresh()
         {
-
             Localization local = Localization.Instance;
             if (_textName != null)
             {
@@ -63,14 +68,18 @@ namespace UI.Panels.Assets
                 value = result.value;
             }
 
-            if (_textShares != null)
+            if (_panelShares != null)
             {
-                _textShares.text = count.ToString();
+                _panelShares.gameObject.SetActive(_showAlways || count > 0);
+                _panelShares.SetValue(count);
+                _panelShares.tabCount = 1;
             }
 
-            if (_textTotalValue != null)
+            if (_panelTotalValue != null)
             {
-                _textTotalValue.text = local.GetCurrency(value);
+                _panelTotalValue.gameObject.SetActive(_showAlways || count > 0);
+                _panelTotalValue.SetValue(local.GetCurrencyPlain(value));
+                _panelTotalValue.tabCount = 1;
             }
 
             if (_buttonSell)

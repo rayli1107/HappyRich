@@ -12,28 +12,13 @@ namespace UI.Panels.PlayerDetails
         [SerializeField]
         private ItemValuePanel _panelTotalHappiness;
         [SerializeField]
-        private ItemValuePanel _prefabItemValuePanel;
+        private ItemValueListPanel _panelModifiers;
 #pragma warning restore 0649
 
         public Player player;
 
         private void Awake()
         {
-        }
-
-        private void AddItem(
-            Transform parentTranform, string label, int value, Action clickAction)
-        {
-            if (value == 0)
-            {
-                return;
-            }
-
-            ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.label = label;
-            panel.tabCount = 1;
-            panel.clickAction = clickAction;
-            panel.SetValueAsChange(value);
         }
 
         public void Refresh()
@@ -43,18 +28,23 @@ namespace UI.Panels.PlayerDetails
                 return;
             }
 
-            Transform parentTransform = _panelTotalHappiness.transform.parent;
             int totalHappiness = player.defaultHappiness;
+            int tabCount = _panelModifiers.firstItemValuePanel.tabCount + 1;
+            _panelModifiers.AddItemValue("Default Happiness", tabCount, player.defaultHappiness);
 
-            AddItem(parentTransform, "Starting Happiness", player.defaultHappiness, null);
             foreach (AbstractPlayerState state in player.states)
             {
                 int modifier = state.happinessModifier;
-                Action action = () => UIManager.Instance.ShowPlayerStateInfo(state, null);
-                AddItem(parentTransform, state.name, modifier, action);
-                totalHappiness += modifier;
+                if (modifier != 0)
+                {
+                    ItemValuePanel panel = _panelModifiers.AddItemValue(
+                        state.name, tabCount, modifier);
+                    panel.clickAction = () => UIManager.Instance.ShowPlayerStateInfo(state, null);
+                    totalHappiness += modifier;
+                }
             }
-            _panelTotalHappiness.SetValuePlain(totalHappiness);
+
+            _panelTotalHappiness.SetValue(totalHappiness);
         }
 
         private void OnEnable()

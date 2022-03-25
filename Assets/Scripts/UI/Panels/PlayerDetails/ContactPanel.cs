@@ -40,10 +40,14 @@ namespace UI.Panels.PlayerDetails
 
             Localization local = Localization.Instance;
 
-            if (_buttonSelect != null)
+            GetComponent<Button>().enabled = callback != null;
+
+/*
+ * if (_buttonSelect != null)
             {
                 _buttonSelect.gameObject.SetActive(callback != null);
             }
+*/
 
             if (_textName != null)
             {

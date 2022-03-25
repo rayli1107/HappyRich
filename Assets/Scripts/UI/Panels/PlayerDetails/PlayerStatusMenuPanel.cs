@@ -7,6 +7,11 @@ namespace UI.Panels.PlayerDetails
 {
     public class PlayerStatusMenuPanel : MonoBehaviour
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private Button _buttonContacts;
+#pragma warning restore 0649
+
         public Player player;
 
         public void ShowAssetLiabilityStatusPanel()
@@ -37,6 +42,21 @@ namespace UI.Panels.PlayerDetails
         public void ShowTraitsSkillListPanel()
         {
             UIManager.Instance.ShowTraitsSkillsListPanel();
+        }
+
+        public void Refresh()
+        {
+            if (_buttonContacts != null)
+            {
+                _buttonContacts.gameObject.SetActive(
+                    player != null &&
+                    player.contacts.Count + player.specialists.Count > 0);
+            }
+        }
+
+        public void OnEnable()
+        {
+            Refresh();
         }
     }
 }

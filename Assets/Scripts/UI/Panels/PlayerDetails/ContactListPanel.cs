@@ -13,11 +13,9 @@ namespace UI.Panels.PlayerDetails
     {
 #pragma warning disable 0649
         [SerializeField]
-        private Transform _labelSpecialists;
+        private ItemValueListPanel _panelSpecialists;
         [SerializeField]
-        private Transform _labelInvestors;
-        [SerializeField]
-        private Transform _prefabSpecialist;
+        private ItemValueListPanel _panelInvestors;
         [SerializeField]
         private ContactPanel _prefabContactPanel;
 #pragma warning restore 0649
@@ -41,8 +39,36 @@ namespace UI.Panels.PlayerDetails
             {
                 return;
             }
+
             Localization local = Localization.Instance;
 
+            if (_panelSpecialists != null)
+            {
+                _panelSpecialists.gameObject.SetActive(player.specialists.Count > 0);
+
+                int tabCount = _panelSpecialists.firstItemValuePanel.tabCount + 1;
+                foreach (SpecialistInfo info in player.specialists)
+                {
+                    ItemValuePanel panel = _panelSpecialists.AddItem(
+                        local.GetSpecialist(info), tabCount);
+                    panel.clickAction = () => onSpecialistClick(info);
+                }
+            }
+
+            if (_panelInvestors != null)
+            {
+                _panelInvestors.gameObject.SetActive(player.contacts.Count > 0);
+                foreach (InvestmentPartner partner in player.contacts)
+                {
+                    ContactPanel panel = Instantiate(
+                        _prefabContactPanel, _panelInvestors.firstItemValuePanel.transform.parent);
+                    panel.player = player;
+                    panel.partner = partner;
+                    panel.callback = callback;
+                    panel.Refresh();
+                }
+            }
+            /*
             if (_labelSpecialists != null)
             {
                 _labelSpecialists.gameObject.SetActive(player.specialists.Count > 0);
@@ -76,6 +102,7 @@ namespace UI.Panels.PlayerDetails
                     panel.Refresh();
                 }
             }
+            */
         }
 
         private void OnEnable()

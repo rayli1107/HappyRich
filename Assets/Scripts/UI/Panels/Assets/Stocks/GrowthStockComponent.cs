@@ -3,6 +3,7 @@ using Assets;
 using PlayerInfo;
 using ScriptableObjects;
 using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace UI.Panels.Assets
     {
 #pragma warning disable 0649
         [SerializeField]
-        private TextMeshProUGUI _textEstimatedValue;
+        private ItemValuePanel _panelEstimatedValue;
 #pragma warning restore 0649
 
         public Player player;
@@ -20,14 +21,16 @@ namespace UI.Panels.Assets
 
         public void Refresh()
         {
-            Localization local = Localization.Instance;
-            if (_textEstimatedValue != null)
+            if (_panelEstimatedValue != null)
             {
-                _textEstimatedValue.text =
-                    player.HasSkill(SkillType.STOCK_EVALUATION) &&
-                    StockManager.Instance.stockEvaluated ?
-                    local.GetCurrency(Mathf.RoundToInt(growthStock.basePrice)) :
-                    "???";
+                bool evaluate = player.HasSkill(SkillType.STOCK_EVALUATION);
+                _panelEstimatedValue.gameObject.SetActive(evaluate);
+                if (evaluate)
+                {
+                    int value = Mathf.RoundToInt(growthStock.basePrice);
+                    _panelEstimatedValue.SetValue(
+                        Localization.Instance.GetCurrencyPlain(value));
+                }
             }
         }
 

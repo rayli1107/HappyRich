@@ -15,7 +15,11 @@ MonoBehaviour:
   _panelGrowthStocks: {fileID: 4695893370668766200}
   _panelYieldStocks: {fileID: 6892700294008744641}
   _panelCryptos: {fileID: 7409432358262279976}
-  _prefabStockPanel: {fileID: 6200085276511884809, guid: 3b988e3e68e49b545844eb151585bd80,
+  _prefabGrowthStockPanel: {fileID: 8924961368961106347, guid: 3b988e3e68e49b545844eb151585bd80,
+    type: 3}
+  _prefabYieldStockPanel: {fileID: 527000703273385546, guid: 48b7d6816a9394946a0c1aa04853359b,
+    type: 3}
+  _prefabCryptoPanel: {fileID: 7824414979624171178, guid: 2c5653a2f41c4434e9149fc8d3468afb,
     type: 3}
 --- !u!114 &6643780153063634412
 MonoBehaviour:
@@ -62,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 205206290930458061, guid: c8bd8a1f83bf5924e91faa3af2d99c84,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 391.49997
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 291916292862792651, guid: c8bd8a1f83bf5924e91faa3af2d99c84,
         type: 3}
@@ -72,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 705729552673393798, guid: c8bd8a1f83bf5924e91faa3af2d99c84,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 705729552673393798, guid: c8bd8a1f83bf5924e91faa3af2d99c84,
         type: 3}
@@ -591,7 +595,7 @@ PrefabInstance:
     - target: {fileID: 292070175913035738, guid: 738de00ffe8b38442b09902a10b3e712,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 12
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 292070175913035738, guid: 738de00ffe8b38442b09902a10b3e712,
         type: 3}
@@ -611,7 +615,7 @@ PrefabInstance:
     - target: {fileID: 292070175913035738, guid: 738de00ffe8b38442b09902a10b3e712,
         type: 3}
       propertyPath: m_text
-      value: Yield Stocks
+      value: Dividend Stocks
       objectReference: {fileID: 0}
     - target: {fileID: 292070175913035738, guid: 738de00ffe8b38442b09902a10b3e712,
         type: 3}

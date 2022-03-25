@@ -8,23 +8,9 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class CryptoComponent : MonoBehaviour
+    public class CryptoComponent : StockPanel
     {
-        public Player player;
         public AbstractCryptoCurrency crypto;
-
-        public void Refresh()
-        {
-        }
-
-        private void OnEnable()
-        {
-            if (player == null || crypto == null)
-            {
-                return;
-            }
-
-            Refresh();
-        }
+        public override AbstractStock stock => crypto;
     }
 }

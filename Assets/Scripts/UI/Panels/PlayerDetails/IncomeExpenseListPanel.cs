@@ -99,19 +99,15 @@ namespace UI.Panels.PlayerDetails
                     local.GetCurrency(player.spouse.additionalIncome));
             }
 
-            bool enable = _panelActiveIncome.itemCount > 0;
-            _panelActiveIncome.gameObject.SetActive(enable);
-            if (enable)
+            _panelActiveIncome.ActivateIfNonEmpty();
+            if (_showTotalValues)
             {
-                if (_showTotalValues)
-                {
-                    _panelActiveIncome.firstItemValuePanel.SetValue(
-                        local.GetCurrency(activeIncome));
-                }
-                else
-                {
-                    _panelActiveIncome.firstItemValuePanel.RemoveValue();
-                }
+                _panelActiveIncome.firstItemValuePanel.SetValue(
+                    local.GetCurrency(activeIncome));
+            }
+            else
+            {
+                _panelActiveIncome.firstItemValuePanel.RemoveValue();
             }
         }
 
@@ -208,19 +204,15 @@ namespace UI.Panels.PlayerDetails
                 ref passiveIncome,
                 true);
 
-            bool enable = _panelPassiveIncome.itemCount > 0;
-            _panelPassiveIncome.gameObject.SetActive(enable);
-            if (enable)
+            _panelPassiveIncome.ActivateIfNonEmpty();
+            if (_showTotalValues)
             {
-                if (_showTotalValues)
-                {
-                    _panelPassiveIncome.firstItemValuePanel.SetValue(
-                        local.GetCurrency(passiveIncome));
-                }
-                else
-                {
-                    _panelPassiveIncome.firstItemValuePanel.RemoveValue();
-                }
+                _panelPassiveIncome.firstItemValuePanel.SetValue(
+                    local.GetCurrency(passiveIncome));
+            }
+            else
+            {
+                _panelPassiveIncome.firstItemValuePanel.RemoveValue();
             }
         }
 
@@ -314,19 +306,15 @@ namespace UI.Panels.PlayerDetails
                 }
             }
 
-            bool enable = _panelExpenses.itemCount > 0;
-            _panelExpenses.gameObject.SetActive(enable);
-            if (enable)
+            _panelExpenses.ActivateIfNonEmpty();
+            if (_showTotalValues)
             {
-                if (_showTotalValues)
-                {
-                    _panelExpenses.firstItemValuePanel.SetValue(
-                        local.GetCurrency(expenses, true));
-                }
-                else
-                {
-                    _panelExpenses.firstItemValuePanel.RemoveValue();
-                }
+                _panelExpenses.firstItemValuePanel.SetValue(
+                    local.GetCurrency(expenses, true));
+            }
+            else
+            {
+                _panelExpenses.firstItemValuePanel.RemoveValue();
             }
         }
 

@@ -42,7 +42,7 @@ namespace UI.Panels.PlayerDetails
                 panel = _panelTraits.AddItem(local.GetPlayerState(trait), tabCount);
                 panel.clickAction = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);
             }
-            _panelTraits.gameObject.SetActive(_panelTraits.itemCount > 0);
+            _panelTraits.ActivateIfNonEmpty();
 
             // Skills
             tabCount = _panelSkills.firstItemValuePanel.tabCount + 1;
@@ -51,7 +51,7 @@ namespace UI.Panels.PlayerDetails
                 panel = _panelSkills.AddItem(local.GetSkill(skillInfo), tabCount);
                 panel.clickAction = () => UIManager.Instance.ShowSkillInfo(skillInfo, null);
             }
-            _panelSkills.gameObject.SetActive(_panelSkills.itemCount > 0);
+            _panelSkills.ActivateIfNonEmpty();
         }
 
         private void OnEnable()

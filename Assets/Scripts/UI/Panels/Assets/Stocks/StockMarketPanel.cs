@@ -18,117 +18,22 @@ namespace UI.Panels.Assets
         [SerializeField]
         private ItemValueListPanel _panelCryptos;
         [SerializeField]
-        private StockPanel _prefabStockPanel;
+        private GrowthStockComponent _prefabGrowthStockPanel;
+        [SerializeField]
+        private YieldStockComponent _prefabYieldStockPanel;
+        [SerializeField]
+        private CryptoComponent _prefabCryptoPanel;
 #pragma warning restore 0649
 
         public Player player;
 
-/*
- * private void registerGrowthStock(
-            StockPanel panel,
-            GrowthStock stock)
+        private void setupStockPanel(StockPanel panel)
         {
-            Debug.LogFormat("Growth Stock {0}", stock.name);
-            panel.stock = stock;
-            GrowthStockComponent component = panel.GetComponent<GrowthStockComponent>();
-            component.growthStock = stock;
-            component.player = player;
+            panel.player = player;
+            panel.tradeCallback = Refresh;
+            panel.gameObject.SetActive(true);
+            panel.Refresh();
         }
-
-        private void registerYieldStock(
-            StockPanel panel,
-            YieldStock stock)
-        {
-            Debug.LogFormat("Yield Stock {0}", stock.name);
-            panel.stock = stock;
-            YieldStockComponent component = panel.GetComponent<YieldStockComponent>();
-            component.yieldStock = stock;
-            component.player = player;
-        }
-
-        private void registerCrypto(
-            StockPanel panel,
-            AbstractCryptoCurrency stock)
-        {
-            Debug.LogFormat("Crypto {0}", stock.name);
-            panel.stock = stock;
-            CryptoComponent component = panel.GetComponent<CryptoComponent>();
-            component.crypto = stock;
-            component.player = player;
-        }
-*/
-        private void AddStockList(
-            ItemValueListPanel stockListPanel,
-            List<AbstractStock> stocks)
-//            Action<StockPanel, StockType> registerFn)
-        {
-            stockListPanel.Clear();
-            stockListPanel.gameObject.SetActive(stocks.Count > 0);
-            foreach (AbstractStock stock in stocks)
-            {
-                StockPanel panel = Instantiate(_prefabStockPanel, stockListPanel.transform);
-                panel.player = player;
-                panel.stock = stock;
-//                registerFn(panel, stock);
-                panel.gameObject.SetActive(true);
-                panel.buttonTrade.onClick.AddListener(
-                    new UnityEngine.Events.UnityAction(
-                        () => stock.OnDetail(Refresh)));
-                panel.Refresh();
-            }
-
-            stockListPanel.gameObject.SetActive(stockListPanel.itemCount > 0);
-        }
-/*
-
-        private void AddGrowthStocks(List<GrowthStock> stocks)
-        {
-            _stockListGrowth.gameObject.SetActive(stocks.Count > 0);
-            foreach (GrowthStock stock in stocks)
-            {
-                GrowthStockComponent component = Instantiate(
-                    _prefabGrowthStockPanel, _stockListGrowth.transform);
-                component.player = player;
-                component.growthStock = stock;
-                StockPanel panel = component.GetComponent<StockPanel>();
-                panel.player = player;
-                panel.stock = stock;
-                component.gameObject.SetActive(true);
-            }
-        }
-
-        private void AddYieldStocks(List<YieldStock> stocks)
-        {
-            _stockListYield.gameObject.SetActive(stocks.Count > 0);
-            foreach (YieldStock stock in stocks)
-            {
-                YieldStockComponent component = Instantiate(
-                    _prefabYieldStockPanel, _stockListYield.transform);
-                component.player = player;
-                component.yieldStock = stock;
-                StockPanel panel = component.GetComponent<StockPanel>();
-                panel.player = player;
-                panel.stock = stock;
-                component.gameObject.SetActive(true);
-            }
-        }
-
-        private void AddCryptos(List<AbstractCryptoCurrency> stocks)
-        {
-            _stockListCrypto.gameObject.SetActive(stocks.Count > 0);
-            foreach (AbstractCryptoCurrency stock in stocks)
-            {
-                CryptoComponent component = Instantiate(
-                    _prefabCryptoPanel, _stockListCrypto.transform);
-                component.player = player;
-                component.crypto = stock;
-                StockPanel panel = component.GetComponent<StockPanel>();
-                panel.player = player;
-                panel.stock = stock;
-                component.gameObject.SetActive(true);
-            }
-        }
-        */
 
         public void Refresh()
         {
@@ -139,17 +44,41 @@ namespace UI.Panels.Assets
 
             StockManager stockManager = StockManager.Instance;
 
-            AddStockList(
-                _panelGrowthStocks,
-                stockManager.growthStocks.ConvertAll(s => (AbstractStock)s));
+            // Growth Stocks
+            _panelGrowthStocks.Clear();
+            foreach (GrowthStock stock in stockManager.growthStocks)
+            {
+                GrowthStockComponent panel = Instantiate(
+                    _prefabGrowthStockPanel,
+                    _panelGrowthStocks.transform);
+                panel.growthStock = stock;
+                setupStockPanel(panel);
+            }
+            _panelGrowthStocks.ActivateIfNonEmpty();
 
-            AddStockList(
-                _panelYieldStocks,
-                stockManager.yieldStocks.ConvertAll(s => (AbstractStock)s));
+            // Yield Stocks
+            _panelYieldStocks.Clear();
+            foreach (YieldStock stock in stockManager.yieldStocks)
+            {
+                YieldStockComponent panel = Instantiate(
+                    _prefabYieldStockPanel,
+                    _panelYieldStocks.transform);
+                panel.yieldStock = stock;
+                setupStockPanel(panel);
+            }
+            _panelYieldStocks.ActivateIfNonEmpty();
 
-            AddStockList(
-                _panelCryptos,
-                stockManager.cryptoCurrencies.ConvertAll(s => (AbstractStock)s));
+            // Crypto
+            _panelCryptos.Clear();
+            foreach (AbstractCryptoCurrency stock in stockManager.cryptoCurrencies)
+            {
+                CryptoComponent panel = Instantiate(
+                    _prefabCryptoPanel,
+                    _panelCryptos.transform);
+                panel.crypto = stock;
+                setupStockPanel(panel);
+            }
+            _panelCryptos.ActivateIfNonEmpty();
         }
 
         private void OnEnable()

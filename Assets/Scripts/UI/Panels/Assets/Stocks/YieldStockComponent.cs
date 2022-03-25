@@ -8,19 +8,20 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class YieldStockComponent : MonoBehaviour
+    public class YieldStockComponent : StockPanel
     {
 #pragma warning disable 0649
         [SerializeField]
         private TextMeshProUGUI _textYield;
 #pragma warning restore 0649
 
-        public Player player;
         public YieldStock yieldStock;
+        public override AbstractStock stock => yieldStock;
 
-        public void Refresh()
+        public override void Refresh()
         {
-            Localization local = Localization.Instance;
+            base.Refresh();
+
             if (_textYield != null)
             {
                 Vector2Int range = yieldStock.yieldRange;
@@ -35,16 +36,6 @@ namespace UI.Panels.Assets
                         "{0}% - {1}%", range.x, range.y);
                 }
             }
-        }
-
-        private void OnEnable()
-        {
-            if (player == null || yieldStock == null)
-            {
-                return;
-            }
-
-            Refresh();
         }
     }
 }

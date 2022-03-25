@@ -9,18 +9,20 @@ using UnityEngine.UI;
 
 namespace UI.Panels.Assets
 {
-    public class GrowthStockComponent : MonoBehaviour
+    public class GrowthStockComponent : StockPanel
     {
 #pragma warning disable 0649
         [SerializeField]
         private ItemValuePanel _panelEstimatedValue;
 #pragma warning restore 0649
 
-        public Player player;
         public GrowthStock growthStock;
+        public override AbstractStock stock => growthStock;
 
-        public void Refresh()
+        public override void Refresh()
         {
+            base.Refresh();
+
             if (_panelEstimatedValue != null)
             {
                 bool evaluate = player.HasSkill(SkillType.STOCK_EVALUATION);
@@ -32,16 +34,6 @@ namespace UI.Panels.Assets
                         Localization.Instance.GetCurrencyPlain(value));
                 }
             }
-        }
-
-        private void OnEnable()
-        {
-            if (player == null || growthStock == null)
-            {
-                return;
-            }
-
-            Refresh();
         }
     }
 }

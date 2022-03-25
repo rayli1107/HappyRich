@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 2440061057475904138}
   - component: {fileID: 6787663737010424472}
   m_Layer: 5
-  m_Name: Text Change
+  m_Name: Text Yield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 64
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 513
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -330,11 +330,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 100
+  m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 100
+  m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!1 &5495164566622549593
@@ -630,7 +630,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5607272783047938701}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 527000703273385546}
+        m_MethodName: OnTrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5607272783047938701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,9 +682,9 @@ GameObject:
   - component: {fileID: 5859688690258493119}
   - component: {fileID: 7566338845956731389}
   - component: {fileID: 4729601884233328526}
-  - component: {fileID: 6200085276511884809}
+  - component: {fileID: 527000703273385546}
   m_Layer: 5
-  m_Name: Prefab Stock Panel
+  m_Name: Yield Stock Prefab Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -748,7 +759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!114 &6200085276511884809
+--- !u!114 &527000703273385546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -757,18 +768,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5742342640210316970}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a232abddfdace4e9eba33728782422, type: 3}
+  m_Script: {fileID: 11500000, guid: 0edb209266f903048a42773679bcea0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _textName: {fileID: 7589717912547045892}
   _textTitle: {fileID: 0}
   _textValue: {fileID: 3972704470864758599}
-  _textChange: {fileID: 2440061057475904138}
+  _textChange: {fileID: 0}
   _panelShares: {fileID: 4546390871749406232}
   _panelTotalValue: {fileID: 1477082390967066366}
   _buttonSell: {fileID: 0}
-  _buttonTrade: {fileID: 5611325363074476211}
   _showAlways: 0
+  _textYield: {fileID: 2440061057475904138}
 --- !u!1 &6623563936421381252
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,11 +949,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 100
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 100
   m_PreferredHeight: -1
-  m_FlexibleWidth: 1
+  m_FlexibleWidth: -1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!1 &8426001118483893521

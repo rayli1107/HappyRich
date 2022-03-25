@@ -1,6 +1,7 @@
 ﻿using Actions;
 using Assets;
 using PlayerInfo;
+using System;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
@@ -26,16 +27,14 @@ namespace UI.Panels.Assets
         [SerializeField]
         private Button _buttonSell;
         [SerializeField]
-        private Button _buttonTrade;
-        [SerializeField]
         private bool _showAlways = true;
 #pragma warning restore 0649
 
         public Player player;
-        public AbstractStock stock;
-        public Button buttonTrade => _buttonTrade;
+        public virtual AbstractStock stock { get; }
+        public Action tradeCallback;
 
-        public void Refresh()
+        public virtual void Refresh()
         {
             Localization local = Localization.Instance;
             if (_textName != null)
@@ -98,9 +97,9 @@ namespace UI.Panels.Assets
             Refresh();
         }
 
-        public void OnClick()
+        public void OnTrade()
         {
-            stock.OnDetail(null);
+            stock.OnDetail(tradeCallback);
         }
 
         public void OnBuy()

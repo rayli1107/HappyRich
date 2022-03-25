@@ -28,7 +28,7 @@ namespace UI.Panels.Assets
                 StockPanel childPanel = Instantiate(
                     _prefabStockPanel, _content);
                 childPanel.player = player;
-                childPanel.stock = stock;
+//                childPanel.stock = stock;
                 childPanel.Refresh();
             }
         }

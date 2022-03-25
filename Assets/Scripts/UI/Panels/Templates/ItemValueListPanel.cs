@@ -6,7 +6,7 @@ namespace UI.Panels.Templates
     {
         public ItemValuePanel firstItemValuePanel { get; private set; }
 
-        public int itemCount => transform.childCount - 1;
+        private int itemCount => transform.childCount - 1;
 
         private void Awake()
         {
@@ -42,6 +42,11 @@ namespace UI.Panels.Templates
             {
                 DestroyImmediate(transform.GetChild(1).gameObject);
             }
+        }
+
+        public void ActivateIfNonEmpty()
+        {
+            gameObject.SetActive(itemCount > 0);
         }
     }
 }

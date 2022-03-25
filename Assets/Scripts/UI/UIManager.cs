@@ -257,18 +257,6 @@ namespace UI
             panel.Refresh();
         }
 
-        private void setupStockPanel(
-            Player player,
-            StockPanel panel,
-            Assets.AbstractStock stock,
-            Action callback=null)
-        {
-            panel.player = player;
-            panel.stock = stock;
-            panel.GetComponent<MessageBox>().messageBoxHandler = _ => callback?.Invoke();
-            panel.Refresh();
-        }
-
         public void ShowGrowthStockPanel(
             Assets.GrowthStock stock,
             Action callback=null)
@@ -277,8 +265,8 @@ namespace UI
             GrowthStockComponent component = Instantiate(_prefabGrowthStockPanel, transform);
             component.player = player;
             component.growthStock = stock;
+            component.GetComponent<MessageBox>().messageBoxHandler = _ => callback?.Invoke();
             component.Refresh();
-            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
         }
 
         public void ShowYieldStockPanel(
@@ -289,8 +277,8 @@ namespace UI
             YieldStockComponent component = Instantiate(_prefabYieldStockComponent, transform);
             component.player = player;
             component.yieldStock = stock;
+            component.GetComponent<MessageBox>().messageBoxHandler = _ => callback?.Invoke();
             component.Refresh();
-            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
         }
 
         public void ShowCryptoPanel(
@@ -301,8 +289,8 @@ namespace UI
             CryptoComponent component = Instantiate(_prefabCryptoComponent, transform);
             component.player = player;
             component.crypto = stock;
+            component.GetComponent<MessageBox>().messageBoxHandler = _ => callback?.Invoke();
             component.Refresh();
-            setupStockPanel(player, component.GetComponent<StockPanel>(), stock, callback);
         }
 
         public SimpleNumberInputPanel ShowNumberInputPanel(

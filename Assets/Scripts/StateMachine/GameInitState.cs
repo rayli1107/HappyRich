@@ -64,6 +64,7 @@ namespace StateMachine
                 SpecialistManager.Instance != null &&
                 StartupManager.Instance != null &&
                 StockManager.Instance != null &&
+                EventLogManager.Instance != null &&
                 TutorialManager.Instance != null)
             {
                 _initAction.Run(null);

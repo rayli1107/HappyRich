@@ -12,6 +12,7 @@
         public void EnterState(StateMachineParameter param)
         {
             PlayerInfo.Player player = GameManager.Instance.player;
+            EventLogManager.Instance.OnTurnEnd(player);
             ++player.age;
             UI.UIManager.Instance.UpdatePlayerInfo(player);
             PlayerInfo.Snapshot snapshot = new PlayerInfo.Snapshot(player);

@@ -28,6 +28,7 @@ namespace StateMachine
             SkillManager.Instance.OnPlayerTurnStart(player, GameManager.Instance.Random);
             UI.UIManager.Instance.UpdatePlayerInfo(player);
             TutorialManager.Instance.GameStartOnce.Run(null);
+            EventLogManager.Instance.OnTurnStart(player);
         }
 
         public void ExitState()

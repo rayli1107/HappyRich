@@ -67,7 +67,7 @@ namespace UI.Panels
             if (player.portfolio.cash + maxLoanAmount + liquidAsset < amount)
             {
                 string message = string.Format(
-                    "Unfortunately you don't have a way to come with the {0} needed. " +
+                    "Unfortunately you don't have a way to come with the {0} needed.\n\n" +
                     "You only have {1} in available cash and {2} in liquid assets, and " +
                     "the maximum amount of personal you can take out is {3}.",
                     local.GetCurrency(amount),
@@ -80,9 +80,10 @@ namespace UI.Panels
             }
 
             _textMessage.text = string.Format(
-                "You need to come up with {0} but you only have {1} in available cash. " +
+                "You need to come up with {0} but you only have {1} in available cash.\n\n" +
                 "You also have {2} in liquid assets, and the maximum of amount of " +
-                "personal loan you can take out is {3}. How do you want to proceed?",
+                "personal loan you can take out is {3}.\n\n" +
+                "How do you want to proceed?",
                 local.GetCurrency(amount),
                 local.GetCurrency(player.portfolio.cash),
                 local.GetCurrency(liquidAsset),

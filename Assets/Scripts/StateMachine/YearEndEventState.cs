@@ -24,16 +24,16 @@
                     "retirement age. Congratulations!";
                 _stateMachine.ChangeState(_stateMachine.VictoryState, newParam);
             }
-            else if (snapshot.cash <= 0 && snapshot.expectedCashflow <= 0)
+            else if (snapshot.cash <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
-                newParam.message = "Unfortunately you are now financially broke. Game over.";
+                newParam.message = "You are now financially broke. Game over.";
                 _stateMachine.ChangeState(_stateMachine.GameOverState, newParam);
             }
             else if (snapshot.happiness <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
-                newParam.message = "Unfortunately you are really unhappy with your life right now. Game over.";
+                newParam.message = "You are really unhappy with your life right now. Game over.";
                 _stateMachine.ChangeState(_stateMachine.GameOverState, newParam);
             }
             else if (snapshot.age >= GameManager.Instance.retirementAge)

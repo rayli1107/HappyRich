@@ -39,50 +39,50 @@ namespace Actions
 
     public static class ForceDebit
     {
-        private static void messageBoxHandler(
-            Player player,
-            int amount,
-            Action handler)
-        {
-            int loanAmount = amount - player.cash;
-            player.portfolio.AddCash(-1 * player.cash);
-            player.portfolio.AddPersonalLoan(loanAmount);
-            handler?.Invoke();
-        }
-
         public static void Run(Player player, int amount, Action handler)
         {
-            int loanAmount = Mathf.Max(amount - player.cash, 0);
-            int maxLoanAmount = new Snapshot(player).availablePersonalLoanAmount;
             Localization local = Localization.Instance;
+
+            int loanAmount = Mathf.Max(amount - player.cash, 0);
+            amount -= loanAmount;
+
+            player.portfolio.AddCash(-1 * amount);
+            if (loanAmount > 0)
+            {
+                player.portfolio.AddPersonalLoan(loanAmount);
+            }
+
             if (loanAmount == 0)
             {
-                player.portfolio.AddCash(-1 * amount);
                 handler?.Invoke();
-            }
-            else if (loanAmount <= maxLoanAmount)
-            {
-                int interst = loanAmount * InterestRateManager.Instance.personalLoanRate / 100;
-                string message = string.Format(
-                    "You had to take out a personal loan of {0} and " +
-                    "pay an additional annual interest of {1}.",
-                    local.GetCurrency(loanAmount, true),
-                    local.GetCurrency(interst, true));
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_ONLY,
-                    _ => messageBoxHandler(player, amount, handler));
             }
             else
             {
-                string message = string.Format(
-                    "Unfortunately you were not able to take out a personal loan " +
-                    "to help pay off the {0} you owe.",
-                    local.GetCurrency(amount, true));
-                UI.UIManager.Instance.ShowSimpleMessageBox(
-                    message,
-                    ButtonChoiceType.OK_ONLY,
-                    _ => messageBoxHandler(player, amount, handler));
+                Snapshot snapshot = new Snapshot(player);
+                if (snapshot.actualCashflow >= 0)
+                {
+                    int interst = loanAmount * InterestRateManager.Instance.personalLoanRate / 100;
+                    string message = string.Format(
+                        "You had to take out a personal loan of {0} and " +
+                        "pay an additional annual interest of {1}.",
+                        local.GetCurrency(loanAmount, true),
+                        local.GetCurrency(interst, true));
+                    UI.UIManager.Instance.ShowSimpleMessageBox(
+                        message,
+                        ButtonChoiceType.OK_ONLY,
+                        _ => handler?.Invoke());
+                }
+                else
+                {
+                    string message = string.Format(
+                        "Unfortunately you were not able to take out a personal loan " +
+                        "to help pay off the {0} you owe.",
+                        local.GetCurrency(loanAmount, true));
+                    UI.UIManager.Instance.ShowSimpleMessageBox(
+                        message,
+                        ButtonChoiceType.OK_ONLY,
+                        _ => handler?.Invoke());
+                }
             }
         }
     }

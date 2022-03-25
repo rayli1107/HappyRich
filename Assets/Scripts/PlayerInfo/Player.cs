@@ -142,15 +142,8 @@ namespace PlayerInfo
         public void DistributeCashflow(Action callback)
         {
             int cashflow = new Snapshot(this).actualCashflow;
-            if (cashflow >= 0)
-            {
-                portfolio.AddCash(cashflow);
-                callback?.Invoke();
-            }
-            else
-            {
-                ForceDebit.Run(this, -1 * cashflow, callback);
-            }
+            portfolio.AddCash(cashflow);
+            callback?.Invoke();
         }
 
         public Profession GetMainJob()

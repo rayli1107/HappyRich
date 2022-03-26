@@ -166,6 +166,9 @@ namespace PlayerInfo
 
         public void AddPersonalLoan(int amount)
         {
+            EventLogManager.Instance.LogFormat(
+                "Add Personal Loan: {0}",
+                Localization.Instance.GetCurrency(amount, true));
             if (personalLoan == null)
             {
                 personalLoan = new PersonalLoan(amount);
@@ -178,7 +181,9 @@ namespace PlayerInfo
 
         public void AddCash(int amount)
         {
-            Debug.LogFormat("Add Cash {0}", amount);
+            EventLogManager.Instance.LogFormat(
+                "Add Cash: {0}",
+                Localization.Instance.GetCurrency(amount));
             cash += amount;
         }
 

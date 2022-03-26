@@ -21,28 +21,32 @@
                 snapshot.expectedPassiveIncome >= snapshot.expectedExpenses)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
+                newParam.victory = true;
                 newParam.message = "You were able to achieve financial independence and a happy life before " +
                     "retirement age. Congratulations!";
-                _stateMachine.ChangeState(_stateMachine.VictoryState, newParam);
+                _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
             else if (snapshot.cash <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
+                newParam.victory = false;
                 newParam.message = "You are now financially broke. Game over.";
-                _stateMachine.ChangeState(_stateMachine.GameOverState, newParam);
+                _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
             else if (snapshot.happiness <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
+                newParam.victory = false;
                 newParam.message = "You are really unhappy with your life right now. Game over.";
-                _stateMachine.ChangeState(_stateMachine.GameOverState, newParam);
+                _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
             else if (snapshot.age >= GameManager.Instance.retirementAge)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
+                newParam.victory = false;
                 newParam.message = "You reached retirement age but unfortunately have not achieved" +
                     "financial independence or a truly happy life. Game over.";
-                _stateMachine.ChangeState(_stateMachine.GameOverState, newParam);
+                _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
             else 
             {

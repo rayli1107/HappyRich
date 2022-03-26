@@ -17,8 +17,7 @@ namespace PlayerInfo
         public int happiness => player.happiness;
 
         public int netWorth { get; private set; }
-
-
+        public int financialIndependenceProgress => (100 * expectedPassiveIncome) / expectedExpenses;
         public int expectedCashflow => activeIncome + expectedPassiveIncome - expectedExpenses;
         public int actualCashflow => activeIncome + actualPassiveIncome - actualExpenses;
 

@@ -141,6 +141,7 @@ namespace PlayerInfo
 
         public void DistributeCashflow(Action callback)
         {
+            EventLogManager.Instance.Log("Distribute Cashflow");
             int cashflow = new Snapshot(this).actualCashflow;
             portfolio.AddCash(cashflow);
             callback?.Invoke();
@@ -160,12 +161,16 @@ namespace PlayerInfo
 
         public void AddJob(Profession job)
         {
+            EventLogManager.Instance.LogFormat(
+                "Add Job: {0}", job.professionName);
             jobs.Add(job);
             oldJobs.Remove(job);
         }
 
         public void LoseJob(Profession job)
         {
+            EventLogManager.Instance.LogFormat(
+                "Lose Job: {0}", job.professionName);
             if (jobs.Remove(job) && !oldJobs.Contains(job))
             {
                 oldJobs.Add(job);
@@ -174,18 +179,28 @@ namespace PlayerInfo
 
         public void AddMentalState(AbstractPlayerState state)
         {
+            EventLogManager.Instance.LogFormat(
+                "Add Mental State: {0}", state.name);
             mentalStates.RemoveAll(s => s.GetType() == state.GetType());
             mentalStates.Add(state);
         }
 
         public void RemoveMentalState(AbstractPlayerState state)
         {
-            mentalStates.Remove(state);
+            if (mentalStates.Remove(state))
+            {
+                EventLogManager.Instance.LogFormat(
+                    "Remove Mental State: {0}", state.name);
+            }
         }
 
         public void RemoveMentalState<T>()
         {
-            mentalStates.RemoveAll(s => s.GetType() == typeof(T));
+            if (mentalStates.RemoveAll(s => s.GetType() == typeof(T)) > 0)
+            {
+                EventLogManager.Instance.LogFormat(
+                    "Remove Mental States: {0}", typeof(T).Name);
+            }
         }
 
         public SkillInfo GetSkillInfo(SkillType skillType)
@@ -206,6 +221,8 @@ namespace PlayerInfo
         {
             if (!HasSkill(skillInfo.skillType))
             {
+                EventLogManager.Instance.LogFormat(
+                    "Learned Skill: {0}", skillInfo.skillName);
                 skills.Add(skillInfo);
             }
         }
@@ -228,6 +245,8 @@ namespace PlayerInfo
         {
             if (!HasSpecialist(specialistInfo.specialistType))
             {
+                EventLogManager.Instance.LogFormat(
+                    "Add Specialist: {0}", specialistInfo.specialistName);
                 specialists.Add(specialistInfo);
             }
         }

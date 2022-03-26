@@ -19,6 +19,7 @@ namespace UI.Panels.Templates
                 firstItemValuePanel, firstItemValuePanel.transform.parent);
             newPanel.tabCount = tabCount;
             newPanel.label = label;
+            newPanel.RemoveValue();
             return newPanel;
         }
 

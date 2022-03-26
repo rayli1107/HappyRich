@@ -79,6 +79,8 @@ namespace UI
         [SerializeField]
         private RaisePersonalFundsMessageBox _prefabRaisePersonalFundsMessageBox;
         [SerializeField]
+        private EventLogPanel _prefabEventLogPanel;
+        [SerializeField]
         private GameObject _prefabMessageBoxPanel;
         [SerializeField]
         private GrowthStockComponent _prefabGrowthStockPanel;
@@ -540,6 +542,17 @@ namespace UI
             string message = string.Join(
                 "\n", local.GetSkill(skillInfo), skillInfo.skillDescription);
             ShowSimpleMessageBox(message, ButtonChoiceType.OK_ONLY, callback);
+        }
+
+        public void ShowEventLogPanel(MessageBoxHandler messageBoxHandler = null)
+        {
+            EventLogPanel panel = Instantiate(_prefabEventLogPanel, transform);
+
+            MessageBox messageBox = panel.GetComponent<MessageBox>();
+            messageBox.messageBoxHandler = messageBoxHandler;
+
+            panel.gameObject.SetActive(true);
+            panel.Refresh();
         }
 
         public void ShowAvailableActionsPanel(

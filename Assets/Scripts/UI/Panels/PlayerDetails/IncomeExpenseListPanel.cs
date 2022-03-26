@@ -26,55 +26,7 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
-        /*
-        private void showAssetLiabilityDetails(
-            AbstractAsset asset, AbstractLiability loan, int fontSizeMax = 32)
-        {
-            List<string> details =
-                asset == null ? loan.GetDetails() : asset.GetDetails();
-            SimpleTextMessageBox panel = UIManager.Instance.ShowSimpleMessageBox(
-                string.Join("\n", details), ButtonChoiceType.OK_ONLY, null);
-            panel.text.fontSizeMax = fontSizeMax;
-        }
 
-        private Action getClickAction(
-            AbstractAsset asset, AbstractLiability loan)
-        {
-            if (loan != null && loan.payable && loan.amount > 0)
-            {
-                return () => LoanPayoffActions.PayAssetLoanPrincipal(
-                    player, asset, loan, reloadWindow);
-            }
-            else
-            {
-                return () => showAssetLiabilityDetails(asset, loan);
-            }
-        }*/
-
-/*
-        private int AddItemValueAsCurrency(
-            ItemValueListPanel parentPanel,
-            string label,
-            int value,
-            bool flip,
-            Action clickAction = null)
-        {
-            ItemValuePanel panel = Instantiate(_prefabItemValuePanel, parentTranform);
-            panel.setLabel(label);
-            if (value != 0)
-            {
-                panel.setValueAsCurrency(value, flip);
-            }
-            else
-            {
-                panel.removeValue();
-            }
-            panel.setTabCount(tab);
-            panel.transform.SetSiblingIndex(index);
-            panel.clickAction = clickAction;
-            return index + 1;
-        }
-*/
         private void AddActiveIncome()
         {
             Localization local = Localization.Instance;
@@ -333,8 +285,8 @@ namespace UI.Panels.PlayerDetails
             _panelTotalCashflow.SetValue(
                 Localization.Instance.GetCurrency(snapshot.expectedCashflow));
 
-            int fi = (100 * snapshot.expectedPassiveIncome) / snapshot.expectedExpenses;
-            _panelFinancialIndependence.SetValue(string.Format("{0}%", fi));
+            _panelFinancialIndependence.SetValue(
+                string.Format("{0}%", snapshot.financialIndependenceProgress));
         }
 
         private void OnEnable()

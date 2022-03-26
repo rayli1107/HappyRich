@@ -52,8 +52,8 @@ private System.Action _buyInsuranceAction;
 
             if (_textFI)
             {
-                int fi = (100 * snapshot.expectedPassiveIncome) / snapshot.expectedExpenses;
-                _textFI.text = string.Format("{0}%", fi);
+                _textFI.text = string.Format(
+                    "{0}%", snapshot.financialIndependenceProgress);
             }
 
             if (_textCash)

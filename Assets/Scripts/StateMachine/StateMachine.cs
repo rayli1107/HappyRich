@@ -4,6 +4,7 @@ namespace StateMachine
 {
     public class StateMachineParameter
     {
+        public bool victory;
         public string message;
         public bool newYearEnterMarketEventState = true;
     }
@@ -20,8 +21,7 @@ namespace StateMachine
         public PlayerActionState PlayerActionState { get; private set; }
         public PlayerPostActionState PlayerPostActionState { get; private set; }
         public PersonalEventState PersonalEventState { get; private set; }
-        public GameOverState GameOverState { get; private set; }
-        public VictoryState VictoryState { get; private set; }
+        public GameEndingState GameEndingState { get; private set; }
         public YearEndEventState YearEndEventState { get; private set; }
         public YearStartState YearStartState { get; private set; }
         public GameExitState GameExitState { get; private set; }
@@ -41,8 +41,7 @@ namespace StateMachine
             PlayerPostActionState = new PlayerPostActionState(this);
             PersonalEventState = new PersonalEventState(this);
             GameExitState = new GameExitState(this);
-            GameOverState = new GameOverState(this);
-            VictoryState = new VictoryState(this);
+            GameEndingState = new GameEndingState(this);
             YearEndEventState = new YearEndEventState(this);
             YearStartState = new YearStartState(this);
 

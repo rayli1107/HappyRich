@@ -44,6 +44,11 @@ namespace UI.Panels.PlayerDetails
             UIManager.Instance.ShowTraitsSkillsListPanel();
         }
 
+        public void ShowEventLogPanel()
+        {
+            UIManager.Instance.ShowEventLogPanel();
+        }
+
         public void Refresh()
         {
             if (_buttonContacts != null)

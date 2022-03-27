@@ -226,4 +226,9 @@ public class Localization : MonoBehaviour
     {
         return colorWrap(liability.longName, colorNegative);
     }
+
+    public string Highlight(string s)
+    {
+        return string.Format("<b>{0}</b>", s);
+    }
 }

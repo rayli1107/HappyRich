@@ -24,14 +24,17 @@ namespace UI.Panels.Templates
         {
             set
             {
-                _button.enabled = value != null;
-                if (value == null)
+                if (_button != null)
                 {
-                    _button.onClick.RemoveAllListeners();
-                }
-                else
-                {
-                    _button.onClick.AddListener(new UnityAction(value));
+                    _button.enabled = value != null;
+                    if (value == null)
+                    {
+                        _button.onClick.RemoveAllListeners();
+                    }
+                    else
+                    {
+                        _button.onClick.AddListener(new UnityAction(value));
+                    }
                 }
             }
         }

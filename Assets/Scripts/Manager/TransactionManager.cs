@@ -33,6 +33,12 @@ public static class TransactionManager
             partialAsset != null &&
             rentalAsset != null)
         {
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Bought a {0} for {1} with {2}",
+                local.GetRealEstateLabel(rentalAsset.template.profile),
+                local.GetCurrency(rentalAsset.totalCost),
+                local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.rentalProperties.Add(
                 new RentalProperty(partialAsset, rentalAsset));
         }
@@ -64,6 +70,12 @@ public static class TransactionManager
             partialAsset != null &&
             distressedAsset != null)
         {
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Bought a {0} for {1} with {2}",
+                local.GetRealEstateLabel(distressedAsset.template.profile),
+                local.GetCurrency(distressedAsset.totalCost),
+                local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.distressedProperties.Add(
                 new DistressedProperty(partialAsset, distressedAsset));
         }
@@ -95,6 +107,12 @@ public static class TransactionManager
             partialAsset != null &&
             asset != null)
         {
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Invested in a {0} for {1} with {2}",
+                local.GetBusinessDescription(asset.description),
+                local.GetCurrency(asset.totalCost),
+                local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.businessEntities.Add(
                 new BusinessEntity(partialAsset, asset));
         }
@@ -126,6 +144,12 @@ public static class TransactionManager
             partialAsset != null &&
             asset != null)
         {
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Founded a {0} startup for {1} with {2}",
+                local.GetBusinessDescription(asset.description),
+                local.GetCurrency(asset.totalCost),
+                local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.startupEntities.Add(
                 new StartupEntity(partialAsset, asset));
         }
@@ -153,6 +177,11 @@ public static class TransactionManager
     {
         if (success)
         {
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Founded a {0} for {1}",
+                local.GetLuxuryItem(item.profile),
+                local.GetCurrency(item.value));
             player.portfolio.luxuryItems.Add(item);
             player.AddMentalState(
                 new LuxuryHappinessState(
@@ -200,8 +229,15 @@ public static class TransactionManager
 
         if (player.cash >= cost)
         {
+            Localization local = Localization.Instance;
             player.portfolio.AddCash(-1 * cost);
             player.portfolio.AddStock(stock, amount);
+            EventLogManager.Instance.LogFormat(
+                "Bought {0} shares of {1} at {2} for a total of {3}",
+                amount,
+                local.GetStockName(stock),
+                local.GetCurrency(stock.value),
+                local.GetCurrency(cost));
             success = true;
         }
 
@@ -217,7 +253,16 @@ public static class TransactionManager
         bool success = false;
         if (player.portfolio.TryRemoveStock(stock, amount))
         {
-            player.portfolio.AddCash(amount * stock.value);
+            int gain = amount * stock.value;
+            player.portfolio.AddCash(gain);
+
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Sold {0} shares of {1} at {2} for a total of {3}",
+                amount,
+                local.GetStockName(stock),
+                local.GetCurrency(stock.value),
+                local.GetCurrency(gain));
             success = true;
         }
 
@@ -263,6 +308,12 @@ public static class TransactionManager
             if (partner == null)
             {
                 player.portfolio.AddCash(amount);
+                Localization local = Localization.Instance;
+                EventLogManager.Instance.LogFormat(
+                    "Sold {0} for {1} for a gain of {2}",
+                    local.Highlight(asset.label),
+                    local.GetCurrency(price),
+                    local.GetCurrency(amount));
             }
             else
             {
@@ -297,6 +348,12 @@ public static class TransactionManager
             if (partner == null)
             {
                 player.portfolio.AddCash(amount);
+                Localization local = Localization.Instance;
+                EventLogManager.Instance.LogFormat(
+                    "Refinanced a {0} for {1} with a returned capital of {2}",
+                    local.GetRealEstateLabel(refinancedAsset.distressedAsset.template.profile),
+                    local.GetCurrency(refinancedAsset.value),
+                    local.GetCurrency(amount));
             }
             else
             {
@@ -316,6 +373,12 @@ public static class TransactionManager
         partialAsset.Restructure(company);
         player.portfolio.businessEntities.Add(
             new BusinessEntity(partialAsset, company));
+
+        Localization local = Localization.Instance;
+        EventLogManager.Instance.LogFormat(
+            "Startup {0} went public with a valuation of {1}",
+            local.GetBusinessDescription(company.name),
+            local.GetCurrency(company.value));
     }
 
     private static void buyTimedInvestmentDebitHandler(
@@ -353,6 +416,12 @@ public static class TransactionManager
         if (success)
         {
             loan.PayOff(amount);
+
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Paid off {0} towards {1}",
+                local.GetCurrency(amount),
+                local.GetLiability(loan));
         }
         handler?.Invoke(success);
     }

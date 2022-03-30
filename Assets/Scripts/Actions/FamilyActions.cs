@@ -33,6 +33,13 @@ namespace Actions
         {
             player.RemoveMentalState<DivorcedPenaltyState>();
             player.spouse = spouse;
+
+            Localization local = Localization.Instance;
+            EventLogManager.Instance.LogFormat(
+                "Personal Event: Marriage Income {0} Expense {1} Happiness {2}",
+                local.GetCurrency(spouse.additionalIncome),
+                local.GetCurrency(spouse.additionalExpense, true),
+                local.GetValueAsChange(spouse.additionalHappiness));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "You met the love of your life at a party and decided to get married. Congratulations!",
                 ButtonChoiceType.OK_ONLY,
@@ -48,8 +55,28 @@ namespace Actions
             return (Action cb) => run(player, isBoy, cb);
         }
 
+        private static void showChildDetails(Player player)
+        {
+            Localization local = Localization.Instance;
+            List<string> text = new List<string>()
+            {
+                string.Format("Expense per child: {0}", local.GetCurrency(player.costPerChild, true)),
+                string.Format("Number of children: {0}", player.numChild),
+                string.Format(
+                    "Total children expense: {0}",
+                    local.GetCurrency(player.costPerChild * player.numChild, true))
+            };
+            SimpleTextMessageBox messageBox = UI.UIManager.Instance.ShowSimpleMessageBox(
+                string.Join("\n", text),
+                ButtonChoiceType.OK_ONLY,
+                null);
+            messageBox.text.enableWordWrapping = false;
+        }
+
+
         private static void run(Player player, bool isBoy, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: New Child");
             ++player.numChild;
             string gender = isBoy ? "boy" : "girl";
             UI.UIManager.Instance.ShowSimpleMessageBox(
@@ -68,6 +95,7 @@ namespace Actions
 
         private static void run(Player player, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Divorce");
             player.AddMentalState(
                 new DivorcedPenaltyState(
                     player,

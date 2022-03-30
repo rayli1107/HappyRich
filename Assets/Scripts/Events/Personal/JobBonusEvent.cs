@@ -34,10 +34,13 @@ namespace Events.Personal
         private static void run(Player player, Profession job, System.Random random, Action callback)
         {
             int bonus = JobManager.Instance.GetJobBonus(job, random);
+            string formattedBonus = Localization.Instance.GetCurrency(bonus);
+            EventLogManager.Instance.LogFormat(
+                "Personal Event: Job Bonus {0}", formattedBonus);
             string message = string.Format(
                 "Your boss decided to give you an year end bonus of {0} " +
                 "because of your exemplary performance at work.",
-                Localization.Instance.GetCurrency(bonus));
+                formattedBonus);
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,

@@ -49,6 +49,8 @@ namespace StateMachine
             */
             if (GameManager.Instance.cheatMode)
             {
+                GameManager.Instance.player.AddSpecialist(
+                    SpecialistManager.Instance.GetSpecialistInfo(ScriptableObjects.SpecialistType.VENTURE_CAPITALIST));
                 GameManager.Instance.player.portfolio.AddCash(5000000);
                 GameManager.Instance.player.contacts.Add(
                     new InvestmentPartner("Alice", 2000000, RiskTolerance.kHigh, 10));

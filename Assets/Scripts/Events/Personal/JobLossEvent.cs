@@ -37,6 +37,7 @@ namespace Events.Personal
 
         private static void Run(Player player, Profession job, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Job Loss Event");
             player.LoseJob(job);
             string message = string.Format(
                 "You lost your job as a {0}.", job.professionName);

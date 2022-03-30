@@ -48,6 +48,7 @@ namespace Events.Personal
 
         private static void runFamilyTragedyEvent(Player player, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Family Tragedy Event");
             string message = "One of your close relatives passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.AddMentalState(
@@ -60,6 +61,7 @@ namespace Events.Personal
 
         private static void runSpouseTragedyEvent(Player player, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Spouse Tragedy Event");
             string message = "Your spouse recently passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.spouse = null;
@@ -73,6 +75,7 @@ namespace Events.Personal
 
         private static void runChildTragedyEvent(Player player, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Child Tragedy Event");
             string message = "One of your children recently passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.numChild = Math.Max(player.numChild - 1, 0);

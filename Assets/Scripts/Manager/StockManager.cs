@@ -159,9 +159,11 @@ public class StockManager : MonoBehaviour
     private void getMarketEventNewCrypto(System.Random random, Action callback)
     {
         System.Tuple<string, AbstractStock> crypto = CreateNewCryptoCurrency(random);
+        string stockName = Localization.Instance.GetStockName(crypto.Item2);
+        EventLogManager.Instance.LogFormat(
+            "Market Event - New Crypto {0}", stockName);
         string message = string.Format(
-            "A new cryptocurrency {0} has just been launched!",
-            Localization.Instance.GetStockName(crypto.Item2));
+            "A new cryptocurrency {0} has just been launched!", stockName);
         UI.UIManager.Instance.ShowSimpleMessageBox(
             message, ButtonChoiceType.OK_ONLY, (_) => callback?.Invoke());
     }

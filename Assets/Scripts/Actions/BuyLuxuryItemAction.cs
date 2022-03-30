@@ -53,6 +53,7 @@ namespace Actions
         private static void run(
             Player player, LuxuryItem item, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Buy Luxury Item");
             Localization local = Localization.Instance;
             string message = string.Format(
                 "You came across an opportunity to purchase a {0} for {1}. Do you want to buy it?",

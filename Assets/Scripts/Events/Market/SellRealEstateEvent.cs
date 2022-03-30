@@ -53,6 +53,7 @@ namespace Events.Market
         private static void run(
             Player player, int index, int initialOffer, Action callback)
         {
+            EventLogManager.Instance.Log("Market Event - Sell Real Estate");
             RentalRealEstate asset = player.portfolio.rentalProperties[index].Item2;
             PartialInvestment partialAsset = player.portfolio.rentalProperties[index].Item1;
             int finalOffer = initialOffer;

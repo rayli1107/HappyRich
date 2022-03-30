@@ -28,6 +28,7 @@ namespace Events.Market
 
         private static void run(Player player, float modifier, Action callback)
         {
+            EventLogManager.Instance.Log("Market Event - Rental Boom");
             string message = string.Format(
                 "Rental boom! All of your properties rental income increases " +
                 "permanently by {0}.",
@@ -59,6 +60,7 @@ namespace Events.Market
 
         private static void run(Player player, float modifier, Action callback)
         {
+            EventLogManager.Instance.Log("Market Event - Rental Crash");
             string message = string.Format(
                 "Rental crash! All of your properties rental income decreases " +
                 "permanently by {0}.",
@@ -89,6 +91,7 @@ namespace Events.Market
 
         private static void run(Player player, float modifier, Action callback)
         {
+            EventLogManager.Instance.Log("Market Event - Business Boom");
             string message = string.Format(
                 "Market boom! All of your business income increases " +
                 "permanently by {0}.",
@@ -120,6 +123,7 @@ namespace Events.Market
 
         private static void run(Player player, float modifier, Action callback)
         {
+            EventLogManager.Instance.Log("Market Event - Business Crash");
             string message = string.Format(
                 "Market crash! All of your business income decrease " +
                 "permanently by {0}.",

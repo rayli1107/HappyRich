@@ -25,6 +25,7 @@ namespace Actions
         {
             player.contacts.Add(partner);
             string description = null;
+            string partnerType = partner.riskTolerance.ToString();
             switch (partner.riskTolerance)
             {
                 case RiskTolerance.kHigh:
@@ -39,11 +40,13 @@ namespace Actions
                     break;
             }
 
+            string formattedCash = Localization.Instance.GetCurrency(partner.cash);
+            string partnerName = Localization.Instance.GetName(partner.name);
             string message = string.Format(
                 "You met {0}, a follow investor, who has {1} of available cash and {2}",
-                Localization.Instance.GetName(partner.name),
-                Localization.Instance.GetCurrency(partner.cash),
-                description);
+                partnerName, formattedCash, description);
+            EventLogManager.Instance.LogFormat(
+                "Add Investor - {0} {1} {2}", partnerName, partnerType, formattedCash);
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message, ButtonChoiceType.OK_ONLY, (_) => actionDone(player, callback));
         }

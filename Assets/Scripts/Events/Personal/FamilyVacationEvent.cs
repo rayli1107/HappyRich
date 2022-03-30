@@ -22,6 +22,7 @@ namespace Events.Personal
 
         private static void run(Player player, Action callback)
         {
+            EventLogManager.Instance.Log("Personal Event: Family Vacation");
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 "You decided to take a vacation and spend some time with your family",
                 ButtonChoiceType.OK_ONLY,

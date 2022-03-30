@@ -122,31 +122,21 @@ public class InvestmentPartnerManager : MonoBehaviour
             partners.Add(getPartner(lo, hi, random));
         }
         return partners;
-
-        /*
-        int totalWeight = 0;
-        foreach (InvestmentPartnerProfile profile in _profiles)
-        {
-            totalWeight += profile.distributionWeight;
-        }
-
-        int index = random.Next(totalWeight);
-        foreach (InvestmentPartnerProfile profile in _profiles)
-        {
-            index -= profile.distributionWeight;
-            if (index < 0)
-            {
-                return GetPartnerFromProfile(profile, random);
-            }
-        }
-        return GetPartnerFromProfile(_profiles[0], random);*/
     }
+
+
 
     private Action<Action> getActionFromPartnerList(
         Player player,
         List<InvestmentPartner> partners)
     {
         List<Action<Action>> actions = new List<Action<Action>>();
+        actions.Add(
+            cb =>
+            {
+                EventLogManager.Instance.Log("Market Event - New Investors");
+                cb?.Invoke();
+            });
         foreach (InvestmentPartner partner in partners)
         {
             actions.Add(cb => FindNewInvestors.FindInvestor(player, partner, cb));
@@ -156,16 +146,11 @@ public class InvestmentPartnerManager : MonoBehaviour
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)
     {
-        List<Action<Action>> actions = new List<Action<Action>>();
-
-        foreach (SpecialistInfo info in player.specialists)
+        if (player.HasSpecialist(SpecialistType.VENTURE_CAPITALIST))
         {
-            if (info.specialistType == SpecialistType.VENTURE_CAPITALIST)
-            {
-                List<InvestmentPartner> partners = getPartners(
-                    player, random, _vcPartnerCount);
-                return getActionFromPartnerList(player, partners);
-            }
+            List<InvestmentPartner> partners = getPartners(
+                player, random, _vcPartnerCount);
+            return getActionFromPartnerList(player, partners);
         }
         return null;
     }

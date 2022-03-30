@@ -28,12 +28,15 @@ namespace Events.Personal
         {
             int original = PersonalEventManager.Instance.GetPersonalAccidentLoss(random);
             int loss = PersonalEventManager.Instance.insuranceOutOfPocket;
+            string formattedLoss = Localization.Instance.GetCurrency(loss, true);
+            EventLogManager.Instance.LogFormat(
+                "Personal Event: Personal Accident {0}", formattedLoss);
             string message = string.Format(
                 "You injured yourself and had to pay {0} for surgery. " +
                 "Fortunately since you have insurance, you only need to pay {1} " +
                 "out of pocket.",
                 Localization.Instance.GetCurrency(original, true),
-                Localization.Instance.GetCurrency(loss, true));
+                formattedLoss);
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,
@@ -75,9 +78,12 @@ namespace Events.Personal
             int loss = Mathf.FloorToInt(
                 player.portfolio.car.value *
                 PersonalEventManager.Instance.GetCarAccidentLoss(random));
+            string formattedLoss = Localization.Instance.GetCurrency(loss, true);
+            EventLogManager.Instance.LogFormat(
+                "Personal Event: Car Accident Event {0}", formattedLoss);
             string message = string.Format(
                 "You got into a minor car accident and had to pay {0} to repair your car.",
-                Localization.Instance.GetCurrency(loss, true));
+                formattedLoss);
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
                 ButtonChoiceType.OK_ONLY,

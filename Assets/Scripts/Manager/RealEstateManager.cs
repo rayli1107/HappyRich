@@ -142,7 +142,7 @@ public class RealEstateManager : MonoBehaviour
         return 0;
     }
 
-    private AvailableActionContext GetDistressedRealEstateAction(
+    private AvailableInvestmentContext GetDistressedRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random)
@@ -179,12 +179,12 @@ public class RealEstateManager : MonoBehaviour
             unitCount,
             maxMortgageLtv,
             _maxDistressedLoanLTV);
-        return new AvailableActionContext(
-            asset.GetActionLabel(),
+        return new AvailableInvestmentContext(
+            asset,
             BuyDistressedRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private AvailableActionContext GetRentalRealEstateAction(
+    private AvailableInvestmentContext GetRentalRealEstateAction(
         Player player,
         RealEstateTemplate template,
         System.Random random)
@@ -208,12 +208,12 @@ public class RealEstateManager : MonoBehaviour
         int ltv = getRentalMortgageLTV(player);
         RentalRealEstate asset = new RentalRealEstate(
             template, price, price, annualIncome, ltv, ltv, unitCount);
-        return new AvailableActionContext(
-            asset.GetActionLabel(),
+        return new AvailableInvestmentContext(
+            asset,
             BuyRentalRealEstateAction.GetBuyAction(player, asset));
     }
 
-    private AvailableActionContext GetInvestmentAction(
+    private AvailableInvestmentContext GetInvestmentAction(
         Player player,
         List<RealEstateTemplate> templates,
         System.Random random)
@@ -229,13 +229,13 @@ public class RealEstateManager : MonoBehaviour
         }
     }
 
-    public AvailableActionContext GetSmallInvestmentAction(
+    public AvailableInvestmentContext GetSmallInvestmentAction(
         Player player, System.Random random)
     {
         return GetInvestmentAction(player, _smallInvestments, random);
     }
 
-    public AvailableActionContext GetLargeInvestmentAction(
+    public AvailableInvestmentContext GetLargeInvestmentAction(
         Player player, System.Random random)
     {
         return GetInvestmentAction(player, _largeInvestments, random);

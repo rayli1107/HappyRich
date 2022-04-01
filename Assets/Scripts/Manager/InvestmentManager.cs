@@ -12,7 +12,7 @@ using UnityEngine;
 using GetInvestmentFn = System.Func<
     PlayerInfo.Player,
     System.Random,
-    UI.Panels.Assets.AvailableActionContext>;
+    UI.Panels.Assets.AvailableInvestmentContext>;
 using Investment = System.Tuple<InvestmentPartner, int>;
 /*
 public struct BuyInvestmentContext
@@ -62,7 +62,7 @@ public class InvestmentManager : MonoBehaviour
         return random.Next(2) == 0 ? fn1 : fn2;
     }
 
-    private List<AvailableActionContext> getAvailableInvestments(
+    private List<AvailableInvestmentContext> getAvailableInvestments(
         Player player,
         System.Random random,
         GetInvestmentFn getRealEstateFn,
@@ -82,7 +82,7 @@ public class InvestmentManager : MonoBehaviour
             }
         }
 
-        List<AvailableActionContext> actions = new List<AvailableActionContext>();
+        List<AvailableInvestmentContext> actions = new List<AvailableInvestmentContext>();
         for (int i = 0; i < randomCount; ++i)
         {
             GetInvestmentFn fn = GetRandomInvestmentFn(random, getRealEstateFn, getBusinessFn);
@@ -110,7 +110,7 @@ public class InvestmentManager : MonoBehaviour
         return actions;
     }
 
-    public List<AvailableActionContext> GetAvailableSmallInvestments(
+    public List<AvailableInvestmentContext> GetAvailableSmallInvestments(
         Player player, System.Random random)
     {
         return getAvailableInvestments(
@@ -120,7 +120,7 @@ public class InvestmentManager : MonoBehaviour
             BusinessManager.Instance.GetSmallInvestmentAction);
     }
 
-    public List<AvailableActionContext> GetAvailableLargeInvestments(
+    public List<AvailableInvestmentContext> GetAvailableLargeInvestments(
         Player player, System.Random random)
     {
         return getAvailableInvestments(

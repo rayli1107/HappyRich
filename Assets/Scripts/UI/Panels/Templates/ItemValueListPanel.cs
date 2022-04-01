@@ -1,16 +1,29 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Templates
 {
     public class ItemValueListPanel : MonoBehaviour
     {
-        public ItemValuePanel firstItemValuePanel { get; private set; }
+#pragma warning disable 0649
+        [SerializeField]
+        private ItemValuePanel _firstItemValuePanel;
+#pragma warning restore 0649
+        public ItemValuePanel firstItemValuePanel => _firstItemValuePanel;
 
         private int itemCount => transform.childCount - 1;
 
-        private void Awake()
+        public Action buttonAction
         {
-            firstItemValuePanel = GetComponentInChildren<ItemValuePanel>();
+            set
+            {
+                Button button = GetComponent<Button>();
+                button.enabled = value != null;
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(
+                    new UnityEngine.Events.UnityAction(value));
+            }
         }
 
         public ItemValuePanel AddItem(string label, int tabCount)

@@ -41,6 +41,7 @@ namespace Assets
 
     public class StartupInvestment : AbstractTimedInvestment
     {
+        public override string investmentType => "Startup Investment";
         private StartupExitAction _exitAction;
 
         public StartupInvestment(

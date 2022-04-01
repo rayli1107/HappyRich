@@ -5,6 +5,8 @@ namespace Assets
 {
     public class RentalRealEstate : AbstractRealEstate
     {
+        public override string investmentType => "Rental Real Estate";
+
         public RentalRealEstate(
             RealEstateTemplate template,
             int purchasePrice,

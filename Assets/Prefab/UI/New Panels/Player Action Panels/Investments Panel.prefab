@@ -87,6 +87,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonEvaluateStocks: {fileID: 3860861853715653143}
+  _prefabAvailableInvestmentsPanel: {fileID: 7453527973977985580, guid: d7e3f35b3520c074ca7f0824fc4deca2,
+    type: 3}
 --- !u!114 &6212853153230068359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +605,7 @@ PrefabInstance:
     - target: {fileID: 4306608561798902299, guid: 91ca65c61bef31342b69992344516235,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4306608561798902299, guid: 91ca65c61bef31342b69992344516235,
         type: 3}
@@ -738,7 +740,7 @@ PrefabInstance:
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 330
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1241497282955918597, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -758,7 +760,7 @@ PrefabInstance:
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 330
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1905649934721305371, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
@@ -943,7 +945,7 @@ PrefabInstance:
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 330
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3172408695689407097, guid: b5d29931ca13f7449831e611c76f2c4e,
         type: 3}

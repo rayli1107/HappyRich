@@ -5,6 +5,7 @@ namespace Assets
 {
     public class DistressedRealEstate : AbstractRealEstate
     {
+        public override string investmentType => "Distressed Real Estate";
         public int rehabPrice { get; private set; }
 
         public override int value =>

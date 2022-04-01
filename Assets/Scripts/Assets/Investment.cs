@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class AbstractInvestment : AbstractAsset
+    public abstract class AbstractInvestment : AbstractAsset
     {
+        public abstract string investmentType { get; }
         public int originalPrice { get; protected set; }
         public virtual int totalCost => originalPrice;
         public virtual int loanValue => originalPrice;

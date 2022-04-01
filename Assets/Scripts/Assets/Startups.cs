@@ -6,6 +6,7 @@ namespace Assets
 {
     public class Startup : AbstractInvestment
     {
+        public override string investmentType => "Startup";
         private int _turn;
         private int _duration;
         public bool exited => _turn >= _duration;

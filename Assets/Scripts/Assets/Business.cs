@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class AbstractBusiness : AbstractInvestment
+    public abstract class AbstractBusiness : AbstractInvestment
     {
         public override bool returnCapital => false;
         public AbstractBusiness(string name, int originalPrice, int value, int income)
@@ -18,7 +18,7 @@ namespace Assets
             label = name;
         }
     }
-    public class VariableIncomeBusiness : AbstractBusiness
+    public abstract class VariableIncomeBusiness : AbstractBusiness
     {
         public VariableIncomeBusiness(
             string description,
@@ -36,6 +36,7 @@ namespace Assets
 
     public class SmallBusiness : VariableIncomeBusiness
     {
+        public override string investmentType => "Small Business";
         public SmallBusiness(
             string description,
             int startupCost,
@@ -52,6 +53,7 @@ namespace Assets
 
     public class Franchise : VariableIncomeBusiness
     {
+        public override string investmentType => "Franchise";
         public int franchiseFee { get; private set; }
         public override int value => originalPrice + franchiseFee;
         public override int totalCost => value;
@@ -89,6 +91,7 @@ namespace Assets
 
     public class PublicCompany : AbstractBusiness
     {
+        public override string investmentType => "Public Company";
         public Startup startup { get; private set; }
         public int originalLoanAmount { get; private set; }
         public int originalInterest { get; private set; }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class AbstractRealEstate : AbstractInvestment
+    public abstract class AbstractRealEstate : AbstractInvestment
     {
         public override bool returnCapital => true;
         public RealEstateTemplate template { get; private set; }

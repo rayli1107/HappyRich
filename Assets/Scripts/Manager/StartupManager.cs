@@ -48,7 +48,7 @@ public class StartupManager : MonoBehaviour
     {
     }
 
-    public AvailableActionContext GetStartupInvestmentAction(
+    public AvailableInvestmentContext GetStartupInvestmentAction(
         Player player, System.Random random)
     {
         string idea = _startupIdeas[random.Next(_startupIdeas.Length)];
@@ -60,8 +60,8 @@ public class StartupManager : MonoBehaviour
             s => s.specialistType == SpecialistType.LOAN_AGENT) ?
             _loanAgentStartupLoanLTV : _maxStartupLoanLTV;
         Startup startup = new Startup(idea, label, cost, duration, ltv, ltv);
-        return new AvailableActionContext(
-            startup.GetActionLabel(),
+        return new AvailableInvestmentContext(
+            startup,
             PurchaseStartupAction.GetBuyAction(player, startup));
     }
 

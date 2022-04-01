@@ -64,14 +64,14 @@ public class BusinessManager : MonoBehaviour
         return random.Next(n1, n2 + 1) * increment;
     }
 
-    private AvailableActionContext GetBusinessInvestmentAction(
+    private AvailableInvestmentContext GetBusinessInvestmentAction(
         Player player,
         BusinessProfile[] templates,
         System.Random random)
     {
         if (templates == null || templates.Length == 0)
         {
-            return new AvailableActionContext(null, null);
+            return new AvailableInvestmentContext(null, null);
         }
 
         BusinessProfile profile = templates[random.Next(templates.Length)];
@@ -113,8 +113,8 @@ public class BusinessManager : MonoBehaviour
                 profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
-            return new AvailableActionContext(
-                franchise.GetActionLabel(),
+            return new AvailableInvestmentContext(
+                franchise,
                 JoinFranchiseAction.GetBuyAction(player, franchise));
         }
         else
@@ -127,13 +127,13 @@ public class BusinessManager : MonoBehaviour
                 profile.incomeIncrement,
                 0,
                 _maxBusinessLoanLTV);
-            return new AvailableActionContext(
-                business.GetActionLabel(),
+            return new AvailableInvestmentContext(
+                business,
                 PurchaseSmallBusinessAction.GetBuyAction(player, business));
         }
     }
 
-    public AvailableActionContext GetSmallInvestmentAction(
+    public AvailableInvestmentContext GetSmallInvestmentAction(
         Player player, System.Random random)
     {
         return GetBusinessInvestmentAction(player, _smallInvestments, random);

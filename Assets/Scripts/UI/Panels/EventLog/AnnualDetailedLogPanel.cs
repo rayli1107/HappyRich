@@ -63,10 +63,12 @@ namespace UI.Panels.PlayerDetails
 
             int tabCount = _panelEvents.firstItemValuePanel.tabCount + 1;
             _panelEvents.Clear();
-            foreach (string message in eventLog.messages)
-            {
-                _panelEvents.AddItem(message, tabCount);
-            }
+            eventLog.messages.ForEach(
+                entry =>
+                {
+                    ItemValuePanel panel = _panelEvents.AddItem(entry.Item2, tabCount);
+                    panel.clickAction = entry.Item1;
+                });
             _panelEvents.ActivateIfNonEmpty();
         }
 

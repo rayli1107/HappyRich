@@ -21,7 +21,7 @@ namespace UI.Panels.PlayerDetails
 
         public void ShowIncomeExpenseStatusPanel()
         {
-            UIManager.Instance.ShowIncomeExpenseStatusPanel();
+            UIManager.Instance.ShowIncomeExpenseStatusPanel(null);
         }
 
         public void ShowJobListPanel()

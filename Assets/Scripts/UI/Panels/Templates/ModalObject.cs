@@ -21,10 +21,12 @@ namespace UI.Panels.Templates
         public virtual void EnableInput(bool enable)
         {
             _enableInput = enable;
+/*
             foreach (Button button in GetComponentsInChildren<Button>())
             {
                 button.enabled = enable;
             }
+*/
         }
 
         public void Destroy()

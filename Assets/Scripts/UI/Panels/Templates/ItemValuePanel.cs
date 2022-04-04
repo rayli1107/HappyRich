@@ -17,6 +17,8 @@ namespace UI.Panels.Templates
         [SerializeField]
         private LayoutElement _tab;
         [SerializeField]
+        private TextMeshProUGUI _tabText;
+        [SerializeField]
         private float tabWidth = 40;
 #pragma warning restore 0649
 
@@ -27,6 +29,10 @@ namespace UI.Panels.Templates
                 if (_button != null)
                 {
                     _button.enabled = value != null;
+                    if (_tabText != null)
+                    {
+                        _tabText.text = value == null ? "" : "+";
+                    }
                     if (value == null)
                     {
                         _button.onClick.RemoveAllListeners();
@@ -46,8 +52,12 @@ namespace UI.Panels.Templates
             set
             {
                 _tabCount = value;
-                _tab.minWidth = tabWidth * _tabCount;
-                _tab.preferredWidth = tabWidth * _tabCount;
+                if (_tab != null)
+                {
+                    _tab.gameObject.SetActive(_tabCount > 0);
+                    _tab.minWidth = tabWidth * _tabCount;
+                    _tab.preferredWidth = tabWidth * _tabCount;
+                }
             }
         }
 

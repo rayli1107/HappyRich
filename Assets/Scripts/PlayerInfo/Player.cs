@@ -3,6 +3,7 @@ using PlayerState;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
+using UI.Panels.PlayerDetails;
 using UnityEngine;
 
 namespace PlayerInfo
@@ -141,7 +142,11 @@ namespace PlayerInfo
 
         public void DistributeCashflow(Action callback)
         {
-            EventLogManager.Instance.Log("Distribute Cashflow");
+            IncomeExpenseSnapshot snapshot = new IncomeExpenseSnapshot(
+                this, null, null, null);
+            EventLogManager.Instance.Log(
+                () => UI.UIManager.Instance.ShowIncomeExpenseStatusPanel(snapshot),
+                "Distribute Cashflow");
             int cashflow = new Snapshot(this).actualCashflow;
             portfolio.AddCash(cashflow);
             callback?.Invoke();

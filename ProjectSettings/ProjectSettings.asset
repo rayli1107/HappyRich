@@ -120,7 +120,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.4.1
+  bundleVersion: 0.5
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -166,8 +166,8 @@ PlayerSettings:
   applicationIdentifier:
     Standalone: com.Company.ProductName
   buildNumber:
-    iPhone: 7
-  AndroidBundleVersionCode: 7
+    iPhone: 8
+  AndroidBundleVersionCode: 8
   AndroidMinSdkVersion: 29
   AndroidTargetSdkVersion: 30
   AndroidPreferredInstallLocation: 1
@@ -711,7 +711,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    4: 
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

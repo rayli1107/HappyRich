@@ -11,14 +11,13 @@ namespace Assets
         public int count { get; private set; }
         public override int value { get { return count * stock.value; } }
 
-        public override int expectedIncome => Mathf.FloorToInt(
-            count * stock.value * stock.expectedYield / 100f);
-        public override int totalIncome => Mathf.FloorToInt(
-            count * stock.value * stock.currentYield / 100f);
-
         public override string name => stock.longName;
 
-        public PurchasedStock(AbstractStock stock) : base(stock.name, 0, 0)
+        public override Vector2Int totalIncomeRange => new Vector2Int(
+            Mathf.FloorToInt(count * stock.value * stock.yieldRange.x / 100f),
+            Mathf.FloorToInt(count * stock.value * stock.yieldRange.y / 100f));
+
+        public PurchasedStock(AbstractStock stock) : base(stock.name, 0, Vector2Int.zero)
         {
             this.stock = stock;
             count = 0;
@@ -45,6 +44,12 @@ namespace Assets
         {
             stock.OnDetail(callback);
         }
+
+        public override int GetActualIncome(System.Random random)
+        {
+            int yield = random.Next(stock.yieldRange.x, stock.yieldRange.y + 1);
+            return Mathf.FloorToInt(count * stock.value * yield / 100f);
+        }
     }
 
     public abstract class AbstractStock
@@ -62,14 +67,12 @@ namespace Assets
                 return _turnCount >= 2 ? (value - prevValue) / (float)prevValue : 0f;
             }
         }
-
-        public virtual int expectedYield => 0;
-        public virtual int currentYield => 0;
-
-        public AbstractStock(string name, int value)
+        public Vector2Int yieldRange { get; private set; }
+        public AbstractStock(string name, int value, Vector2Int yieldRange)
         {
             this.name = name;
             this.value = value;
+            this.yieldRange = yieldRange;
             prevValue = value;
             _turnCount = 0;
         }
@@ -107,7 +110,8 @@ namespace Assets
         public float variance => (value - basePrice) / basePrice;
 
 
-        public GrowthStock(string name, int initialPrice) : base(name, initialPrice)
+        public GrowthStock(string name, int initialPrice)
+            : base(name, initialPrice, Vector2Int.zero)
         {
             _currentPeriodTurn = 0;
             basePrice = initialPrice;
@@ -141,22 +145,10 @@ namespace Assets
     public class YieldStock : AbstractStock
     {
         public override string longName => string.Format("Dividend Stock - {0}", name);
-        public Vector2Int yieldRange { get; private set; }
-        public override int expectedYield => yieldRange.x;
-        public override int currentYield => _currentYield;
-        private int _currentYield;
 
         public YieldStock(string name, int initialPrice, Vector2Int yieldRange)
-            : base(name, initialPrice)
+            : base(name, initialPrice, yieldRange)
         {
-            this.yieldRange = yieldRange;
-            _currentYield = 0;
-        }
-
-        public override void OnTurnStart(System.Random random)
-        {
-            base.OnTurnStart(random);
-            _currentYield = random.Next(yieldRange.x, yieldRange.y + 1);
         }
 
         public override void OnDetail(Action callback)
@@ -174,7 +166,8 @@ namespace Assets
 
         public bool tookOff => _turn >= _turnDelay;
 
-        public AbstractCryptoCurrency(string name, int initialPrice, int turnDelay) : base(name, initialPrice)
+        public AbstractCryptoCurrency(string name, int initialPrice, int turnDelay)
+            : base(name, initialPrice, Vector2Int.zero)
         {
             _turn = 0;
             _turnDelay = turnDelay;

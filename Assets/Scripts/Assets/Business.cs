@@ -7,7 +7,7 @@ namespace Assets
     public abstract class AbstractBusiness : AbstractInvestment
     {
         public override bool returnCapital => false;
-        public AbstractBusiness(string name, int originalPrice, int value, int income)
+        public AbstractBusiness(string name, int originalPrice, int value, Vector2Int income)
             : base(name, originalPrice, value, income)
         {
 
@@ -26,11 +26,9 @@ namespace Assets
             int minIncome,
             int maxIncome,
             int incomeIncrement)
-            : base(description, originalCost, originalCost, 0)
+            : base(description, originalCost, originalCost, new Vector2Int(minIncome, maxIncome))
         {
             this.description = description;
-            _baseIncomeRange = new Vector2Int(minIncome, maxIncome);
-            _incomeIncrement = incomeIncrement;
         }
     }
 
@@ -116,7 +114,7 @@ namespace Assets
             Startup startup,
             int value,
             int income)
-            : base(startup.description, startup.totalCost, value, income)
+            : base(startup.description, startup.totalCost, value, new Vector2Int(income, income))
         {
             this.startup = startup;
             SetName(startup.label);

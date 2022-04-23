@@ -59,7 +59,7 @@ namespace Actions
             else
             {
                 Snapshot snapshot = new Snapshot(player);
-                if (snapshot.actualCashflow >= 0)
+                if (snapshot.totalCashflowRange.x >= 0)
                 {
                     int interst = loanAmount * InterestRateManager.Instance.personalLoanRate / 100;
                     string message = string.Format(

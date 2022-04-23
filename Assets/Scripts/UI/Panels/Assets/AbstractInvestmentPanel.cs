@@ -129,7 +129,7 @@ namespace UI.Panels.Assets
 
             if (_textAnnualIncome != null)
             {
-                _textAnnualIncome.text = getIncomeRangeString(partialAsset.incomeRange);
+                _textAnnualIncome.text = getIncomeRangeString(partialAsset.netIncomeRange);
             }
 
             if (_textTotalLTV != null)

@@ -26,7 +26,8 @@ namespace StateMachine
         private void distributeCashflow()
         {
             GameManager.Instance.player.DistributeCashflow(
-                () => _stateMachine.ChangeState(_stateMachine.YearEndEventState));
+                () => _stateMachine.ChangeState(_stateMachine.YearEndEventState),
+                GameManager.Instance.Random);
         }
 
         private void runPersonalEvent()

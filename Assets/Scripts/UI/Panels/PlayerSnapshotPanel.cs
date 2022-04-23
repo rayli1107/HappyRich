@@ -42,12 +42,12 @@ private System.Action _buyInsuranceAction;
 
             if (_textAge)
             {
-                _textAge.text = snapshot.age.ToString();
+                _textAge.text = player.age.ToString();
             }
 
             if (_textHappiness)
             {
-                _textHappiness.text = snapshot.happiness.ToString();
+                _textHappiness.text = player.happiness.ToString();
             }
 
             if (_textFI)
@@ -58,12 +58,12 @@ private System.Action _buyInsuranceAction;
 
             if (_textCash)
             {
-                _textCash.text = local.GetCurrencyPlain(snapshot.cash);
+                _textCash.text = local.GetCurrencyPlain(player.cash);
             }
 
             if (_textCashflow)
             {
-                _textCashflow.text = local.GetCurrency(snapshot.expectedCashflow, false, true);
+                _textCashflow.text = local.GetIncomeRange(snapshot.totalCashflowRange);
             }
 
             if (_textNetworth)

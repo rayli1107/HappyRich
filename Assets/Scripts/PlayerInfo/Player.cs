@@ -1,4 +1,5 @@
 ﻿using Actions;
+using Assets;
 using PlayerState;
 using ScriptableObjects;
 using System;
@@ -140,14 +141,16 @@ namespace PlayerInfo
             contacts = newContacts;
         }
 
-        public void DistributeCashflow(Action callback)
+        public void DistributeCashflow(Action callback, System.Random random)
         {
-            IncomeExpenseSnapshot snapshot = new IncomeExpenseSnapshot(
-                this, null, null, null);
+            Localization local = Localization.Instance;
+
+            Snapshot snapshot = new Snapshot(this);
             EventLogManager.Instance.Log(
                 () => UI.UIManager.Instance.ShowIncomeExpenseStatusPanel(snapshot),
-                "Distribute Cashflow");
-            int cashflow = new Snapshot(this).actualCashflow;
+                string.Format("Distribute Cashflow {0}", local.GetIncomeRange(snapshot.totalCashflowRange)));
+
+            int cashflow = snapshot.GetActualIncome(random);
             portfolio.AddCash(cashflow);
             callback?.Invoke();
         }

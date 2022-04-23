@@ -9,19 +9,14 @@ using LogContext = System.Tuple<System.Action, string>;
 public class EventSnapshot
 {
     public int cash { get; private set; }
-    public int cashflow { get; private set; }
-    public int networth { get; private set; }
     public int happiness { get; private set; }
-    public int financialIndependenceProgress { get; private set; }
+    public Snapshot snapshot { get; private set; }
 
     public EventSnapshot(Player player)
     {
-        Snapshot snapshot = new Snapshot(player);
-        cash = snapshot.cash;
-        cashflow = snapshot.actualCashflow;
-        networth = snapshot.netWorth;
-        happiness = snapshot.happiness;
-        financialIndependenceProgress = snapshot.financialIndependenceProgress;
+        snapshot = new Snapshot(player);
+        cash = player.cash;
+        happiness = player.happiness;
     }
 }
 

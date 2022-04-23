@@ -16,7 +16,7 @@ namespace Assets
             int marketValue,
             int annualIncome,
             int unitCount)
-            : base("", originalPrice, marketValue, annualIncome)
+            : base("", originalPrice, marketValue, new Vector2Int(annualIncome, annualIncome))
         {
             label = unitCount > 1 ?
                 string.Format(template.label, unitCount) :

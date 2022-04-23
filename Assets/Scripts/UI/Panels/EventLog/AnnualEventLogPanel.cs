@@ -81,7 +81,7 @@ namespace UI.Panels.PlayerDetails
                     _panelFinancialProgress.SetValue(
                         string.Format(
                             "{0}%",
-                            eventLog.yearEndSnapshot.financialIndependenceProgress));
+                            eventLog.yearEndSnapshot.snapshot.financialIndependenceProgress));
                 }
                 else
                 {

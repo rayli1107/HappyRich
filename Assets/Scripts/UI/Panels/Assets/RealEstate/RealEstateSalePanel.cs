@@ -39,6 +39,24 @@ namespace UI.Panels.Assets
             GetComponent<MessageBox>().confirmMessageHandler = GetConfirmMessage;
         }
 
+        protected string getIncomeRangeString(Vector2Int range)
+        {
+            Localization local = Localization.Instance;
+            int incomeLow = range.x;
+            int incomeHigh = range.y;
+            if (incomeLow == incomeHigh)
+            {
+                return local.GetCurrency(incomeLow);
+            }
+            else
+            {
+                return string.Format(
+                    "{0} ~ {1}",
+                    local.GetCurrency(incomeLow),
+                    local.GetCurrency(incomeHigh));
+            }
+        }
+
         public virtual void Refresh()
         {
             if (player == null || asset == null)
@@ -82,7 +100,7 @@ namespace UI.Panels.Assets
 
             if (_textTotalIncome != null)
             {
-                _textTotalIncome.text = local.GetCurrency(asset.totalIncome);
+                _textTotalIncome.text = getIncomeRangeString(asset.totalIncomeRange);
             }
 
             if (_textOriginalPurchasePrice != null)

@@ -78,10 +78,8 @@ namespace UI.Panels.Assets
 
             if (_textAnnualIncome != null)
             {
-                Vector2Int ownerIncomeRange = new Vector2Int(
-                    partialAsset.GetOwnerCashflow(refinancedAsset.incomeRange.x),
-                    partialAsset.GetOwnerCashflow(refinancedAsset.incomeRange.y));
-                _textAnnualIncome.text = getIncomeRangeString(ownerIncomeRange);
+                _textAnnualIncome.text = getIncomeRangeString(
+                    partialAsset.GetOwnerCashflowRange(refinancedAsset.netIncomeRange));
             }
             /*
                         int actualIncome = refinancedAsset.income;

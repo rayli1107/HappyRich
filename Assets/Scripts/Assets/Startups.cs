@@ -24,7 +24,7 @@ namespace Assets
             int duration,
             int loanLtv,
             int maxLoanLtv)
-            : base(description, startupCost, 0, 0)
+            : base(description, startupCost, 0, Vector2Int.zero)
         {
             this.description = description;
             this.label = label;

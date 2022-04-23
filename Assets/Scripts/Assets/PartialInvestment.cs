@@ -42,18 +42,22 @@ namespace Assets
 
         public float investorEquity => investorShares * equityPerShare;
         public Vector2Int investorCashflowRange => new Vector2Int(
-            getInvestorCashflow(asset.incomeRange.x),
-            getInvestorCashflow(asset.incomeRange.y));
-        public int investorCashflow => getInvestorCashflow(asset.income);
-
+            getInvestorCashflow(asset.netIncomeRange.x),
+            getInvestorCashflow(asset.netIncomeRange.y));
         public bool hasInvestors => investorShares > 0;
 
         public int fundsNeeded => asset.downPayment - investorCapital;
         public float equity => 1 - investorEquity;
-        public Vector2Int incomeRange => new Vector2Int(
-            GetOwnerCashflow(asset.incomeRange.x),
-            GetOwnerCashflow(asset.incomeRange.y));
-        public override int expectedIncome => GetOwnerCashflow(asset.incomeRange.x);
+        public override Vector2Int netIncomeRange => GetOwnerCashflowRange(asset.netIncomeRange);
+        public override Vector2Int totalIncomeRange
+        {
+            get
+            {
+                int expense = combinedLiability.expense;
+                Vector2Int netRange = netIncomeRange;
+                return new Vector2Int(netRange.x + expense, netRange.y + expense);
+            }
+        }
 
         public override int value
         {
@@ -81,7 +85,6 @@ namespace Assets
             }
         }
 
-        public override int income => GetOwnerCashflow(asset.income);
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
         public PartialInvestment(
@@ -89,7 +92,7 @@ namespace Assets
             List<InvestmentPartner> partners,
             float equitySplit,
             int maxShares) :
-            base("", 0, 0)
+            base("", 0, Vector2Int.zero)
         {
             this.asset = asset;
             this.equitySplit = equitySplit;
@@ -160,6 +163,21 @@ namespace Assets
         {
             base.OnPurchase();
             asset.OnPurchase();
+/*
+            Localization local = Localization.Instance;
+            Debug.LogFormat(
+                "OnPurchase Partial Expected {0} Actual {1} Expected Total {2} Actual Total {3}",
+                local.GetCurrency(expectedIncome),
+                local.GetCurrency(income),
+                local.GetCurrency(expectedTotalIncome),
+                local.GetCurrency(totalIncome));
+            Debug.LogFormat(
+                "OnPurchase Underlying Expected {0} Actual {1} Expected Total {2} Actual Total {3}",
+                local.GetCurrency(asset.expectedIncome),
+                local.GetCurrency(asset.income),
+                local.GetCurrency(asset.expectedTotalIncome),
+                local.GetCurrency(asset.totalIncome));
+*/
         }
 
         public override void OnPurchaseCancel()
@@ -199,45 +217,38 @@ namespace Assets
                         "Your Asset Value: {0}",
                         local.GetCurrency(value)));
 
-                int incomeLow = incomeRange.x;
-                int incomeHigh = incomeRange.y;
-                if (incomeLow == incomeHigh)
+                string formatted = getFormattedIncomeRange(netIncomeRange);
+                if (formatted != null && formatted.Length > 0)
                 {
-                    if (incomeLow != 0)
-                    {
-                        details.Add(
-                            string.Format(
-                                "Your Profit Share: {0}",
-                                local.GetCurrency(incomeLow)));
-                    }
-                }
-                else
-                {
-                    details.Add(
-                        string.Format(
-                            "Your Profit Share: {0} ~ {1}",
-                            local.GetCurrency(incomeLow),
-                            local.GetCurrency(incomeHigh)));
+                    details.Add(string.Format("Your Profit Share: {0}", formatted));
                 }
             }
             return details;
         }
-
+/*
         public override void OnTurnStart(System.Random random)
         {
             base.OnTurnStart(random);
             asset.OnTurnStart(random);
         }
-
+*/
         private int getInvestorCashflow(int assetIncome)
         {
-            return Mathf.Max(
-                Mathf.FloorToInt(investorEquity * assetIncome), 0);
+            return Mathf.Max(Mathf.FloorToInt(investorEquity * assetIncome), 0);
         }
 
-        public int GetOwnerCashflow(int assetIncome)
+        private Vector2Int getInvestorCashflowRange(Vector2Int range)
         {
-            return assetIncome - getInvestorCashflow(assetIncome);
+            return new Vector2Int(
+                getInvestorCashflow(range.x),
+                getInvestorCashflow(range.y));
+        }
+
+        public Vector2Int GetOwnerCashflowRange(Vector2Int range) 
+        {
+            return new Vector2Int(
+                range.x - getInvestorCashflow(range.x),
+                range.y - getInvestorCashflow(range.y));
         }
     }
 }

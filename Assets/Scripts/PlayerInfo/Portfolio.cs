@@ -10,6 +10,10 @@ using BusinessEntity = System.Tuple<
     Assets.PartialInvestment, Assets.AbstractBusiness>;
 using StartupEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Startup>;
+using AssetTypeEntity = System.Tuple<
+    string, System.Collections.Generic.List<Assets.AbstractAsset>>;
+using System;
+
 namespace PlayerInfo
 {
     public class Portfolio
@@ -17,6 +21,7 @@ namespace PlayerInfo
         public StudentLoan studentLoan { get; private set; }
         public PersonalLoan personalLoan { get; private set; }
         public Car car { get; private set; }
+        public AutoLoan autoLoan { get; private set; }
         public int cash { get; private set; }
         public bool hasHealthInsurance;
 
@@ -94,7 +99,7 @@ namespace PlayerInfo
                 return assets;
             }
         }
-
+/*
         public List<AbstractAsset> assets
         {
             get
@@ -106,6 +111,27 @@ namespace PlayerInfo
                 assets.AddRange(businesses);
                 assets.AddRange(timedInvestments);
                 return assets;
+            }
+        }
+*/
+        public List<AssetTypeEntity> assetsByType 
+        {
+            get
+            {
+                List<AssetTypeEntity> results = new List<AssetTypeEntity>()
+                {
+                    new AssetTypeEntity(
+                        "Real Estate", properties.ConvertAll(a => (AbstractAsset)a)),
+                    new AssetTypeEntity(
+                        "Business", businesses.ConvertAll(a => (AbstractAsset)a)),
+                    new AssetTypeEntity(
+                        "Liquid Assets", liquidAssets.ConvertAll(a => (AbstractAsset)a)),
+                    new AssetTypeEntity(
+                        "Timed Investments", timedInvestments.ConvertAll(a => (AbstractAsset)a)),
+                    new AssetTypeEntity(
+                        "Other Assets", otherAssets.ConvertAll(a => (AbstractAsset)a)),
+                };
+                return results;
             }
         }
 
@@ -136,6 +162,10 @@ namespace PlayerInfo
                 {
                     ret.Add(personalLoan);
                 }
+                if (autoLoan != null && autoLoan.amount > 0)
+                {
+                    ret.Add(autoLoan);
+                }
                 return ret;
             }
         }
@@ -146,6 +176,7 @@ namespace PlayerInfo
             if (profession.autoLoan > 0)
             {
                 car = new Car(profession.autoLoan);
+                autoLoan = new AutoLoan(profession.autoLoan);
             }
 
             if (profession.jobCost > 0)
@@ -241,7 +272,7 @@ namespace PlayerInfo
             }
             stocksDelisted.ForEach(s => stocks.Remove(s));
 
-            assets.ForEach(a => a.OnTurnStart(random));
+//            assets.ForEach(a => a.OnTurnStart(random));
         }
 
         public bool hasHighRiskInvestments

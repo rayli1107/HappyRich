@@ -245,7 +245,7 @@ namespace UI
         }
 
 
-        public void ShowIncomeExpenseStatusPanel(IncomeExpenseSnapshot snapshot)
+        public void ShowIncomeExpenseStatusPanel(Snapshot snapshot)
         {
             IncomeExpenseListPanel panel = Instantiate(_prefabIncomeExpenseListPanel, transform);
             panel.player = GameManager.Instance.player;

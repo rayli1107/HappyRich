@@ -231,4 +231,19 @@ public class Localization : MonoBehaviour
     {
         return string.Format("<b>{0}</b>", s);
     }
+
+    public string GetIncomeRange(Vector2Int range, bool flipped = false)
+    {
+        if (range.x == range.y)
+        {
+            return GetCurrency(range.x, flipped);
+        }
+        else
+        {
+            return string.Format(
+                "{0} ~ {1}",
+                GetCurrency(range.x, flipped),
+                GetCurrency(range.y, flipped));
+        }
+    }
 }

@@ -66,7 +66,7 @@ namespace Assets
             Debug.LogFormat(
                 "Refinance income {0} {1}",
                 distressedAsset.actualIncome,
-                income);
+                Localization.Instance.GetIncomeRange(netIncomeRange));
         }
 
         public override List<string> getPurchaseDetails()

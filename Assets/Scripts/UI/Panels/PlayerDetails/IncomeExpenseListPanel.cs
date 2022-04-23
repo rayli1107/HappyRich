@@ -1,279 +1,14 @@
 ﻿using Actions;
-using Assets;
 using PlayerInfo;
-using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
 
-using ItemValueEntry = System.Tuple<int, string, string, System.Action>;
+using ItemValueEntry = System.Tuple<
+    int, string, UnityEngine.Vector2Int, System.Action>;
 
 namespace UI.Panels.PlayerDetails
 {
-    public class IncomeExpenseSnapshot
-    {
-        public int totalCashflow;
-        public int financialIndependenceProgress;
-        public int totalActiveIncome;
-        public int totalPassiveIncome;
-        public int totalExpenses;
-        public List<ItemValueEntry> itemsActiveIncome;
-        public List<ItemValueEntry> itemsPassiveIncome;
-        public List<ItemValueEntry> itemsExpenses;
-
-        private void AddActiveIncome(Player player)
-        {
-            Localization local = Localization.Instance;
-            int tabCount = 0;
-
-            foreach (ScriptableObjects.Profession income in player.jobs)
-            {
-                totalActiveIncome += income.salary;
-                itemsActiveIncome.Add(
-                    new ItemValueEntry(
-                        tabCount,
-                        income.professionName,
-                        local.GetCurrency(income.salary),
-                        null));
-            }
-
-            if (player.spouse != null && player.spouse.additionalIncome > 0)
-            {
-                totalActiveIncome += player.spouse.additionalIncome;
-                itemsActiveIncome.Add(
-                    new ItemValueEntry(
-                        tabCount,
-                        "Spouse",
-                        local.GetCurrency(player.spouse.additionalIncome),
-                        null));
-            }
-        }
-
-        private void addInvestmentsByType(
-            List<ItemValueEntry> entries,
-            string investmentType,
-            List<AbstractAsset> assets,
-            int tabCount,
-            ref int total,
-            bool positive,
-            Func<AbstractAsset, Action> getClickAction)
-        {
-            Localization local = Localization.Instance;
-            if (positive)
-            {
-                assets = assets.FindAll(a => a.expectedIncome > 0);
-            }
-            else
-            {
-                assets = assets.FindAll(a => a.expectedIncome < 0);
-            }
-
-            if (assets.Count == 0)
-            {
-                return;
-            }
-
-            entries.Add(new ItemValueEntry(tabCount, investmentType, null, null));
-
-            foreach (AbstractAsset asset in assets)
-            {
-                int value = (positive ? 1 : -1) * asset.expectedIncome;
-                total += value;
-                entries.Add(
-                    new ItemValueEntry(
-                        tabCount + 1,
-                        asset.name,
-                        local.GetCurrency(value, !positive),
-                        getClickAction?.Invoke(asset)));
-            }
-        }
-
-        private void AddPassiveIncome(
-            Player player,
-            Func<AbstractAsset, Action> getClickAction)
-        {
-            Localization local = Localization.Instance;
-            int tabCount = 0;
-
-            // Stocks
-            List<PurchasedStock> stocks = new List<PurchasedStock>();
-            foreach (KeyValuePair<string, PurchasedStock> entry in player.portfolio.stocks)
-            {
-                if (entry.Value.expectedIncome > 0)
-                {
-                    stocks.Add(entry.Value);
-                }
-            }
-            if (stocks.Count > 0)
-            {
-                itemsPassiveIncome.Add(
-                    new ItemValueEntry(tabCount, "Liquid Assets", null, null));
-                foreach (PurchasedStock stock in stocks)
-                {
-                    int income = stock.expectedIncome;
-                    totalPassiveIncome += income;
-
-                    itemsPassiveIncome.Add(
-                        new ItemValueEntry(
-                            tabCount + 1,
-                            stock.stock.longName,
-                            local.GetCurrency(income),
-                            getClickAction?.Invoke(stock)));
-                }
-            }
-
-            addInvestmentsByType(
-                itemsPassiveIncome,
-                "Real Estate",
-                player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
-                tabCount,
-                ref totalPassiveIncome,
-                true,
-                getClickAction);
-            addInvestmentsByType(
-                itemsPassiveIncome,
-                "Businesses",
-                player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
-                tabCount,
-                ref totalPassiveIncome,
-                true,
-                getClickAction);
-            addInvestmentsByType(
-                itemsPassiveIncome,
-                "Other Assets",
-                player.portfolio.otherAssets,
-                tabCount,
-                ref totalPassiveIncome,
-                true,
-                getClickAction);
-        }
-
-        private void AddExpenses(
-            Player player,
-            Func<AbstractAsset, Action> getAssetClickAction,
-            Func<AbstractLiability, Action> getLiabilityClickAction,
-            Action healthInsuranceAction)
-        {
-            Localization local = Localization.Instance;
-            int tabCount = 0;
-
-            // Personal Expenses
-            totalExpenses += player.personalExpenses;
-            itemsExpenses.Add(
-                new ItemValueEntry(
-                    tabCount,
-                    "Personal Expenses",
-                    local.GetCurrency(player.personalExpenses, true),
-                    null));
-
-            if (player.spouse != null && player.spouse.additionalExpense > 0)
-            {
-                totalExpenses += player.spouse.additionalExpense;
-                itemsExpenses.Add(
-                    new ItemValueEntry(
-                        tabCount,
-                        "Spouse's Expenses",
-                        local.GetCurrency(player.spouse.additionalExpense, true),
-                        null));
-            }
-
-            // Child Expenses
-            if (player.numChild > 0)
-            {
-                int childCost = player.numChild * player.costPerChild;
-                totalExpenses += childCost;
-                itemsExpenses.Add(
-                    new ItemValueEntry(
-                        tabCount,
-                        "Child Expenses",
-                        local.GetCurrency(childCost, true),
-                        null));
-            }
-
-            if (player.portfolio.hasHealthInsurance)
-            {
-                totalExpenses += PersonalEventManager.Instance.healthInsuranceCost;
-                itemsExpenses.Add(
-                    new ItemValueEntry(
-                        tabCount,
-                        "Health Insurance",
-                        local.GetCurrency(PersonalEventManager.Instance.healthInsuranceCost, true),
-                        healthInsuranceAction));
-            }
-
-            // Assets with negative cashflow
-            addInvestmentsByType(
-                itemsExpenses,
-                "Real Estate",
-                player.portfolio.properties.ConvertAll(p => (AbstractAsset)p),
-                tabCount,
-                ref totalExpenses,
-                false,
-                getAssetClickAction);
-            addInvestmentsByType(
-                itemsExpenses,
-                "Businesses",
-                player.portfolio.businesses.ConvertAll(p => (AbstractAsset)p),
-                tabCount,
-                ref totalExpenses,
-                false,
-                getAssetClickAction);
-            addInvestmentsByType(
-                itemsExpenses,
-                "Other Assets",
-                player.portfolio.otherAssets,
-                tabCount,
-                ref totalExpenses,
-                false,
-                getAssetClickAction);
-
-            // Liabilities
-            List <AbstractLiability> liabilities = player.portfolio.liabilities.FindAll(
-                l => l.expense > 0);
-            if (liabilities.Count > 0)
-            {
-                itemsExpenses.Add(
-                    new ItemValueEntry(
-                        tabCount, "Other Liabilities", null, null));
-                foreach (AbstractLiability liability in liabilities)
-                {
-                    int expense = liability.expense;
-                    if (expense > 0)
-                    {
-                        totalExpenses += expense;
-                        itemsExpenses.Add(
-                            new ItemValueEntry(
-                                tabCount + 1,
-                                liability.shortName,
-                                local.GetCurrency(expense, true),
-                                getLiabilityClickAction?.Invoke(liability)));
-                    }
-                }
-            }
-        }
-
-        public IncomeExpenseSnapshot(
-            Player player,
-            Func<AbstractAsset, Action> getAssetClickAction,
-            Func<AbstractLiability, Action> getLiabilityClickAction,
-            Action healthInsuranceAction)
-        {
-            itemsActiveIncome = new List<ItemValueEntry>();
-            itemsPassiveIncome = new List<ItemValueEntry>();
-            itemsExpenses = new List<ItemValueEntry>();
-
-            AddActiveIncome(player);
-            AddPassiveIncome(player, getAssetClickAction);
-            AddExpenses(
-                player, getAssetClickAction, getLiabilityClickAction, healthInsuranceAction);
-
-            Snapshot snapshot = new Snapshot(player);
-            totalCashflow = snapshot.expectedCashflow;
-            financialIndependenceProgress = snapshot.financialIndependenceProgress;
-        }
-
-    }
-
     public class IncomeExpenseListPanel : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -292,13 +27,24 @@ namespace UI.Panels.PlayerDetails
 #pragma warning restore 0649
 
         public Player player;
-        public IncomeExpenseSnapshot incomeExpenseSnapshot;
+        public Snapshot incomeExpenseSnapshot;
 
         private void setupItemValueList(
             ItemValueListPanel panel,
             List<ItemValueEntry> entries,
             int totalValue,
-            bool positive)
+            bool flipped = false)
+        {
+            setupItemValueList(
+                panel, entries, new Vector2Int(totalValue, totalValue), flipped);
+        }
+
+
+        private void setupItemValueList(
+            ItemValueListPanel panel,
+            List<ItemValueEntry> entries,
+            Vector2Int totalValue,
+            bool flipped = false)
         {
             Localization local = Localization.Instance;
             int tabCount = panel.firstItemValuePanel.tabCount + 1;
@@ -308,7 +54,7 @@ namespace UI.Panels.PlayerDetails
             if (_showTotalValues)
             {
                 panel.firstItemValuePanel.SetValue(
-                    local.GetCurrency(totalValue, !positive));
+                    local.GetIncomeRange(totalValue, flipped));
             }
             else
             {
@@ -317,39 +63,42 @@ namespace UI.Panels.PlayerDetails
 
             foreach (ItemValueEntry entry in entries)
             {
+                Vector2Int incomeRange = entry.Item3;
+                if (incomeRange == Vector2Int.zero)
+                {
+                    continue;
+                }
+
                 ItemValuePanel childPanel = panel.AddItemValue(
                     entry.Item2,
                     tabCount + entry.Item1,
-                    entry.Item3);
+                    local.GetIncomeRange(entry.Item3, flipped));
                 childPanel.clickAction = entry.Item4;
             }
             panel.ActivateIfNonEmpty();
         }
 
-        private void refreshFromSnapshot(IncomeExpenseSnapshot snapshot)
+        private void refreshFromSnapshot(Snapshot snapshot)
         {
             Localization local = Localization.Instance;
             _panelTotalCashflow.SetValue(
-                Localization.Instance.GetCurrency(snapshot.totalCashflow));
-
+                local.GetIncomeRange(snapshot.totalCashflowRange));
             _panelFinancialIndependence.SetValue(
                 string.Format("{0}%", snapshot.financialIndependenceProgress));
 
             setupItemValueList(
                 _panelActiveIncome,
                 snapshot.itemsActiveIncome,
-                snapshot.totalActiveIncome,
-                true);
+                snapshot.totalActiveIncome);
             setupItemValueList(
                 _panelPassiveIncome,
                 snapshot.itemsPassiveIncome,
-                snapshot.totalPassiveIncome,
-                true);
+                snapshot.passiveIncomeRange);
             setupItemValueList(
                 _panelExpenses,
-                snapshot.itemsExpenses,
-                snapshot.totalExpenses,
-                false);
+                snapshot.itemsFixedExpenses,
+                snapshot.totalFixedExpenses,
+                true);
         }
 
         public void RefreshContent()
@@ -366,7 +115,7 @@ namespace UI.Panels.PlayerDetails
             }
 
             refreshFromSnapshot(
-                new IncomeExpenseSnapshot(
+                new Snapshot(
                     player,
                     asset => () => asset.OnDetail(player, reloadWindow),
                     liability => () => liability.OnDetail(player, reloadWindow),

@@ -18,7 +18,7 @@
             PlayerInfo.Snapshot snapshot = new PlayerInfo.Snapshot(player);
 
             if (player.happiness >= GameManager.Instance.requiredHappiness &&
-                snapshot.expectedPassiveIncome >= snapshot.expectedExpenses)
+                snapshot.passiveIncomeRange.x >= snapshot.totalFixedExpenses)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.victory = true;
@@ -26,21 +26,21 @@
                     "retirement age. Congratulations!";
                 _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
-            else if (snapshot.cash <= 0)
+            else if (player.cash <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.victory = false;
                 newParam.message = "You are now financially broke. Game over.";
                 _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
-            else if (snapshot.happiness <= 0)
+            else if (player.happiness <= 0)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.victory = false;
                 newParam.message = "You are really unhappy with your life right now. Game over.";
                 _stateMachine.ChangeState(_stateMachine.GameEndingState, newParam);
             }
-            else if (snapshot.age >= GameManager.Instance.retirementAge)
+            else if (player.age >= GameManager.Instance.retirementAge)
             {
                 StateMachineParameter newParam = new StateMachineParameter();
                 newParam.victory = false;

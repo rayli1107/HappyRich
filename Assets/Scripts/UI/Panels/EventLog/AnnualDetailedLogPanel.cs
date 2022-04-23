@@ -40,17 +40,17 @@ namespace UI.Panels.PlayerDetails
                 int tabCount = panel.firstItemValuePanel.tabCount + 1;
                 panel.Clear();
                 panel.AddItemValue(
-                    "Networth", tabCount, local.GetCurrency(snapshot.networth));
+                    "Networth", tabCount, local.GetCurrency(snapshot.snapshot.netWorth));
                 panel.AddItemValue(
                     "Cash", tabCount, local.GetCurrency(snapshot.cash));
                 panel.AddItemValue(
-                    "Cashflow", tabCount, local.GetCurrency(snapshot.cashflow));
+                    "Cashflow", tabCount, local.GetIncomeRange(snapshot.snapshot.totalCashflowRange));
                 panel.AddItemValue(
                     "Happiness", tabCount, snapshot.happiness);
                 panel.AddItemValue(
                     "Financial Independence",
                     tabCount,
-                    string.Format("{0}%", snapshot.financialIndependenceProgress));
+                    string.Format("{0}%", snapshot.snapshot.financialIndependenceProgress));
             }
         }
 

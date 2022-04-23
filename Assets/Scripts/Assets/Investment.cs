@@ -17,19 +17,10 @@ namespace Assets
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
 
-        protected Vector2Int _baseIncomeRange;
-        protected int _incomeIncrement;
-        protected virtual int _baseIncome { get; private set; }
         public float multiplier;
-        public override int totalIncome => Mathf.FloorToInt(_baseIncome * multiplier);
-        public Vector2Int totalIncomeRange => new Vector2Int(
-            Mathf.FloorToInt(_baseIncomeRange.x * multiplier),
-            Mathf.FloorToInt(_baseIncomeRange.y * multiplier));
-        public override int expectedTotalIncome => totalIncomeRange.x;
-        public Vector2Int incomeRange => new Vector2Int(
-            calculateNetIncome(totalIncomeRange.x),
-            calculateNetIncome(totalIncomeRange.y));
-
+        public override Vector2Int totalIncomeRange => new Vector2Int(
+            Mathf.FloorToInt(base.totalIncomeRange.x * multiplier),
+            Mathf.FloorToInt(base.totalIncomeRange.y * multiplier));
         public AdjustableSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
 
@@ -81,10 +72,9 @@ namespace Assets
             string name,
             int originalPrice,
             int marketValue,
-            int annualIncome)
-            : base(name, marketValue, 0)
+            Vector2Int totalIncomeRange)
+            : base(name, marketValue, totalIncomeRange)
         {
-            _baseIncomeRange = new Vector2Int(annualIncome, annualIncome);
             multiplier = 1;
             this.originalPrice = originalPrice;
             label = name;
@@ -115,62 +105,63 @@ namespace Assets
             ClearPrivateLoan();
         }
 
-        public override void OnTurnStart(System.Random random)
-        {
-            base.OnTurnStart(random);
-            if (_baseIncomeRange.x == _baseIncomeRange.y)
-            {
-                _baseIncome = _baseIncomeRange.x;
-            }
-            else
-            {
-                int x = _baseIncomeRange.x / _incomeIncrement;
-                int y = _baseIncomeRange.y / _incomeIncrement;
-                _baseIncome = random.Next(x, y + 1) * _incomeIncrement;
-                Debug.LogFormat(
-                    "{0} newIncome: {1}", name, _baseIncome);
-            }
-        }
-
-        private List<string> getIncomeRangeDetail(
-            string label, Vector2Int range)
-        {
-            Localization local = Localization.Instance;
-            List<string> details = new List<string>();
-            int incomeLow = range.x;
-            int incomeHigh = range.y;
-            if (incomeLow == incomeHigh)
-            {
-                if (incomeLow != 0)
+        /*
+         * public override void OnTurnStart(System.Random random)
                 {
-                    details.Add(
-                        string.Format(
-                            "{0}: {1}",
-                            label,
-                            local.GetCurrency(incomeLow)));
+                    base.OnTurnStart(random);
+                    if (_baseIncomeRange.x == _baseIncomeRange.y)
+                    {
+                        _baseIncome = _baseIncomeRange.x;
+                    }
+                    else
+                    {
+                        int x = _baseIncomeRange.x / _incomeIncrement;
+                        int y = _baseIncomeRange.y / _incomeIncrement;
+                        _baseIncome = random.Next(x, y + 1) * _incomeIncrement;
+                        Debug.LogFormat(
+                            "{0} newIncome: {1}", name, _baseIncome);
+                    }
                 }
-            }
-            else
-            {
-                details.Add(
-                    string.Format(
-                        "{0}: {1} ~ {2}",
-                        label,
-                        local.GetCurrency(incomeLow),
-                        local.GetCurrency(incomeHigh)));
-            }
-            return details;
-        }
+                private List<string> getIncomeRangeDetail(
+                    string label, Vector2Int range)
+                {
+                    Localization local = Localization.Instance;
+                    List<string> details = new List<string>();
+                    int incomeLow = range.x;
+                    int incomeHigh = range.y;
+                    if (incomeLow == incomeHigh)
+                    {
+                        if (incomeLow != 0)
+                        {
+                            details.Add(
+                                string.Format(
+                                    "{0}: {1}",
+                                    label,
+                                    local.GetCurrency(incomeLow)));
+                        }
+                    }
+                    else
+                    {
+                        details.Add(
+                            string.Format(
+                                "{0}: {1} ~ {2}",
+                                label,
+                                local.GetCurrency(incomeLow),
+                                local.GetCurrency(incomeHigh)));
+                    }
+                    return details;
+                }
 
-        protected override List<string> getTotalIncomeDetails()
-        {
-            return getIncomeRangeDetail("Total Income", totalIncomeRange);
-        }
+                protected override List<string> getTotalIncomeDetails()
+                {
+                    return getIncomeRangeDetail("Total Income", totalIncomeRange);
+                }
 
-        protected override List<string> getNetIncomeDetails()
-        {
-            return getIncomeRangeDetail("Net Income", incomeRange);
-        }
+                protected override List<string> getNetIncomeDetails()
+                {
+                    return getIncomeRangeDetail("Net Income", incomeRange);
+                }
+        */
 
         public string GetActionLabel()
         {

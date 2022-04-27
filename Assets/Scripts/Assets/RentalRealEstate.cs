@@ -7,6 +7,15 @@ namespace Assets
     {
         public override string investmentType => "Rental Real Estate";
 
+        private int _defaultMortgageLtv;
+        private int _maxMortgageLtv;
+
+        protected override void resetLoans()
+        {
+            ClearPrivateLoan();
+            primaryLoan = new Mortgage(this, _defaultMortgageLtv, _maxMortgageLtv, false);
+        }
+
         public RentalRealEstate(
             RealEstateTemplate template,
             int purchasePrice,
@@ -17,7 +26,9 @@ namespace Assets
             int unitCount)
             : base(template, purchasePrice, marketValue, annualIncome, unitCount)
         {
-            primaryLoan = new Mortgage(this, mortgageLtv, maxMortgageLtv, false); ;
+            _defaultMortgageLtv = mortgageLtv;
+            _maxMortgageLtv = maxMortgageLtv;
+            resetLoans();
         }
     }
     
@@ -30,6 +41,25 @@ namespace Assets
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
         public override int loanValue => value;
+
+        private int _maxMortgageLtv;
+        private int _maxPrivateLoanLtv;
+        private List<InvestmentPartner> _debtPartners;
+
+        protected override void resetLoans()
+        {
+            ClearPrivateLoan();
+
+            primaryLoan.setMinimumLoanAmount(originalLoanAmount);
+            primaryLoan.ltv = _maxMortgageLtv;
+
+            int remainingLoanAmount = Mathf.Max(originalLoanAmount - primaryLoan.amount, 0);
+            if (remainingLoanAmount > 0)
+            {
+                AddPrivateLoan(_debtPartners, _maxPrivateLoanLtv);
+                privateLoan.setMinimumLoanAmount(remainingLoanAmount);
+            }
+        }
 
         public RefinancedRealEstate(
             DistressedRealEstate distressedAsset,
@@ -48,16 +78,11 @@ namespace Assets
             originalTotalCost = distressedAsset.totalCost;
             originalLoanAmount = distressedAsset.combinedLiability.amount;
             distressedAsset.ClearPrivateLoan();
+            _maxMortgageLtv = maxMortgageLtv;
+            _maxPrivateLoanLtv = maxPrivateLoanLtv;
+            _debtPartners = debtPartners;
 
-            primaryLoan.setMinimumLoanAmount(originalLoanAmount);
-            primaryLoan.ltv = maxMortgageLtv;
-
-            int remainingLoanAmount = Mathf.Max(originalLoanAmount - primaryLoan.amount, 0);
-            if (remainingLoanAmount > 0)
-            {
-                AddPrivateLoan(debtPartners, maxPrivateLoanLtv);
-                privateLoan.setMinimumLoanAmount(remainingLoanAmount);
-            }
+            resetLoans();
 
             Debug.LogFormat(
                 "Refinance mortgage ltv {0} private loan ltv {1}",

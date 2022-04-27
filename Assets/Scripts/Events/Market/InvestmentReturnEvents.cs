@@ -10,7 +10,7 @@ using UnityEngine;
 using RentalProperty = System.Tuple<
     Assets.PartialInvestment, Assets.RentalRealEstate>;
 using BusinessEntity = System.Tuple<
-    Assets.PartialInvestment, Assets.AbstractBusiness>;
+    Assets.PartialInvestment, Assets.AbstractInvestment>;
 
 namespace Events.Market
 {

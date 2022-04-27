@@ -17,6 +17,20 @@ namespace Assets
             InterestRateManager.Instance.startupPrivateLoanRate;
         public int accruedDelayedInterest => _turn * delayedInterest;
 
+
+        private int _loanLtv;
+        private int _maxLoanLtv;
+
+        protected override void resetLoans()
+        {
+            ClearPrivateLoan();
+            if (_maxLoanLtv > 0)
+            {
+                primaryLoan = new StartupLoan(
+                    this, _loanLtv, _maxLoanLtv, _isDebtInterestDelayed);
+            }
+
+        }
         public Startup(
             string description,
             string label,
@@ -30,11 +44,9 @@ namespace Assets
             this.label = label;
             _duration = duration;
             _turn = 0;
-            if (maxLoanLtv > 0)
-            {
-                primaryLoan = new StartupLoan(
-                    this, loanLtv, maxLoanLtv, _isDebtInterestDelayed);
-            }
+            _loanLtv = loanLtv;
+            _maxLoanLtv = maxLoanLtv;
+            resetLoans();
         }
 
         public void SetName(string name)

@@ -11,7 +11,7 @@ namespace UI.Panels.Assets
     public class AbstractBusinessPurchasePanel : AbstractInvestmentPanel
     {
 
-        protected VariableIncomeBusiness _business;
+        protected AbstractBusiness _business;
 
         public override void Refresh()
         {

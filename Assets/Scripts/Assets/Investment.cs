@@ -99,10 +99,21 @@ namespace Assets
             }
         }
 
+        protected virtual void resetLoans()
+        {
+            ClearPrivateLoan();
+        }
+
+        public override void OnPurchaseStart()
+        {
+            base.OnPurchaseStart();
+            resetLoans();
+        }
+
         public override void OnPurchaseCancel()
         {
             base.OnPurchaseCancel();
-            ClearPrivateLoan();
+            resetLoans();
         }
 
         /*

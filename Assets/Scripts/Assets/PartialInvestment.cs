@@ -182,6 +182,7 @@ namespace Assets
 
         public override void OnPurchaseCancel()
         {
+            Debug.Log("OnPurchaseCancel");
             base.OnPurchaseCancel();
             Reset();
             asset.OnPurchaseCancel();

@@ -193,6 +193,11 @@ namespace Assets
             int availableCash = 0;
             foreach (InvestmentPartner partner in partners)
             {
+                Debug.LogFormat(
+                    "Partner available cash {0} {1}",
+                    partner.name,
+                    Localization.Instance.GetCurrency(partner.cash));
+
                 if (partner.cash > 0)
                 {
                     _investments.Add(new Investment(partner, 0));
@@ -206,6 +211,7 @@ namespace Assets
 
         protected override void AddLoan(int delta)
         {
+            Debug.LogFormat("Add Loan: {0}", Localization.Instance.GetCurrency(delta));
             for (int i = 0; i < _investments.Count && delta > 0; ++i)
             {
                 InvestmentPartner partner = _investments[i].Item1;
@@ -214,6 +220,10 @@ namespace Assets
                 {
                     partner.cash -= partnerAmount;
                     delta -= partnerAmount;
+                    Debug.LogFormat(
+                        "Partner New Cash: {0} {1}",
+                        partner.name,
+                        Localization.Instance.GetCurrency(partner.cash));
 
                     _investments[i] = new Investment(
                         partner, _investments[i].Item2 + partnerAmount);
@@ -223,6 +233,7 @@ namespace Assets
 
         protected override void RemoveLoan(int delta)
         {
+            Debug.LogFormat("Remove Loan: {0}", Localization.Instance.GetCurrency(delta));
             int totalPaidOff = 0;
             for (int i = 0; i < _investments.Count && delta > 0; ++i)
             {
@@ -234,7 +245,11 @@ namespace Assets
                     totalPaidOff += partnerAmount;
                     delta -= partnerAmount;
                     partner.cash += partnerAmount;
- 
+                    Debug.LogFormat(
+                        "Partner New Cash: {0} {1}",
+                        partner.name,
+                        Localization.Instance.GetCurrency(partner.cash));
+
                     _investments[i] = new Investment(
                         partner, _investments[i].Item2 - partnerAmount);
                 }

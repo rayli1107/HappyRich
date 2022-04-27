@@ -45,8 +45,9 @@ namespace UI.Panels.Assets
             {
                 if (player.HasSkill(SkillType.REAL_ESTATE_VALUATION))
                 {
+                    AbstractRealEstate realEstate = (AbstractRealEstate)asset;
                     _textEstimatedValue.text = local.GetCurrencyPlain(
-                        ((AbstractRealEstate)asset).template.basePrice);
+                        realEstate.template.basePrice * realEstate.unitCount);
                 }
                 else
                 {

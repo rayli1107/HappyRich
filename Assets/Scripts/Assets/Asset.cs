@@ -59,6 +59,12 @@ namespace Assets
 
         }
 
+        public virtual void OnPurchaseStart()
+        {
+
+        }
+
+
         public virtual void OnPurchaseCancel()
         {
 

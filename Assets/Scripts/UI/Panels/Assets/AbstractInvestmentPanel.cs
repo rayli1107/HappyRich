@@ -157,6 +157,8 @@ namespace UI.Panels.Assets
                 return;
             }
 
+            partialAsset.OnPurchaseCancel();
+
             Localization local = Localization.Instance;
 
             if (_textPurchasePrice != null)

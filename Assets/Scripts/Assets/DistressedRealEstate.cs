@@ -17,6 +17,24 @@ namespace Assets
         protected override int _privateLoanRate =>
             InterestRateManager.Instance.distressedLoanRate;
 
+        private int _maxMortgageLtv;
+        private int _maxPrivateLoanLtv;
+        private List<InvestmentPartner> _debtPartners;
+        protected override void resetLoans()
+        {
+            ClearPrivateLoan();
+
+            if (_maxMortgageLtv > 0)
+            {
+                primaryLoan = new Mortgage(
+                    this, _maxMortgageLtv, _maxMortgageLtv, true);
+            }
+            else
+            {
+                AddPrivateLoan(_debtPartners, _maxPrivateLoanLtv);
+            }
+        }
+
         public DistressedRealEstate(
             RealEstateTemplate template,
             List<InvestmentPartner> debtPartners,
@@ -32,18 +50,12 @@ namespace Assets
             this.rehabPrice = rehabPrice;
             this.appraisalPrice = appraisalPrice;
             actualIncome = annualIncome;
-
-            if (maxMortgageLtv > 0)
-            {
-                primaryLoan = new Mortgage(this, maxMortgageLtv, maxMortgageLtv, true);
-            }
-            else
-            {
-                AddPrivateLoan(debtPartners, maxPrivateLoanLtv);
-            }
-
+            _maxMortgageLtv = maxMortgageLtv;
+            _maxPrivateLoanLtv = maxPrivateLoanLtv;
+            _debtPartners = debtPartners;
             label = string.Format("Distressed {0}", label);
             description = string.Format("Distressed {0}", description);
+            resetLoans();
         }
 
         public override List<string> getPurchaseDetails()

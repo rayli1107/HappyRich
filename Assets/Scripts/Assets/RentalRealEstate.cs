@@ -48,7 +48,7 @@ namespace Assets
 
         protected override void resetLoans()
         {
-            ClearPrivateLoan();
+            base.resetLoans();
 
             primaryLoan.setMinimumLoanAmount(originalLoanAmount);
             primaryLoan.ltv = _maxMortgageLtv;

@@ -1050,6 +1050,8 @@ MonoBehaviour:
   _professions:
   - {fileID: 11400000, guid: 3c94c11276e8ff3408697d911312f561, type: 2}
   - {fileID: 11400000, guid: bc34682c295f55842abe7f3dc9846bbd, type: 2}
+  _professionTutorial: {fileID: 11400000, guid: 3c94c11276e8ff3408697d911312f561,
+    type: 2}
   _partTimeJobs:
   - {fileID: 11400000, guid: c0a81dc94d1e54e4e9b8e37a0f11b2a5, type: 2}
   - {fileID: 11400000, guid: b70c521c4e9065446abbd6973908c834, type: 2}
@@ -4569,6 +4571,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1228826433}
   m_CullTransparentMesh: 0
+--- !u!114 &1233112661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223656125}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1264579359
 GameObject:
   m_ObjectHideFlags: 0
@@ -5553,6 +5567,8 @@ MonoBehaviour:
   _prefabYieldStockComponent: {fileID: 5277625631823845635, guid: eba5a6b7f7a0ce34a99c175d87006eb1,
     type: 3}
   _prefabCryptoComponent: {fileID: -1981182131328805253, guid: a9b4b1fe707491546baa0c8694117f9e,
+    type: 3}
+  _prefabTutorialFocusPanel: {fileID: 2475880130951957027, guid: b9a1a217135543244a2e3f182e090617,
     type: 3}
   _buttonEndTurnNotReady: {fileID: 630578663}
   _buttonEndTurnReady: {fileID: 1667852064}
@@ -6867,18 +6883,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130936854}
   m_CullTransparentMesh: 0
---- !u!114 &8788763660281005369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8788763660281005371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12d849addec5d7042967e97be50341a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &8788763660281005370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6910,7 +6914,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8788763660281005370}
-  - component: {fileID: 8788763660281005369}
   - component: {fileID: 8788763660281005372}
   m_Layer: 5
   m_Name: Top Level UI Panel
@@ -6939,5 +6942,16 @@ MonoBehaviour:
   _textCash: {fileID: 605392714}
   _textCashflow: {fileID: 2130936857}
   _textNetworth: {fileID: 0}
+  _buttonPlayerDetails: {fileID: 840702281}
+  _buttonAssets: {fileID: 12563516}
+  _buttonIncome: {fileID: 11169102}
+  _buttonHappiness: {fileID: 1077997883}
+  _buttonFire: {fileID: 1289882282}
+  _buttonJobSearch: {fileID: 1679192599}
+  _buttonNetworking: {fileID: 1105718437}
+  _buttonInvestments: {fileID: 2062782877}
+  _buttonSelfImprovement: {fileID: 801112306}
   _buttonBuyInsurance: {fileID: 598892205}
   _buttonCancelInsurance: {fileID: 745812431}
+  _buttonStockBrockerage: {fileID: 1233112661}
+  _buttonEndTurn: {fileID: 1667852064}

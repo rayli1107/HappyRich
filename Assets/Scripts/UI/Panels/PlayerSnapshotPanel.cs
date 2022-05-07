@@ -2,12 +2,13 @@
 using PlayerInfo;
 using ScriptableObjects;
 using TMPro;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panels
 {
-    public class PlayerSnapshotPanel : MonoBehaviour
+    public class PlayerSnapshotPanel : ModalObject
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -27,12 +28,48 @@ namespace UI.Panels
         [SerializeField]
         private TextMeshProUGUI _textNetworth;
         [SerializeField]
+        private Button _buttonPlayerDetails;
+        [SerializeField]
+        private Button _buttonAssets;
+        [SerializeField]
+        private Button _buttonIncome;
+        [SerializeField]
+        private Button _buttonHappiness;
+        [SerializeField]
+        private Button _buttonFire;
+        [SerializeField]
+        private Button _buttonJobSearch;
+        [SerializeField]
+        private Button _buttonNetworking;
+        [SerializeField]
+        private Button _buttonInvestments;
+        [SerializeField]
+        private Button _buttonSelfImprovement;
+        [SerializeField]
         private Button _buttonBuyInsurance;
         [SerializeField]
         private Button _buttonCancelInsurance;
+        [SerializeField]
+        private Button _buttonStockBrockerage;
+        [SerializeField]
+        private Button _buttonEndTurn;
 #pragma warning restore 0649
 
-private System.Action _buyInsuranceAction;
+        public Button buttonPlayerDetails => _buttonPlayerDetails;
+        public Button buttonAssets =>_buttonAssets;
+        public Button buttonIncome => _buttonIncome;
+        public Button buttonHappiness => _buttonHappiness;
+        public Button buttonFire => _buttonFire;
+        public Button buttonJobSearch => _buttonJobSearch;
+        public Button buttonNetworking => _buttonNetworking;
+        public Button buttonInvestments => _buttonInvestments;
+        public Button buttonSelfImprovement => _buttonSelfImprovement;
+        public Button buttonBuyInsurance => _buttonBuyInsurance;
+        public Button buttonCancelInsurance => _buttonCancelInsurance;
+        public Button buttonStockBrockerage => _buttonStockBrockerage;
+        public Button buttonEndTurn => _buttonEndTurn;
+
+        private System.Action _buyInsuranceAction;
         private System.Action _cancelInsuranceAction;
 
         public void UpdatePlayerInfo(Player player)

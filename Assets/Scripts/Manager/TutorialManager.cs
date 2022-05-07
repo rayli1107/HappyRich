@@ -1,9 +1,16 @@
 ﻿using Actions;
+using StateMachine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UI;
+using UI.Panels;
+using UI.Panels.PlayerDetails;
 using UI.Panels.Templates;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class TutorialAction
 {
@@ -37,10 +44,10 @@ public class TutorialManager : MonoBehaviour
 #pragma warning restore 0649
 
     public static TutorialManager Instance { get; private set; }
-    private bool _enableTutorial;
+    public bool tutorialEnabled { get; private set; }
 
     public TutorialAction GameInitOnce { get; private set; }
-    public TutorialAction GameStartOnce { get; private set; }
+    //public TutorialAction GameStartOnce { get; private set; }
     public TutorialAction InvestmentOnce { get; private set; }
     public TutorialAction JobSearchOnce { get; private set; }
     public TutorialAction SelfImprovementOnce { get; private set; }
@@ -49,19 +56,20 @@ public class TutorialManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _enableTutorial = false;
+        tutorialEnabled = false;
 
         GameInitOnce = new TutorialAction(GetGameInitMessageAction);
-        GameStartOnce = new TutorialAction(GetGameStartMessageAction);
+        //GameStartOnce = new TutorialAction(GetGameStartMessageAction);
         InvestmentOnce = new TutorialAction(GetInvestmentAction);
         JobSearchOnce = new TutorialAction(GetJobSearchAction);
         SelfImprovementOnce = new TutorialAction(GetSelfImprovementAction);
         NetworkingOnce = new TutorialAction(GetNetworkingAction);
     }
 
+
     private void enableTutorialMessageHandler(ButtonType button, Action callback)
     {
-        _enableTutorial = button == ButtonType.OK;
+        tutorialEnabled = button == ButtonType.OK;
         callback?.Invoke();
     }
 
@@ -75,7 +83,7 @@ public class TutorialManager : MonoBehaviour
 
     private void showTutorialMessage(bool force, List<string> messages, Action callback)
     {
-        bool enable = force || _enableTutorial;
+        bool enable = force || tutorialEnabled;
         if (enable && messages != null)
         {
             MessageAction.GetAction(messages, _tutorialFontSize, _spriteAsset)?.Invoke(callback);
@@ -128,6 +136,8 @@ public class TutorialManager : MonoBehaviour
         showTutorialMessage(force, messages, cb);
     }
 
+
+
     public void GetJobSearchAction(bool force, Action cb)
     {
         Localization local = Localization.Instance;
@@ -173,4 +183,85 @@ public class TutorialManager : MonoBehaviour
 
         showTutorialMessage(force, messages, cb);
     }
+
+    private IEnumerator waitForPlayerTurn()
+    {
+        while (true) {
+            IState currentState = GameManager.Instance.StateMachine.currentState;
+            if (currentState is PlayerActionState &&
+                ((PlayerActionState)currentState).playerStartReady)
+            {
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator waitForTopPanel<PanelType>()
+    {
+        while (UIManager.Instance.topModalObject.GetComponent<PanelType>() == null)
+        {
+            yield return null;
+        }
+    }
+
+    private IEnumerator waitForButtonClick(ModalObject panel, Button button, string text)
+    {
+        TutorialFocusPanel focusPanel = UIManager.Instance.ShowTutorialFocusPanel();
+        focusPanel.focusPosition = button.transform.position;
+        focusPanel.text.text = text;
+        focusPanel.text.spriteAsset = _spriteAsset;
+
+        List<Button> buttonsDisabled = panel.DisableButtons(button);
+        bool clicked = false;
+        UnityAction action = new UnityAction(() => clicked = true);
+        button.onClick.AddListener(action);
+        while (!clicked)
+        {
+            yield return null;
+        }
+        button.onClick.RemoveListener(action);
+        panel.EnableButtons(buttonsDisabled);
+        Destroy(focusPanel.gameObject);
+    }
+
+
+    private IEnumerator tutorialScript()
+    {
+        PlayerSnapshotPanel snapshotPanel = null;
+        yield return StartCoroutine(waitForPlayerTurn());
+
+        // Assets & Liability List
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonAssets,
+                "The <sprite name=\"Cash\"> icon represents your current <b>Available Cash</b>. " +
+                "You can click on the button to view your current <b>Assets and Liabilities</b>."));
+        yield return waitForTopPanel<AssetLiabilityListPanel>();
+
+        // Income Expense List
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonIncome,
+                "The <sprite name=\"Cashflow\"> icon represents your <b>Annual Cashflow</b>. " +
+                "You can click on the button to view your current <b>Income and Expenses</b>."));
+        yield return waitForTopPanel<IncomeExpenseListPanel>();
+
+    }
+
+    public void StartTutorialScript(Action cb)
+    {
+        if (tutorialEnabled)
+        {
+            StartCoroutine(tutorialScript());
+        }
+        cb?.Invoke();
+    }
+
 }

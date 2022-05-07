@@ -89,6 +89,8 @@ namespace UI
         [SerializeField]
         private CryptoComponent _prefabCryptoComponent;
         [SerializeField]
+        private TutorialFocusPanel _prefabTutorialFocusPanel;
+        [SerializeField]
         private Button _buttonEndTurnNotReady;
         [SerializeField]
         private Button _buttonEndTurnReady;
@@ -96,6 +98,9 @@ namespace UI
 
         public static UIManager Instance { get; private set; }
         public bool ready { get; private set; }
+
+        public ModalObject topModalObject =>
+            _modalObjects.Count == 0 ? null : _modalObjects[_modalObjects.Count - 1];
 
         private List<ModalObject> _modalObjects;
         private EventSystem _eventSystem;
@@ -637,6 +642,13 @@ namespace UI
                 string message = "You haven't done anything this year yet. Are you sure you want to end your turn?";
                 ShowSimpleMessageBox(message, ButtonChoiceType.OK_CANCEL, onEndTurnConfirm);
             }
+        }
+
+        public TutorialFocusPanel ShowTutorialFocusPanel()
+        {
+            TutorialFocusPanel panel = Instantiate(_prefabTutorialFocusPanel, transform);
+            panel.gameObject.SetActive(true);
+            return panel;
         }
     }
 }

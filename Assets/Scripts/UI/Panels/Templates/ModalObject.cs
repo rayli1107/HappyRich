@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panels.Templates
@@ -21,12 +22,25 @@ namespace UI.Panels.Templates
         public virtual void EnableInput(bool enable)
         {
             _enableInput = enable;
-/*
-            foreach (Button button in GetComponentsInChildren<Button>())
+        }
+
+        public List<Button> DisableButtons(Button exception)
+        {
+            List<Button> buttonsDisabled = new List<Button>();
+            foreach (Button button in GetComponentsInChildren<Button>(true))
             {
-                button.enabled = enable;
+                if (button != exception)
+                {
+                    button.enabled = false;
+                    buttonsDisabled.Add(button);
+                }
             }
-*/
+            return buttonsDisabled;
+        }
+
+        public void EnableButtons(List<Button> buttons)
+        {
+            buttons.ForEach(b => b.enabled = true);
         }
 
         public void Destroy()

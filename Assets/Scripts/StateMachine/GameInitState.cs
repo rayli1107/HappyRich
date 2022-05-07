@@ -36,6 +36,7 @@ namespace StateMachine
             List<Action<Action>> actions = new List<Action<Action>>()
             {
                 TutorialManager.Instance.GetEnableTutorialAction(),
+                TutorialManager.Instance.StartTutorialScript,
                 TutorialManager.Instance.GameInitOnce.Run
             };
             CompositeActions.GetAndAction(actions)?.Invoke(

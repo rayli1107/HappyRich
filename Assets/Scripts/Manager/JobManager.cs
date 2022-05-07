@@ -9,6 +9,8 @@ public class JobManager : MonoBehaviour
     [SerializeField]
     private Profession[] _professions;
     [SerializeField]
+    private Profession _professionTutorial;
+    [SerializeField]
     private Profession[] _partTimeJobs;
     [SerializeField]
     private float _applyOldJobSuccessChance = 0.5f;
@@ -43,7 +45,14 @@ public class JobManager : MonoBehaviour
     public List<Profession> GetInitialProfessionList(System.Random random)
     {
         List<Profession> professions = new List<Profession>();
-        professions.AddRange(_professions);
+        if (TutorialManager.Instance.tutorialEnabled)
+        {
+            professions.Add(_professionTutorial);
+        }
+        else
+        {
+            professions.AddRange(_professions);
+        }
         return professions;
     }
 

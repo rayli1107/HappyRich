@@ -15,8 +15,9 @@ namespace UI
         private float _screenWidth = 800f;
 #pragma warning restore 0649
 
-        private Rect _prevSafeArea;
+        public Action canvasUpdateAction;
 
+        private Rect _prevSafeArea;
         private void UpdateCanvasSize()
         {
             float x = Screen.safeArea.x;
@@ -49,7 +50,7 @@ namespace UI
             rect.offsetMax = Vector2.zero;
 
 /*
- * Debug.LogFormat("device factor {0}", deviceFactor);
+            Debug.LogFormat("device factor {0}", deviceFactor);
             Debug.LogFormat(
                 "RectTransform rect {0}", rect.rect);
             Debug.LogFormat(
@@ -64,8 +65,6 @@ namespace UI
             float scaledWidth = _screenWidth / w;
             CanvasScaler scaler = GetComponentInParent<CanvasScaler>();
             scaler.referenceResolution = new Vector2(scaledWidth, scaledWidth);
-
-
         }
 
         private void Awake()
@@ -85,6 +84,7 @@ namespace UI
                     Screen.height,
                     Screen.safeArea);
                 UpdateCanvasSize();
+                canvasUpdateAction?.Invoke();
             }
         }
     }

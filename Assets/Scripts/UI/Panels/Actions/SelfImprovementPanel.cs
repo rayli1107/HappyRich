@@ -87,7 +87,7 @@ namespace UI.Panels.Actions
 
         private void OnEnable()
         {
-            _tutorialAction.Run(null);
+//            _tutorialAction.Run(null);
         }
     }
 }

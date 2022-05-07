@@ -6,15 +6,18 @@ namespace StateMachine
 {
     public class PlayerActionState : IState
     {
+        public bool playerStartReady { get; private set; }
         private StateMachine _stateMachine;
 
         public PlayerActionState(StateMachine stateMachine)
         {
             _stateMachine = stateMachine;
+            playerStartReady = false;
         }
 
         public void EnterState(StateMachineParameter param)
         {
+            playerStartReady = false;
             UI.UIManager.Instance.ShowTimedTransitionScreen(
                 "Player's Turn", Color.green, onPlayerStart);
         }
@@ -27,8 +30,9 @@ namespace StateMachine
             JobManager.Instance.OnPlayerTurnStart(GameManager.Instance.Random);
             SkillManager.Instance.OnPlayerTurnStart(player, GameManager.Instance.Random);
             UI.UIManager.Instance.UpdatePlayerInfo(player);
-            TutorialManager.Instance.GameStartOnce.Run(null);
+//            TutorialManager.Instance.GameStartOnce.Run(null);
             EventLogManager.Instance.OnTurnStart(player);
+            playerStartReady = true;
         }
 
         public void ExitState()

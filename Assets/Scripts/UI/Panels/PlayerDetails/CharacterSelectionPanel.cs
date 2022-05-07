@@ -30,6 +30,10 @@ namespace UI.Panels.PlayerDetails
         private TextMeshProUGUI _textStudentLoan;
         [SerializeField]
         private TextMeshProUGUI _textChildExpenses;
+        [SerializeField]
+        private Button _buttonNext;
+        [SerializeField]
+        private Button _buttonPrev;
 #pragma warning restore 0649
 
         public List<Profession> professions;
@@ -86,6 +90,16 @@ namespace UI.Panels.PlayerDetails
                 if (_textChildExpenses != null)
                 {
                     _textChildExpenses.text = local.GetCurrency(profession.costPerChild, true);
+                }
+
+                if (_buttonNext != null)
+                {
+                    _buttonNext.gameObject.SetActive(professions.Count > 1);
+                }
+
+                if (_buttonPrev != null)
+                {
+                    _buttonPrev.gameObject.SetActive(professions.Count > 1);
                 }
             }
         }

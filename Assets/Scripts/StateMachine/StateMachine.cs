@@ -26,7 +26,7 @@ namespace StateMachine
         public YearStartState YearStartState { get; private set; }
         public GameExitState GameExitState { get; private set; }
 
-        private IState _currentState;
+        public IState currentState { get; private set; }
 
         public StateMachine()
         {
@@ -45,40 +45,40 @@ namespace StateMachine
             YearEndEventState = new YearEndEventState(this);
             YearStartState = new YearStartState(this);
 
-            _currentState = GameInitState;
+            currentState = GameInitState;
         }
 
         public void Start(StateMachineParameter param)
         {
-            _currentState.EnterState(param);
+            currentState.EnterState(param);
         }
 
         public void ChangeState(IState newState, StateMachineParameter param = null)
         {
-            if (_currentState != null)
+            if (currentState != null)
             {
-                _currentState.ExitState();
+                currentState.ExitState();
             }
-//            Debug.LogFormat("State: {0}", newState.GetType().Name);
-            _currentState = newState;
+            //            Debug.LogFormat("State: {0}", newState.GetType().Name);
+            currentState = newState;
 
-            if (_currentState != null)
+            if (currentState != null)
             {
-                _currentState.EnterState(param);
+                currentState.EnterState(param);
             }
         }
 
         public void Update()
         {
-            if (_currentState != null)
+            if (currentState != null)
             {
-                _currentState.Update();
+                currentState.Update();
             }
         }
 
         public bool CheckState(IState state)
         {
-            return _currentState == state;
+            return currentState == state;
         }
 
         public void OnPlayerActionDone()

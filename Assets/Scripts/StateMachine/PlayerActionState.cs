@@ -27,7 +27,7 @@ namespace StateMachine
         {
             Player player = GameManager.Instance.player;
             player.OnPlayerTurnStart(GameManager.Instance.Random);
-            JobManager.Instance.OnPlayerTurnStart(GameManager.Instance.Random);
+            JobManager.Instance.OnPlayerTurnStart(player, GameManager.Instance.Random);
             SkillManager.Instance.OnPlayerTurnStart(player, GameManager.Instance.Random);
             UI.UIManager.Instance.UpdatePlayerInfo(player);
 //            TutorialManager.Instance.GameStartOnce.Run(null);

@@ -22,9 +22,12 @@ public class MarketEventManager : MonoBehaviour
 
     public static MarketEventManager Instance { get; private set; }
 
+    private LinkedList<Func<Player, System.Random, Action<Action>>> _tutorialActions;
+
     private void Awake()
     {
         Instance = this;
+        _tutorialActions = new LinkedList<Func<Player, System.Random, Action<Action>>>();
     }
 
     private Action<Action> getRandomEvent(
@@ -47,6 +50,14 @@ public class MarketEventManager : MonoBehaviour
         Player player = GameManager.Instance.player;        
         System.Random random = GameManager.Instance.Random;
 
+        if (_tutorialActions.Count > 0)
+        {
+            Func<Player, System.Random, Action<Action>> getEventFn =
+                _tutorialActions.First.Value;
+            _tutorialActions.RemoveFirst();
+            return getEventFn(player, random);
+        }
+
         List<Action<Action>> allEvents = new List<Action<Action>>();
         if (_enableInvestmentEvents)
         {
@@ -66,5 +77,9 @@ public class MarketEventManager : MonoBehaviour
         }
         Action <Action> marketEvent = getRandomEvent(allEvents, random);
         return marketEvent == null ? cb => noOpEvent(cb) : marketEvent;
+    }
+
+    public void EnableTutorialActions()
+    {
     }
 }

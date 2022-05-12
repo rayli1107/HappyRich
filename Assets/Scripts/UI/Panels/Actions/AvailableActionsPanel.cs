@@ -36,7 +36,7 @@ namespace UI.Panels.Assets
         public Player player;
         public int maxAllowed = -1;
         public Func<string> getLabelFn;
-        private List<Button> _buyActionButtons;
+        public List<Button> buyActionButtons { get; private set; }
         private int _resolved;
 
         private void Awake()
@@ -46,9 +46,9 @@ namespace UI.Panels.Assets
 
         private void buyCallback(int index, bool success)
         {
-            if (success && index < _buyActionButtons.Count)
+            if (success && index < buyActionButtons.Count)
             {
-                _buyActionButtons[index].gameObject.SetActive(false);
+                buyActionButtons[index].gameObject.SetActive(false);
                 ++_resolved;
             }
 
@@ -56,7 +56,7 @@ namespace UI.Panels.Assets
             {
                 GetComponent<MessageBox>().OnButtonOk();
             }
-            else if (!_buyActionButtons.Exists(b => b.gameObject.activeInHierarchy))
+            else if (!buyActionButtons.Exists(b => b.gameObject.activeInHierarchy))
             {
                 GetComponent<MessageBox>().OnButtonCancel();
             }
@@ -93,7 +93,7 @@ namespace UI.Panels.Assets
             }
 
             Localization local = Localization.Instance;
-            _buyActionButtons = new List<Button>();
+            buyActionButtons = new List<Button>();
             for (int i = 0; i < buyActions.Count; ++i)
             {
                 int index = i;
@@ -104,7 +104,7 @@ namespace UI.Panels.Assets
                 button.onClick.AddListener(new UnityEngine.Events.UnityAction(buyAction));
                 button.transform.SetSiblingIndex(index + 1);
                 button.gameObject.SetActive(true);
-                _buyActionButtons.Add(button);
+                buyActionButtons.Add(button);
             }
 
             Refresh();
@@ -114,7 +114,7 @@ namespace UI.Panels.Assets
         {
             if (buttonType == ButtonType.CANCEL)
             {
-                return _buyActionButtons.Exists(b => b.gameObject.activeInHierarchy) ?
+                return buyActionButtons.Exists(b => b.gameObject.activeInHierarchy) ?
                     "Pass on these opportunities?" : "";
             }
             return "";

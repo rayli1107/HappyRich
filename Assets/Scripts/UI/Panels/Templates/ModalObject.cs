@@ -24,25 +24,6 @@ namespace UI.Panels.Templates
             _enableInput = enable;
         }
 
-        public List<Button> DisableButtons(Button exception)
-        {
-            List<Button> buttonsDisabled = new List<Button>();
-            foreach (Button button in GetComponentsInChildren<Button>(true))
-            {
-                if (button != exception)
-                {
-                    button.enabled = false;
-                    buttonsDisabled.Add(button);
-                }
-            }
-            return buttonsDisabled;
-        }
-
-        public void EnableButtons(List<Button> buttons)
-        {
-            buttons.ForEach(b => b.enabled = true);
-        }
-
         public void Destroy()
         {
             gameObject.SetActive(false);

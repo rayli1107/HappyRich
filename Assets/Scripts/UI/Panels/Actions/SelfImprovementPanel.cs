@@ -5,11 +5,23 @@ using System.Collections.Generic;
 using UI.Panels.Assets;
 using UI.Panels.Templates;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Actions
 {
     public class SelfImprovementPanel : MonoBehaviour
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private Button _buttonSelfReflection;
+        [SerializeField]
+        private Button _buttonTraining;
+#pragma warning restore 0649
+
+        public Button buttonSelfReflection => _buttonSelfReflection;
+        public Button buttonTraining => _buttonTraining;
+
+
         public Player player;
         private TutorialAction _tutorialAction => TutorialManager.Instance.SelfImprovementOnce;
 

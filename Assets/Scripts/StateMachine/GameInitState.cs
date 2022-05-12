@@ -24,6 +24,16 @@ namespace StateMachine
         {
         }
 
+        private void setupTutorial(Action cb)
+        {
+            if (TutorialManager.Instance.tutorialEnabled)
+            {
+                PersonalEventManager.Instance.EnableTutorialActions();
+                MarketEventManager.Instance.EnableTutorialActions();
+            }
+            cb?.Invoke();
+        }
+
         private void runInit()
         {
             RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
@@ -37,6 +47,7 @@ namespace StateMachine
             {
                 TutorialManager.Instance.GetEnableTutorialAction(),
                 TutorialManager.Instance.StartTutorialScript,
+                setupTutorial,
                 TutorialManager.Instance.GameInitOnce.Run
             };
             CompositeActions.GetAndAction(actions)?.Invoke(

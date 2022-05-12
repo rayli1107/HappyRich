@@ -1,14 +1,25 @@
 ﻿using Actions;
 using PlayerInfo;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Actions
 {
     public class JobSearchPanel : MonoBehaviour
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private Button _buttonNewJob;
+        [SerializeField]
+        private Button _buttonOldJob;
+#pragma warning restore 0649
+
         public Player player;
 
         private TutorialAction _tutorialAction => TutorialManager.Instance.JobSearchOnce;
+        public Button buttonNewJob => _buttonNewJob;
+        public Button buttonOldJob => _buttonOldJob;
+        
 
         public void OnNewJobButton()
         {

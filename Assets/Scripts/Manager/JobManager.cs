@@ -1,5 +1,6 @@
 ﻿using PlayerInfo;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,9 +27,9 @@ public class JobManager : MonoBehaviour
     private int _maxAllowedJobs = 2;
 #pragma warning restore 0649
 
-/*    public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
-    public float applyNewJobSuccessChance => _applyNewJobSuccessChance;
-*/
+    /*    public float applyOldJobSuccessChance => _applyOldJobSuccessChance;
+        public float applyNewJobSuccessChance => _applyNewJobSuccessChance;
+    */
     public int maxAllowedJobs => _maxAllowedJobs;
 
     private Profession _currentFullTime;
@@ -61,11 +62,12 @@ public class JobManager : MonoBehaviour
         return _professions[random.Next(_professions.Length)];
     }
 
-    public void OnPlayerTurnStart(System.Random random)
+    public void OnPlayerTurnStart(Player player, System.Random random)
     {
         _currentFullTime = _professions[random.Next(_professions.Length)];
 
         List<Profession> availableJobs = new List<Profession>(_partTimeJobs);
+        availableJobs.RemoveAll(j => player.jobs.Contains(j));
         _currentPartTimes.Clear();
         while (_currentPartTimes.Count < _numberOfChoices && availableJobs.Count > 0)
         {
@@ -99,5 +101,13 @@ public class JobManager : MonoBehaviour
         return player.oldJobs.Contains(job) ?
             _applyOldJobSuccessChance :
             _applyNewJobSuccessChance;
+    }
+
+    public void ReplaceTutorialJobs(Profession[] partTimeJobs)
+    {
+        for (int i = 0; i < _currentPartTimes.Count && i < partTimeJobs.Length; ++i)
+        {
+            _currentPartTimes[i] = partTimeJobs[i];
+        }
     }
 }

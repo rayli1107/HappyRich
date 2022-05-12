@@ -64,6 +64,13 @@ namespace UI.Panels.Templates
         private GameObject _buttonHelp;
 #pragma warning restore 0649
 
+        public Button buttonOk => _buttonOk.GetComponentInChildren<Button>();
+        public Button buttonCancel => _buttonCancel.GetComponentInChildren<Button>();
+        public Button buttonBack => _buttonBack.GetComponentInChildren<Button>();
+        public Button buttonDetails => _buttonDetails.GetComponentInChildren<Button>();
+        public Button buttonHelp => _buttonHelp.GetComponentInChildren<Button>();
+
+
         private void enableButton(GameObject button, Action action)
         {
             button.gameObject.SetActive(action != null);

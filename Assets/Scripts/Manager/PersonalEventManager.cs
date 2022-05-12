@@ -27,9 +27,13 @@ public class PersonalEventManager : MonoBehaviour
     public int healthInsuranceCost => _healthInsuranceCost;
     public int insuranceOutOfPocket => _insuranceOutOfPocket;
 
+    private LinkedList<Func<Player, System.Random, Action<Action>>> _tutorialActions;
+
     private void Awake()
     {
         Instance = this;
+        _tutorialActions = new LinkedList<
+            Func<Player, System.Random, Action<Action>>>();
     }
 
     public int GetLotteryWinning(System.Random random)
@@ -99,6 +103,14 @@ public class PersonalEventManager : MonoBehaviour
         Player player = GameManager.Instance.player;
         System.Random random = GameManager.Instance.Random;
 
+        if (_tutorialActions.Count > 0)
+        {
+            Func<Player, System.Random, Action<Action>> getEventFn =
+                _tutorialActions.First.Value;
+            _tutorialActions.RemoveFirst();
+            return getEventFn(player, random);
+        }
+
         List<Action<Action>> allEvents = new List<Action<Action>>();
         allEvents.Add(getBadEvent(player, random));
         allEvents.Add(getGoodEvent(player, random));
@@ -112,5 +124,12 @@ public class PersonalEventManager : MonoBehaviour
 
         allEvents = allEvents.FindAll(e => e != null);
         return CompositeActions.GetRandomAction(allEvents, random);
+    }
+
+    public void EnableTutorialActions()
+    {
+        _tutorialActions.AddLast(JobBonusEvent.GetEvent);
+        _tutorialActions.AddLast(PersonalAccidentEvent.GetEvent);
+        _tutorialActions.AddLast(getFamilyEvent);
     }
 }

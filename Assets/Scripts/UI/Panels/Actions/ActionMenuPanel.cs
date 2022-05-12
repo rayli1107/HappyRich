@@ -49,8 +49,8 @@ namespace UI.Panels.Actions
         {
             foreach (Button button in GetComponentsInChildren<Button>())
             {
-                button.GetComponent<Image>().alphaHitTestMinimumThreshold = _alphaHitThreshold;
-                checkLocation(button.GetComponent<RectTransform>());
+//                button.GetComponent<Image>().alphaHitTestMinimumThreshold = _alphaHitThreshold;
+//                checkLocation(button.GetComponent<RectTransform>());
             }
         }
 

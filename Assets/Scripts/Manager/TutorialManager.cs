@@ -1,4 +1,5 @@
 ﻿using Actions;
+using ScriptableObjects;
 using StateMachine;
 using System;
 using System.Collections;
@@ -6,6 +7,8 @@ using System.Collections.Generic;
 using TMPro;
 using UI;
 using UI.Panels;
+using UI.Panels.Actions;
+using UI.Panels.Assets;
 using UI.Panels.PlayerDetails;
 using UI.Panels.Templates;
 using UnityEngine;
@@ -41,6 +44,8 @@ public class TutorialManager : MonoBehaviour
     private TMP_SpriteAsset _spriteAsset;
     [SerializeField]
     private int _tutorialFontSize = 40;
+    [SerializeField]
+    private Profession[] _tutorialPartTimeJobs;
 #pragma warning restore 0649
 
     public static TutorialManager Instance { get; private set; }
@@ -101,7 +106,7 @@ public class TutorialManager : MonoBehaviour
         {
             "The <sprite name=\"Cash\"> icon represents your <b>current available cash</b>, " +
             " and the <sprite name=\"Cashflow\"> icon represents your <b>annual cahsflow</b>.",
-
+             
             "The <sprite name=\"Happiness\"> icon represents your <b>total happiness</b>, " +
             "and the <sprite name=\"Fire\"> icon represents your progress towards " +
             "<b>financial indepence</b>.",
@@ -184,15 +189,18 @@ public class TutorialManager : MonoBehaviour
         showTutorialMessage(force, messages, cb);
     }
 
-    private IEnumerator waitForPlayerTurn()
+    private IEnumerator waitForState<StateType>(Func<IState, bool> check = null)
     {
         while (true) {
             IState currentState = GameManager.Instance.StateMachine.currentState;
-            if (currentState is PlayerActionState &&
-                ((PlayerActionState)currentState).playerStartReady)
+            if (currentState is StateType)
             {
-                break;
+                if (check == null || check.Invoke(currentState))
+                {
+                    break;
+                }
             }
+//                ((PlayerActionState)currentState).playerStartReady)
             yield return null;
         }
     }
@@ -205,14 +213,24 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private IEnumerator waitForButtonClick(ModalObject panel, Button button, string text)
+    private IEnumerator waitForButtonClick(MonoBehaviour panel, Button button, string text, bool recover=true)
     {
         TutorialFocusPanel focusPanel = UIManager.Instance.ShowTutorialFocusPanel();
         focusPanel.focusPosition = button.transform.position;
         focusPanel.text.text = text;
         focusPanel.text.spriteAsset = _spriteAsset;
 
-        List<Button> buttonsDisabled = panel.DisableButtons(button);
+        // Disable all buttons
+        List<Button> buttonsDisabled = new List<Button>();
+        foreach (Button otherButton in panel.GetComponentsInChildren<Button>(true))
+        {
+            if (otherButton != button)
+            {
+                otherButton.interactable = false;
+                buttonsDisabled.Add(otherButton);
+            }
+        }
+
         bool clicked = false;
         UnityAction action = new UnityAction(() => clicked = true);
         button.onClick.AddListener(action);
@@ -221,15 +239,37 @@ public class TutorialManager : MonoBehaviour
             yield return null;
         }
         button.onClick.RemoveListener(action);
-        panel.EnableButtons(buttonsDisabled);
+        if (recover)
+        {
+            buttonsDisabled.ForEach(b => b.interactable = true);
+        }
         Destroy(focusPanel.gameObject);
     }
 
+    private IEnumerator waitForButton(MessageBoxHandler handler)
+    {
+        yield return waitForTopPanel<SimpleTextMessageBox>();
+        SimpleTextMessageBox messageBox =
+            UIManager.Instance.topModalObject.GetComponent<SimpleTextMessageBox>();
+        bool done = false;
 
-    private IEnumerator tutorialScript()
+        MessageBoxHandler oldHandler = messageBox.messageBoxHandler;
+        messageBox.messageBoxHandler = b =>
+        {
+            handler?.Invoke(b);
+            oldHandler?.Invoke(b);
+            done = true;
+        };
+        while (!done)
+        {
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator tutorialScriptPlayerStatus()
     {
         PlayerSnapshotPanel snapshotPanel = null;
-        yield return StartCoroutine(waitForPlayerTurn());
 
         // Assets & Liability List
         yield return waitForTopPanel<PlayerSnapshotPanel>();
@@ -253,6 +293,127 @@ public class TutorialManager : MonoBehaviour
                 "You can click on the button to view your current <b>Income and Expenses</b>."));
         yield return waitForTopPanel<IncomeExpenseListPanel>();
 
+        // Happiness
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonHappiness,
+                "The <sprite name=\"Happiness\"> icon represents your <b>Total Happiness</b> " +
+                "You can click on the button to view your current <b>Happiness Modifiers</b>."));
+        yield return waitForTopPanel<HappinessListPanel>();
+
+        // Financial Independence Progress
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonFire,
+                "The <sprite name=\"Fire\"> icon represents your progress towards " +
+                "<b>Financial Independence</b>, which is achieved once your " +
+                "<b>Passive Income</b> exceeds your <b>Total Expenses</b>."));
+        yield return waitForTopPanel<IncomeExpenseListPanel>();
+    }
+
+    private IEnumerator tutorialScriptFirstYear()
+    {
+        JobManager.Instance.ReplaceTutorialJobs(_tutorialPartTimeJobs);
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        PlayerSnapshotPanel snapshotPanel =
+            UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonJobSearch,
+                "You can only perform one <b>Action</b> every year. First we are going to " +
+                "find a part time job to help improve our <b>Annual Income.</b>"));
+
+        yield return waitForTopPanel<JobSearchPanel>();
+        JobSearchPanel jobSearchPanel =
+            UIManager.Instance.topModalObject.GetComponent<JobSearchPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                jobSearchPanel,
+                jobSearchPanel.buttonNewJob,
+                "You can choose to either apply for a new job or a previous job you had. " +
+                "Search for a new job for now."));
+
+        bool done = false;
+        while (!done)
+        {
+            yield return waitForTopPanel<AvailableActionsPanel>();
+            AvailableActionsPanel actionPanel =
+                UIManager.Instance.topModalObject.GetComponent<AvailableActionsPanel>();
+            yield return StartCoroutine(
+                waitForButtonClick(
+                    actionPanel,
+                    actionPanel.buyActionButtons[0],
+                    "This menu lists available job openings available, including its annual salary " +
+                    " and its upfront training cost. Click on the first one to apply for the job."));
+
+            yield return waitForButton(b => done = b == ButtonType.OK);
+        }
+
+        Debug.Log("ABC");
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        Debug.Log("DEF");
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonEndTurn,
+                "Click on the end turn button to finish your first year."));
+    }
+
+    private IEnumerator tutorialScriptSecondYear()
+    {
+        JobManager.Instance.ReplaceTutorialJobs(_tutorialPartTimeJobs);
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        PlayerSnapshotPanel snapshotPanel =
+            UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonSelfImprovement,
+                "We are now going to focus on <b>Self Improvement</b> this year."));
+
+        yield return waitForTopPanel<SelfImprovementPanel>();
+        SelfImprovementPanel selfImprovementPanel =
+            UIManager.Instance.topModalObject.GetComponent<SelfImprovementPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                selfImprovementPanel,
+                selfImprovementPanel.buttonSelfReflection,
+                "You can choose to either focus on self reflection or look for " +
+                "professional training. Choose self reflection for now."));
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonEndTurn,
+                "Click the end turn button."));
+    }
+
+
+    private IEnumerator tutorialScript()
+    {
+        yield return StartCoroutine(
+            waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
+//        yield return StartCoroutine(tutorialScriptPlayerStatus());
+
+        /*
+        yield return StartCoroutine(tutorialScriptFirstYear());
+        yield return StartCoroutine(waitForState<MarketEventState>());
+        yield return StartCoroutine(
+            waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
+        */
+        yield return StartCoroutine(tutorialScriptSecondYear());
     }
 
     public void StartTutorialScript(Action cb)

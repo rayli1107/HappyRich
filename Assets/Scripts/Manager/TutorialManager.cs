@@ -391,6 +391,21 @@ public class TutorialManager : MonoBehaviour
                 "You can choose to either focus on self reflection or look for " +
                 "professional training. Choose self reflection for now."));
 
+        bool done = false;
+        while (!done)
+        {
+            yield return waitForTopPanel<PlayerSnapshotPanel>();
+            snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+            yield return StartCoroutine(
+                waitForButtonClick(
+                    snapshotPanel,
+                    snapshotPanel.buttonBuyInsurance,
+                    "Click on the <b>Buy Insurance</b> button to purchase health " +
+                    "insurance, just in case something happens."));
+
+            yield return waitForButton(b => done = b == ButtonType.OK);
+        }
+
         yield return waitForTopPanel<PlayerSnapshotPanel>();
         snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
         yield return StartCoroutine(
@@ -407,13 +422,14 @@ public class TutorialManager : MonoBehaviour
             waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
 //        yield return StartCoroutine(tutorialScriptPlayerStatus());
 
-        /*
         yield return StartCoroutine(tutorialScriptFirstYear());
         yield return StartCoroutine(waitForState<MarketEventState>());
         yield return StartCoroutine(
             waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
-        */
         yield return StartCoroutine(tutorialScriptSecondYear());
+        yield return StartCoroutine(waitForState<MarketEventState>());
+        yield return StartCoroutine(
+            waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
     }
 
     public void StartTutorialScript(Action cb)

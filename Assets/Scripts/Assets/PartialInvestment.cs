@@ -180,9 +180,15 @@ namespace Assets
 */
         }
 
+        public override void OnPurchaseStart()
+        {
+            base.OnPurchaseStart();
+            Reset();
+            asset.OnPurchaseStart();
+        }
+
         public override void OnPurchaseCancel()
         {
-            Debug.Log("OnPurchaseCancel");
             base.OnPurchaseCancel();
             Reset();
             asset.OnPurchaseCancel();

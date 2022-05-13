@@ -13,6 +13,7 @@ namespace Assets
         protected override void resetLoans()
         {
             ClearPrivateLoan();
+            primaryLoan = null;
             primaryLoan = new Mortgage(this, _defaultMortgageLtv, _maxMortgageLtv, false);
         }
 

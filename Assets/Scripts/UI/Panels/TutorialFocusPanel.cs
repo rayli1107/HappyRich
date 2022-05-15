@@ -17,9 +17,10 @@ namespace UI.Panels
         private CutoutMaskImage _cutoutMaskIamge;
         [SerializeField]
         private TextMeshProUGUI _tutorialText;
+        [SerializeField]
+        private RectTransform _textPanel;
 #pragma warning restore 0649
 
-        private RectTransform _tutorialTextRect;
         private Vector2 _tutorialTextAnchorMax;
         private Vector2 _tutorialTextAnchorMin;
         private Vector2 _tutorialTextAnchorMaxFlipped;
@@ -31,18 +32,7 @@ namespace UI.Panels
             set
             {
                 _tutorialFocusMask.transform.position = value;
-
-                RectTransform rectTransform = _tutorialText.GetComponent<RectTransform>();
-                if (_tutorialFocusMask.transform.localPosition.y < 0)
-                {
-                    rectTransform.anchorMax = _tutorialTextAnchorMaxFlipped;
-                    rectTransform.anchorMin = _tutorialTextAnchorMinFlipped;
-                }
-                else
-                {
-                    rectTransform.anchorMax = _tutorialTextAnchorMax;
-                    rectTransform.anchorMin = _tutorialTextAnchorMin;
-                }
+                setTextLocation();
             }
         }
         public TextMeshProUGUI text => _tutorialText;
@@ -52,11 +42,10 @@ namespace UI.Panels
         private void Awake()
         {
             _parentCanvas = GetComponentInParent<SafeAreaCanvas>();
-            _tutorialTextRect = _tutorialText.GetComponent<RectTransform>();
-            _tutorialTextAnchorMax = _tutorialTextRect.anchorMax;
+            _tutorialTextAnchorMax = _textPanel.anchorMax;
             _tutorialTextAnchorMaxFlipped = new Vector2(
                 _tutorialTextAnchorMax.x, 1 - _tutorialTextAnchorMin.y);
-            _tutorialTextAnchorMin = _tutorialTextRect.anchorMin;
+            _tutorialTextAnchorMin = _textPanel.anchorMin;
             _tutorialTextAnchorMinFlipped = new Vector2(
                 _tutorialTextAnchorMin.x, 1 - _tutorialTextAnchorMax.y);
         }
@@ -72,6 +61,20 @@ namespace UI.Panels
             _parentCanvas.canvasUpdateAction -= onCanvasAreaUpdate;
         }
 
+        private void setTextLocation()
+        {
+            if (_tutorialFocusMask.transform.localPosition.y < 0)
+            {
+                _textPanel.anchorMax = _tutorialTextAnchorMaxFlipped;
+                _textPanel.anchorMin = _tutorialTextAnchorMinFlipped;
+            }
+            else
+            {
+                _textPanel.anchorMax = _tutorialTextAnchorMax;
+                _textPanel.anchorMin = _tutorialTextAnchorMin;
+            }
+        }
+
         private void onCanvasAreaUpdate()
         {
             Rect canvasRect = _parentCanvas.GetComponent<RectTransform>().rect;
@@ -80,6 +83,7 @@ namespace UI.Panels
                 RectTransform.Axis.Horizontal, canvasRect.width * 2);
             maskRect.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Vertical, canvasRect.height * 2);
+            setTextLocation();
         }
     }
 }

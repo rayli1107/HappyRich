@@ -39,9 +39,9 @@ namespace UI.Panels.Assets
 #pragma warning restore 0649
 
         public Player player;
-        private List<ItemValueListPanel> _buyActionPanels;
+        public List<ItemValueListPanel> buyActionPanels { get; private set; }
         private bool _investmentsAvailable =>
-            _buyActionPanels.Exists(b => b.gameObject.activeInHierarchy);
+            buyActionPanels.Exists(b => b.gameObject.activeInHierarchy);
 
         private void Awake()
         {
@@ -50,9 +50,9 @@ namespace UI.Panels.Assets
 
         private void buyCallback(int index, bool success)
         {
-            if (success && index < _buyActionPanels.Count)
+            if (success && index < buyActionPanels.Count)
             {
-                _buyActionPanels[index].gameObject.SetActive(false);
+                buyActionPanels[index].gameObject.SetActive(false);
             }
 
             if (!_investmentsAvailable)
@@ -94,7 +94,7 @@ namespace UI.Panels.Assets
             }
 
             Localization local = Localization.Instance;
-            _buyActionPanels = new List<ItemValueListPanel>();
+            buyActionPanels = new List<ItemValueListPanel>();
             for (int i = 0; i < buyActions.Count; ++i)
             {
                 int index = i;
@@ -109,7 +109,7 @@ namespace UI.Panels.Assets
                 panel.AddItemValue("Total Cost", tabCount, local.GetCurrency(asset.totalCost));
                 panel.buttonAction = buyAction;
                 panel.gameObject.SetActive(true);
-                _buyActionPanels.Add(panel);
+                buyActionPanels.Add(panel);
             }
 
             Refresh();

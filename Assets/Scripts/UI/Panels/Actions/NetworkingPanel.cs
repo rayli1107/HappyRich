@@ -2,12 +2,22 @@
 using PlayerInfo;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels.Actions
 {
     public class NetworkingPanel : MonoBehaviour
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private Button _buttonFindInvestor;
+        [SerializeField]
+        private Button _buttonMaintainRelationship;
+#pragma warning restore 0649
+
         public Player player;
+        public Button buttonFindInvestor => _buttonFindInvestor;
+        public Button buttonMaintainRelationship => _buttonMaintainRelationship;
 
         private TutorialAction _tutorialAction => TutorialManager.Instance.NetworkingOnce;
 

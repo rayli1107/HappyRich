@@ -51,9 +51,15 @@ public class InvestmentManager : MonoBehaviour
     public int investmentHappinessThreshold => _investmentHappinessThreshold;
     public int investmentHappinessModifier => _investmentHappinessModifier;
 
+    private LinkedList<GetInvestmentFn> _injectedSmallInvestments;
+    private LinkedList<GetInvestmentFn> _injectedLargeInvestments;
+
     private void Awake()
     {
         Instance = this;
+
+        _injectedSmallInvestments = new LinkedList<GetInvestmentFn>();
+        _injectedLargeInvestments = new LinkedList<GetInvestmentFn>();
     }
 
     private GetInvestmentFn GetRandomInvestmentFn(
@@ -66,7 +72,8 @@ public class InvestmentManager : MonoBehaviour
         Player player,
         System.Random random,
         GetInvestmentFn getRealEstateFn,
-        GetInvestmentFn getBusinessFn)
+        GetInvestmentFn getBusinessFn,
+        LinkedList<GetInvestmentFn> injectedInvestments)
     {
         int randomCount = _defaultAvailableInvestments;
         if (GameManager.Instance.cheatMode)
@@ -83,7 +90,18 @@ public class InvestmentManager : MonoBehaviour
         }
 
         List<AvailableInvestmentContext> actions = new List<AvailableInvestmentContext>();
-        for (int i = 0; i < randomCount; ++i)
+        for (int i = 0; i < randomCount && injectedInvestments.Count > 0; ++i)
+        {
+            GetInvestmentFn fn = injectedInvestments.First.Value;
+            injectedInvestments.RemoveFirst();
+            actions.Add(fn(player, random));
+        }
+        if (actions.Count > 0)
+        {
+            return actions;
+        }
+
+        for (int i = actions.Count; i < randomCount; ++i)
         {
             GetInvestmentFn fn = GetRandomInvestmentFn(random, getRealEstateFn, getBusinessFn);
             actions.Add(fn(player, random));
@@ -117,7 +135,8 @@ public class InvestmentManager : MonoBehaviour
             player,
             random,
             RealEstateManager.Instance.GetSmallInvestmentAction,
-            BusinessManager.Instance.GetSmallInvestmentAction);
+            BusinessManager.Instance.GetSmallInvestmentAction,
+            _injectedSmallInvestments);
     }
 
     public List<AvailableInvestmentContext> GetAvailableLargeInvestments(
@@ -127,7 +146,8 @@ public class InvestmentManager : MonoBehaviour
             player,
             random,
             RealEstateManager.Instance.GetLargeInvestmentAction,
-            StartupManager.Instance.GetStartupInvestmentAction);
+            StartupManager.Instance.GetStartupInvestmentAction,
+            _injectedLargeInvestments);
     }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)
@@ -206,5 +226,15 @@ public class InvestmentManager : MonoBehaviour
             returnCapital ? asset.totalCost : asset.combinedLiability.amount,
             asset.combinedLiability.amount,
             price);
+    }
+
+    public void InjectSmallInvestments(GetInvestmentFn fn)
+    {
+        _injectedSmallInvestments.AddLast(fn);
+    }
+
+    public void InjectLargeInvestments(GetInvestmentFn fn)
+    {
+        _injectedLargeInvestments.AddLast(fn);
     }
 }

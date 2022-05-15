@@ -45,6 +45,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private int _tutorialFontSize = 40;
     [SerializeField]
+    private int _maxRentalPrice = 160000;
+    [SerializeField]
     private Profession[] _tutorialPartTimeJobs;
 #pragma warning restore 0649
 
@@ -415,21 +417,125 @@ public class TutorialManager : MonoBehaviour
                 "Click the end turn button."));
     }
 
+    private IEnumerator tutorialScriptThirdYear()
+    {
+        InvestmentManager.Instance.InjectSmallInvestments(
+            (p, r) => RealEstateManager.Instance.GetSmallRentalAction(p, r, _maxRentalPrice));
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        PlayerSnapshotPanel snapshotPanel =
+            UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonInvestments,
+                "We will now look into <b>Investing in a Rental Property</b> this year."));
+
+        yield return waitForTopPanel<InvestmentsPanel>();
+        InvestmentsPanel investmentsPanel =
+            UIManager.Instance.topModalObject.GetComponent<InvestmentsPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                investmentsPanel,
+                investmentsPanel.buttonSmallInvestments,
+                "Choose small investments for now.",
+                false));
+
+        yield return waitForTopPanel<AvailableInvestmentsPanel>();
+        AvailableInvestmentsPanel availableInvestmentsPanel =
+            UIManager.Instance.topModalObject.GetComponent<AvailableInvestmentsPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                availableInvestmentsPanel,
+                availableInvestmentsPanel.buyActionPanels[0].GetComponent<Button>(),
+                "Select the rental property investment."));
+
+        bool done = false;
+        while (!done)
+        {
+            yield return waitForTopPanel<RentalRealEstatePurchasePanel>();
+            RentalRealEstatePurchasePanel rentalPanel =
+                UIManager.Instance.topModalObject.GetComponent<RentalRealEstatePurchasePanel>();
+            MessageBox messageBox = rentalPanel.GetComponent<MessageBox>();
+            yield return StartCoroutine(
+                waitForButtonClick(
+                    messageBox,
+                    messageBox.buttonOk,
+                    "Click OK to purchase the rental property."));
+
+            yield return waitForButton(b => done = b == ButtonType.OK);
+        }
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonIncome,
+                "Click on the <b>Income and Expense</b> button to view your new income stream."));
+        yield return waitForTopPanel<IncomeExpenseListPanel>();
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        snapshotPanel = UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonEndTurn,
+                "Click the end turn button."));
+    }
+
+    private IEnumerator tutorialScriptFourthYear()
+    {
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+        PlayerSnapshotPanel snapshotPanel =
+            UIManager.Instance.topModalObject.GetComponent<PlayerSnapshotPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                snapshotPanel,
+                snapshotPanel.buttonNetworking,
+                "We will now try to find <b>Investors</b> who are interested in investing " +
+                "their money with us."));
+
+        yield return waitForTopPanel<NetworkingPanel>();
+        NetworkingPanel networkingPanel =
+            UIManager.Instance.topModalObject.GetComponent<NetworkingPanel>();
+        yield return StartCoroutine(
+            waitForButtonClick(
+                networkingPanel,
+                networkingPanel.buttonFindInvestor,
+                "Click on <b>Find New Investors</b>.",
+                false));
+
+        yield return waitForTopPanel<PlayerSnapshotPanel>();
+    }
 
     private IEnumerator tutorialScript()
     {
         yield return StartCoroutine(
             waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
-//        yield return StartCoroutine(tutorialScriptPlayerStatus());
+        yield return StartCoroutine(tutorialScriptPlayerStatus());
 
         yield return StartCoroutine(tutorialScriptFirstYear());
         yield return StartCoroutine(waitForState<MarketEventState>());
         yield return StartCoroutine(
             waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
+
         yield return StartCoroutine(tutorialScriptSecondYear());
         yield return StartCoroutine(waitForState<MarketEventState>());
         yield return StartCoroutine(
             waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
+
+        yield return StartCoroutine(tutorialScriptThirdYear());
+        yield return StartCoroutine(waitForState<MarketEventState>());
+        yield return StartCoroutine(
+            waitForState<PlayerActionState>(s => ((PlayerActionState)s).playerStartReady));
+
+        yield return StartCoroutine(tutorialScriptFourthYear());
+
+        UIManager.Instance.ShowSimpleMessageBox(
+            "That's it for the tutorial! Good luck and have fun!",
+            ButtonChoiceType.OK_ONLY,
+            null);
     }
 
     public void StartTutorialScript(Action cb)

@@ -6264,6 +6264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteAsset: {fileID: 11400000, guid: f6ae3aa5f0a31d7408aa2383f0b08fdd, type: 2}
   _tutorialFontSize: 40
+  _maxRentalPrice: 160000
   _tutorialPartTimeJobs:
   - {fileID: 11400000, guid: b70c521c4e9065446abbd6973908c834, type: 2}
   - {fileID: 11400000, guid: 16b9e07653e755d43931ade213c94d2b, type: 2}

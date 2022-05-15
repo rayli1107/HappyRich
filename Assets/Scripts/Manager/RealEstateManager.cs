@@ -101,10 +101,16 @@ public class RealEstateManager : MonoBehaviour
     }
 
     private int calculatePrice(
-        System.Random random, int price, Vector2 range, int increment)
+        System.Random random, int price, Vector2 range, int increment, int? maxPrice = null)
     {
         int x = Mathf.FloorToInt(price * range.x / increment);
-        int y = Mathf.FloorToInt(price * range.y / increment);
+        int y = Mathf.FloorToInt(price * range.y);
+        if (maxPrice.HasValue)
+        {
+            y = Mathf.Min(y, maxPrice.Value);
+        }
+        y /= increment;
+
         return random.Next(x, y + 1) * increment;
     }
 
@@ -187,12 +193,13 @@ public class RealEstateManager : MonoBehaviour
     private AvailableInvestmentContext GetRentalRealEstateAction(
         Player player,
         RealEstateTemplate template,
-        System.Random random)
+        System.Random random,
+        int? maxPrice = null)
     {
         Vector2 variance = new Vector2(
             1 - template.priceVariance, 1 + template.priceVariance);
         int price = calculatePrice(
-            random, template.basePrice, variance, template.priceIncrement);
+            random, template.basePrice, variance, template.priceIncrement, maxPrice);
         int rentBasePrice = template.commercial ? price : template.basePrice;
         int annualIncome = calculateRent(
             random, rentBasePrice, template.rentalRange, template.rentalIncrement);
@@ -227,6 +234,16 @@ public class RealEstateManager : MonoBehaviour
         {
             return GetDistressedRealEstateAction(player, template, random);
         }
+    }
+
+    public AvailableInvestmentContext GetSmallRentalAction(
+        Player player,
+        System.Random random,
+        int? maxPrice = null)
+    {
+        RealEstateTemplate template =
+            _smallInvestments[random.Next(_smallInvestments.Count)];
+        return GetRentalRealEstateAction(player, template, random, maxPrice);
     }
 
     public AvailableInvestmentContext GetSmallInvestmentAction(

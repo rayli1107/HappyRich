@@ -14,12 +14,19 @@ namespace UI.Panels.Actions
     {
 #pragma warning disable 0649
         [SerializeField]
+        private Button _buttonSmallInvestments;
+        [SerializeField]
+        private Button _buttonLargeInvestments;
+        [SerializeField]
         private Button _buttonEvaluateStocks;
         [SerializeField]
         private AvailableInvestmentsPanel _prefabAvailableInvestmentsPanel;
 #pragma warning restore 0649
 
         public Player player;
+
+        public Button buttonSmallInvestments => _buttonSmallInvestments;
+        public Button buttonLargeInvestments => _buttonLargeInvestments;
 
         private TutorialAction _tutorialAction => TutorialManager.Instance.InvestmentOnce;
 

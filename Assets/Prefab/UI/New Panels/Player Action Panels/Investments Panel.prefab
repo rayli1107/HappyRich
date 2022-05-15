@@ -86,6 +86,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 362c8b59b728f844dbe9878659dae70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _buttonSmallInvestments: {fileID: 6767931041418214319}
+  _buttonLargeInvestments: {fileID: 400955074505410497}
   _buttonEvaluateStocks: {fileID: 3860861853715653143}
   _prefabAvailableInvestmentsPanel: {fileID: 7453527973977985580, guid: d7e3f35b3520c074ca7f0824fc4deca2,
     type: 3}
@@ -338,6 +340,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 431724439652332503}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &400955074505410497 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
+    type: 3}
+  m_PrefabInstance: {fileID: 431724439652332503}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291550866556010777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3889202379422045697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1463,3 +1477,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6737724790239367097}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6767931041418214319 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 30876018329646102, guid: 90076b73e2ce698429481b5d419a664a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6737724790239367097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6662851483309718903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

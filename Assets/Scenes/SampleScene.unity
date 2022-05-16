@@ -4621,6 +4621,11 @@ MonoBehaviour:
   _profiles:
   - {fileID: 11400000, guid: fb4c013d00837f145bfc448a952d4388, type: 2}
   - {fileID: 11400000, guid: 9c707023f07168a4a86392f74219a520, type: 2}
+  - {fileID: 11400000, guid: 51d483dc52cbeb54984d033cc2021a37, type: 2}
+  - {fileID: 11400000, guid: 797942871c814bb4097ccb51f7cf3423, type: 2}
+  - {fileID: 11400000, guid: 5f8fd0dfbc07ebf4bb5919069b5b4966, type: 2}
+  - {fileID: 11400000, guid: d8706aa59ca6964438177d6dfcb27beb, type: 2}
+  - {fileID: 11400000, guid: 9891c6eadc0cc5a448f0704a04bae044, type: 2}
   _maxMortgageLTV: 75
   _maxPrivateLoanLTV: 90
   _maxDistressedLoanLTV: 100

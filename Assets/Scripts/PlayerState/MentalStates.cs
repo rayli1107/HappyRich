@@ -113,7 +113,7 @@ namespace PlayerState
         }
     }
 
-    public class Enlightenment : AbstractPlayerState
+    public class Enlightenment : SelfReflectionState
     {
         public override string description =>
             "You've become one with the universe.";

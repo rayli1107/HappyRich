@@ -7,30 +7,54 @@ using System.Collections.Generic;
 using UI.Panels.PlayerDetails;
 using UnityEngine;
 
+public partial class GameInstanceData
+{
+    public PlayerInfo.Player playerData;
+}
+
 namespace PlayerInfo
 {
+    [Serializable]
     public class Spouse
     {
-        public int additionalIncome { get; private set; }
-        public int additionalExpense { get; private set; }
-        public int additionalHappiness { get; private set; }
+        [SerializeField]
+        private int _additionalIncome;
+        public int additionalIncome => _additionalIncome;
+
+        [SerializeField]
+        private int _additionalExpense;
+        public int additionalExpense => _additionalExpense;
+
+        [SerializeField]
+        private int _additionalHappiness;
+        public int additionalHappiness => _additionalHappiness;
 
         public Spouse(int income, int expense, int happiness)
         {
-            additionalIncome = income;
-            additionalExpense = expense;
-            additionalHappiness = happiness;
+            _additionalIncome = income;
+            _additionalExpense = expense;
+            _additionalHappiness = happiness;
         }
     }
 
-    public class Player
+    [Serializable]
+    public class Player : ISerializationCallbackReceiver
     {
+        [SerializeField]
+        private List<string> _jobs;
         public List<Profession> jobs { get; private set; }
+
+        [SerializeField]
+        private List<string> _oldJobs;
         public List<Profession> oldJobs { get; private set; }
+
         public Portfolio portfolio { get; private set; }
         public int cash => portfolio.cash;
 
+        [SerializeField]
         private int _personalExpenses;
+
+        [SerializeField]
         private int _costPerChild;
 
         public int expenseModifier
@@ -50,6 +74,8 @@ namespace PlayerInfo
         public int numChild;
         public int age;
         public int meditatedCount = 0;
+
+        [SerializeField]
         public Spouse spouse;
 
         public int maxHappiness => 100;
@@ -58,7 +84,7 @@ namespace PlayerInfo
         {
             get
             {
-                int happiness = defaultHappiness;
+                int happiness = _defaultHappiness;
                 foreach (AbstractPlayerState state in states)
                 {
                     happiness += state.happinessModifier;
@@ -67,22 +93,37 @@ namespace PlayerInfo
             }
         }
 
+        [SerializeField]
+        private string _personality;
         public Personality personality;
-        public List<AbstractPlayerState> passiveStates { get; private set; }
-        public List<AbstractPlayerState> mentalStates { get; private set; }
+
+
+        private List<AbstractPlayerState> _passiveStates;
+
+        [SerializeField]
+        private List<string> _selfReflectionStates;
+        public List<SelfReflectionState> selfReflectionStates { get; private set; }
+
+        [SerializeField]
+        private List<TimedPlayerStateData> _timedPlayerStates;
+        public List<TimedPlayerState> timedPlayerStates { get; private set; }
         public List<AbstractPlayerState> states
         {
             get
             {
                 List<AbstractPlayerState> states = new List<AbstractPlayerState>();
                 states.Add(personality);
-                states.AddRange(passiveStates);
-                states.AddRange(mentalStates);
+                states.AddRange(_passiveStates);
+                states.AddRange(selfReflectionStates);
+                states.AddRange(timedPlayerStates);
                 return states;
             }
         }
 
-        public int defaultHappiness { get; private set; }
+        [SerializeField]
+        private int _defaultHappiness;
+        public int defaultHappiness => _defaultHappiness;
+
         public List<InvestmentPartner> contacts { get; private set; }
         public List<SkillInfo> skills { get; private set; }
         public List<SpecialistInfo> specialists { get; private set; }
@@ -100,12 +141,12 @@ namespace PlayerInfo
             _costPerChild = profession.costPerChild;
             numChild = 0;
             age = profession.startingAge;
-            this.defaultHappiness = defaultHappiness;
+            _defaultHappiness = defaultHappiness;
             meditatedCount = 0;
 
             contacts = new List<InvestmentPartner>();
 
-            passiveStates = new List<AbstractPlayerState>()
+            _passiveStates = new List<AbstractPlayerState>()
             {
                 new OneJobState(this),
                 new TwoJobState(this),
@@ -114,7 +155,8 @@ namespace PlayerInfo
                 new AssetManagementStress(this),
             };
 
-            mentalStates = new List<AbstractPlayerState>();
+            selfReflectionStates = new List<SelfReflectionState>();
+            timedPlayerStates = new List<TimedPlayerState>();
         }
 
         public void OnPlayerTurnStart(System.Random random)
@@ -185,17 +227,24 @@ namespace PlayerInfo
             }
         }
 
-        public void AddMentalState(AbstractPlayerState state)
+        public void AddSelfReflectionState(SelfReflectionState state)
+        {
+            EventLogManager.Instance.LogFormat(
+                "Add Self Reflection State: {0}", state.name);
+            selfReflectionStates.Add(state);
+        }
+
+        public void AddTimedState(TimedPlayerState state)
         {
             EventLogManager.Instance.LogFormat(
                 "Add Mental State: {0}", state.name);
-            mentalStates.RemoveAll(s => s.GetType() == state.GetType());
-            mentalStates.Add(state);
+            timedPlayerStates.RemoveAll(s => s.GetType() == state.GetType());
+            timedPlayerStates.Add(state);
         }
 
-        public void RemoveMentalState(AbstractPlayerState state)
+        public void RemoveMentalState(TimedPlayerState state)
         {
-            if (mentalStates.Remove(state))
+            if (timedPlayerStates.Remove(state))
             {
                 EventLogManager.Instance.LogFormat(
                     "Remove Mental State: {0}", state.name);
@@ -204,7 +253,7 @@ namespace PlayerInfo
 
         public void RemoveMentalState<T>()
         {
-            if (mentalStates.RemoveAll(s => s.GetType() == typeof(T)) > 0)
+            if (timedPlayerStates.RemoveAll(s => s.GetType() == typeof(T)) > 0)
             {
                 EventLogManager.Instance.LogFormat(
                     "Remove Mental States: {0}", typeof(T).Name);
@@ -298,6 +347,27 @@ namespace PlayerInfo
                 }
             }
             return ret;
+        }
+
+        public void OnBeforeSerialize() 
+        {
+            _jobs = jobs.ConvertAll(j => j.professionName);
+            _oldJobs = oldJobs.ConvertAll(j => j.professionName);
+            _selfReflectionStates = selfReflectionStates.ConvertAll(s => s.name);
+            _personality = personality.name;
+        }
+
+        public void OnAfterDeserialize()
+        {
+            jobs = _jobs.ConvertAll(
+                n => JobManager.Instance.GetJobByName(n, true));
+            oldJobs = _oldJobs.ConvertAll(
+                n => JobManager.Instance.GetJobByName(n, true));
+            selfReflectionStates = _selfReflectionStates.ConvertAll(
+                n => MentalStateManager.Instance.GetSelfReflectionStateByName(this, n, true));
+            personality =
+                MentalStateManager.Instance.GetPersonalityByName(this, _personality, true);
+
         }
     }
 }

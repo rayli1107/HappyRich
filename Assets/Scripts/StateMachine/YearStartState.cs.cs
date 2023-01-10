@@ -26,6 +26,7 @@ namespace StateMachine
 
         public void EnterState(StateMachineParameter param)
         {
+            GameSaveLoadManager.Instance.SaveGame();
             UI.UIManager.Instance.ShowTimedTransitionScreen(
                 "Start of\nNew Year", Color.white, () => transitionCallback(param));
         }

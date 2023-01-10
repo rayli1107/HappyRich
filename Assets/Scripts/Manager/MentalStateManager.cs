@@ -37,8 +37,10 @@ public class MentalStateManager : MonoBehaviour
 #pragma warning restore 0649
 
     public static MentalStateManager Instance { get; private set; }
-    private List<Action<Player, Action<Personality>>> _personalities;
-    private List<Action<Player, Action<SelfReflectionState>>> _selfReflectionStates;
+    private Dictionary<string, Func<Player, Personality>> _personalities;
+    private Dictionary<string, Func<Player, SelfReflectionState>> _selfReflectionStates;
+    private Func<Player, SelfReflectionState> _enlightenmentState;
+
     public int tragedyDuration => _tragedyDuration;
     public int extrovertThreshold => _extrovertThreshold;
     public int extrovertHappinessModifier => _extrovertHappinessModifier;
@@ -63,39 +65,128 @@ public class MentalStateManager : MonoBehaviour
 
     public void Initialize()
     {
-        _selfReflectionStates = new List<Action<Player, Action<SelfReflectionState>>>();
-        _selfReflectionStates.Add((p, cb) => cb(new FamilyOrientedState(p)));
-        _selfReflectionStates.Add((p, cb) => cb(new Frugality(p)));
-        _selfReflectionStates.Add((p, cb) => cb(new Minimalism(p)));
-        _selfReflectionStates.Add((p, cb) => cb(new Hustling(p)));
-        _selfReflectionStates.Add((p, cb) => cb(new Tranquil(p)));
-        _selfReflectionStates.Add((p, cb) => cb(new Extravagant(p)));
+        _enlightenmentState = p => new Enlightenment(p);
 
-        _personalities = new List<Action<Player, Action<Personality>>>();
-        _personalities.Add((p, cb) => cb(new Extrovert(p)));
-        _personalities.Add((p, cb) => cb(new Introvert(p)));
-        _personalities.Add((p, cb) => cb(new Romantic(p)));
-        _personalities.Add((p, cb) => cb(new RiskTaker(p)));
-        _personalities.Add((p, cb) => cb(new RiskAverse(p)));
+        List<Func<Player, SelfReflectionState>> states =
+            new List<Func<Player, SelfReflectionState>>();
+        states.Add(p => new FamilyOrientedState(p));
+        states.Add(p => new Frugality(p));
+        states.Add(p => new Minimalism(p));
+        states.Add(p => new Hustling(p));
+        states.Add(p => new Tranquil(p));
+        states.Add(p => new Extravagant(p));
+
+        _selfReflectionStates = new Dictionary<string, Func<Player, SelfReflectionState>>();
+        foreach (Func<Player, SelfReflectionState> action in states)
+        {
+            _selfReflectionStates[action(null).name] = action;
+        }
+
+        List<Func<Player, Personality>> personalities = new List<Func<Player, Personality>>();
+        personalities.Add(p => new Extrovert(p));
+        personalities.Add(p => new Introvert(p));
+        personalities.Add(p => new Romantic(p));
+        personalities.Add(p => new RiskTaker(p));
+        personalities.Add(p => new RiskAverse(p));
+
+        _personalities = new Dictionary<string, Func<Player, Personality>>();
+        foreach (Func<Player, Personality> action in personalities)
+        {
+            _personalities[action(null).name] = action;
+        }
 
     }
 
-    public Action<Player, Action<Personality>> GetPersonality(System.Random random)
+    public Personality GetPersonality(Player player, System.Random random)
     {
-        return _personalities[random.Next(_personalities.Count)];
+        List<Func<Player, Personality>> values =
+            new List<Func<Player, Personality>>(_personalities.Values);
+        return values[random.Next(_personalities.Count)](player);
     }
 
-    public Action<Player, Action<SelfReflectionState>> GetSelfReflectionState(System.Random random)
+    public Personality GetPersonalityByName(Player player, string name, bool throwException)
+    {
+        Func<Player, Personality> func;
+        if (_personalities.TryGetValue(name, out func))
+        {
+            return func(player);
+        }
+        if (throwException)
+        {
+            Debug.LogException(
+                new Exception(string.Format("Cannot find Personality: {0}", name)));
+        }
+        return null;
+    }
+
+    public SelfReflectionState GetEnlightenmentState(Player player)
+    {
+        return _enlightenmentState(player);
+    }
+
+    public SelfReflectionState GetSelfReflectionState(Player player, System.Random random)
     {
         if (_selfReflectionStates == null || _selfReflectionStates.Count == 0)
         {
-            return (p, cb) => cb(null);
+            return null;
         }
 
         int index = random.Next(_selfReflectionStates.Count);
-        Action<Player, Action<SelfReflectionState>> action = _selfReflectionStates[index];
-        _selfReflectionStates.RemoveAt(index);
-        return action;
+        string key = new List<string>(_selfReflectionStates.Keys)[index];
+        Func<Player, SelfReflectionState> func = _selfReflectionStates[key];
+        _selfReflectionStates.Remove(key);
+        return func(player);
+    }
+
+    public SelfReflectionState GetSelfReflectionStateByName(
+        Player player, string name, bool throwException)
+    {
+        SelfReflectionState state = GetEnlightenmentState(player);
+        if (state.name == name)
+        {
+            return state;
+        }
+
+        Func<Player, SelfReflectionState> func;
+        if (_selfReflectionStates.TryGetValue(name, out func))
+        {
+            return func(player);
+        }
+
+        if (throwException)
+        {
+            string message = string.Format(
+                "Cannot find Self Reflection: {0}", name);
+            Debug.LogException(new Exception(message));
+        }
+
+        return null;
+    }
+
+    public TimedPlayerState CreateTimedStateFromData(
+        Player player, TimedPlayerStateData data, bool throwException)
+    {
+        switch (data.stateType)
+        {
+            case TimedPlayerStateData.StateType.DIVORCE_PENALTY:
+                return new DivorcedPenaltyState(player, data.turn, data.penalty);
+            case TimedPlayerStateData.StateType.TRAGEDY_PENALTY:
+                return new TragedyPenaltyState(player, data.turn);
+            case TimedPlayerStateData.StateType.LUXURY_HAPPINESS:
+                return new LuxuryHappinessState(player, data.turn);
+            case TimedPlayerStateData.StateType.FAMILY_VACATION_HAPPINESS:
+                return new FamilyVacationHappinessState(player, data.turn);
+            case TimedPlayerStateData.StateType.MEDITATED:
+                return new MeditatedState(player, data.turn);
+            default:
+                if (throwException)
+                {
+                    string message = string.Format(
+                        "Cannot find Timed State: {0}", data.stateType.ToString());
+                    Debug.LogException(new Exception(message));
+                }
+                return null;
+        }
     }
 }
 

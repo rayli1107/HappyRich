@@ -23,7 +23,12 @@ public class GameManager : MonoBehaviour
     public bool cheatMode => _cheatMode;
 
     public static GameManager Instance { get; private set; }
-    public Player player { get; private set; }
+
+    public PersistentGameData PersistentGameData =>
+        GameSaveLoadManager.Instance.persistentGameData;
+    public GameInstanceData GameData => PersistentGameData.gameInstanceData;
+    public Player player =>
+        GameSaveLoadManager.Instance.persistentGameData.gameInstanceData.playerData;
 
     public StateMachine.StateMachine StateMachine { get; private set; }
     public System.Random Random { get; private set; }
@@ -44,11 +49,8 @@ public class GameManager : MonoBehaviour
 
     public void CreatePlayer(Profession profession)
     {
-        player = new Player(profession, defaultHappiness);
-
-        Action<Player, Action<Personality>> cb =
-            MentalStateManager.Instance.GetPersonality(Random);
-        cb?.Invoke(player, p => player.personality = p);
+        GameData.playerData = new Player(profession, defaultHappiness);
+        player.personality = MentalStateManager.Instance.GetPersonality(player, Random);
     }
 
     // Update is called once per frame

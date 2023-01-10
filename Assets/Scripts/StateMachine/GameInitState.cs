@@ -36,6 +36,7 @@ namespace StateMachine
 
         private void runInit()
         {
+            GameSaveLoadManager.Instance.Initialize();
             RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
             StockManager.Instance.Initialize(GameManager.Instance.Random);
             BusinessManager.Instance.Initialize(GameManager.Instance.Random);
@@ -58,6 +59,7 @@ namespace StateMachine
         {
             if (UI.UIManager.Instance != null &&
                 UI.UIManager.Instance.ready &&
+                GameSaveLoadManager.Instance != null &&
                 BusinessManager.Instance != null &&
                 FamilyManager.Instance != null &&
                 GameManager.Instance != null &&

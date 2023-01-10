@@ -110,4 +110,29 @@ public class JobManager : MonoBehaviour
             _currentPartTimes[i] = partTimeJobs[i];
         }
     }
+
+    public Profession GetJobByName(string jobName, bool throwException=false)
+    {
+        if (_professionTutorial.professionName == jobName) return _professionTutorial;
+        foreach (Profession job in _professions)
+        {
+            if (job.professionName == jobName)
+            {
+                return job;
+            }
+        }
+        foreach (Profession job in _partTimeJobs)
+        {
+            if (job.professionName == jobName)
+            {
+                return job;
+            }
+        }
+        if (throwException)
+        {
+            Debug.LogException(
+                new Exception(string.Format("Cannot find job: {0}", jobName)));
+        }
+        return null;
+    }
 }

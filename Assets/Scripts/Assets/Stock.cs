@@ -52,85 +52,102 @@ namespace Assets
         }
     }
 
-    public abstract class AbstractStock
+    [Serializable]
+    public class StockData
     {
-        public string name { get; private set; }
-        public abstract string longName { get; }
-
-        public int value { get; protected set; }
-        public int prevValue { get; private set; }
-        private int _turnCount;
-        public float change
+        public enum StockType
         {
-            get
-            {
-                return _turnCount >= 2 ? (value - prevValue) / (float)prevValue : 0f;
-            }
+            GROWTH_STOCK,
+            YIELD_STOCK,
+            SUCCESSFUL_CRYPTO,
+            FAILED_CRYPTO
         }
-        public Vector2Int yieldRange { get; private set; }
-        public AbstractStock(string name, int value, Vector2Int yieldRange)
+
+        public StockType stockType;
+        public string name;
+        public int value;
+        public int prevValue;
+        public Vector2Int yieldRange;
+        public int turnCount;
+
+        // Growth Stock Info
+        public int currentPeriodTurn;
+        public float basePrice;
+
+        // Crypto
+        public int cryptoTurnDelay;
+
+        // Successful Crypto
+        public bool cryptoFirstBoost;
+        public Vector2Int cryptoInitialRange;
+        public Vector2 cryptoMultiplierRange;
+
+        public StockData(StockType stockType, string name, int value, Vector2Int yieldRange)
         {
+            this.stockType = stockType;
             this.name = name;
             this.value = value;
             this.yieldRange = yieldRange;
             prevValue = value;
-            _turnCount = 0;
+            turnCount = 0;
+        }
+    }
+
+    public abstract class AbstractStock
+    {
+        protected StockData _stockData;
+        public string name => _stockData.name;
+        public abstract string longName { get; }
+
+        public int value => _stockData.value;
+        public int prevValue => _stockData.prevValue;
+        public float change
+        {
+            get
+            {
+                return _stockData.turnCount >= 2 ? (value - prevValue) / (float)prevValue : 0f;
+            }
+        }
+        public Vector2Int yieldRange => _stockData.yieldRange;
+
+        public AbstractStock(StockData stockData)
+        {
+            _stockData = stockData;
         }
 
         public virtual void OnTurnStart(System.Random random)
         {
-            ++_turnCount;
-            prevValue = value;
+            ++_stockData.turnCount;
+            _stockData.prevValue = value;
         }
 
         public abstract void OnDetail(Action callback);
-        /*
-        public virtual string GetDescription()
-        {
-            List<string> messages = new List<string>();
-            messages.Add(string.Format("Name: {0}", name));
-            messages.Add(string.Format("Price: {0}", value));
-            if (yieldRange.y == yieldRange.x)
-            {
-                messages.Add(string.Format("Yield {0}%", yieldRange.x));
-            }
-            else
-            {
-                messages.Add(string.Format("Yield {0}% - {1}%", yieldRange.x, yieldRange.y));
-            }
-            return string.Join("\n", messages);
-        }
-        */
     }
 
     public class GrowthStock : AbstractStock {
         public override string longName => string.Format("Growth Stock - {0}", name);
-        private int _currentPeriodTurn;
-        public float basePrice { get; private set; }
+        public float basePrice => _stockData.basePrice;
         public float variance => (value - basePrice) / basePrice;
 
 
-        public GrowthStock(string name, int initialPrice)
-            : base(name, initialPrice, Vector2Int.zero)
+        public GrowthStock(StockData stockData) : base(stockData)
         {
-            _currentPeriodTurn = 0;
-            basePrice = initialPrice;
         }
 
         public override void OnTurnStart(System.Random random)
         {
             base.OnTurnStart(random);
-            ++_currentPeriodTurn;
-            if (_currentPeriodTurn > StockManager.Instance.growthStockMinPeriod &&
+            ++_stockData.currentPeriodTurn;
+            if (_stockData.currentPeriodTurn > StockManager.Instance.growthStockMinPeriod &&
                 random.NextDouble() < StockManager.Instance.growthStockUpdateChance)
             {
-                basePrice = basePrice * StockManager.Instance.getGrowthStockGrowth(random);
-                _currentPeriodTurn = 0;
+                _stockData.basePrice = basePrice * StockManager.Instance.getGrowthStockGrowth(random);
+                _stockData.currentPeriodTurn = 0;
             }
 
             float newBase = (value + basePrice) / 2;
-            value = Mathf.RoundToInt(newBase * StockManager.Instance.getGrowthStockVariance(random));
-            value = Math.Max(value, 1);
+            _stockData.value = Mathf.RoundToInt(newBase * StockManager.Instance.getGrowthStockVariance(random));
+            _stockData.value = Math.Max(value, 1);
 
             Debug.LogFormat("{0} prev {1} cur {2} change {3} variance {4}",
                 name, prevValue, value, change, variance);
@@ -140,14 +157,22 @@ namespace Assets
         {
             UI.UIManager.Instance.ShowGrowthStockPanel(this, callback);
         }
+
+        public static StockData CreateStockData(string name, int initialPrice)
+        {
+            StockData stockData = new StockData(
+                StockData.StockType.GROWTH_STOCK, name, initialPrice, Vector2Int.zero);
+            stockData.currentPeriodTurn = 0;
+            stockData.basePrice = initialPrice;
+            return stockData;
+        }
     }
 
     public class YieldStock : AbstractStock
     {
         public override string longName => string.Format("Dividend Stock - {0}", name);
 
-        public YieldStock(string name, int initialPrice, Vector2Int yieldRange)
-            : base(name, initialPrice, yieldRange)
+        public YieldStock(StockData stockData) : base(stockData)
         {
         }
 
@@ -156,21 +181,21 @@ namespace Assets
             UI.UIManager.Instance.ShowYieldStockPanel(this, callback);
         }
 
+        public static StockData CreateStockData(string name, int initialPrice, Vector2Int range)
+        {
+            return new StockData(
+                StockData.StockType.YIELD_STOCK, name, initialPrice, range);
+        }
     }
 
     public abstract class AbstractCryptoCurrency : AbstractStock
     {
         public override string longName => string.Format("Cryptocurrency - {0}", name);
-        private int _turnDelay;
-        private int _turn;
 
-        public bool tookOff => _turn >= _turnDelay;
+        public bool tookOff => _stockData.turnCount >= _stockData.cryptoTurnDelay;
 
-        public AbstractCryptoCurrency(string name, int initialPrice, int turnDelay)
-            : base(name, initialPrice, Vector2Int.zero)
+        public AbstractCryptoCurrency(StockData stockData) : base(stockData)
         {
-            _turn = 0;
-            _turnDelay = turnDelay;
         }
 
         public abstract void OnTurnStartDelayed(System.Random random);
@@ -178,57 +203,89 @@ namespace Assets
         public override void OnTurnStart(System.Random random)
         {
             base.OnTurnStart(random);
-            ++_turn;
             if (tookOff)
             {
                 OnTurnStartDelayed(random);
             }
         }
+
         public override void OnDetail(Action callback)
         {
             UI.UIManager.Instance.ShowCryptoPanel(this, callback);
+        }
+
+        public static AbstractCryptoCurrency CreateStockFromData(StockData stockData)
+        {
+            switch (stockData.stockType)
+            {
+                case StockData.StockType.SUCCESSFUL_CRYPTO:
+                    return new SuccessfulCryptoCurrency(stockData);
+                case StockData.StockType.FAILED_CRYPTO:
+                    return new FailedCryptoCurrency(stockData);
+                default:
+                    return null;
+            }
         }
     }
 
     public class FailedCryptoCurrency : AbstractCryptoCurrency
     {
-        public FailedCryptoCurrency(string name, int initialPrice, int turnDelay) :
-            base(name, initialPrice, turnDelay)
+        public FailedCryptoCurrency(StockData stockData) : base(stockData)
         {
         }
 
         public override void OnTurnStartDelayed(System.Random random)
         {
-            value = 0;
+            _stockData.value = 0;
+        }
+
+        public static StockData CreateStockData(string name, int initialPrice, int turnDelay)
+        {
+            StockData stockData = new StockData(
+                StockData.StockType.FAILED_CRYPTO, name, initialPrice, Vector2Int.zero);
+            stockData.cryptoTurnDelay = turnDelay;
+            return stockData;
         }
     }
 
     public class SuccessfulCryptoCurrency : AbstractCryptoCurrency
     {
-        private bool _first;
-        private Vector2Int _initialRange;
-        private Vector2 _multiplierRange;
-
-        public SuccessfulCryptoCurrency(string name, int initialPrice, int turnDelay, Vector2Int initialRange, Vector2 multiplierRange) :
-            base(name, initialPrice, turnDelay)
+        public SuccessfulCryptoCurrency(StockData stockData) : base(stockData)
         {
-            _first = true;
-            _initialRange = initialRange;
-            _multiplierRange = multiplierRange;
         }
 
         public override void OnTurnStartDelayed(System.Random random)
         {
-            if (_first)
+            if (_stockData.cryptoFirstBoost)
             {
-                value *= _initialRange.x + random.Next(_initialRange.y - _initialRange.x + 1);
-                _first = false;
+                _stockData.value *=
+                    _stockData.cryptoInitialRange.x +
+                    random.Next(_stockData.cryptoInitialRange.y - _stockData.cryptoInitialRange.x + 1);
+                _stockData.cryptoFirstBoost = false;
             }
             else if (value > 0)
             {
-                double multiplier = _multiplierRange.x + random.NextDouble() * (_multiplierRange.y - _multiplierRange.x);
-                value = Mathf.RoundToInt(value * (float)multiplier);
+                double multiplier =
+                    _stockData.cryptoMultiplierRange.x +
+                    random.NextDouble() * (_stockData.cryptoMultiplierRange.y - _stockData.cryptoMultiplierRange.x);
+                _stockData.value = Mathf.RoundToInt(_stockData.value * (float)multiplier);
             }
+        }
+
+        public static StockData CreateStockData(
+            string name,
+            int initialPrice,
+            int turnDelay,
+            Vector2Int initialRange,
+            Vector2 multiplierRange)
+        {
+            StockData stockData = new StockData(
+                StockData.StockType.SUCCESSFUL_CRYPTO, name, initialPrice, Vector2Int.zero);
+            stockData.cryptoTurnDelay = turnDelay;
+            stockData.cryptoFirstBoost = true;
+            stockData.cryptoInitialRange = initialRange;
+            stockData.cryptoMultiplierRange = multiplierRange;
+            return stockData;
         }
     }
 

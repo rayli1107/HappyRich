@@ -15,22 +15,29 @@ namespace Actions
             callback?.Invoke();
         }
 
-        private static void addPlayerState(
-            Player player, AbstractPlayerState state, bool show, Action callback)
+        private static void addTimedPlayerState(
+            Player player, TimedPlayerState state, Action callback)
+        {
+            player.AddTimedState(state);
+            showStateHandler(player, callback);
+        }
+
+        private static void addSelfReflectionState(
+            Player player, SelfReflectionState state, bool show, Action callback)
         {
             if (state == null)
             {
-                state = new MedidatedState(player);
+                MeditatedState meditated = new MeditatedState(player, MentalStateManager.Instance.meditatedDuration);
                 ++player.meditatedCount;
                 UI.UIManager.Instance.ShowSimpleMessageBox(
                     "You didn't learn anything new about yourself, but you got a" +
                     "chance to meditate, bringing you a sense of calm and happiness.",
                     ButtonChoiceType.OK_ONLY,
-                    _ => addPlayerState(player, state, false, callback));
+                    _ => addTimedPlayerState(player, meditated, callback));
                 return;
             }
 
-            player.AddMentalState(state);
+            player.AddSelfReflectionState(state);
             if (show)
             {
                 UI.UIManager.Instance.ShowPlayerStateInfo(
@@ -45,7 +52,7 @@ namespace Actions
         public static void Run(Player player, System.Random random, Action<bool> callback)
         {
             Localization local = Localization.Instance;
-            if (player.mentalStates.Exists(s => s is Enlightenment))
+            if (player.selfReflectionStates.Exists(s => s is Enlightenment))
             {
                 string message = string.Format(
                     "You've already reached a state of {0}. There's nothing more " +
@@ -59,7 +66,7 @@ namespace Actions
             }
 
             Action cb = () => callback?.Invoke(true);
-
+            SelfReflectionState state;
             if (player.meditatedCount >=
                 MentalStateManager.Instance.enlightenedThreshold)
             {
@@ -67,19 +74,17 @@ namespace Actions
                     "After many years of meditation, you've finally reached a " +
                     "state of {0}.",
                     local.GetPlayerState("Enlightenment"));
-                player.RemoveMentalState<MedidatedState>();
-                Enlightenment state = new Enlightenment(player);
+                player.RemoveMentalState<MeditatedState>();
+                state = MentalStateManager.Instance.GetEnlightenmentState(player);
                 UI.UIManager.Instance.ShowSimpleMessageBox(
                     message,
                     ButtonChoiceType.OK_ONLY,
-                    _ => addPlayerState(player, state, false, cb));
+                    _ => addSelfReflectionState(player, state, false, cb));
                 return;
             }
 
-            Action<Player, Action<AbstractPlayerState>> addAction =
-                MentalStateManager.Instance.GetSelfReflectionState(random);
-            addAction?.Invoke(
-                player, s => addPlayerState(player, s, true, cb));
+            state = MentalStateManager.Instance.GetSelfReflectionState(player, random);
+            addSelfReflectionState(player, state, true, cb);
         }
     }
 }

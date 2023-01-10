@@ -16,13 +16,29 @@ using System;
 
 namespace PlayerInfo
 {
-    public class Portfolio
+    [Serializable]
+    public class Portfolio : ISerializationCallbackReceiver
     {
+        [SerializeField]
+        private int _studentLoanAmount;
         public StudentLoan studentLoan { get; private set; }
+
+        [SerializeField]
+        private int _personalLoanAmount;
         public PersonalLoan personalLoan { get; private set; }
+
+        [SerializeField]
+        private int _carValue;
         public Car car { get; private set; }
+
+        [SerializeField]
+        private int _autoLoanAmount;
         public AutoLoan autoLoan { get; private set; }
-        public int cash { get; private set; }
+
+        [SerializeField]
+        private int _cash;
+        public int cash => _cash;
+
         public bool hasHealthInsurance;
 
         public Dictionary<string, PurchasedStock> stocks { get; private set; }
@@ -32,6 +48,22 @@ namespace PlayerInfo
         public List<StartupEntity> startupEntities { get; private set; }
         public List<AbstractTimedInvestment> timedInvestments { get; private set; }
         public List<LuxuryItem> luxuryItems { get; private set; }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            _studentLoanAmount = studentLoan != null ? studentLoan.amount : 0;
+            _personalLoanAmount = personalLoan != null ? personalLoan.amount : 0;
+            _autoLoanAmount = autoLoan != null ? autoLoan.amount : 0;
+            _carValue = car != null ? car.value : 0;
+        }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            studentLoan = _studentLoanAmount > 0 ? new StudentLoan(_studentLoanAmount) : null;
+            personalLoan = _personalLoanAmount > 0 ? new PersonalLoan(_personalLoanAmount) : null;
+            autoLoan = _autoLoanAmount > 0 ? new AutoLoan(_autoLoanAmount) : null;
+            car = _carValue > 0 ? new Car(_carValue) : null;
+        }
 
         public List<PartialInvestment> properties {
             get
@@ -184,7 +216,7 @@ namespace PlayerInfo
                 studentLoan = new StudentLoan(profession.jobCost);
             }
 
-            cash = profession.startingCash;
+            _cash = profession.startingCash;
             stocks = new Dictionary<string, PurchasedStock>();
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
@@ -215,7 +247,7 @@ namespace PlayerInfo
             EventLogManager.Instance.LogFormat(
                 "Add Cash: {0}",
                 Localization.Instance.GetCurrency(amount));
-            cash += amount;
+            _cash += amount;
         }
 
         public void AddStock(AbstractStock stock, int number)

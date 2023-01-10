@@ -31,7 +31,8 @@ namespace Events.Personal
 
         private static void messageBoxHandler(Player player, Action callback)
         {
-            player.AddMentalState(new FamilyVacationHappinessState(player));
+            player.AddMentalState(new FamilyVacationHappinessState(
+                player, FamilyManager.Instance.familyVacationHappinessModifier.y));
             UI.UIManager.Instance.UpdatePlayerInfo(player);
             callback?.Invoke();
         }

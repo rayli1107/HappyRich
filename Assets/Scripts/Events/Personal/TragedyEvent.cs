@@ -51,7 +51,7 @@ namespace Events.Personal
             EventLogManager.Instance.Log("Personal Event: Family Tragedy Event");
             string message = "One of your close relatives passed away due to a tragic accident. " +
                 "Sorry for your loss.";
-            player.AddMentalState(
+            player.AddTimedState(
                 new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
@@ -65,7 +65,7 @@ namespace Events.Personal
             string message = "Your spouse recently passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.spouse = null;
-            player.AddMentalState(
+            player.AddTimedState(
                 new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,
@@ -79,7 +79,7 @@ namespace Events.Personal
             string message = "One of your children recently passed away due to a tragic accident. " +
                 "Sorry for your loss.";
             player.numChild = Math.Max(player.numChild - 1, 0);
-            player.AddMentalState(
+            player.AddTimedState(
                 new TragedyPenaltyState(player, MentalStateManager.Instance.tragedyDuration));
             UI.UIManager.Instance.ShowSimpleMessageBox(
                 message,

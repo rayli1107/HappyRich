@@ -5,6 +5,19 @@ using System.Collections.Generic;
 using UI.Panels.Templates;
 using UnityEngine;
 
+[Serializable]
+public class StockManagerData
+{
+    public List<StockData> growthStocks;
+    public List<StockData> yieldStocks;
+    public List<StockData> cryptoStocks;
+}
+
+public partial class GameInstanceData
+{
+    public StockManagerData stockManagerData;
+}
+
 public class StockManager : MonoBehaviour
 {
 #pragma warning disable 0649
@@ -41,6 +54,8 @@ public class StockManager : MonoBehaviour
 #pragma warning restore 0649
 
     public static StockManager Instance;
+    private GameInstanceData gameData =>
+        GameSaveLoadManager.Instance.persistentGameData.gameInstanceData;
 
     private Dictionary<string, AbstractStock> _stocks;
     public List<GrowthStock> growthStocks { get; private set; }
@@ -82,24 +97,67 @@ public class StockManager : MonoBehaviour
         growthStocks = new List<GrowthStock>();
         yieldStocks = new List<YieldStock>();
         cryptoCurrencies = new List<AbstractCryptoCurrency>();
-        stockEvaluated = false;
 
-        for (int i = 0; i < _numGrowthStock; ++i) {
-            string name = generateStockName(random);
-            int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
-            GrowthStock stock = new GrowthStock(name, value);
-            growthStocks.Add(stock);
-            _stocks.Add(name, stock);
-        }
-
-        for (int i = 0; i < _yieldStockYields.Length; ++i)
+        if (gameData.stockManagerData == null)
         {
-            string name = generateStockName(random);
-            int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
-            YieldStock stock = new YieldStock(name, value, _yieldStockYields[i]);
-            yieldStocks.Add(stock);
-            _stocks.Add(name, stock);
+            // Initialize stocks on a new game
+            gameData.stockManagerData = new StockManagerData();
+            gameData.stockManagerData.growthStocks = new List<StockData>();
+            gameData.stockManagerData.yieldStocks = new List<StockData>();
+            gameData.stockManagerData.cryptoStocks = new List<StockData>();
+
+            for (int i = 0; i < _numGrowthStock; ++i)
+            {
+                string name = generateStockName(random);
+                int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
+
+                StockData data = GrowthStock.CreateStockData(name, value);
+                gameData.stockManagerData.growthStocks.Add(data);
+
+                GrowthStock stock = new GrowthStock(data);
+                growthStocks.Add(stock);
+                _stocks.Add(name, stock);
+            }
+
+            for (int i = 0; i < _yieldStockYields.Length; ++i)
+            {
+                string name = generateStockName(random);
+                int value = random.Next(_initialPriceMin, _initialPriceMax + 1);
+
+                StockData data = YieldStock.CreateStockData(name, value, _yieldStockYields[i]);
+                gameData.stockManagerData.yieldStocks.Add(data);
+
+                YieldStock stock = new YieldStock(data);
+                yieldStocks.Add(stock);
+                _stocks.Add(name, stock);
+            }
         }
+        else
+        {
+            // Load stock data from save game data
+            foreach (StockData data in gameData.stockManagerData.growthStocks)
+            {
+                GrowthStock stock = new GrowthStock(data);
+                growthStocks.Add(stock);
+                _stocks.Add(name, stock);
+            }
+
+            foreach (StockData data in gameData.stockManagerData.yieldStocks)
+            {
+                YieldStock stock = new YieldStock(data);
+                yieldStocks.Add(stock);
+                _stocks.Add(name, stock);
+            }
+
+            foreach (StockData data in gameData.stockManagerData.cryptoStocks)
+            {
+                AbstractCryptoCurrency stock = AbstractCryptoCurrency.CreateStockFromData(data);
+                cryptoCurrencies.Add(stock);
+                _stocks.Add(name, stock);
+            }
+        }
+
+        stockEvaluated = false;
     }
 
     public void EvaluateStocks()
@@ -111,16 +169,14 @@ public class StockManager : MonoBehaviour
     {
         string name = generateStockName(random);
         int delay = random.Next(_cryptoTurnDelayRange.y - _cryptoTurnDelayRange.x + 1) + _cryptoTurnDelayRange.x;
-        AbstractCryptoCurrency crypto;
-        if (random.NextDouble() < _cryptoSuccessProbability)
-        {
-            crypto = new SuccessfulCryptoCurrency(
-                name, _cryptoInitialValue, delay, _cryptoInitialMultiplier, _cryptoGrowthMultiplier);
-        }
-        else
-        {
-            crypto = new FailedCryptoCurrency(name, _cryptoInitialValue, delay);
-        }
+
+        StockData data = random.NextDouble() < _cryptoSuccessProbability ?
+            SuccessfulCryptoCurrency.CreateStockData(
+                name, _cryptoInitialValue, delay, _cryptoInitialMultiplier, _cryptoGrowthMultiplier) :
+            FailedCryptoCurrency.CreateStockData(name, _cryptoInitialValue, delay);
+        gameData.stockManagerData.cryptoStocks.Add(data);
+
+        AbstractCryptoCurrency crypto = AbstractCryptoCurrency.CreateStockFromData(data);
         cryptoCurrencies.Add(crypto);
         _stocks.Add(name, crypto);
         return new Tuple<string, AbstractStock>(name, crypto);

@@ -11,7 +11,7 @@ namespace Events.Personal
     {
         public static Action<Action> GetEvent(Player player)
         {
-            if (player.mentalStates.Exists(s => s is FamilyVacationHappinessState) ||
+            if (player.states.Exists(s => s is FamilyVacationHappinessState) ||
                 player.numChild <= 0) 
             {
                 return null;
@@ -31,7 +31,7 @@ namespace Events.Personal
 
         private static void messageBoxHandler(Player player, Action callback)
         {
-            player.AddMentalState(new FamilyVacationHappinessState(
+            player.AddTimedState(new FamilyVacationHappinessState(
                 player, FamilyManager.Instance.familyVacationHappinessModifier.y));
             UI.UIManager.Instance.UpdatePlayerInfo(player);
             callback?.Invoke();

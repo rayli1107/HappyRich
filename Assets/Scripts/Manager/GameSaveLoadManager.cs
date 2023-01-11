@@ -23,8 +23,8 @@ public interface IGameDataVerifier
 
 public interface IGameDataSaver
 {
-    void LoadGame(PersistentGameData data);
-    void SaveGame(ref PersistentGameData data);
+    void LoadGame();
+    void SaveGame();
 }
 
 public class GameSaveLoadManager : MonoBehaviour
@@ -60,6 +60,11 @@ public class GameSaveLoadManager : MonoBehaviour
 
     public void SaveGame()
     {
+        foreach (IGameDataSaver saver in _gameDataSavers)
+        {
+            saver.SaveGame();
+        }
+
         Debug.Log(JsonUtility.ToJson(persistentGameData, true));
     }
 }

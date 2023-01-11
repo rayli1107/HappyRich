@@ -1,4 +1,4 @@
-﻿using System;
+﻿using InvestmentPartnerInfo;
 using System.Collections.Generic;
 using UnityEngine;
 

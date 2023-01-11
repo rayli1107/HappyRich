@@ -4,7 +4,7 @@ using ScriptableObjects;
 using System;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IGameDataSaver
 {
 #pragma warning disable 0649
     [SerializeField]
@@ -27,8 +27,7 @@ public class GameManager : MonoBehaviour
     public PersistentGameData PersistentGameData =>
         GameSaveLoadManager.Instance.persistentGameData;
     public GameInstanceData GameData => PersistentGameData.gameInstanceData;
-    public Player player =>
-        GameSaveLoadManager.Instance.persistentGameData.gameInstanceData.playerData;
+    public Player player { get; private set; }
 
     public StateMachine.StateMachine StateMachine { get; private set; }
     public System.Random Random { get; private set; }
@@ -47,15 +46,33 @@ public class GameManager : MonoBehaviour
         StateMachine.Start(null);
     }
 
+    public void Initialize()
+    {
+        GameSaveLoadManager.Instance.RegisterGameDataSaver(this);
+    }
+
     public void CreatePlayer(Profession profession)
     {
-        GameData.playerData = new Player(profession, defaultHappiness);
-        player.personality = MentalStateManager.Instance.GetPersonality(player, Random);
+        Personality personality = MentalStateManager.Instance.GetPersonality(player, Random);
+        GameData.playerData = new PlayerData();
+        GameData.playerData.Initialize(profession, defaultHappiness, personality.name);
+
+        player = new Player(GameData.playerData, new Portfolio(profession));
     }
 
     // Update is called once per frame
     void Update()
     {
         StateMachine.Update();
+    }
+
+    public void LoadGame()
+    {
+        player.LoadData();
+    }
+
+    public void SaveGame()
+    {
+        player.SaveData();
     }
 }

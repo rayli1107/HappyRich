@@ -1,5 +1,6 @@
 ﻿using PlayerInfo;
 using ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ public class SkillManager : MonoBehaviour
     public static SkillManager Instance { get; private set; }
 
     private Dictionary<SkillType, SkillInfo> _skillInfo;
+    private Dictionary<string, SkillInfo> _skillInfoByLabel;
+
     public List<SkillInfo> currentAvailableSkills { get; private set; }
 
     private void Awake()
@@ -26,16 +29,45 @@ public class SkillManager : MonoBehaviour
         Instance = this;
 
         _skillInfo = new Dictionary<SkillType, SkillInfo>();
+        _skillInfoByLabel = new Dictionary<string, SkillInfo>();
         foreach (SkillInfo skillInfo in _skills)
         {
+            Debug.Assert(!_skillInfo.ContainsKey(skillInfo.skillType));
             _skillInfo[skillInfo.skillType] = skillInfo;
+            _skillInfoByLabel[GetSkillLabel(skillInfo)] = skillInfo;
         }
         currentAvailableSkills = new List<SkillInfo>();
     }
 
+    public string GetSkillLabel(SkillInfo info)
+    {
+        return Enum.GetName(typeof(SkillType), info.skillType);
+    }
+
+    public SkillInfo GetSkillByLabel(string label)
+    {
+        SkillInfo result;
+        if (_skillInfoByLabel.TryGetValue(label, out result))
+        {
+            return result;
+        }
+        string message = string.Format(
+            "Cannot find Skill: {0}", label);
+        Debug.LogException(new Exception(message));
+        return null;
+    }
+
     public SkillInfo GetSkillInfo(SkillType skillType)
     {
-        return _skillInfo[skillType];
+        SkillInfo result;
+        if (_skillInfo.TryGetValue(skillType, out result))
+        {
+            return result;
+        }
+        string message = string.Format(
+            "Cannot find Skill: {0}", skillType);
+        Debug.LogException(new Exception(message));
+        return null;
     }
 
     public int GetCost(Player player)

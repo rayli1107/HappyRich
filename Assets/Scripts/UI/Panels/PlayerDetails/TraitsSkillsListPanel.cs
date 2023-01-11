@@ -37,7 +37,7 @@ namespace UI.Panels.PlayerDetails
 
             // Traits
             tabCount = _panelTraits.firstItemValuePanel.tabCount + 1;
-            foreach (AbstractPlayerState trait in player.mentalStates.FindAll(s => s is SelfReflectionState))
+            foreach (SelfReflectionState trait in player.selfReflectionStates)
             {
                 panel = _panelTraits.AddItem(local.GetPlayerState(trait), tabCount);
                 panel.clickAction = () => UIManager.Instance.ShowPlayerStateInfo(trait, null);

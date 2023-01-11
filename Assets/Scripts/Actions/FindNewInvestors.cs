@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using InvestmentPartnerInfo;
+using PlayerInfo;
 using System;
 using UI.Panels.Templates;
 

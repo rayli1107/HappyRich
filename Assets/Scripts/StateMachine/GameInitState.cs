@@ -37,6 +37,7 @@ namespace StateMachine
         private void runInit()
         {
             GameSaveLoadManager.Instance.Initialize();
+            GameManager.Instance.Initialize();
             RealEstateManager.Instance.Initialize(GameManager.Instance.Random);
             StockManager.Instance.Initialize(GameManager.Instance.Random);
             BusinessManager.Instance.Initialize(GameManager.Instance.Random);

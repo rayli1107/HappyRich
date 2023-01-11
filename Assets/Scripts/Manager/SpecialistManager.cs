@@ -13,22 +13,53 @@ public class SpecialistManager : MonoBehaviour
     public static SpecialistManager Instance { get; private set; }
 
     private Dictionary<SpecialistType, SpecialistInfo> _specialistInfo;
+    private Dictionary<string, SpecialistInfo> _specialistInfoByLabel;
 
     private void Awake()
     {
         Instance = this;
 
         _specialistInfo = new Dictionary<SpecialistType, SpecialistInfo>();
+        _specialistInfoByLabel = new Dictionary<string, SpecialistInfo>();
         foreach (SpecialistInfo info in _specialists)
         {
             _specialistInfo[info.specialistType] = info;
+            _specialistInfoByLabel[GetSpecialistLabel(info)] = info;
         }
+    }
+
+    public string GetSpecialistLabel(SpecialistInfo info)
+    {
+        return System.Enum.GetName(
+            typeof(SpecialistType), info.specialistType);
     }
 
     public SpecialistInfo GetSpecialistInfo(SpecialistType specialistType)
     {
-        return _specialistInfo[specialistType];
+        SpecialistInfo result;
+        if (_specialistInfo.TryGetValue(specialistType, out result))
+        {
+            return result;
+        }
+        string message = string.Format(
+            "Cannot find Specialist: {0}", specialistType);
+        Debug.LogException(new System.Exception(message));
+        return null;
     }
+
+    public SpecialistInfo GetSpecialistInfoByLabel(string label)
+    {
+        SpecialistInfo result;
+        if (_specialistInfoByLabel.TryGetValue(label, out result))
+        {
+            return result;
+        }
+        string message = string.Format(
+            "Cannot find Specialist: {0}", label);
+        Debug.LogException(new System.Exception(message));
+        return null;
+    }
+
 
     public SpecialistInfo GetNewSpecialist(Player player, System.Random random)
     {

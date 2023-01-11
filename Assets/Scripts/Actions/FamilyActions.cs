@@ -96,7 +96,7 @@ namespace Actions
         private static void run(Player player, Action callback)
         {
             EventLogManager.Instance.Log("Personal Event: Divorce");
-            player.AddMentalState(
+            player.AddTimedState(
                 new DivorcedPenaltyState(
                     player,
                     FamilyManager.Instance.divorcePenaltyDuration,

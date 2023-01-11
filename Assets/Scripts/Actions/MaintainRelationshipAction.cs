@@ -1,10 +1,10 @@
 ﻿using Assets;
+using InvestmentPartnerInfo;
 using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
 using UI.Panels.Templates;
-using UnityEngine;
 
 namespace Actions
 {

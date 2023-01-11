@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using InvestmentPartnerInfo;
+using System.Collections.Generic;
 using UnityEngine;
 
-using Investment = System.Tuple<InvestmentPartner, int>;
+using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 
 namespace Assets
 {

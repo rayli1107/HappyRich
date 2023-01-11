@@ -1,4 +1,5 @@
-﻿using PlayerInfo;
+﻿using InvestmentPartnerInfo;
+using PlayerInfo;
 using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;

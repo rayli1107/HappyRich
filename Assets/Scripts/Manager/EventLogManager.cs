@@ -46,7 +46,7 @@ public class EventLogYearContext
     }
 }
 
-public class EventLogManager : MonoBehaviour, IGameDataSaver
+public class EventLogManager : MonoBehaviour
 {
     public static EventLogManager Instance { get; private set; }
     public LinkedList<EventLogYearContext> annualEventLogs { get; private set; }
@@ -85,15 +85,5 @@ public class EventLogManager : MonoBehaviour, IGameDataSaver
     public void Log(Action clickAction, string message)
     {
         annualEventLogs.Last?.Value?.Log(clickAction, message);
-    }
-
-    public void LoadGame(PersistentGameData data)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SaveGame(ref PersistentGameData data)
-    {
-        throw new NotImplementedException();
     }
 }

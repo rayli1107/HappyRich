@@ -4,7 +4,7 @@ using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
 
-using Investment = System.Tuple<InvestmentPartner, int>;
+using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 
 namespace UI.Panels.Assets
 {

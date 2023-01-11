@@ -1,19 +1,18 @@
-﻿using PlayerInfo;
+﻿using InvestmentPartnerInfo;
+using Michsky.UI.ModernUIPack;
+using PlayerInfo;
+using PlayerState;
+using ScriptableObjects;
+using System;
 using System.Collections.Generic;
+using UI.Panels;
+using UI.Panels.Actions;
+using UI.Panels.Assets;
+using UI.Panels.PlayerDetails;
+using UI.Panels.Templates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UI.Panels;
-using UI.Panels.Assets;
-using TMPro;
-using Michsky.UI.ModernUIPack;
-using UI.Panels.PlayerDetails;
-using UI.Panels.Templates;
-using UI.Panels.Actions;
-using PlayerState;
-using System;
-using ScriptableObjects;
-using Actions;
 
 namespace UI
 {

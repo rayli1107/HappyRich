@@ -13,7 +13,7 @@ using GetInvestmentFn = System.Func<
     PlayerInfo.Player,
     System.Random,
     UI.Panels.Assets.AvailableInvestmentContext>;
-using Investment = System.Tuple<InvestmentPartner, int>;
+using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 /*
 public struct BuyInvestmentContext
 {

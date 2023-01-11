@@ -1,19 +1,62 @@
-﻿using Actions;
-using Assets;
+﻿using InvestmentPartnerInfo;
 using PlayerState;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
-using UI.Panels.PlayerDetails;
 using UnityEngine;
 
 public partial class GameInstanceData
 {
-    public PlayerInfo.Player playerData;
+    public PlayerInfo.PlayerData playerData;
 }
 
 namespace PlayerInfo
 {
+    [Serializable]
+    public class PlayerData
+    {
+        public int personalExpenses;
+        public int costPerChild;
+        public int numChild;
+        public int age;
+        public int meditatedCount;
+        public int defaultHappiness;
+
+        [SerializeField]
+        public Spouse spouse;
+
+        // Custom Serialization
+        public List<string> jobs;
+        public List<string> oldJobs;
+        public string personality;
+        public List<string> selfReflectionStates;
+        public List<TimedPlayerStateData> timedPlayerStates;
+        public List<string> skills;
+        public List<string> specialists;
+        public List<int> contacts;
+
+        public void Initialize(
+            Profession profession, int defaultHappiness, string personality)
+        {
+            personalExpenses = profession.personalExpenses;
+            costPerChild = profession.costPerChild;
+            numChild = 0;
+            age = profession.startingAge;
+            meditatedCount = 0;
+            this.defaultHappiness = defaultHappiness;
+            spouse = null;
+
+            jobs = new List<string>() { profession.professionName };
+            oldJobs = new List<string>();
+            this.personality = personality;
+            selfReflectionStates = new List<string>();
+            timedPlayerStates = new List<TimedPlayerStateData>();
+            skills = new List<string>();
+            specialists = new List<string>();
+            contacts = new List<int>();
+        }
+    }
+
     [Serializable]
     public class Spouse
     {
@@ -37,25 +80,37 @@ namespace PlayerInfo
         }
     }
 
-    [Serializable]
-    public class Player : ISerializationCallbackReceiver
+    public class Player
     {
-        [SerializeField]
-        private List<string> _jobs;
-        public List<Profession> jobs { get; private set; }
-
-        [SerializeField]
-        private List<string> _oldJobs;
-        public List<Profession> oldJobs { get; private set; }
+        private PlayerData _playerData;
 
         public Portfolio portfolio { get; private set; }
+        public List<Profession> jobs { get; private set; }
+        public List<Profession> oldJobs { get; private set; }
         public int cash => portfolio.cash;
+        public Spouse spouse
+        {
+            get => _playerData.spouse;
+            set { _playerData.spouse = value; }
+        }
 
-        [SerializeField]
-        private int _personalExpenses;
+        public int age
+        {
+            get => _playerData.age;
+            set { _playerData.age = value; }
+        }
 
-        [SerializeField]
-        private int _costPerChild;
+        public int numChild
+        {
+            get => _playerData.numChild;
+            set { _playerData.numChild = value; }
+        }
+
+        public int meditatedCount
+        {
+            get => _playerData.meditatedCount;
+            set { _playerData.meditatedCount = value; }
+        }
 
         public int expenseModifier
         {
@@ -69,14 +124,8 @@ namespace PlayerInfo
                 return modifier;
             }
         }
-        public int personalExpenses => (_personalExpenses * expenseModifier) / 100;
-        public int costPerChild => (_costPerChild * expenseModifier) / 100;
-        public int numChild;
-        public int age;
-        public int meditatedCount = 0;
-
-        [SerializeField]
-        public Spouse spouse;
+        public int personalExpenses => _playerData.personalExpenses * expenseModifier / 100;
+        public int costPerChild => _playerData.costPerChild * expenseModifier / 100;
 
         public int maxHappiness => 100;
 
@@ -84,7 +133,7 @@ namespace PlayerInfo
         {
             get
             {
-                int happiness = _defaultHappiness;
+                int happiness = defaultHappiness;
                 foreach (AbstractPlayerState state in states)
                 {
                     happiness += state.happinessModifier;
@@ -93,19 +142,10 @@ namespace PlayerInfo
             }
         }
 
-        [SerializeField]
-        private string _personality;
         public Personality personality;
-
-
         private List<AbstractPlayerState> _passiveStates;
-
-        [SerializeField]
-        private List<string> _selfReflectionStates;
         public List<SelfReflectionState> selfReflectionStates { get; private set; }
 
-        [SerializeField]
-        private List<TimedPlayerStateData> _timedPlayerStates;
         public List<TimedPlayerState> timedPlayerStates { get; private set; }
         public List<AbstractPlayerState> states
         {
@@ -120,31 +160,16 @@ namespace PlayerInfo
             }
         }
 
-        [SerializeField]
-        private int _defaultHappiness;
-        public int defaultHappiness => _defaultHappiness;
+        public int defaultHappiness => _playerData.defaultHappiness;
 
         public List<InvestmentPartner> contacts { get; private set; }
         public List<SkillInfo> skills { get; private set; }
         public List<SpecialistInfo> specialists { get; private set; }
 
-        public Player(Profession profession, int defaultHappiness)
+        public Player(PlayerData playerData, Portfolio portfolio)
         {
-            oldJobs = new List<Profession>();
-            jobs = new List<Profession>();
-            jobs.Add(profession);
-            portfolio = new Portfolio(profession);
-            skills = new List<SkillInfo>();
-            specialists = new List<SpecialistInfo>();
-
-            _personalExpenses = profession.personalExpenses;
-            _costPerChild = profession.costPerChild;
-            numChild = 0;
-            age = profession.startingAge;
-            _defaultHappiness = defaultHappiness;
-            meditatedCount = 0;
-
-            contacts = new List<InvestmentPartner>();
+            _playerData = playerData;
+            this.portfolio = portfolio;
 
             _passiveStates = new List<AbstractPlayerState>()
             {
@@ -155,8 +180,39 @@ namespace PlayerInfo
                 new AssetManagementStress(this),
             };
 
-            selfReflectionStates = new List<SelfReflectionState>();
-            timedPlayerStates = new List<TimedPlayerState>();
+            LoadData();
+        }
+
+        public void SaveData()
+        {
+            _playerData.jobs = jobs.ConvertAll(j => j.professionName);
+            _playerData.oldJobs = oldJobs.ConvertAll(j => j.professionName);
+            _playerData.selfReflectionStates = selfReflectionStates.ConvertAll(s => s.name);
+            _playerData.personality = personality.name;
+            _playerData.timedPlayerStates = timedPlayerStates.ConvertAll(s => s.GetData());
+            _playerData.skills = skills.ConvertAll(SkillManager.Instance.GetSkillLabel);
+            _playerData.specialists = specialists.ConvertAll(SpecialistManager.Instance.GetSpecialistLabel);
+            _playerData.contacts = contacts.ConvertAll(c => c.partnerId);
+        }
+
+        public void LoadData()
+        {
+            jobs = _playerData.jobs?.ConvertAll(
+                n => JobManager.Instance.GetJobByName(n, true));
+            oldJobs = _playerData.oldJobs?.ConvertAll(
+                n => JobManager.Instance.GetJobByName(n, true));
+            selfReflectionStates = _playerData.selfReflectionStates?.ConvertAll(
+                n => MentalStateManager.Instance.GetSelfReflectionStateByName(this, n, true));
+            personality = MentalStateManager.Instance.GetPersonalityByName(
+                this, _playerData.personality, true);
+            timedPlayerStates = _playerData.timedPlayerStates?.ConvertAll(
+                s => MentalStateManager.Instance.CreateTimedStateFromData(this, s, true));
+            skills = _playerData.skills?.ConvertAll(
+                SkillManager.Instance.GetSkillByLabel);
+            specialists = _playerData.specialists?.ConvertAll(
+                SpecialistManager.Instance.GetSpecialistInfoByLabel);
+            contacts = _playerData.contacts?.ConvertAll(
+                InvestmentPartnerManager.Instance.GetPartnerById);
         }
 
         public void OnPlayerTurnStart(System.Random random)
@@ -349,25 +405,6 @@ namespace PlayerInfo
             return ret;
         }
 
-        public void OnBeforeSerialize() 
-        {
-            _jobs = jobs.ConvertAll(j => j.professionName);
-            _oldJobs = oldJobs.ConvertAll(j => j.professionName);
-            _selfReflectionStates = selfReflectionStates.ConvertAll(s => s.name);
-            _personality = personality.name;
-        }
 
-        public void OnAfterDeserialize()
-        {
-            jobs = _jobs.ConvertAll(
-                n => JobManager.Instance.GetJobByName(n, true));
-            oldJobs = _oldJobs.ConvertAll(
-                n => JobManager.Instance.GetJobByName(n, true));
-            selfReflectionStates = _selfReflectionStates.ConvertAll(
-                n => MentalStateManager.Instance.GetSelfReflectionStateByName(this, n, true));
-            personality =
-                MentalStateManager.Instance.GetPersonalityByName(this, _personality, true);
-
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets;
+using InvestmentPartnerInfo;
 using PlayerInfo;
 using ScriptableObjects;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using BusinessEntity = System.Tuple<
 using StartupEntity = System.Tuple<
     Assets.PartialInvestment, Assets.Startup>;
 
-using Investment = System.Tuple<InvestmentPartner, int>;
+using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 using UnityEngine;
 using PlayerState;
 using Actions;
@@ -183,7 +184,7 @@ public static class TransactionManager
                 local.GetLuxuryItem(item.profile),
                 local.GetCurrency(item.value));
             player.portfolio.luxuryItems.Add(item);
-            player.AddMentalState(
+            player.AddTimedState(
                 new LuxuryHappinessState(
                     player, LuxuryManager.Instance.luxuryHappinessDuration));
         }

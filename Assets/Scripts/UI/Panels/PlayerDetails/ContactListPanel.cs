@@ -1,11 +1,9 @@
-﻿using PlayerInfo;
+﻿using InvestmentPartnerInfo;
+using PlayerInfo;
 using ScriptableObjects;
 using System.Collections.Generic;
-using TMPro;
 using UI.Panels.Templates;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace UI.Panels.PlayerDetails
 {

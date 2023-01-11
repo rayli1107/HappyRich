@@ -1,44 +1,70 @@
 ﻿using Actions;
 using Assets;
+using InvestmentPartnerInfo;
 using PlayerInfo;
 using ScriptableObjects;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RiskTolerance
+public partial class GameInstanceData
 {
-    kLow,
-    kMedium,
-    kHigh
+    public List<InvestmentPartner> investmentPartners;
 }
 
-public class InvestmentPartner
+namespace InvestmentPartnerInfo
 {
-    public string name { get; private set; }
-    public int cash;
-    public int duration { get; private set; }
-    private int _initialDuration;
-    public RiskTolerance riskTolerance { get; private set; }
-
-    public InvestmentPartner(
-        string name, int cash, RiskTolerance riskTolerance, int duration)
+    public enum RiskTolerance
     {
-        this.name = name;
-        this.cash = cash;
-        this.riskTolerance = riskTolerance;
-        _initialDuration = duration;
-        RefreshDuration();
+        kLow,
+        kMedium,
+        kHigh
     }
 
-    public void OnTurnStart()
+    [Serializable]
+    public class InvestmentPartner
     {
-        --duration;
-    }
+        [SerializeField]
+        private int _partnerId;
+        public int partnerId => _partnerId;
 
-    public void RefreshDuration()
-    {
-        duration = _initialDuration;
+        [SerializeField]
+        private string _name;
+        public string name => _name;
+
+        public int cash;
+
+        [SerializeField]
+        private int _duration;
+        public int duration => _duration;
+
+        [SerializeField]
+        private int _initialDuration;
+
+        [SerializeField]
+        private RiskTolerance _riskTolerance;
+        public RiskTolerance riskTolerance => _riskTolerance;
+
+        public InvestmentPartner(
+            int partnerId, string name, int cash, RiskTolerance riskTolerance, int duration)
+        {
+            _partnerId = partnerId;
+            _name = name;
+            this.cash = cash;
+            _riskTolerance = riskTolerance;
+            _initialDuration = duration;
+            RefreshDuration();
+        }
+
+        public void OnTurnStart()
+        {
+            --_duration;
+        }
+
+        public void RefreshDuration()
+        {
+            _duration = _initialDuration;
+        }
     }
 }
 
@@ -64,34 +90,31 @@ public class InvestmentPartnerManager : MonoBehaviour
 #pragma warning restore 0649
 
     public static InvestmentPartnerManager Instance { get; private set; }
+    public PersistentGameData PersistentGameData =>
+        GameSaveLoadManager.Instance.persistentGameData;
+    public GameInstanceData GameData => PersistentGameData.gameInstanceData;
 
     private void Awake()
     {
         Instance = this;        
     }
 
-    private InvestmentPartner GetPartnerFromProfile(
-        InvestmentPartnerProfile profile, System.Random random)
-    {
-        int min = profile.cashRange.x / profile.cashIncrement;
-        int max = profile.cashRange.y / profile.cashIncrement;
-        int cash = random.Next(min, max + 1) * profile.cashIncrement;
-        string name = _names[random.Next(_names.Length)];
-
-        Array riskLevels = Enum.GetValues(typeof(RiskTolerance));
-        RiskTolerance riskTolerance =
-            random.Next(2) == 0 ? RiskTolerance.kLow : RiskTolerance.kHigh;
-
-        return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
-    }
-
     private InvestmentPartner getPartner(int lo, int hi, System.Random random)
     {
+        if (GameData.investmentPartners == null)
+        {
+            GameData.investmentPartners = new List<InvestmentPartner>();
+        }
+
         int cash = Mathf.Max(1, random.Next(lo, hi + 1)) * _increment;
         string name = _names[random.Next(_names.Length)];
         RiskTolerance riskTolerance =
             random.Next(2) == 0 ? RiskTolerance.kLow : RiskTolerance.kHigh;
-        return new InvestmentPartner(name, cash, riskTolerance, _defaultDuration);
+        int partnerId = GameData.investmentPartners.Count;
+        InvestmentPartner partner = new InvestmentPartner(
+            partnerId, name, cash, riskTolerance, _defaultDuration);
+        GameData.investmentPartners.Add(partner);
+        return partner;
     }
 
     private List<InvestmentPartner> getPartners(
@@ -123,8 +146,6 @@ public class InvestmentPartnerManager : MonoBehaviour
         }
         return partners;
     }
-
-
 
     private Action<Action> getActionFromPartnerList(
         Player player,
@@ -159,5 +180,17 @@ public class InvestmentPartnerManager : MonoBehaviour
     {
         List<InvestmentPartner> partners = getPartners(player, random);
         return getActionFromPartnerList(player, partners);
+    }
+
+    public InvestmentPartner GetPartnerById(int partnerId)
+    {
+        if (partnerId < GameData.investmentPartners.Count)
+        {
+            return GameData.investmentPartners[partnerId];
+        }
+        string message = string.Format(
+            "Cannot find partner with id {0}", partnerId);
+        Debug.LogException(new Exception(message));
+        return null;
     }
 }

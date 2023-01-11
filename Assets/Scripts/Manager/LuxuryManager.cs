@@ -32,14 +32,14 @@ public class LuxuryManager : MonoBehaviour
 
     public int GetLuxuryHappinessModifier(Player player)
     {
-        return player.mentalStates.Exists(s => s is Extravagant) ?
+        return player.states.Exists(s => s is Extravagant) ?
             _extravagantLuxuryHappinessModifier : _defaultLuxuryHappinessModifier;
     }
 
     public List<Action<Action>> GetEvents(Player player, System.Random random)
     {
         List<Action<Action>> events = new List<Action<Action>>();
-        if (!player.mentalStates.Exists(s => s is LuxuryHappinessState) && _luxuryItems.Length > 0)
+        if (!player.states.Exists(s => s is LuxuryHappinessState) && _luxuryItems.Length > 0)
         {
             LuxuryItemProfile profile = _luxuryItems[random.Next(_luxuryItems.Length)];
             int priceLow = profile.itemPriceRange.x / profile.itemIncrement;

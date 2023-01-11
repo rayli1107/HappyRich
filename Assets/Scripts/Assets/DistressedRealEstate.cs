@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using InvestmentPartnerInfo;
+using System.Collections.Generic;
 
 namespace Assets
 {

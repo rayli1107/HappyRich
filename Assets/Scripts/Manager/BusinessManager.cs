@@ -2,12 +2,8 @@
 using Assets;
 using PlayerInfo;
 using ScriptableObjects;
-using System;
-using System.Collections.Generic;
 using UI.Panels.Assets;
 using UnityEngine;
-
-using Investment = System.Tuple<InvestmentPartner, int>;
 
 public class BusinessManager : MonoBehaviour
 {

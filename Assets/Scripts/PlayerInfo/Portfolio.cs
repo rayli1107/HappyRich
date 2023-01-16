@@ -14,32 +14,62 @@ using AssetTypeEntity = System.Tuple<
     string, System.Collections.Generic.List<Assets.AbstractAsset>>;
 using System;
 
+public partial class GameInstanceData
+{
+    public PlayerInfo.PortfolioData portfolioData;
+}
+
+
 namespace PlayerInfo
 {
     [Serializable]
-    public class Portfolio : ISerializationCallbackReceiver
+    public class PortfolioData
     {
-        [SerializeField]
-        private int _studentLoanAmount;
-        public StudentLoan studentLoan { get; private set; }
-
-        [SerializeField]
-        private int _personalLoanAmount;
-        public PersonalLoan personalLoan { get; private set; }
-
-        [SerializeField]
-        private int _carValue;
-        public Car car { get; private set; }
-
-        [SerializeField]
-        private int _autoLoanAmount;
-        public AutoLoan autoLoan { get; private set; }
-
-        [SerializeField]
-        private int _cash;
-        public int cash => _cash;
-
+        public int cash;
         public bool hasHealthInsurance;
+
+        // Custom Serialization
+        public int studentLoan;
+        public int personalLoan;
+        public int carValue;
+        public int autoLoan;
+
+        public List<PurchasedStockData> stocks;
+
+        public void Initialize(Profession profession)
+        {
+            cash = profession.startingCash;
+            hasHealthInsurance = false;
+
+            studentLoan = profession.jobCost;
+            personalLoan = 0;
+            carValue = profession.autoLoan;
+            autoLoan = profession.autoLoan;
+
+            stocks = new List<PurchasedStockData>();
+        }
+    }
+
+    public class Portfolio
+    {
+        private PortfolioData _data;
+
+        public int cash
+        {
+            get => _data.cash;
+            set { _data.cash = value; }
+        }
+
+        public bool hasHealthInsurance
+        {
+            get => _data.hasHealthInsurance;
+            set { _data.hasHealthInsurance = value; }
+        }
+
+        public StudentLoan studentLoan { get; private set; }
+        public PersonalLoan personalLoan { get; private set; }
+        public Car car { get; private set; }
+        public AutoLoan autoLoan { get; private set; }
 
         public Dictionary<string, PurchasedStock> stocks { get; private set; }
         public List<RentalProperty> rentalProperties { get; private set; }
@@ -49,21 +79,35 @@ namespace PlayerInfo
         public List<AbstractTimedInvestment> timedInvestments { get; private set; }
         public List<LuxuryItem> luxuryItems { get; private set; }
 
-        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        public void SaveData()
         {
-            _studentLoanAmount = studentLoan != null ? studentLoan.amount : 0;
-            _personalLoanAmount = personalLoan != null ? personalLoan.amount : 0;
-            _autoLoanAmount = autoLoan != null ? autoLoan.amount : 0;
-            _carValue = car != null ? car.value : 0;
+            _data.studentLoan = studentLoan != null ? studentLoan.amount : 0;
+            _data.personalLoan = personalLoan != null ? personalLoan.amount : 0;
+            _data.carValue = car != null ? car.value : 0;
+            _data.autoLoan = autoLoan != null ? autoLoan.amount : 0;
+
+            _data.stocks.Clear();
+            foreach (PurchasedStock stock in stocks.Values)
+            {
+                _data.stocks.Add(stock.SaveToStockData());
+            }
         }
 
-        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        public void LoadData()
         {
-            studentLoan = _studentLoanAmount > 0 ? new StudentLoan(_studentLoanAmount) : null;
-            personalLoan = _personalLoanAmount > 0 ? new PersonalLoan(_personalLoanAmount) : null;
-            autoLoan = _autoLoanAmount > 0 ? new AutoLoan(_autoLoanAmount) : null;
-            car = _carValue > 0 ? new Car(_carValue) : null;
+            studentLoan = _data.studentLoan > 0 ? new StudentLoan(_data.studentLoan) : null;
+            personalLoan = _data.personalLoan > 0 ? new PersonalLoan(_data.personalLoan) : null;
+            car = _data.carValue > 0 ? new Car(_data.carValue) : null;
+            autoLoan = _data.autoLoan > 0 ? new AutoLoan(_data.autoLoan) : null;
+
+            stocks.Clear();
+            foreach (PurchasedStockData data in _data.stocks)
+            {
+                stocks[data.name] = new PurchasedStock(
+                    StockManager.Instance.GetStockByName(data.name, true), data.count);
+            }
         }
+
 
         public List<PartialInvestment> properties {
             get
@@ -203,20 +247,9 @@ namespace PlayerInfo
         }
 
 
-        public Portfolio(Profession profession)
+        public Portfolio(PortfolioData data)
         {
-            if (profession.autoLoan > 0)
-            {
-                car = new Car(profession.autoLoan);
-                autoLoan = new AutoLoan(profession.autoLoan);
-            }
-
-            if (profession.jobCost > 0)
-            {
-                studentLoan = new StudentLoan(profession.jobCost);
-            }
-
-            _cash = profession.startingCash;
+            _data = data;
             stocks = new Dictionary<string, PurchasedStock>();
             rentalProperties = new List<RentalProperty>();
             distressedProperties = new List<DistressedProperty>();
@@ -247,7 +280,7 @@ namespace PlayerInfo
             EventLogManager.Instance.LogFormat(
                 "Add Cash: {0}",
                 Localization.Instance.GetCurrency(amount));
-            _cash += amount;
+            _data.cash += amount;
         }
 
         public void AddStock(AbstractStock stock, int number)

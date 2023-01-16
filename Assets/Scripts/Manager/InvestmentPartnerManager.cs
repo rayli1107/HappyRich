@@ -16,9 +16,9 @@ namespace InvestmentPartnerInfo
 {
     public enum RiskTolerance
     {
-        kLow,
-        kMedium,
-        kHigh
+        kLow = 0,
+        kMedium = 1,
+        kHigh = 2,
     }
 
     [Serializable]

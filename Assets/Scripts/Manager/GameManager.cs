@@ -54,10 +54,15 @@ public class GameManager : MonoBehaviour, IGameDataSaver
     public void CreatePlayer(Profession profession)
     {
         Personality personality = MentalStateManager.Instance.GetPersonality(player, Random);
+
         GameData.playerData = new PlayerData();
         GameData.playerData.Initialize(profession, defaultHappiness, personality.name);
 
-        player = new Player(GameData.playerData, new Portfolio(profession));
+        GameData.portfolioData = new PortfolioData();
+        GameData.portfolioData.Initialize(profession);
+
+        player = new Player(
+            GameData.playerData, new Portfolio(GameData.portfolioData));
     }
 
     // Update is called once per frame

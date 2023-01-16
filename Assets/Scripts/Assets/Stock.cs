@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace Assets
 {
+    [Serializable]
+    public struct PurchasedStockData
+    {
+        public int count;
+        public string name;
+    }
+
     public class PurchasedStock : AbstractAsset
     {
         public AbstractStock stock { get; private set; }
@@ -17,10 +24,10 @@ namespace Assets
             Mathf.FloorToInt(count * stock.value * stock.yieldRange.x / 100f),
             Mathf.FloorToInt(count * stock.value * stock.yieldRange.y / 100f));
 
-        public PurchasedStock(AbstractStock stock) : base(stock.name, 0, Vector2Int.zero)
+        public PurchasedStock(AbstractStock stock, int count=0) : base(stock.name, 0, Vector2Int.zero)
         {
             this.stock = stock;
-            count = 0;
+            this.count = count;
         }
 
         public void AddCount(int amount)
@@ -49,6 +56,14 @@ namespace Assets
         {
             int yield = random.Next(stock.yieldRange.x, stock.yieldRange.y + 1);
             return Mathf.FloorToInt(count * stock.value * yield / 100f);
+        }
+
+        public PurchasedStockData SaveToStockData()
+        {
+            PurchasedStockData data;
+            data.name = stock.name;
+            data.count = count;
+            return data;
         }
     }
 

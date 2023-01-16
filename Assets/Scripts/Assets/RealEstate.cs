@@ -8,6 +8,7 @@ namespace Assets
     {
         public override bool returnCapital => true;
         public RealEstateTemplate template { get; private set; }
+//        private RealEstateTemplate template;
         public int unitCount { get; private set; }
 
         public AbstractRealEstate(

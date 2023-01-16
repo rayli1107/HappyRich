@@ -185,6 +185,7 @@ namespace PlayerInfo
 
         public void SaveData()
         {
+            portfolio.SaveData();
             _playerData.jobs = jobs.ConvertAll(j => j.professionName);
             _playerData.oldJobs = oldJobs.ConvertAll(j => j.professionName);
             _playerData.selfReflectionStates = selfReflectionStates.ConvertAll(s => s.name);
@@ -197,6 +198,7 @@ namespace PlayerInfo
 
         public void LoadData()
         {
+            portfolio.LoadData();
             jobs = _playerData.jobs?.ConvertAll(
                 n => JobManager.Instance.GetJobByName(n, true));
             oldJobs = _playerData.oldJobs?.ConvertAll(

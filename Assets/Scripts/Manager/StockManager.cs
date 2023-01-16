@@ -234,13 +234,15 @@ public class StockManager : MonoBehaviour
         return null;
     }
 
-    public AbstractStock GetStockByName(string name)
+    public AbstractStock GetStockByName(string name, bool throwException = false)
     {
         AbstractStock result;
         if (_stocks.TryGetValue(name, out result))
         {
             return result;
         }
+        string message = string.Format("Cannot find stock {0}", name);
+        Debug.LogException(new Exception(message));
         return null;
     }
 }

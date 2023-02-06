@@ -4,30 +4,89 @@ using UnityEngine;
 
 namespace Assets
 {
-    public abstract class AbstractRealEstate : AbstractInvestment
+    [Serializable]
+    public class RealEstateData
     {
-        public override bool returnCapital => true;
-        public RealEstateTemplate template { get; private set; }
-//        private RealEstateTemplate template;
-        public int unitCount { get; private set; }
+        [SerializeField]
+        private string _templateLabel;
+        public string templateLabel => _templateLabel;
 
-        public AbstractRealEstate(
-            RealEstateTemplate template,
+        [SerializeField]
+        private int _rehabPrice;
+        public int rehabPrice => _rehabPrice;
+
+        [SerializeField]
+        private int _appraisalPrice;
+        public int appraisalPrice => _appraisalPrice;
+
+        [SerializeField]
+        private int _unitCount;
+        public int unitCount => _unitCount;
+
+        [SerializeField]
+        private InvestmentData _investmentData;
+        public InvestmentData investmentData => _investmentData;
+
+        public void Initialize(
+            string templateLabel,
             int originalPrice,
             int marketValue,
             int annualIncome,
-            int unitCount)
-            : base("", originalPrice, marketValue, new Vector2Int(annualIncome, annualIncome))
+            int unitCount,
+            int rehabPrice = 0,
+            int appraisalPrice = 0)
         {
-            label = unitCount > 1 ?
-                string.Format(template.label, unitCount) :
-                template.label;
-            description = unitCount > 1 ?
-                string.Format(template.description, unitCount) :
-                template.description;
+            _templateLabel = templateLabel;
+            _rehabPrice = rehabPrice;
+            _appraisalPrice = appraisalPrice;
+            _unitCount = unitCount;
 
+            _investmentData = new InvestmentData();
+            _investmentData.Initialize(originalPrice, marketValue, annualIncome, annualIncome);
+        }
+    }
+
+    public abstract class AbstractRealEstate : AbstractInvestment
+    {
+        protected RealEstateData _realEstateData { get; private set; }
+        public override bool returnCapital => true;
+        public RealEstateTemplate template { get; private set; }
+
+        protected void AddMortgage(int maxMortgageLtv)
+        {
+            if (maxMortgageLtv > 0)
+            {
+                _realEstateData.investmentData.securedLoan = new AdjustableLoanData();
+                _realEstateData.investmentData.securedLoan.Initialize(
+                    maxMortgageLtv, maxMortgageLtv);
+                setupSecuredLoan();
+            }
+        }
+
+        protected void setupSecuredLoan()
+        {
+            if (_realEstateData.investmentData.securedLoan != null)
+            {
+                primaryLoan = new Mortgage(
+                    this, _realEstateData.investmentData.securedLoan, false);
+            }
+        }
+
+
+        public AbstractRealEstate(
+            RealEstateTemplate template,
+            RealEstateData realEstateData)
+            : base(realEstateData.investmentData)
+        {
+            _realEstateData = realEstateData;
             this.template = template;
-            this.unitCount = unitCount;
+
+            label = realEstateData.unitCount > 1 ?
+                string.Format(template.label, realEstateData.unitCount) :
+                template.label;
+            description = realEstateData.unitCount > 1 ?
+                string.Format(template.description, realEstateData.unitCount) :
+                template.description;
         }
     }
 }

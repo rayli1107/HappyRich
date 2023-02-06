@@ -122,7 +122,8 @@ namespace Assets
             label = startup.label;
             originalLoanAmount = startup.combinedLiability.amount;
             originalInterest = startup.accruedDelayedInterest;
-            _restructuredLoan = new RestructuredBusinessLoan(startup);
+            _restructuredLoan = new RestructuredBusinessLoan(startup, originalLoanAmount + originalInterest);
+            startup.ClearPrivateLoan();
         }
 
         public override List<string> getPurchaseDetails()

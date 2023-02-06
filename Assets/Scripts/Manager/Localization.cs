@@ -75,9 +75,9 @@ public class Localization : MonoBehaviour
         return GetPlayerState(state.name);
     }
 
-    public string GetRealEstateLabel(RealEstateProfile profile)
+    public string GetRealEstateLabel(RealEstateTemplate template)
     {
-        return colorWrap(profile.label, _colorRealEstate);
+        return colorWrap(template.label, _colorRealEstate);
     }
 
     public string GetBusinessDescription(string description)

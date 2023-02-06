@@ -7,24 +7,62 @@ using System;
 using System.Collections.Generic;
 using UI.Panels.Assets;
 using UnityEngine;
+public partial class GameInstanceData
+{
+    public List<RealEstateTemplate> realEstateTemplatesSmall;
+    public List<RealEstateTemplate> realEstateTemplatesLarge;
+}
 
+[Serializable]
 public class RealEstateTemplate
 {
-    public RealEstateProfile profile { get; private set; }
-    public string description => profile.description;
-    public string label => profile.label;
-    public int basePrice { get; private set; }
-    public float priceVariance => profile.priceVariance;
-    public Vector2Int rentalRange => profile.rentalRange;
-    public int priceIncrement => profile.priceIncrement;
-    public int rentalIncrement => profile.rentalIncrement;
-    public bool commercial => profile.commercial;
-    public int[] unitCount => profile.unitCount;
+    [SerializeField]
+    private string _description;
+    public string description => _description;
 
-    public RealEstateTemplate(RealEstateProfile profile, System.Random random)
+    [SerializeField]
+    private string _label;
+    public string label => _label;
+
+    [SerializeField]
+    private float _priceVariance;
+    public float priceVariance => _priceVariance;
+
+    [SerializeField]
+    private Vector2Int _rentalRange;
+    public Vector2Int rentalRange => _rentalRange;
+
+    [SerializeField]
+    private int _priceIncrement;
+    public int priceIncrement => _priceIncrement;
+
+    [SerializeField]
+    private int _rentalIncrement;
+    public int rentalIncrement => _rentalIncrement;
+
+    [SerializeField]
+    private bool _commercial;
+    public bool commercial => _commercial;
+
+    [SerializeField]
+    private int[] _unitCount;
+    public int[] unitCount => _unitCount;
+
+    [SerializeField]
+    private int _basePrice;
+    public int basePrice => _basePrice;
+
+    public void Initialize(RealEstateProfile profile, System.Random random)
     {
-        this.profile = profile;
-        basePrice = priceIncrement * random.Next(
+        _description = profile.description;
+        _label = profile.label;
+        _priceVariance = profile.priceVariance;
+        _rentalRange = profile.rentalRange;
+        _priceIncrement = profile.priceIncrement;
+        _rentalIncrement = profile.rentalIncrement;
+        _commercial = profile.commercial;
+        _unitCount = profile.unitCount;
+        _basePrice = priceIncrement * random.Next(
             profile.basePriceRange.x / priceIncrement,
             profile.basePriceRange.y / priceIncrement + 1);
     }
@@ -63,9 +101,13 @@ public class RealEstateManager : MonoBehaviour
     public int maxPrivateLoanLTV => _maxPrivateLoanLTV;
     public float sellChance => _sellChance;
 
+    public Dictionary<string, RealEstateTemplate> realEstateTemplates { get; private set; }
 
-    private List<RealEstateTemplate> _smallInvestments;
-    private List<RealEstateTemplate> _largeInvestments;
+
+
+    public PersistentGameData PersistentGameData =>
+        GameSaveLoadManager.Instance.persistentGameData;
+    public GameInstanceData GameData => PersistentGameData.gameInstanceData;
 
     private void Awake()
     {
@@ -74,21 +116,39 @@ public class RealEstateManager : MonoBehaviour
 
     public void Initialize(System.Random random)
     {
-        _smallInvestments = new List<RealEstateTemplate>();
-        _largeInvestments = new List<RealEstateTemplate>();
-
-        foreach (RealEstateProfile profile in _profiles)
+        if (GameData.realEstateTemplatesSmall == null ||
+            GameData.realEstateTemplatesLarge == null)
         {
-            RealEstateTemplate template = new RealEstateTemplate(profile, random);
+            GameData.realEstateTemplatesSmall = new List<RealEstateTemplate>();
+            GameData.realEstateTemplatesLarge = new List<RealEstateTemplate>();
 
-            if (profile.smallInvestment)
+            foreach (RealEstateProfile profile in _profiles)
             {
-                _smallInvestments.Add(template);
+                RealEstateTemplate template = new RealEstateTemplate();
+                template.Initialize(profile, random);
+
+                if (profile.smallInvestment)
+                {
+                    GameData.realEstateTemplatesSmall.Add(template);
+                }
+                else
+                {
+                    GameData.realEstateTemplatesLarge.Add(template);
+                }
             }
-            else
-            {
-                _largeInvestments.Add(template);
-            }
+        }
+
+        realEstateTemplates = new Dictionary<string, RealEstateTemplate>();
+        foreach (RealEstateTemplate template in GameData.realEstateTemplatesSmall)
+        {
+            Debug.Assert(!realEstateTemplates.ContainsKey(template.label));
+            realEstateTemplates[template.label] = template;
+        }
+
+        foreach (RealEstateTemplate template in GameData.realEstateTemplatesLarge)
+        {
+            Debug.Assert(!realEstateTemplates.ContainsKey(template.label));
+            realEstateTemplates[template.label] = template;
         }
     }
 
@@ -175,14 +235,14 @@ public class RealEstateManager : MonoBehaviour
         }
 
         int maxMortgageLtv = getDistressedMortgageLTV(player);
+        RealEstateData data = new RealEstateData();
+        data.Initialize(
+            template.label, purchasePrice, appraisalPrice, annualIncome, unitCount, rehabPrice, appraisalPrice);
+
         DistressedRealEstate asset = new DistressedRealEstate(
             template,
+            data,
             player.GetDebtPartners(),
-            purchasePrice,
-            rehabPrice,
-            appraisalPrice,
-            annualIncome,
-            unitCount,
             maxMortgageLtv,
             _maxDistressedLoanLTV);
         return new AvailableInvestmentContext(
@@ -213,8 +273,11 @@ public class RealEstateManager : MonoBehaviour
         }
 
         int ltv = getRentalMortgageLTV(player);
-        RentalRealEstate asset = new RentalRealEstate(
-            template, price, price, annualIncome, ltv, ltv, unitCount);
+
+        RealEstateData data = new RealEstateData();
+        data.Initialize(template.label, price, price, annualIncome, unitCount);
+
+        RentalRealEstate asset = new RentalRealEstate(template, data, ltv);
         return new AvailableInvestmentContext(
             asset,
             BuyRentalRealEstateAction.GetBuyAction(player, asset));
@@ -241,21 +304,21 @@ public class RealEstateManager : MonoBehaviour
         System.Random random,
         int? maxPrice = null)
     {
-        RealEstateTemplate template =
-            _smallInvestments[random.Next(_smallInvestments.Count)];
+        int index = random.Next(GameData.realEstateTemplatesSmall.Count);
+        RealEstateTemplate template = GameData.realEstateTemplatesSmall[index];
         return GetRentalRealEstateAction(player, template, random, maxPrice);
     }
 
     public AvailableInvestmentContext GetSmallInvestmentAction(
         Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _smallInvestments, random);
+        return GetInvestmentAction(player, GameData.realEstateTemplatesSmall, random);
     }
 
     public AvailableInvestmentContext GetLargeInvestmentAction(
         Player player, System.Random random)
     {
-        return GetInvestmentAction(player, _largeInvestments, random);
+         return GetInvestmentAction(player, GameData.realEstateTemplatesLarge, random);
     }
 
     public RefinancedRealEstate RefinanceDistressedProperty(

@@ -1,13 +1,45 @@
 ﻿using InvestmentPartnerInfo;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets
 {
+    [Serializable]
+    public class InvestmentData
+    {
+        public int originalPrice;
+        public int marketValue;
+        public int incomeRangeLow;
+        public int incomeRangeHigh;
+        public float multiplier;
+
+        [SerializeField]
+        public AdjustableLoanData securedLoan;
+
+        [SerializeField]
+        public AdjustableLoanData privateLoan;
+
+        public void Initialize(
+            int originalPrice,
+            int marketValue,
+            int incomeRangeLow,
+            int incomeRangeHigh)
+        {
+            this.originalPrice = originalPrice;
+            this.marketValue = marketValue;
+            this.incomeRangeLow = incomeRangeLow;
+            this.incomeRangeHigh = incomeRangeHigh;
+            multiplier = 1f;
+        }
+    }
+
     public abstract class AbstractInvestment : AbstractAsset
     {
+        private InvestmentData _investmentData;
         public abstract string investmentType { get; }
-        public int originalPrice { get; protected set; }
+
+        public int originalPrice => _investmentData.originalPrice;
         public virtual int totalCost => originalPrice;
         public virtual int loanValue => originalPrice;
         public virtual int loanUnitValue => loanValue / 100;
@@ -17,10 +49,9 @@ namespace Assets
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
 
-        public float multiplier;
         public override Vector2Int totalIncomeRange => new Vector2Int(
-            Mathf.FloorToInt(base.totalIncomeRange.x * multiplier),
-            Mathf.FloorToInt(base.totalIncomeRange.y * multiplier));
+            Mathf.FloorToInt(_investmentData.incomeRangeLow * _investmentData.multiplier),
+            Mathf.FloorToInt(_investmentData.incomeRangeHigh * _investmentData.multiplier));
         public AdjustableSecuredLoan primaryLoan { get; protected set; }
         public PrivateLoan privateLoan { get; protected set; }
 
@@ -28,11 +59,11 @@ namespace Assets
         protected virtual int _privateLoanRate =>
             InterestRateManager.Instance.defaultPrivateLoanRate;
         public virtual bool returnCapital => true;
-        public virtual List<AbstractSecuredLoan> securedLoans
+        public virtual List<AdjustableSecuredLoan> securedLoans
         {
             get
             {
-                List<AbstractSecuredLoan> loans = new List<AbstractSecuredLoan>();
+                List<AdjustableSecuredLoan> loans = new List<AdjustableSecuredLoan>();
                 if (primaryLoan != null)
                 {
                     loans.Add(primaryLoan);
@@ -60,7 +91,7 @@ namespace Assets
             get
             {
                 int interest = 0;
-                foreach (AbstractSecuredLoan loan in securedLoans)
+                foreach (AdjustableSecuredLoan loan in securedLoans)
                 {
                     interest += loan.delayedExpense;
                 }
@@ -68,25 +99,30 @@ namespace Assets
             }
         }
 
-        public AbstractInvestment(
-            string name,
-            int originalPrice,
-            int marketValue,
-            Vector2Int totalIncomeRange)
-            : base(name, marketValue, totalIncomeRange)
+        public AbstractInvestment(InvestmentData data)
+            : base("", data.marketValue, Vector2Int.zero)
         {
-            multiplier = 1;
-            this.originalPrice = originalPrice;
-            label = name;
+            _investmentData = data;
+            setupPrivateLoan(null);
+        }
+
+        protected void setupPrivateLoan(List<InvestmentPartner> partners)
+        {
+            if (_investmentData.privateLoan != null)
+            {
+                privateLoan = new PrivateLoan(
+                    this, _investmentData.privateLoan, partners, _privateLoanRate, _isDebtInterestDelayed);
+            }
         }
 
         public void AddPrivateLoan(
             List<InvestmentPartner> partners, int maxltv)
         {
-            if (privateLoan == null)
+            if (_investmentData.privateLoan == null)
             {
-                privateLoan = new PrivateLoan(
-                    this, partners, maxltv, _privateLoanRate, _isDebtInterestDelayed);
+                _investmentData.privateLoan = new AdjustableLoanData();
+                _investmentData.privateLoan.Initialize(0, maxltv);
+                setupPrivateLoan(partners);
             }
         }
 
@@ -97,6 +133,7 @@ namespace Assets
                 privateLoan.ltv = 0;
                 privateLoan = null;
             }
+            _investmentData.privateLoan = null;
         }
 
         protected virtual void resetLoans()

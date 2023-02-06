@@ -1,4 +1,5 @@
 ﻿using InvestmentPartnerInfo;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,29 +9,22 @@ namespace Assets
     {
         public override string investmentType => "Rental Real Estate";
 
-        private int _defaultMortgageLtv;
         private int _maxMortgageLtv;
 
         protected override void resetLoans()
         {
             ClearPrivateLoan();
-            primaryLoan = null;
-            primaryLoan = new Mortgage(this, _defaultMortgageLtv, _maxMortgageLtv, false);
+            AddMortgage(_maxMortgageLtv);
         }
 
         public RentalRealEstate(
             RealEstateTemplate template,
-            int purchasePrice,
-            int marketValue,
-            int annualIncome,
-            int mortgageLtv,
-            int maxMortgageLtv,
-            int unitCount)
-            : base(template, purchasePrice, marketValue, annualIncome, unitCount)
+            RealEstateData data,
+            int maxMortgateLtv)
+            : base(template, data)
         {
-            _defaultMortgageLtv = mortgageLtv;
-            _maxMortgageLtv = maxMortgageLtv;
-            resetLoans();
+            _maxMortgageLtv = maxMortgateLtv;
+            setupSecuredLoan();
         }
     }
     

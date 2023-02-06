@@ -1,4 +1,5 @@
 ﻿using InvestmentPartnerInfo;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,58 +7,175 @@ using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 
 namespace Assets
 {
+    [Serializable]
+    public class InvestorContribution
+    {
+        [SerializeField]
+        private int _partnerId;
+        public int partnerId => _partnerId;
+
+        public int amount;
+
+        public InvestorContribution(int partnerId, int amount)
+        {
+            _partnerId = partnerId;
+            this.amount = amount;
+        }
+    }
+
+    [Serializable]
+    public class AdjustableLoanData
+    {
+/*
+        [SerializeField]
+        private string _assetName;
+        public string assetName => _assetName;
+*/
+        [SerializeField]
+        private int _defaultltv;
+        public int defaultltv => _defaultltv;
+
+        public int maxltv;
+/*
+        [SerializeField]
+        private int _interestRate;
+        public int interestRate => _interestRate;
+
+        [SerializeField]
+        private bool _delayed;
+        public bool delayed => _delayed;
+*/
+/*
+        [SerializeField]
+        private int _loanUnitValue;
+        public int loanUnitValue => _loanUnitValue;
+*/
+        public int minltv;
+
+        [SerializeField]
+        private int _ltv;
+        public int ltv
+        {
+            get => _ltv;
+            set { _ltv = Mathf.Clamp(value, minltv, maxltv); }
+        }
+
+        [SerializeField]
+        private List<InvestorContribution> _investorContributions;
+
+        public void Initialize(
+//            AbstractInvestment asset,
+            int defaultltv,
+            int maxltv)
+//            int interestRate,
+//            bool delayed)
+        {
+//            _assetName = asset.name;
+            _defaultltv = defaultltv;
+            this.maxltv = maxltv;
+//            _interestRate = interestRate;
+//            _delayed = delayed;
+//            _loanUnitValue = asset.loanUnitValue;
+            minltv = 0;
+            _ltv = 0;
+            ltv = defaultltv;
+
+            _investorContributions = new List<InvestorContribution>();
+        }
+
+        public static int GetUnitCount(AbstractInvestment asset, int loanAmount)
+        {
+            int unitValue = asset.loanUnitValue;
+            return (loanAmount + unitValue - 1) / unitValue;
+        }
+
+        public void AddPrivateLoan(int partnerId, int amount)
+        {
+            foreach (InvestorContribution entry in _investorContributions)
+            {
+                if (entry.partnerId == partnerId)
+                {
+                    entry.amount += amount;
+                    return;
+                }
+            }
+            _investorContributions.Add(new InvestorContribution(partnerId, amount));
+        }
+
+        public void RemovePrivateLoan(int totalAmount, Action<int, int> partnerCallback)
+        {
+            foreach (InvestorContribution entry in _investorContributions)
+            {
+                int investorAmount = Mathf.Min(totalAmount, entry.amount);
+                entry.amount -= investorAmount;
+                totalAmount -= investorAmount;
+                partnerCallback?.Invoke(entry.partnerId, investorAmount);
+            }
+            _investorContributions.RemoveAll(e => e.amount <= 0);
+        }
+    }
+    /*
+        [Serializable]
+        public class RestructuredBusinessLoanData
+        {
+            [SerializeField]
+            private string _assetName;
+            public string assetName => _assetName;
+
+            [SerializeField]
+            private int _amount;
+            public int amount => _amount;
+
+            public void Initialize(Startup startup)
+            {
+                _assetName = startup.name;
+                _amount = startup.combinedLiability.amount + startup.accruedDelayedInterest;
+            }
+        }
+    */
     public class AbstractSecuredLoan : AbstractLiability
     {
-        private bool _delayed;
-        public override int expense => _delayed ? 0 : base.expense;
-        public int delayedExpense => _delayed ? base.expense : 0;
+        protected AbstractInvestment _asset { get; private set; }
+//        public virtual int delayedExpense => 0;
         public override string longName => string.Format(
-            "{0} - {1}", shortName, asset.name);
-
-        public AbstractInvestment asset { get; private set; }
+            "{0} - {1}", shortName, _asset.name);
 
         public AbstractSecuredLoan(
-            AbstractInvestment asset,
-            string label,
-            int amount,
-            int interestRate,
-            bool delayed) : base(label, amount, interestRate)
+            AbstractInvestment asset, string label, int amount, int interestRate)
+            : base(label, amount, interestRate)
         {
-            this.asset = asset;
-            _delayed = delayed;
+            _asset = asset;
         }
     }
 
     public class RestructuredBusinessLoan : AbstractSecuredLoan
     {
-        public RestructuredBusinessLoan(Startup startup)
+        public RestructuredBusinessLoan(Startup startup, int amount)
             : base(startup,
-                   "Business Loan",
-                   startup.combinedLiability.amount + startup.accruedDelayedInterest,
-                   InterestRateManager.Instance.businessLoanRate,
-                   false)
+                  "Business Loan",
+                  amount,
+                  InterestRateManager.Instance.businessLoanRate)
         {
-            startup.ClearPrivateLoan();
         }
     }
 
     public class AdjustableSecuredLoan : AbstractSecuredLoan
     {
-        public int maxltv { get; protected set; }
-        public int minltv { get; protected set; }
-
-        public override int amount => ltv * asset.loanUnitValue;
-
-        private int _ltv;
-        public int defaultltv { get; private set; }
+        protected AdjustableLoanData _data { get; private set; }
+        private bool _delayed;
+        public override int amount => _data.ltv * _asset.loanUnitValue;
+        public override int expense => _delayed ? 0 : base.expense;
+        public int delayedExpense => _delayed ? base.expense : 0;
 
         public int ltv
         {
-            get => _ltv;
+            get => _data.ltv;
             set
             {
-                int newltv = Mathf.Clamp(value, minltv, maxltv);
-                int delta = (newltv - _ltv) * asset.loanUnitValue;
+                int oldltv = ltv;
+                _data.ltv = value;
+                int newltv = ltv;
+                int delta = (newltv - oldltv) * _asset.loanUnitValue;
                 if (delta > 0)
                 {
                     AddLoan(delta);
@@ -66,31 +184,24 @@ namespace Assets
                 {
                     RemoveLoan(-1 * delta);
                 }
-                _ltv = newltv;
             }
         }
 
-        protected int getUnitCount(int loanAmount)
-        {
-            int unitValue = asset.loanUnitValue;
-            return (loanAmount + unitValue - 1) / unitValue;
-        }
 
         public AdjustableSecuredLoan(
-            AbstractInvestment asset,
-            string label,
-            int defaultltv,
-            int maxltv,
-            int interestRate,
-            bool delayed) :
-            base(asset, label, 0, interestRate, delayed)
+            AbstractInvestment asset, AdjustableLoanData data, string label, int interestRate, bool delayed)
+            : base(asset, label, 0, interestRate)
         {
+            _data = data;
+            _delayed = delayed;
+/*
             this.maxltv = getUnitCount(
                 maxltv * asset.loanUnitValue - asset.combinedLiability.amount);
             minltv = 0;
             this.defaultltv = defaultltv;
             _ltv = 0;
             ltv = defaultltv;
+*/
         }
 
         protected virtual void AddLoan(int delta)
@@ -108,23 +219,23 @@ namespace Assets
 
         public void setMinimumLoanAmount(int loanAmount)
         {
-            minltv = Mathf.Min(getUnitCount(loanAmount), maxltv);
-            ltv = ltv;
+            int unitCount = AdjustableLoanData.GetUnitCount(_asset, loanAmount);
+            _data.minltv = Mathf.Min(unitCount, _data.maxltv);
+            _data.ltv = _data.ltv;
         }
 
         public void setLoanAmount(int loanAmount)
         {
-            ltv = getUnitCount(loanAmount);
+            _data.ltv = AdjustableLoanData.GetUnitCount(_asset, loanAmount);
         }
     }
 
     public class Mortgage : AdjustableSecuredLoan
     {
-        public Mortgage(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
+        public Mortgage(AbstractInvestment asset, AdjustableLoanData data, bool delayed)
             : base(asset,
+                   data,
                    "Mortgage",
-                   defaultltv,
-                   maxltv,
                    InterestRateManager.Instance.realEstateLoanRate,
                    delayed)
         {
@@ -133,11 +244,10 @@ namespace Assets
 
     public class BusinessLoan : AdjustableSecuredLoan
     {
-        public BusinessLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
+        public BusinessLoan(AbstractInvestment asset, AdjustableLoanData data, bool delayed)
             : base(asset,
+                   data,
                    "Business Loan",
-                   defaultltv,
-                   maxltv,
                    InterestRateManager.Instance.businessLoanRate,
                    delayed)
         {
@@ -146,11 +256,10 @@ namespace Assets
 
     public class StartupLoan : AdjustableSecuredLoan
     {
-        public StartupLoan(AbstractInvestment asset, int defaultltv, int maxltv, bool delayed)
+        public StartupLoan(AbstractInvestment asset, AdjustableLoanData data, bool delayed)
             : base(asset,
+                   data,
                    "Startup Loan",
-                   defaultltv,
-                   maxltv,
                    InterestRateManager.Instance.startupBusinessLoanRate,
                    delayed)
         {
@@ -159,8 +268,8 @@ namespace Assets
 
     public class PrivateLoan : AdjustableSecuredLoan
     {
-        private List<Investment> _investments;
-
+        private List<InvestmentPartner> _investmentPartners;
+        /*
         public List<InvestmentPartner> privateLenders
         {
             get
@@ -176,46 +285,43 @@ namespace Assets
                 return partners;
             }
         }
-
+        */
         public PrivateLoan(
             AbstractInvestment asset,
+            AdjustableLoanData data,
             List<InvestmentPartner> partners,
-            int maxltv,
             int interestRate,
             bool delayed) :
             base(asset,
+                 data,
                  "Private Loan",
-                 0,
-                 maxltv,
                  interestRate,
                  delayed)
         {
-            _investments = new List<Investment>();
-            int availableCash = 0;
-            foreach (InvestmentPartner partner in partners)
-            {
-                Debug.LogFormat(
-                    "Partner available cash {0} {1}",
-                    partner.name,
-                    Localization.Instance.GetCurrency(partner.cash));
+            _investmentPartners = partners;
 
-                if (partner.cash > 0)
+            int availableCash = 0;
+            if (partners != null)
+            {
+                foreach (InvestmentPartner partner in partners)
                 {
-                    _investments.Add(new Investment(partner, 0));
+                    Debug.LogFormat(
+                        "Partner available cash {0} {1}",
+                        partner.name,
+                        Localization.Instance.GetCurrency(partner.cash));
                     availableCash += partner.cash;
                 }
             }
 
-            this.maxltv = Mathf.Min(
-                this.maxltv, availableCash / asset.loanUnitValue);
+            _data.maxltv = Mathf.Min(
+                _data.maxltv, _data.ltv + availableCash / asset.loanUnitValue);
         }
 
         protected override void AddLoan(int delta)
         {
             Debug.LogFormat("Add Loan: {0}", Localization.Instance.GetCurrency(delta));
-            for (int i = 0; i < _investments.Count && delta > 0; ++i)
+            foreach (InvestmentPartner partner in _investmentPartners)
             {
-                InvestmentPartner partner = _investments[i].Item1;
                 int partnerAmount = Mathf.Min(partner.cash, delta);
                 if (partnerAmount > 0)
                 {
@@ -225,15 +331,24 @@ namespace Assets
                         "Partner New Cash: {0} {1}",
                         partner.name,
                         Localization.Instance.GetCurrency(partner.cash));
-
-                    _investments[i] = new Investment(
-                        partner, _investments[i].Item2 + partnerAmount);
+                    _data.AddPrivateLoan(partner.partnerId, partnerAmount);
                 }
+            }
+        }
+
+        private void removeLoanPartnerCallback(int partnerId, int amount)
+        {
+            InvestmentPartner partner = InvestmentPartnerManager.Instance.GetPartnerById(partnerId);
+            if (partner != null)
+            {
+                partner.cash += amount;
             }
         }
 
         protected override void RemoveLoan(int delta)
         {
+            _data.RemovePrivateLoan(delta, removeLoanPartnerCallback);
+            /*
             Debug.LogFormat("Remove Loan: {0}", Localization.Instance.GetCurrency(delta));
             int totalPaidOff = 0;
             for (int i = 0; i < _investments.Count && delta > 0; ++i)
@@ -254,7 +369,7 @@ namespace Assets
                     _investments[i] = new Investment(
                         partner, _investments[i].Item2 - partnerAmount);
                 }
-            }
+            }*/
         }
     }
 }

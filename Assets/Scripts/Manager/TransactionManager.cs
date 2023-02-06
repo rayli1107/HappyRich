@@ -37,7 +37,7 @@ public static class TransactionManager
             Localization local = Localization.Instance;
             EventLogManager.Instance.LogFormat(
                 "Bought a {0} for {1} with {2}",
-                local.GetRealEstateLabel(rentalAsset.template.profile),
+                local.GetRealEstateLabel(rentalAsset.template),
                 local.GetCurrency(rentalAsset.totalCost),
                 local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.rentalProperties.Add(
@@ -74,7 +74,7 @@ public static class TransactionManager
             Localization local = Localization.Instance;
             EventLogManager.Instance.LogFormat(
                 "Bought a {0} for {1} with {2}",
-                local.GetRealEstateLabel(distressedAsset.template.profile),
+                local.GetRealEstateLabel(distressedAsset.template),
                 local.GetCurrency(distressedAsset.totalCost),
                 local.GetCurrency(partialAsset.fundsNeeded));
             player.portfolio.distressedProperties.Add(
@@ -352,7 +352,7 @@ public static class TransactionManager
                 Localization local = Localization.Instance;
                 EventLogManager.Instance.LogFormat(
                     "Refinanced a {0} for {1} with a returned capital of {2}",
-                    local.GetRealEstateLabel(refinancedAsset.distressedAsset.template.profile),
+                    local.GetRealEstateLabel(refinancedAsset.distressedAsset.template),
                     local.GetCurrency(refinancedAsset.value),
                     local.GetCurrency(amount));
             }

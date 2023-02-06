@@ -6,10 +6,10 @@ namespace Assets
     public class DistressedRealEstate : AbstractRealEstate
     {
         public override string investmentType => "Distressed Real Estate";
-        public int rehabPrice { get; private set; }
+//        public int rehabPrice { get; private set; }
 
         public override int value =>
-            originalPrice + rehabPrice + delayedInterest;
+            originalPrice + _realEstateData.rehabPrice + delayedInterest;
         public override int totalCost => value;
         public int appraisalPrice { get; private set; }
         public int actualIncome { get; private set; }
@@ -20,20 +20,39 @@ namespace Assets
         private int _maxMortgageLtv;
         private int _maxPrivateLoanLtv;
         private List<InvestmentPartner> _debtPartners;
+
         protected override void resetLoans()
         {
             ClearPrivateLoan();
 
             if (_maxMortgageLtv > 0)
             {
-                primaryLoan = new Mortgage(
-                    this, _maxMortgageLtv, _maxMortgageLtv, true);
+                AddMortgage(_maxMortgageLtv);
             }
-            else
+            else if (_maxPrivateLoanLtv > 0)
             {
                 AddPrivateLoan(_debtPartners, _maxPrivateLoanLtv);
             }
         }
+
+        public DistressedRealEstate(
+            RealEstateTemplate template,
+            RealEstateData realEstateData,
+            List<InvestmentPartner> debtPartners,
+            int maxMortgageLtv,
+            int maxPrivateLoanLtv)
+            : base(template, realEstateData)
+        {
+            _maxMortgageLtv = maxMortgageLtv;
+            _maxPrivateLoanLtv = maxPrivateLoanLtv;
+            _debtPartners = debtPartners;
+            label = string.Format("Distressed {0}", label);
+            description = string.Format("Distressed {0}", description);
+            setupSecuredLoan();
+            setupPrivateLoan(null);
+        }
+
+/*
 
         public DistressedRealEstate(
             RealEstateTemplate template,
@@ -57,7 +76,7 @@ namespace Assets
             description = string.Format("Distressed {0}", description);
             resetLoans();
         }
-
+*/
         public override List<string> getPurchaseDetails()
         {
             Localization local = Localization.Instance;
@@ -69,7 +88,7 @@ namespace Assets
             details.Add(
                 string.Format(
                     "Rehab Price: {0}",
-                    local.GetCurrency(rehabPrice)));
+                    local.GetCurrency(_realEstateData.rehabPrice)));
             int interest = delayedInterest;
             if (interest > 0)
             {

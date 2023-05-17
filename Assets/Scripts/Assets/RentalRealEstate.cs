@@ -5,11 +5,47 @@ using UnityEngine;
 
 namespace Assets
 {
+    public partial class RealEstateData
+    {
+        [SerializeField]
+        private int _originalTotalCost;
+        public int originalTotalCost => _originalTotalCost;
+
+        [SerializeField]
+        private int _originalLoanAmount;
+        public int originalLoanAmount => _originalLoanAmount;
+
+
+        public void InitializeRentalRealEstateData(
+            string templateLabel,
+            int originalPrice,
+            int marketValue,
+            int annualIncome,
+            int unitCount)
+        {
+            initialize(templateLabel, originalPrice, marketValue, annualIncome, unitCount);
+        }
+
+        public void InitializeRefinancedRealEstate(DistressedRealEstate distressedAsset)
+        {
+            initialize(
+                distressedAsset.template.label,
+                distressedAsset.totalCost,
+                distressedAsset.appraisalPrice,
+                distressedAsset.actualIncome,
+                distressedAsset.unitCount);
+
+            _originalTotalCost = distressedAsset.totalCost;
+            _originalLoanAmount = distressedAsset.combinedLiability.amount;
+            _investmentData.purchaseDetails = distressedAsset.getPurchaseDetails();
+        }
+    }
+
     public class RentalRealEstate : AbstractRealEstate
     {
         public override string investmentType => "Rental Real Estate";
 
-        private int _maxMortgageLtv;
+        protected int _maxMortgageLtv;
 
         protected override void resetLoans()
         {
@@ -30,15 +66,14 @@ namespace Assets
     
     public class RefinancedRealEstate : RentalRealEstate
     {
-        public DistressedRealEstate distressedAsset { get; private set; }
-        public int originalLoanAmount { get; private set; }
-        public int originalTotalCost { get; private set; }
+//        public DistressedRealEstate distressedAsset { get; private set; }
+        public int originalLoanAmount => realEstateData.originalLoanAmount;
+        public int originalTotalCost => realEstateData.originalTotalCost;
 
         public int returnedCapital => Mathf.Max(
             combinedLiability.amount - originalLoanAmount, 0);
         public override int loanValue => value;
 
-        private int _maxMortgageLtv;
         private int _maxPrivateLoanLtv;
         private List<InvestmentPartner> _debtPartners;
 
@@ -59,26 +94,32 @@ namespace Assets
 
         public RefinancedRealEstate(
             DistressedRealEstate distressedAsset,
+            RealEstateData realEstateData,
             List<InvestmentPartner> debtPartners,
             int maxMortgageLtv,
             int maxPrivateLoanLtv)
-            : base(distressedAsset.template,
+            : base(distressedAsset.template, realEstateData, maxMortgageLtv)
+/*                  
+                  distressedAsset.template,
                    distressedAsset.totalCost,
                    distressedAsset.appraisalPrice,
                    distressedAsset.actualIncome,
                    0,
                    maxMortgageLtv,
-                   distressedAsset.unitCount)
+                   distressedAsset.unitCount)*/
         {
-            this.distressedAsset = distressedAsset;
-            originalTotalCost = distressedAsset.totalCost;
-            originalLoanAmount = distressedAsset.combinedLiability.amount;
-            distressedAsset.ClearPrivateLoan();
-            _maxMortgageLtv = maxMortgageLtv;
+//            this.distressedAsset = distressedAsset;
+//            originalTotalCost = distressedAsset.totalCost;
+//            originalLoanAmount = distressedAsset.combinedLiability.amount;
+//            distressedAsset.ClearPrivateLoan();
+//           _maxMortgageLtv = maxMortgageLtv;
             _maxPrivateLoanLtv = maxPrivateLoanLtv;
             _debtPartners = debtPartners;
 
-            resetLoans();
+//            resetLoans();
+
+            setupSecuredLoan();
+            setupPrivateLoan(null);
 
             Debug.LogFormat(
                 "Refinance mortgage ltv {0} private loan ltv {1}",
@@ -89,11 +130,11 @@ namespace Assets
                 distressedAsset.actualIncome,
                 Localization.Instance.GetIncomeRange(netIncomeRange));
         }
-
+/*
         public override List<string> getPurchaseDetails()
         {
             return distressedAsset.getPurchaseDetails();
         }
-
+*/
     }
 }

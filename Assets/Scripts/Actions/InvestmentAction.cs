@@ -73,15 +73,16 @@ namespace Actions
             messageBoxHandler(buttonType, player, message, partialAsset, callback);
         }
         public static void GetBuyAction(
-            Player player,
             AbstractInvestment asset,
             Action<PartialInvestment> showPurchasePanelFn)
         {
-            PartialInvestment partialAsset = new PartialInvestment(
-                asset,
-                player.GetEquityPartners(),
+            PartialInvestmentData data = new PartialInvestmentData();
+            data.Initialize(
                 RealEstateManager.Instance.defaultEquitySplit,
-                RealEstateManager.Instance.maxEquityShares);
+                RealEstateManager.Instance.maxEquityShares,
+                InvestmentPartnerManager.Instance.partnerCount);
+
+            PartialInvestment partialAsset = new PartialInvestment(asset, data);
             showPurchasePanelFn(partialAsset);
         }
     }
@@ -104,7 +105,7 @@ namespace Actions
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
-                player, asset, p => showFn(p, cb));
+                asset, p => showFn(p, cb));
         }
     }
 
@@ -126,7 +127,7 @@ namespace Actions
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
-                player, asset, p => showFn(p, cb));
+                asset, p => showFn(p, cb));
         }
     }
 
@@ -203,7 +204,7 @@ namespace Actions
                     false);
 
             return cb => BuyInvestmentUtiliy.GetBuyAction(
-                player, business, p => showFn(p, cb));
+                business, p => showFn(p, cb));
         }
     }
 
@@ -251,7 +252,7 @@ namespace Actions
                     handler => startTransaction(handler, partialAsset),
                     false);
             return cb => BuyInvestmentUtiliy.GetBuyAction(
-                player, business, p => showFn(p, cb));
+                business, p => showFn(p, cb));
         }
     }
 
@@ -318,7 +319,7 @@ namespace Actions
                     false);
 
             return cb => BuyInvestmentUtiliy.GetBuyAction(
-                player, startup, p => showFn(p, cb));
+                startup, p => showFn(p, cb));
         }
     }
 }

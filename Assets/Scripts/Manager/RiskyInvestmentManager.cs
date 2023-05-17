@@ -44,39 +44,51 @@ public class RiskyInvestmentManager : MonoBehaviour
         AnalyzeReturnProfile(_highRiskReturnProfile, "High Risk");
     }
 
-    private StartupExitAction getExitAction(
-        Player player,
-        StartupExitReturnProfile profile)
+    private TimedInvestmentData getStartupInvestmentData(
+        StartupExitReturnProfile profile, int originalPrice, int turnsLeft)
     {
+        TimedInvestmentData data = new TimedInvestmentData();
         float value = (float)_random.NextDouble();
         if (value < profile.publicThreshold)
         {
-            return new StartupExitIPOAction(profile.publicReturn);
+            data.InitializeStartupIPOInvestmentData(
+                originalPrice, turnsLeft, profile.publicReturn);
         }
         else if (value < profile.acquiredThreshold)
         {
-            return new StartupExitAcquiredAction(profile.acquiredReturn);
+            data.InitializeStartupAcquiredInvestmentData(
+                originalPrice, turnsLeft, profile.acquiredReturn);
         }
-        return new StartupExitBankruptAction();
+        else
+        {
+            data.InitializeStartupFailedInvestmentData(
+                originalPrice, turnsLeft);
+        }
+        return data;
     }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)
     {
         string idea = _startupIdeas[_random.Next(_startupIdeas.Length)];
-        StartupExitAction exitAction;
+        StartupExitReturnProfile profile;
         switch (_random.Next(3))
         {
             case 0:
-                exitAction = getExitAction(player, _lowRiskReturnProfile);
+                profile = _lowRiskReturnProfile;
                 break;
             case 1:
-                exitAction = getExitAction(player, _mediumRiskReturnProfile);
+                profile = _mediumRiskReturnProfile;
                 break;
             default:
-                exitAction = getExitAction(player, _highRiskReturnProfile);
+                profile = _highRiskReturnProfile;
                 break;
         }
 
-        return cb => StartupInvestmentAction.Start(player, idea, _turnCount, exitAction, cb);
+        return cb => StartupInvestmentAction.Start(
+            player,
+            idea,
+            _turnCount,
+            (price, turns) => getStartupInvestmentData(profile, price, turns),
+            cb);
     }
 }

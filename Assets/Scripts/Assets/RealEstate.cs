@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets
 {
     [Serializable]
-    public class RealEstateData
+    public partial class RealEstateData
     {
         [SerializeField]
         private string _templateLabel;
         public string templateLabel => _templateLabel;
-
-        [SerializeField]
-        private int _rehabPrice;
-        public int rehabPrice => _rehabPrice;
-
-        [SerializeField]
-        private int _appraisalPrice;
-        public int appraisalPrice => _appraisalPrice;
 
         [SerializeField]
         private int _unitCount;
@@ -27,18 +18,14 @@ namespace Assets
         private InvestmentData _investmentData;
         public InvestmentData investmentData => _investmentData;
 
-        public void Initialize(
+        private void initialize(
             string templateLabel,
             int originalPrice,
             int marketValue,
             int annualIncome,
-            int unitCount,
-            int rehabPrice = 0,
-            int appraisalPrice = 0)
+            int unitCount)
         {
             _templateLabel = templateLabel;
-            _rehabPrice = rehabPrice;
-            _appraisalPrice = appraisalPrice;
             _unitCount = unitCount;
 
             _investmentData = new InvestmentData();
@@ -48,27 +35,30 @@ namespace Assets
 
     public abstract class AbstractRealEstate : AbstractInvestment
     {
-        protected RealEstateData _realEstateData { get; private set; }
+        public RealEstateData realEstateData { get; private set; }
         public override bool returnCapital => true;
         public RealEstateTemplate template { get; private set; }
+        public int unitCount => realEstateData.unitCount;
 
         protected void AddMortgage(int maxMortgageLtv)
         {
             if (maxMortgageLtv > 0)
             {
-                _realEstateData.investmentData.securedLoan = new AdjustableLoanData();
-                _realEstateData.investmentData.securedLoan.Initialize(
-                    maxMortgageLtv, maxMortgageLtv);
+                realEstateData.investmentData.securedLoan = new AdjustableLoanData();
+                realEstateData.investmentData.securedLoan.Initialize(
+                    maxMortgageLtv,
+                    maxMortgageLtv,
+                    InvestmentPartnerManager.Instance.partnerCount);
                 setupSecuredLoan();
             }
         }
 
         protected void setupSecuredLoan()
         {
-            if (_realEstateData.investmentData.securedLoan != null)
+            if (realEstateData.investmentData.securedLoan != null)
             {
                 primaryLoan = new Mortgage(
-                    this, _realEstateData.investmentData.securedLoan, false);
+                    this, realEstateData.investmentData.securedLoan, false);
             }
         }
 
@@ -78,7 +68,7 @@ namespace Assets
             RealEstateData realEstateData)
             : base(realEstateData.investmentData)
         {
-            _realEstateData = realEstateData;
+            this.realEstateData = realEstateData;
             this.template = template;
 
             label = realEstateData.unitCount > 1 ?

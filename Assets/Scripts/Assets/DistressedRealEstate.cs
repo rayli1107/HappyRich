@@ -1,21 +1,48 @@
 ﻿using InvestmentPartnerInfo;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets
 {
+    public partial class RealEstateData
+    {
+        [SerializeField]
+        private int _rehabPrice;
+        public int rehabPrice => _rehabPrice;
+
+        [SerializeField]
+        private int _appraisalPrice;
+        public int appraisalPrice => _appraisalPrice;
+
+        public void InitializeDistressedRealEstateData(
+            string templateLabel,
+            int originalPrice,
+            int marketValue,
+            int annualIncome,
+            int unitCount,
+            int rehabPrice,
+            int appraisalPrice)
+        {
+            initialize(templateLabel, originalPrice, marketValue, annualIncome, unitCount);
+            _rehabPrice = rehabPrice;
+            _appraisalPrice = appraisalPrice;
+        }
+    }
+
     public class DistressedRealEstate : AbstractRealEstate
     {
         public override string investmentType => "Distressed Real Estate";
 //        public int rehabPrice { get; private set; }
 
         public override int value =>
-            originalPrice + _realEstateData.rehabPrice + delayedInterest;
+            originalPrice + realEstateData.rehabPrice + delayedInterest;
         public override int totalCost => value;
         public int appraisalPrice { get; private set; }
         public int actualIncome { get; private set; }
         protected override bool _isDebtInterestDelayed => true;
         protected override int _privateLoanRate =>
             InterestRateManager.Instance.distressedLoanRate;
+        public int rehabPrice => realEstateData.rehabPrice;
 
         private int _maxMortgageLtv;
         private int _maxPrivateLoanLtv;
@@ -52,31 +79,6 @@ namespace Assets
             setupPrivateLoan(null);
         }
 
-/*
-
-        public DistressedRealEstate(
-            RealEstateTemplate template,
-            List<InvestmentPartner> debtPartners,
-            int purchasePrice,
-            int rehabPrice,
-            int appraisalPrice,
-            int annualIncome,
-            int unitCount,
-            int maxMortgageLtv,
-            int maxPrivateLoanLtv)
-            : base(template, purchasePrice, 0, 0, unitCount)
-        {
-            this.rehabPrice = rehabPrice;
-            this.appraisalPrice = appraisalPrice;
-            actualIncome = annualIncome;
-            _maxMortgageLtv = maxMortgageLtv;
-            _maxPrivateLoanLtv = maxPrivateLoanLtv;
-            _debtPartners = debtPartners;
-            label = string.Format("Distressed {0}", label);
-            description = string.Format("Distressed {0}", description);
-            resetLoans();
-        }
-*/
         public override List<string> getPurchaseDetails()
         {
             Localization local = Localization.Instance;
@@ -88,7 +90,7 @@ namespace Assets
             details.Add(
                 string.Format(
                     "Rehab Price: {0}",
-                    local.GetCurrency(_realEstateData.rehabPrice)));
+                    local.GetCurrency(realEstateData.rehabPrice)));
             int interest = delayedInterest;
             if (interest > 0)
             {

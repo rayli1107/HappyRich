@@ -1,4 +1,5 @@
 ﻿using InvestmentPartnerInfo;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,15 +7,41 @@ using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 
 namespace Assets
 {
+    [Serializable]
+    public class PartialInvestmentData
+    {
+        [SerializeField]
+        private float _equitySplit;
+        public float equitySplit => _equitySplit;
+
+        [SerializeField]
+        private int _maxShares;
+        public int maxShares => _maxShares;
+
+        [SerializeField]
+        private List<int> _partnerShares;
+        public List<int> partnerShares => _partnerShares;
+
+        public void Initialize(float equitySplit, int maxShares, int partnerCount)
+        {
+            _equitySplit = equitySplit;
+            _maxShares = maxShares;
+            _partnerShares = new List<int>(partnerCount);
+            for (int i = 0; i < partnerCount; ++i)
+            {
+                _partnerShares.Add(0);
+            }
+        }
+    }
     public class PartialInvestment : AbstractAsset
     {
+        public PartialInvestmentData data { get; private set; }
         public AbstractInvestment asset { get; private set; }
-        public float equitySplit { get; private set; }
-        public int maxShares { get; private set; }
+        public float equitySplit => data.equitySplit;
+        public int maxShares => data.maxShares;
         public float equityPerShare => equitySplit / maxShares;
-        public int capitalPerShare { get; private set; }
-        public List<Investment> investments { get; private set; }
         public override string name => asset.name;
+        public int capitalPerShare { get; private set; }
         public int totalShares { get; private set; }
 
         private int _investorShares;
@@ -87,26 +114,13 @@ namespace Assets
 
         public override List<AbstractLiability> liabilities => asset.liabilities;
 
-        public PartialInvestment(
-            AbstractInvestment asset,
-            List<InvestmentPartner> partners,
-            float equitySplit,
-            int maxShares) :
-            base("", 0, Vector2Int.zero)
+        private InvestmentPartnerManager Manager => InvestmentPartnerManager.Instance;
+
+        public PartialInvestment(AbstractInvestment asset, PartialInvestmentData data)
+            : base("", 0, Vector2Int.zero)
         {
+            this.data = data;
             this.asset = asset;
-            this.equitySplit = equitySplit;
-            this.maxShares = maxShares;
-
-            totalShares = 0;
-            _investorShares = 0;
-
-            investments = new List<Investment>();
-            foreach (InvestmentPartner partner in partners)
-            {
-                investments.Add(new Investment(partner, 0));
-            }
-
             Reset();
         }
 
@@ -116,9 +130,11 @@ namespace Assets
             capitalPerShare = Mathf.FloorToInt(asset.downPayment / maxShares);
 
             totalShares = 0;
-            for (int i = 0; i < investments.Count; ++i)
+            for (int i = 0; i < data.partnerShares.Count; ++i)
             {
-                totalShares += investments[i].Item1.cash / capitalPerShare;
+                InvestmentPartner partner =
+                    InvestmentPartnerManager.Instance.GetPartnerById(i);
+                totalShares += partner.cash / capitalPerShare;
             }
 
             totalShares = Mathf.Min(totalShares, maxShares);
@@ -126,17 +142,17 @@ namespace Assets
 
         private void AddShares(int delta)
         {
-            for (int i = 0; i < investments.Count; ++i)
+            for (int i = 0; i < data.partnerShares.Count; ++i)
             {
-                InvestmentPartner partner = investments[i].Item1;
+                InvestmentPartner partner =
+                    InvestmentPartnerManager.Instance.GetPartnerById(i);
                 int availableShares = Mathf.Min(
                     delta, partner.cash / capitalPerShare);
                 if (availableShares > 0)
                 {
                     delta -= availableShares;
                     partner.cash -= availableShares * capitalPerShare;
-                    investments[i] = new Investment(
-                        partner, investments[i].Item2 + availableShares);
+                    data.partnerShares[i] += availableShares;
                 }
             }
             Debug.Assert(delta == 0);
@@ -144,16 +160,16 @@ namespace Assets
 
         private void RemoveShares(int delta)
         {
-            for (int i = 0; i < investments.Count; ++i)
+            for (int i = 0; i < data.partnerShares.Count; ++i)
             {
-                InvestmentPartner partner = investments[i].Item1;
-                int removedShares = Mathf.Min(delta, investments[i].Item2);
+                InvestmentPartner partner =
+                    InvestmentPartnerManager.Instance.GetPartnerById(i);
+                int removedShares = Mathf.Min(delta, data.partnerShares[i]);
                 if (removedShares > 0)
                 {
                     delta -= removedShares;
                     partner.cash += removedShares * capitalPerShare;
-                    investments[i] = new Investment(
-                        partner, investments[i].Item2 - removedShares);
+                    data.partnerShares[i] -= removedShares;
                 }
             }
             Debug.Assert(delta == 0);
@@ -163,21 +179,6 @@ namespace Assets
         {
             base.OnPurchase();
             asset.OnPurchase();
-/*
-            Localization local = Localization.Instance;
-            Debug.LogFormat(
-                "OnPurchase Partial Expected {0} Actual {1} Expected Total {2} Actual Total {3}",
-                local.GetCurrency(expectedIncome),
-                local.GetCurrency(income),
-                local.GetCurrency(expectedTotalIncome),
-                local.GetCurrency(totalIncome));
-            Debug.LogFormat(
-                "OnPurchase Underlying Expected {0} Actual {1} Expected Total {2} Actual Total {3}",
-                local.GetCurrency(asset.expectedIncome),
-                local.GetCurrency(asset.income),
-                local.GetCurrency(asset.expectedTotalIncome),
-                local.GetCurrency(asset.totalIncome));
-*/
         }
 
         public override void OnPurchaseStart()

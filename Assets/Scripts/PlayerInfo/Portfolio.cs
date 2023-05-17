@@ -23,6 +23,16 @@ public partial class GameInstanceData
 namespace PlayerInfo
 {
     [Serializable]
+    public class InvestmentContextData
+    {
+        [SerializeField]
+        public PartialInvestmentData partialInvestmentData;
+
+        [SerializeField]
+        public RealEstateData realEstateData;
+    }
+
+    [Serializable]
     public class PortfolioData
     {
         public int cash;
@@ -35,6 +45,18 @@ namespace PlayerInfo
         public int autoLoan;
 
         public List<PurchasedStockData> stocks;
+        public List<InvestmentContextData> rentalProperties;
+        public List<InvestmentContextData> distressedProperties;
+
+        /*
+        public List<RentalProperty> rentalProperties { get; private set; }
+        public List<DistressedProperty> distressedProperties { get; private set; }
+        public List<BusinessEntity> businessEntities { get; private set; }
+        public List<StartupEntity> startupEntities { get; private set; }
+        public List<AbstractTimedInvestment> timedInvestments { get; private set; }
+        public List<LuxuryItem> luxuryItems { get; private set; }
+        */
+
 
         public void Initialize(Profession profession)
         {
@@ -47,6 +69,8 @@ namespace PlayerInfo
             autoLoan = profession.autoLoan;
 
             stocks = new List<PurchasedStockData>();
+            rentalProperties = new List<InvestmentContextData>();
+            distressedProperties = new List<InvestmentContextData>();
         }
     }
 
@@ -90,6 +114,24 @@ namespace PlayerInfo
             foreach (PurchasedStock stock in stocks.Values)
             {
                 _data.stocks.Add(stock.SaveToStockData());
+            }
+
+            _data.rentalProperties.Clear();
+            foreach (RentalProperty rentalProperty in rentalProperties)
+            {
+                InvestmentContextData investmentData = new InvestmentContextData();
+                investmentData.partialInvestmentData = rentalProperty.Item1.data;
+                investmentData.realEstateData = rentalProperty.Item2.realEstateData;
+                _data.rentalProperties.Add(investmentData);
+            }
+
+            _data.distressedProperties.Clear();
+            foreach (DistressedProperty distressedProperty in distressedProperties)
+            {
+                InvestmentContextData investmentData = new InvestmentContextData();
+                investmentData.partialInvestmentData = distressedProperty.Item1.data;
+                investmentData.realEstateData = distressedProperty.Item2.realEstateData;
+                _data.distressedProperties.Add(investmentData);
             }
         }
 

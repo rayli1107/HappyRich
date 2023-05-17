@@ -352,7 +352,7 @@ public static class TransactionManager
                 Localization local = Localization.Instance;
                 EventLogManager.Instance.LogFormat(
                     "Refinanced a {0} for {1} with a returned capital of {2}",
-                    local.GetRealEstateLabel(refinancedAsset.distressedAsset.template),
+                    local.GetRealEstateLabel(refinancedAsset.template),
                     local.GetCurrency(refinancedAsset.value),
                     local.GetCurrency(amount));
             }

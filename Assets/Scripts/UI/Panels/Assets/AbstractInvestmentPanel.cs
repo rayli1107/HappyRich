@@ -1,4 +1,5 @@
 ﻿using Assets;
+using InvestmentPartnerInfo;
 using PlayerInfo;
 using ScriptableObjects;
 using System;
@@ -78,11 +79,15 @@ namespace UI.Panels.Assets
 
         private bool checkRaiseDebt()
         {
+            int availableCash = 0;
+            player.GetDebtPartners().ForEach(p => availableCash += p.cash);
+            return availableCash >= asset.loanUnitValue;
+/*
             int maxltv = RealEstateManager.Instance.maxPrivateLoanLTV;
             int rate = InterestRateManager.Instance.defaultPrivateLoanRate;
             PrivateLoan loan = new PrivateLoan(
                 asset, player.GetDebtPartners(), maxltv, rate, false);
-            return loan.maxltv > 0;
+            return loan.maxltv > 0;*/
         }
 
         private bool checkRaiseEquity()

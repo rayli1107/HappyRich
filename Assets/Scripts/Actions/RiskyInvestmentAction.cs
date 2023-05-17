@@ -34,11 +34,12 @@ namespace Actions
         private static void startTransactionHandler(
             Player player,
             TransactionHandler handler,
-            StartupExitAction exitAction,
+            Func<int, int, TimedInvestmentData> getDataFn,
             int turnsLeft,
             int number)
         {
-            StartupInvestment investment = new StartupInvestment(number, turnsLeft, exitAction);
+            TimedInvestmentData investmentData = getDataFn?.Invoke(number, turnsLeft);
+            StartupInvestment investment = new StartupInvestment(investmentData);
             TransactionManager.BuyTimedInvestment(player, investment, handler);
         }
 
@@ -46,7 +47,7 @@ namespace Actions
             Player player,
             string startupIdea,
             int turnsLeft,
-            StartupExitAction exitAction,
+            Func<int, int, TimedInvestmentData> getDataFn,
             Action callback)
         {
             Localization local = Localization.Instance;
@@ -62,7 +63,7 @@ namespace Actions
                 (ButtonType button, int n) => messageBoxHandler(player, button, n, callback),
                 confirmMessageHandler,
                 (TransactionHandler handler, int n) =>
-                    startTransactionHandler(player, handler, exitAction, turnsLeft, n));
+                    startTransactionHandler(player, handler, getDataFn, turnsLeft, n));
         }
 
         private static void messageBoxHandler(

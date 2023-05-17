@@ -100,27 +100,29 @@ public class BusinessManager : MonoBehaviour
         Debug.LogFormat("Min income {0} max income {1} actual {2}", minIncome, maxIncome, actualIncome);
         if (profile.franchise)
         {
-            Franchise franchise = new Franchise(
+            BusinessData data = new BusinessData();
+            data.InitializeFranchise(
                 description,
                 price,
                 franchiseFee,
+                price + franchiseFee,
                 minIncome,
-                maxIncome,
-                0,
-                _maxBusinessLoanLTV);
+                maxIncome);
+            Franchise franchise = new Franchise(data, 0, _maxBusinessLoanLTV);
             return new AvailableInvestmentContext(
                 franchise,
                 JoinFranchiseAction.GetBuyAction(player, franchise));
         }
         else
         {
-            SmallBusiness business = new SmallBusiness(
+            BusinessData data = new BusinessData();
+            data.InitializeSmallBusiness(
                 description,
                 price,
+                price,
                 minIncome,
-                maxIncome,
-                0,
-                _maxBusinessLoanLTV);
+                maxIncome);
+            SmallBusiness business = new SmallBusiness(data, 0, _maxBusinessLoanLTV);
             return new AvailableInvestmentContext(
                 business,
                 PurchaseSmallBusinessAction.GetBuyAction(player, business));

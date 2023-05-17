@@ -236,7 +236,7 @@ public class RealEstateManager : MonoBehaviour
 
         int maxMortgageLtv = getDistressedMortgageLTV(player);
         RealEstateData data = new RealEstateData();
-        data.Initialize(
+        data.InitializeDistressedRealEstateData(
             template.label, purchasePrice, appraisalPrice, annualIncome, unitCount, rehabPrice, appraisalPrice);
 
         DistressedRealEstate asset = new DistressedRealEstate(
@@ -275,7 +275,8 @@ public class RealEstateManager : MonoBehaviour
         int ltv = getRentalMortgageLTV(player);
 
         RealEstateData data = new RealEstateData();
-        data.Initialize(template.label, price, price, annualIncome, unitCount);
+        data.InitializeRentalRealEstateData(
+            template.label, price, price, annualIncome, unitCount);
 
         RentalRealEstate asset = new RentalRealEstate(template, data, ltv);
         return new AvailableInvestmentContext(
@@ -325,12 +326,14 @@ public class RealEstateManager : MonoBehaviour
         Player player, DistressedRealEstate oldAsset)
     {
         int ltv = getRentalMortgageLTV(player);
-        RefinancedRealEstate newAsset = new RefinancedRealEstate(
-            oldAsset,
-            player.GetDebtPartners(),
-            ltv,
-            _maxPrivateLoanLTV);
-        return newAsset;
+
+        RealEstateData data = new RealEstateData();
+        data.InitializeRefinancedRealEstate(oldAsset);
+
+        oldAsset.ClearPrivateLoan();
+
+        return new RefinancedRealEstate(
+            oldAsset, data, player.GetDebtPartners(), ltv, _maxPrivateLoanLTV);
     }
 
     public Action<Action> GetMarketEvent(Player player, System.Random random)

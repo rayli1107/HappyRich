@@ -93,6 +93,7 @@ public class InvestmentPartnerManager : MonoBehaviour
     public PersistentGameData PersistentGameData =>
         GameSaveLoadManager.Instance.persistentGameData;
     public GameInstanceData GameData => PersistentGameData.gameInstanceData;
+    public int partnerCount => GameData.investmentPartners.Count;
 
     private void Awake()
     {

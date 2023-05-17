@@ -8,10 +8,24 @@ namespace Assets
     [Serializable]
     public class InvestmentData
     {
-        public int originalPrice;
-        public int marketValue;
-        public int incomeRangeLow;
-        public int incomeRangeHigh;
+        [SerializeField]
+        private int _originalPrice;
+        public int originalPrice => _originalPrice;
+
+        [SerializeField]
+        private int _marketValue;
+        public int marketValue => _marketValue;
+
+        [SerializeField]
+        private int _incomeRangeLow;
+        public int incomeRangeLow => _incomeRangeLow;
+
+        [SerializeField]
+        private int _incomeRangeHigh;
+        public int incomeRangeHigh => _incomeRangeHigh;
+
+        public List<string> purchaseDetails;
+
         public float multiplier;
 
         [SerializeField]
@@ -26,10 +40,11 @@ namespace Assets
             int incomeRangeLow,
             int incomeRangeHigh)
         {
-            this.originalPrice = originalPrice;
-            this.marketValue = marketValue;
-            this.incomeRangeLow = incomeRangeLow;
-            this.incomeRangeHigh = incomeRangeHigh;
+            _originalPrice = originalPrice;
+            _marketValue = marketValue;
+            _incomeRangeLow = incomeRangeLow;
+            _incomeRangeHigh = incomeRangeHigh;
+            purchaseDetails = new List<string>();
             multiplier = 1f;
         }
     }
@@ -40,11 +55,17 @@ namespace Assets
         public abstract string investmentType { get; }
 
         public int originalPrice => _investmentData.originalPrice;
+        public float multiplier
+        {
+            get => _investmentData.multiplier;
+            set { _investmentData.multiplier = value; }
+        }
+
         public virtual int totalCost => originalPrice;
         public virtual int loanValue => originalPrice;
         public virtual int loanUnitValue => loanValue / 100;
-        public string label { get; protected set; }
-        public string description { get; protected set; }
+        public virtual string label { get; protected set; }
+        public virtual string description { get; protected set; }
         public override string name => label;
         public virtual int downPayment => Mathf.Max(
             totalCost - combinedLiability.amount, 0);
@@ -59,11 +80,11 @@ namespace Assets
         protected virtual int _privateLoanRate =>
             InterestRateManager.Instance.defaultPrivateLoanRate;
         public virtual bool returnCapital => true;
-        public virtual List<AdjustableSecuredLoan> securedLoans
+        public virtual List<AbstractSecuredLoan> securedLoans
         {
             get
             {
-                List<AdjustableSecuredLoan> loans = new List<AdjustableSecuredLoan>();
+                List<AbstractSecuredLoan> loans = new List<AbstractSecuredLoan>();
                 if (primaryLoan != null)
                 {
                     loans.Add(primaryLoan);
@@ -118,10 +139,12 @@ namespace Assets
         public void AddPrivateLoan(
             List<InvestmentPartner> partners, int maxltv)
         {
+            TODO:
             if (_investmentData.privateLoan == null)
             {
                 _investmentData.privateLoan = new AdjustableLoanData();
-                _investmentData.privateLoan.Initialize(0, maxltv);
+                _investmentData.privateLoan.Initialize(
+                    0, maxltv, InvestmentPartnerManager.Instance.partnerCount);
                 setupPrivateLoan(partners);
             }
         }
@@ -220,5 +243,9 @@ namespace Assets
                 local.GetCurrency(originalPrice));
         }
 
+        public override List<string> getPurchaseDetails()
+        {
+            return _investmentData.purchaseDetails;
+        }
     }
 }

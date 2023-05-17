@@ -7,7 +7,8 @@ using Investment = System.Tuple<InvestmentPartnerInfo.InvestmentPartner, int>;
 
 namespace Assets
 {
-    [Serializable]
+/*
+ * [Serializable]
     public class InvestorContribution
     {
         [SerializeField]
@@ -22,7 +23,7 @@ namespace Assets
             this.amount = amount;
         }
     }
-
+*/
     [Serializable]
     public class AdjustableLoanData
     {
@@ -61,12 +62,13 @@ namespace Assets
         }
 
         [SerializeField]
-        private List<InvestorContribution> _investorContributions;
+        private List<int> _investorContributions;
 
         public void Initialize(
 //            AbstractInvestment asset,
             int defaultltv,
-            int maxltv)
+            int maxltv,
+            int partnerCount)
 //            int interestRate,
 //            bool delayed)
         {
@@ -80,7 +82,11 @@ namespace Assets
             _ltv = 0;
             ltv = defaultltv;
 
-            _investorContributions = new List<InvestorContribution>();
+            _investorContributions = new List<int>(partnerCount);
+            for (int i = 0; i < partnerCount; ++i)
+            {
+                _investorContributions.Add(0);
+            }
         }
 
         public static int GetUnitCount(AbstractInvestment asset, int loanAmount)
@@ -91,27 +97,21 @@ namespace Assets
 
         public void AddPrivateLoan(int partnerId, int amount)
         {
-            foreach (InvestorContribution entry in _investorContributions)
-            {
-                if (entry.partnerId == partnerId)
-                {
-                    entry.amount += amount;
-                    return;
-                }
-            }
-            _investorContributions.Add(new InvestorContribution(partnerId, amount));
+            _investorContributions[partnerId] += amount;
         }
 
         public void RemovePrivateLoan(int totalAmount, Action<int, int> partnerCallback)
         {
-            foreach (InvestorContribution entry in _investorContributions)
+            for (int i = 0; i < _investorContributions.Count && totalAmount > 0; ++i)
             {
-                int investorAmount = Mathf.Min(totalAmount, entry.amount);
-                entry.amount -= investorAmount;
-                totalAmount -= investorAmount;
-                partnerCallback?.Invoke(entry.partnerId, investorAmount);
+                int investorAmount = Mathf.Min(totalAmount, _investorContributions[i]);
+                if (investorAmount > 0)
+                {
+                    _investorContributions[i] -= investorAmount;
+                    totalAmount -= investorAmount;
+                    partnerCallback?.Invoke(i, investorAmount);
+                }
             }
-            _investorContributions.RemoveAll(e => e.amount <= 0);
         }
     }
     /*
@@ -150,8 +150,8 @@ namespace Assets
 
     public class RestructuredBusinessLoan : AbstractSecuredLoan
     {
-        public RestructuredBusinessLoan(Startup startup, int amount)
-            : base(startup,
+        public RestructuredBusinessLoan(AbstractInvestment asset, int amount)
+            : base(asset,
                   "Business Loan",
                   amount,
                   InterestRateManager.Instance.businessLoanRate)
@@ -166,6 +166,9 @@ namespace Assets
         public override int amount => _data.ltv * _asset.loanUnitValue;
         public override int expense => _delayed ? 0 : base.expense;
         public int delayedExpense => _delayed ? base.expense : 0;
+
+        public int minltv => _data.minltv;
+        public int maxltv => _data.maxltv;
 
         public int ltv
         {

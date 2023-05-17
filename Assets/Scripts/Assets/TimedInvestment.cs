@@ -1,31 +1,118 @@
 ﻿using PlayerInfo;
 using System;
-using System.Collections.Generic;
 using UI;
 using UI.Panels.Templates;
 using UnityEngine;
 
 namespace Assets
 {
-    public abstract class AbstractTimedInvestment : AbstractInvestment
+    [Serializable]
+    public class TimedInvestmentData
     {
-        public int turnsLeft { get; private set; }
-        public AbstractTimedInvestment(
-            string name,
+        public enum TimedInvestmentType
+        {
+            STARTUP_EXIT,
+        };
+
+        [SerializeField]
+        private InvestmentData _investmentData;
+        public InvestmentData investmentData => _investmentData;
+
+        [SerializeField]
+        private string _investmentName;
+        public string investmentName => _investmentName;
+
+        [SerializeField]
+        private int _turnsLeft;
+        public int turnsLeft => _turnsLeft;
+
+        [SerializeField]
+        private TimedInvestmentType _timedInvestmentType;
+        public TimedInvestmentType timedInvestmentType => _timedInvestmentType;
+
+        [SerializeField]
+        private float _startupExitMultiplier;
+        public float startupExitMultiplier => _startupExitMultiplier;
+
+        [SerializeField]
+        private string _startupExitMessage;
+        public string startupExitMessage => _startupExitMessage;
+
+        private void initializeInvestmentData(
             int originalPrice,
             int marketValue,
             int annualIncome,
+            string investmentName,
             int turnsLeft)
-            : base(name, originalPrice, marketValue, new Vector2Int(annualIncome, annualIncome))
         {
-            this.turnsLeft = turnsLeft;
+            _investmentData = new InvestmentData();
+            _investmentData.Initialize(originalPrice, marketValue, annualIncome, annualIncome);
+            _investmentName = investmentName;
+            _turnsLeft = turnsLeft;
         }
 
-        public void OnResolve(Player player, Action<bool> callback)
+        private void initializeTimedInvestmentAsStartup(
+            int originalPrice,
+            string investmentName,
+            int turnsLeft,
+            float multilpier,
+            string message)
         {
-            --turnsLeft;
-            Debug.LogFormat("Resolving timed investment: {0}", turnsLeft);
-            if (turnsLeft <= 0)
+            initializeInvestmentData(originalPrice, originalPrice, 0, investmentName, turnsLeft);
+
+            _timedInvestmentType = TimedInvestmentType.STARTUP_EXIT;
+            _startupExitMultiplier = multilpier;
+            _startupExitMessage = message;
+        }
+
+        public void InitializeStartupFailedInvestmentData(
+            int originalPrice, int turnsLeft)
+        {
+            string message = "Unfortunately, the startup company that you invested in " +
+                "went backrupt and you were not able to recoup any losses.";
+            initializeTimedInvestmentAsStartup(
+                originalPrice, "Startup Company", turnsLeft, 0, message);
+        }
+
+        public void InitializeStartupIPOInvestmentData(
+            int originalPrice, int turnsLeft, float multiplier)
+        {
+            string message = "Great news! The startup company that you invested in finally " +
+                "went public, giving you a return of {0} from your investment.";
+            initializeTimedInvestmentAsStartup(
+                originalPrice, "Startup Company", turnsLeft, multiplier, message);
+        }
+
+        public void InitializeStartupAcquiredInvestmentData(
+            int originalPrice, int turnsLeft, float multiplier)
+        {
+            string message = "The startup company that you invested in was acquired by " +
+                "another company, giving you a return of {0} from your investment.";
+            initializeTimedInvestmentAsStartup(
+                originalPrice, "Startup Company", turnsLeft, multiplier, message);
+        }
+
+        public void ResolveTurn(Action<bool> callback)
+        {
+            --_turnsLeft;
+            callback?.Invoke(turnsLeft <= 0);
+        }
+    }
+
+
+    public abstract class AbstractTimedInvestment : AbstractInvestment
+    {
+        protected TimedInvestmentData _timedInvestmentData;
+
+        public AbstractTimedInvestment(TimedInvestmentData timedInvestmentData)
+            : base(timedInvestmentData.investmentData)
+        {
+            _timedInvestmentData = timedInvestmentData;
+        }
+
+        private void resolveHandler(Player player, Action<bool> callback, bool done)
+        {
+            if (done)
             {
                 OnInvestmentEnd(player, () => callback?.Invoke(true));
             }
@@ -33,7 +120,12 @@ namespace Assets
             {
                 callback?.Invoke(false);
             }
+        }
 
+        public void OnResolve(Player player, Action<bool> callback)
+        {
+            _timedInvestmentData.ResolveTurn(
+                done => resolveHandler(player, callback, done));
         }
 
         protected abstract void OnInvestmentEnd(Player player, Action callback);
@@ -42,23 +134,32 @@ namespace Assets
     public class StartupInvestment : AbstractTimedInvestment
     {
         public override string investmentType => "Startup Investment";
-        private StartupExitAction _exitAction;
 
-        public StartupInvestment(
-            int originalPrice,
-            int turnsLeft,
-            StartupExitAction exitAction)
-            : base("Unnamed Startup Company", originalPrice, originalPrice, 0, turnsLeft)
+        public StartupInvestment(TimedInvestmentData data)
+            : base(data)
         {
-            _exitAction = exitAction;
         }
 
         protected override void OnInvestmentEnd(Player player, Action callback)
         {
-            _exitAction.RunExitAction(player, this, callback);
+            int gain = Mathf.FloorToInt(
+                _timedInvestmentData.startupExitMultiplier * _timedInvestmentData.investmentData.originalPrice);
+            player.portfolio.AddCash(gain);
+
+            string message = _timedInvestmentData.startupExitMessage;
+            if (gain > 0)
+            {
+                Localization local = Localization.Instance;
+                message = string.Format(message, local.GetCurrency(gain));
+            }
+
+            UIManager.Instance.ShowSimpleMessageBox(
+                message,
+                ButtonChoiceType.OK_ONLY,
+                (_) => callback?.Invoke());
         }
     }
-
+/*
     public class StartupExitAction
     {
         protected string _message;
@@ -121,5 +222,6 @@ namespace Assets
                 "went public, giving you a return of {0} from your investment.";
         }
     }
+*/
 }
 

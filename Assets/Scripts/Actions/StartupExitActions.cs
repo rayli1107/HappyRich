@@ -67,8 +67,12 @@ namespace Actions
             int income,
             Action callback)
         {
-            PublicCompany company = new PublicCompany(
-                entity.Item2, value, income);
+            Startup startup = entity.Item2;
+            BusinessData data = new BusinessData();
+            data.InitializePublicCompany(startup, value, income);
+            startup.ClearPrivateLoan();
+
+            PublicCompany company = new PublicCompany(data);
             PartialInvestment partialEntity = entity.Item1;
             TransactionManager.ListPublicCompany(player, partialEntity, company);
 
